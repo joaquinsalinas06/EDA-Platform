@@ -14,6 +14,17 @@ const activeWeek = knowledgeMap.weeks.find((week) =>
 
 <nav class="min-w-0 lg:sticky lg:top-20 lg:h-fit" aria-label="Mapa del curso">
   <span hidden data-active-week={activeWeek} />
+  <a
+    href="/compare"
+    class:list={[
+      'mb-6 block rounded px-1 py-1 text-[0.8125rem] no-underline transition-colors',
+      current === '/compare'
+        ? 'font-medium text-[var(--accent)]'
+        : 'text-[var(--muted)] hover:text-[var(--ink)]',
+    ]}
+  >
+    comparar estructuras
+  </a>
   <div class="stagger">
     {
       knowledgeMap.weeks.map((week) => (

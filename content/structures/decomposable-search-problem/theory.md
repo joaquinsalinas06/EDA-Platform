@@ -1,0 +1,144 @@
+---
+kind: theory
+title: "Problemas de búsqueda descomponibles"
+---
+
+## ¿Qué problema resuelve?
+
+La técnica anterior — [retroactividad conmutativa e invertible](/structures/commutative-invertible-retroactivity)
+— resuelve retroactividad **parcial** casi gratis, pero el profesor marca su
+límite explícitamente al abrir esta sección: "la mayoría de las estructuras
+interesantes (pilas, colas, árboles de búsqueda, priority queues…) tienen
+operaciones que **sí dependen del orden**. El truco anterior no aplica
+directamente. Necesitamos algo más general."
+
+Este tema es esa generalización, pero para un caso más específico que
+"cualquier estructura": los problemas de búsqueda **descomponibles**. Para
+ellos, la retroactividad **completa** (consultar cualquier tiempo del
+pasado, no sólo el presente) se consigue con un overhead multiplicativo de
+sólo `O(lg m)` por operación — sin exigir conmutatividad ni invertibilidad.
+
+## Intuición
+
+La idea completa cabe en una frase: si la respuesta sobre `A ∪ B` se puede
+reconstruir combinando la respuesta sobre `A` y la respuesta sobre `B` (en
+tiempo constante), entonces no hace falta volver a mirar `A` ni `B` para
+responder sobre su unión. Esa es exactamente la propiedad que hace que un
+[segment tree](/structures/segment-tree) funcione: cada nodo interno resume
+su rango combinando a sus dos hijos, sin tener que recorrer las hojas.
+
+El giro de esta sección es dónde se pone el eje del árbol: en vez de un
+arreglo de datos, se construye el segment tree **sobre el eje del tiempo**.
+Cada hoja ya no es una posición `A[i]`; es un instante de la línea de tiempo
+de operaciones que define [retroactividad](/structures/retroactivity). Una
+operación insertada en el tiempo `t` "vive" ahí, y su efecto se propaga hacia
+arriba exactamente igual que cambiar `A[i]` propaga un nuevo valor hacia la
+raíz. Insertar/eliminar en el pasado dejó de costar `O(m)` (rehacer todo) y
+pasó a costar lo mismo que un [Update](/structures/segment-tree/operations/update)
+de segment tree: `O(lg m)`.
+
+## Estructura interna
+
+Antes de construir nada hace falta la **condición** que hace posible esta
+reducción — no es un algoritmo, es un requisito sobre el problema:
+
+> Un problema de búsqueda sobre un conjunto `S` es **descomponible** si, para
+> cualquier partición `S = A ∪ B`:
+>
+> ```
+> Query(x, A ∪ B) = f( Query(x, A), Query(x, B) )
+> ```
+>
+> para alguna función `f` calculable en `O(1)`.
+
+Cuatro ejemplos que el profesor da como descomponibles, con su `f`
+(página 32-33): "Mínimo, máximo, suma, existencia de un elemento — todos son
+descomponibles: `f = mín, máx, +, ∨`, respectivamente." Ver la operación
+[Decomposability](/structures/decomposable-search-problem/operations/decomposability)
+para el detalle de esta condición, sus ejemplos y su contraejemplo.
+
+Dado un problema que sí cumple la condición, la construcción es (página
+34-35):
+
+- Cada **hoja** del [segment tree](/structures/segment-tree) es un instante
+  entre dos operaciones consecutivas de la línea de tiempo (hay `m` de
+  ellas, una por operación retroactiva insertada).
+- Cada **nodo interno** resume, con `f`, el efecto acumulado de todo su rango
+  de tiempo — el mismo invariante `valor(nodo) = f(valor(hijo_izq),
+  valor(hijo_der))` de un segment tree cualquiera, sólo que el eje que
+  particiona no es un arreglo de datos: es la línea de tiempo.
+
+> **Nota de apoyo** (no está en las diapositivas): el mazo no dice cómo se
+> representan los tiempos `t` ni qué pasa si `Insert(t, op)` cae "entre" dos
+> operaciones ya existentes sin desplazar las demás — es el mismo hueco que
+> deja abierto [retroactividad](/structures/retroactivity). La implementación
+> en C++ de este tema fija una convención concreta para poder ejecutar algo:
+> `m` franjas de tiempo enteras y fijas (`0..m-1`), donde insertar en el
+> tiempo `t` ocupa la hoja `t` y eliminar la vacía. No es una decisión del
+> profesor.
+
+## Operaciones
+
+- [Decomposability](/structures/decomposable-search-problem/operations/decomposability) —
+  la condición sobre `S` y `f` que habilita todo lo demás. No es un algoritmo.
+- [Time-segment-tree-build](/structures/decomposable-search-problem/operations/time-segment-tree-build) —
+  construir el segment tree sobre el eje del tiempo.
+- [Update](/structures/decomposable-search-problem/operations/update) —
+  `Insert(t, op)` / `Delete(t)` retroactivos, vía el mismo Update del
+  segment tree.
+- [Query](/structures/decomposable-search-problem/operations/query) —
+  consultar en cualquier tiempo `t` del pasado (retroactividad completa).
+
+## Análisis de complejidad
+
+El estilo del profesor aquí es, en sus propias palabras, **reducción
+estructural a una estructura conocida**: no hay recurrencia que plantear ni
+argumento amortizado que cerrar, porque la cota entera se **hereda** del
+segment tree ya dado por conocido — la diapositiva que abre la construcción
+se titula literalmente "La conexión con la clase pasada: Segment Tree".
+
+El argumento completo, sin más pasos que estos tres:
+
+1. Se construye un segment tree sobre el eje del tiempo (`m` hojas).
+2. Insertar/eliminar una operación en el tiempo `t` es un
+   [Update](/structures/segment-tree/operations/update) de ese árbol: toca
+   `O(lg m)` nodos — "¡el mismo Update que ya conocemos!" (página 34-35).
+3. Por lo tanto, el overhead retroactivo es `O(lg m)` multiplicativo por
+   operación. Si la estructura original respondía una consulta en `O(q)`, la
+   versión retroactiva completa responde en `O(q · lg m)` (página 36-37).
+
+Nada de esto exige contar pasos ni definir un potencial: el costo del
+Update se hereda sin volver a probarlo, exactamente como cita el profesor.
+
+## Tabla de complejidad
+
+La tabla se genera desde `meta.yaml`. Ojo con los dos parámetros que el mazo
+usa sin presentarlos juntos nunca: **`m`** es el número de operaciones (el
+tamaño del eje de tiempo, y por lo tanto la altura del árbol); **`n`** sería
+el tamaño de los datos de la estructura original, si aplica. `time-segment-tree-build`
+no trae una cota propia del profesor — se anota como heredada del
+[segment tree](/structures/segment-tree#build), sin repetir su prueba.
+
+## Ejemplos
+
+Ver [examples.md](/structures/decomposable-search-problem/examples).
+
+## Comparación con estructuras relacionadas
+
+| | [conmutativa e invertible](/structures/commutative-invertible-retroactivity) | descomponible (este tema) | [rollback](/structures/rollback-method) |
+| --- | --- | --- | --- |
+| requisito sobre las operaciones | conmutan **y** son invertibles | `Query(A∪B) = f(Query(A), Query(B))`, `f` en O(1) | ninguno especial (cualquier operación reversible en O(1) o O(lg n)) |
+| retroactividad que da | parcial | **completa** | completa |
+| overhead | ninguno (cuesta igual que la operación original) | `O(lg m)` multiplicativo | depende de rehacer el log — el peor caso, no acotado por este argumento |
+| contraejemplo del mazo | — | `Delete-Min` **no** es descomponible (simple); ver [retroactive-priority-queue](/structures/retroactive-priority-queue) | (es el método que cubre lo que las otras dos no alcanzan) |
+
+El profesor marca el límite de este tema con el mismo ejemplo que motiva el
+caso de estudio final: "Delete-Min no es un problema descomponible simple"
+(página 47) — porque no hay una `f` en `O(1)` obvia que combine el mínimo de
+`A` y el mínimo de `B` **después de que uno de los dos ya se extrajo**. Eso
+es exactamente lo que [retroactive-priority-queue](/structures/retroactive-priority-queue)
+tiene que resolver con una técnica dedicada.
+
+## Prueba de dominio
+
+Ver [mastery-check.md](/structures/decomposable-search-problem/mastery-check).

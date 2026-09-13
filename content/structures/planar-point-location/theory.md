@@ -1,0 +1,144 @@
+---
+kind: theory
+title: "Localización de puntos en el plano"
+---
+
+## ¿Qué problema resuelve?
+
+El profesor lo plantea así: "Imaginemos que se nos da la representación
+gráfica de un grafo planar (mapa planar). El problema de Planar Point
+Location (PPL) nos dan puntos (x_i, y_i) y se nos pide determinar en qué
+cara del mapa está ubicado cada uno." (#7)
+
+No es una estructura de datos con nombre — el profesor nunca la bautiza —
+sino un **planteamiento**: dada una subdivisión del plano en caras (piénsese
+en un mapa político, o en las celdas de un diagrama planar cualquiera) y un
+punto de consulta, ¿a qué cara pertenece? El problema reto lo cierra con la
+formulación completa: "Dada la descripción de un mapa planar con posibles
+caras disjuntas (contando una región infinita que es el complemento de
+todas las caras descritas), determinar la etiqueta de q puntos (x_i, y_i)."
+(#64)
+
+Es difícil por lo que parece trivial: no hay ningún orden total obvio sobre
+el plano que permita, como en una dimensión, hacer búsqueda binaria directa.
+Un mapa planar tiene aristas con cualquier pendiente y caras de forma
+arbitraria; "cortar" el problema en algo ordenable — para poder reutilizar
+estructuras de búsqueda de una dimensión — es exactamente el trabajo que
+hace el resto del mazo.
+
+## Intuición
+
+La idea del profesor es reducir, no resolver el problema de frente. Un rayo
+vertical hacia arriba desde el punto de consulta, hasta el primer segmento
+que golpea, identifica la arista justo por encima del punto — y de ahí
+(aunque el mazo no lo explicita del todo, ver más abajo) se puede etiquetar
+la cara. Ese "lanzar el rayo" es el problema de
+[vertical-ray-shooting](/structures/vertical-ray-shooting): la reformulación
+concreta de PPL que sí se ataca con estructuras conocidas. Este tema se
+queda en el planteamiento; el vecino desarrolla la reducción.
+
+## Estructura interna
+
+No aplica: PPL no es una estructura de datos y no guarda estado propio. Lo
+que sí tiene estructura es el **objeto de entrada** — el mapa planar — y
+vale la pena fijar el vocabulario que el profesor asume sin definir (#7,
+#54):
+
+- **Grafo/mapa planar**: un grafo dibujado en el plano sin que sus aristas
+  se crucen entre sí. "Al ser un mapa planar, no hay intersecciones. Esto
+  simplifica bastante la idea." (#45)
+- **Cara**: cada región en la que las aristas dividen al plano, incluyendo
+  una **cara infinita** — el complemento de todas las caras descritas
+  (#64) — para los puntos que no caen dentro de ninguna región acotada.
+- **Mapa ortogonal**: un mapa planar cuyas aristas son todas horizontales o
+  verticales; es el caso restringido que permite usar retroactividad
+  parcial (#53-54).
+
+> **Nota de apoyo** (no está en las diapositivas): un grafo planar y sus
+> caras se entienden aquí de forma intuitiva, como en el ejemplo del mazo
+> (#8-9) — el curso no da la definición formal de planaridad ni de cara de
+> un grafo plano; se asume conocida.
+
+## Operaciones
+
+- [Consulta de localización (`locate`)](/structures/planar-point-location/operations/locate):
+  dado (x_i, y_i), devolver la cara del mapa donde cae (#7, #9).
+- [Actualización de aristas (`edge-update`)](/structures/planar-point-location/operations/edge-update):
+  insertar o eliminar una arista del mapa en el escenario dinámico — el
+  material sólo la enuncia, sin desarrollar un algoritmo (#17).
+
+## Análisis de complejidad
+
+El estilo del profesor aquí es **análisis por reducción**: no cuenta pasos
+ni plantea una recurrencia — encadena el problema a otro ya resuelto y la
+complejidad se hereda de ahí. La cadena completa, en el orden en que el mazo
+la arma:
+
+1. **PPL → vertical ray shooting** (#18-23): localizar un punto se reduce a
+   lanzar un rayo vertical hacia arriba desde él y encontrar el primer
+   segmento que corta. Desarrollado en
+   [vertical-ray-shooting](/structures/vertical-ray-shooting).
+2. **→ intersección de segmentos** (#24 en adelante): el rayo vertical se
+   ve como un caso especial de detectar/ordenar cruces con una recta de
+   barrido (**sweep line**, #27). El mazo nunca cierra explícitamente el
+   paso "segmento hallado → etiqueta de la cara"; queda como hueco del
+   material (ver más abajo).
+3. **Caso especial ortogonal → RSQ (Range Sum Query)** (#32, #38): "Usando
+   un Segment tree o un Fenwick tree se puede resolver este caso especial
+   en O(n log n)". El profesor nombra ambas estructuras — [segment
+   tree](/structures/segment-tree) y [Fenwick tree](/structures/fenwick-tree)
+   — sin explicarlas aquí: son andamiaje del curso.
+4. **Caso general → BBST + persistencia** (#43, #49-51): el barrido se
+   modela con un [BBST](/structures/balanced-bst) que ordena los cruces
+   activos contra la recta de barrido, y se hace persistente (ver
+   [persistencia sobre una estructura](/structures/persistence-levels))
+   para responder consultas *online* sin rehacer el barrido: `t_{x_i}` es
+   la versión del BBST asociada al punto x_i, y la respuesta es
+   `Query(t_{x_i}, Successor(y_i))` (#50). Esta fórmula queda sin definir
+   en el mazo — ver huecos.
+5. **Caso dinámico restringido → retroactividad parcial** (#53-55): sólo
+   para mapas ortogonales (aristas horizontales), insertar/eliminar puede
+   resolverse con [retroactividad](/structures/retroactivity) parcial,
+   manteniendo la consulta en O(log n).
+
+**Huecos del material, dichos como tales, no rellenados:**
+
+- El paso "segmento hallado → cara" nunca se explica: el problema reto
+  (#64) exige devolver la etiqueta de la cara, así que el paso existe,
+  pero el mazo no dice cómo se deriva del segmento que golpea el rayo.
+- `Query(t_{x_i}, Successor(y_i))` (#50) es una fórmula, no un algoritmo:
+  no se dice qué devuelve `Query`, cómo se indexan las versiones cuando
+  x_i no coincide con ningún evento del barrido, ni qué estructura es
+  `Successor` exactamente.
+- `edge-update` (insertar/eliminar aristas, #17) **sólo está enunciado**:
+  el mazo no desarrolla un algoritmo para el caso dinámico general. Sólo
+  cita resultados de la literatura, sin derivarlos ni usarlos en el curso:
+  Baumgarten, Jung y Mehlhorn (1994) dan consulta e inserción
+  O(log n · log log n) y eliminación O(log² n) (#60); Arge, Brodal y
+  Georgiadis (2006) dan consulta O(log n), inserción O(log^{1+ε} n) y
+  eliminación O(log^{2+ε} n) (#61). Se citan aquí como cultura del área,
+  no como contenido a implementar — de ahí que `edge-update` no tenga
+  entrada en la tabla de complejidad de `meta.yaml`.
+
+## Tabla de complejidad
+
+Sólo `locate` tiene una entrada — ver `meta.yaml`. `edge-update` no aparece
+en la tabla a propósito: el profesor no deriva ni fija un costo propio del
+curso para ella (ver el hueco arriba).
+
+## Ejemplos
+
+Ver [examples.md](/structures/planar-point-location#ejemplos): el mapa del
+mazo (#8-9) con los tres puntos de consulta que usa el profesor.
+
+## Comparación con estructuras relacionadas
+
+| | localización de puntos (este tema) | vertical ray shooting |
+| --- | --- | --- |
+| qué pregunta | ¿en qué cara cae el punto? | ¿qué segmento golpea el rayo vertical desde el punto? |
+| rol en la cadena | el problema original, sin nombre de estructura | la reformulación que sí se ataca (ver [vertical-ray-shooting](/structures/vertical-ray-shooting)) |
+| quién resuelve a quién | se reduce a vertical ray shooting | se reduce a intersección de segmentos / RSQ |
+
+## Prueba de dominio
+
+Ver [mastery-check.md](/structures/planar-point-location#prueba-de-dominio).

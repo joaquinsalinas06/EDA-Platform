@@ -95,7 +95,7 @@
       "hasVisualization": true,
       "visualizationType": "tree",
       "complexityStyleFromProfessor": "recurrence-based",
-      "status": "pending"
+      "status": "generated"
     },
     "binomial-tree": {
       "type": "concept",
@@ -108,7 +108,7 @@
       "sourceSlides": ["Sem_1_Heaps_I-1.pdf#29-32"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "definición recursiva + conteo combinatorio",
-      "status": "pending"
+      "status": "generated"
     },
     "binomial-heap": {
       "type": "structure",
@@ -130,7 +130,7 @@
       "hasVisualization": true,
       "visualizationType": "tree",
       "complexityStyleFromProfessor": "estructural + amortizado",
-      "status": "pending"
+      "status": "generated"
     },
 
     "potential-method": {
@@ -144,7 +144,7 @@
       "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (1)-1.pdf#32-33"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "potential-method",
-      "status": "pending"
+      "status": "generated"
     },
     "fibonacci-heap": {
       "type": "structure",
@@ -166,7 +166,7 @@
       "hasVisualization": true,
       "visualizationType": "tree",
       "complexityStyleFromProfessor": "potential-method",
-      "status": "pending"
+      "status": "generated"
     },
 
     "segment-tree": {
@@ -181,7 +181,7 @@
       "hasVisualization": true,
       "visualizationType": "tree",
       "supportConcept": true,
-      "status": "pending"
+      "status": "generated"
     },
     "pointer-machine": {
       "type": "concept",
@@ -194,7 +194,7 @@
       "sourceSlides": ["Sem_3_Persistencia-1.pdf#6-12"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "definición de modelo de cómputo",
-      "status": "pending"
+      "status": "generated"
     },
     "persistence-levels": {
       "type": "concept",
@@ -207,7 +207,7 @@
       "sourceSlides": ["Sem_3_Persistencia-1.pdf#13-20"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "taxonomía",
-      "status": "pending"
+      "status": "generated"
     },
     "fat-nodes": {
       "type": "algorithm",
@@ -227,7 +227,7 @@
       "hasVisualization": true,
       "visualizationType": "persistent",
       "complexityStyleFromProfessor": "potential-method",
-      "status": "pending"
+      "status": "generated"
     },
     "path-copying": {
       "type": "algorithm",
@@ -241,7 +241,7 @@
       "hasVisualization": true,
       "visualizationType": "persistent",
       "complexityStyleFromProfessor": "conteo directo del camino",
-      "status": "pending"
+      "status": "generated"
     },
     "retroactivity": {
       "type": "concept",
@@ -259,7 +259,7 @@
       "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf#8-20"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "definición de modelo y taxonomía",
-      "status": "pending"
+      "status": "generated"
     },
     "commutative-invertible-retroactivity": {
       "type": "algorithm",
@@ -272,7 +272,7 @@
       "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf#21-28"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "argumento algebraico",
-      "status": "pending"
+      "status": "generated"
     },
     "decomposable-search-problem": {
       "type": "concept",
@@ -286,7 +286,7 @@
       "hasVisualization": true,
       "visualizationType": "tree",
       "complexityStyleFromProfessor": "reducción estructural",
-      "status": "pending"
+      "status": "generated"
     },
     "rollback-method": {
       "type": "algorithm",
@@ -299,7 +299,7 @@
       "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf#38-44"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "conteo directo del trabajo rehecho",
-      "status": "pending"
+      "status": "generated"
     },
     "retroactive-priority-queue": {
       "type": "structure",
@@ -313,7 +313,7 @@
       "hasVisualization": true,
       "visualizationType": "persistent",
       "complexityStyleFromProfessor": "argumento estructural",
-      "status": "pending"
+      "status": "generated"
     },
 
     "balanced-bst": {
@@ -328,7 +328,7 @@
       "hasVisualization": true,
       "visualizationType": "tree",
       "supportConcept": true,
-      "status": "pending"
+      "status": "generated"
     },
     "fenwick-tree": {
       "type": "structure",
@@ -341,7 +341,7 @@
       "sourceSlides": [],
       "hasVisualization": false,
       "supportConcept": true,
-      "status": "pending"
+      "status": "generated"
     },
     "orthogonal-range-search": {
       "type": "concept",
@@ -354,7 +354,7 @@
       "sourceSlides": ["Sem4_Orthogonal_Range_Search.pdf#5-42"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "conteo estructural directo",
-      "status": "pending"
+      "status": "generated"
     },
     "range-tree": {
       "type": "structure",
@@ -377,7 +377,7 @@
       "hasVisualization": true,
       "visualizationType": "range-tree",
       "complexityStyleFromProfessor": "conteo estructural / multiplicidad",
-      "status": "pending"
+      "status": "generated"
     },
     "planar-point-location": {
       "type": "concept",
@@ -390,7 +390,7 @@
       "sourceSlides": ["Sem4_Planar_Point_Location.pdf#5-23"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "análisis por reducción",
-      "status": "pending"
+      "status": "generated"
     },
     "vertical-ray-shooting": {
       "type": "concept",
@@ -403,7 +403,7 @@
       "sourceSlides": ["Sem4_Planar_Point_Location.pdf#18-23"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "reducción",
-      "status": "pending"
+      "status": "generated"
     },
     "segment-intersection-sweep-line": {
       "type": "algorithm",
@@ -436,7 +436,7 @@
       "hasVisualization": true,
       "visualizationType": "range-tree",
       "complexityStyleFromProfessor": "conteo directo + serie geométrica",
-      "status": "pending"
+      "status": "generated"
     },
     "layered-range-tree": {
       "type": "structure",
@@ -529,7 +529,7 @@
       "hasVisualization": true,
       "visualizationType": "tree",
       "complexityStyleFromProfessor": "definición de modelo de costo",
-      "status": "pending"
+      "status": "generated"
     },
     "search-sequence-properties": {
       "type": "concept",
@@ -542,7 +542,7 @@
       "sourceSlides": ["Sem5_Dynamic_Optimality_I.pdf#29-50"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "amortized",
-      "status": "pending"
+      "status": "generated"
     },
     "dynamic-optimality": {
       "type": "concept",
@@ -555,7 +555,7 @@
       "sourceSlides": ["Sem5_Dynamic_Optimality_I.pdf#51-58"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "análisis competitivo",
-      "status": "pending"
+      "status": "generated"
     },
     "splay-tree": {
       "type": "structure",

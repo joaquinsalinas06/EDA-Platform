@@ -43,7 +43,7 @@ complexity:
       en el primer nodo sin marcar que encuentra. El profesor no da esta
       cota por separado: se absorbe dentro del análisis amortizado de
       Decrease-Key, que es su único invocador en este mazo.
-      source: "CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (1)-1.pdf#12-13,36-38"
+    source: "CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (1)-1.pdf#12-13,36-38"
   decrease-key:
     worst: "O(c)"
     reasoning: >-

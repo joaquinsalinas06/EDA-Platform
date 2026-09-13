@@ -1,0 +1,57 @@
+---
+import { knowledgeMap } from '../lib/knowledge-map';
+
+// La navegación sale entera del knowledge map: no hay rutas escritas a mano.
+const current = Astro.url.pathname;
+---
+
+<nav class="min-w-0 lg:sticky lg:top-20 lg:h-fit" aria-label="Mapa del curso">
+  <div class="stagger">
+    {
+      knowledgeMap.weeks.map((week) => (
+        <section class="mb-7">
+          <a href={`/weeks/${week.id}`} class="tag mb-2 block no-underline hover:text-[var(--accent)]">
+            {week.id}
+          </a>
+          <ul class="space-y-px">
+            {week.topics.map((id) => {
+              const t = knowledgeMap.topics[id];
+              const href = `/structures/${id}`;
+              const active = current === href || current.startsWith(`${href}/`);
+              const ready = t?.status === 'generated';
+              return (
+                <li>
+                  {ready ? (
+                    <a
+                      href={href}
+                      class:list={[
+                        'relative block rounded-r py-1.5 pl-3.5 pr-2 text-[0.8125rem] leading-snug no-underline transition-all',
+                        active
+                          ? 'bg-[var(--accent-wash)] font-medium text-[var(--accent)]'
+                          : 'text-[var(--muted)] hover:bg-[var(--fill)] hover:text-[var(--ink)]',
+                      ]}
+                    >
+                      <span
+                        class:list={[
+                          'absolute inset-y-0 left-0 w-[2px] rounded transition-all duration-300',
+                          active ? 'bg-[var(--accent)]' : 'bg-[var(--rule)]',
+                        ]}
+                      />
+                      {t?.title ?? id}
+                    </a>
+                  ) : (
+                    <span class="relative block py-1.5 pl-3.5 pr-2 text-[0.8125rem] leading-snug text-[var(--faint)]">
+                      <span class="absolute inset-y-0 left-0 w-[2px] rounded bg-[var(--rule)]" />
+                      {t?.title ?? id}
+                      <span class="tag ml-1.5">pendiente</span>
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</nav>

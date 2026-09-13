@@ -1,0 +1,575 @@
+{
+  "weeks": [
+    {
+      "id": "week-01",
+      "title": "Semana 1 — Montículos I",
+      "sourceFiles": ["raw-materials/week1/Sem_1_Heaps_I-1.pdf"],
+      "topics": ["binary-heap", "binomial-tree", "binomial-heap"]
+    },
+    {
+      "id": "week-02",
+      "title": "Semana 2 — Montículo de Fibonacci",
+      "sourceFiles": ["raw-materials/week2/CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (1)-1.pdf"],
+      "topics": ["potential-method", "fibonacci-heap"]
+    },
+    {
+      "id": "week-03",
+      "title": "Semana 3 — Persistencia y retroactividad",
+      "sourceFiles": [
+        "raw-materials/week3/Sem_3_Persistencia-1.pdf",
+        "raw-materials/week3/CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf"
+      ],
+      "topics": [
+        "segment-tree",
+        "pointer-machine",
+        "persistence-levels",
+        "fat-nodes",
+        "path-copying",
+        "retroactivity",
+        "commutative-invertible-retroactivity",
+        "decomposable-search-problem",
+        "rollback-method",
+        "retroactive-priority-queue"
+      ]
+    },
+    {
+      "id": "week-04",
+      "title": "Semana 4 — Búsqueda ortogonal por rangos y localización en el plano",
+      "sourceFiles": [
+        "raw-materials/week4/Sem4_Orthogonal_Range_Search.pdf",
+        "raw-materials/week4/Sem4_Planar_Point_Location.pdf"
+      ],
+      "topics": [
+        "balanced-bst",
+        "fenwick-tree",
+        "orthogonal-range-search",
+        "range-tree",
+        "planar-point-location",
+        "vertical-ray-shooting",
+        "segment-intersection-sweep-line"
+      ]
+    },
+    {
+      "id": "week-05",
+      "title": "Semana 5 — Fractional cascading y optimalidad dinámica",
+      "sourceFiles": [
+        "raw-materials/week5/CS3014_Estructuras_de_Datos_Avanzadas_2s2026+%286%29.pdf",
+        "raw-materials/week5/Sem5_Fractional_Cascading_II.pdf",
+        "raw-materials/week5/Sem5_Dynamic_Optimality_I.pdf"
+      ],
+      "topics": [
+        "fractional-cascading",
+        "layered-range-tree",
+        "dominance-2d",
+        "d2-bound-x",
+        "d3-separation-node",
+        "d4-bound-z",
+        "generalized-fractional-cascading",
+        "bst-computational-model",
+        "search-sequence-properties",
+        "dynamic-optimality",
+        "splay-tree"
+      ]
+    }
+  ],
+
+  "topics": {
+    "binary-heap": {
+      "type": "structure",
+      "title": "Montículo binario",
+      "week": "week-01",
+      "prerequisites": [],
+      "buildsOn": [],
+      "usedBy": ["binomial-heap", "fibonacci-heap"],
+      "operations": [
+        "max-heapify",
+        "build-max-heap",
+        "insert",
+        "find-min",
+        "extract-min",
+        "union",
+        "decrease-key",
+        "delete"
+      ],
+      "sourceSlides": ["Sem_1_Heaps_I-1.pdf#5-27"],
+      "hasVisualization": true,
+      "visualizationType": "tree",
+      "complexityStyleFromProfessor": "recurrence-based",
+      "status": "pending"
+    },
+    "binomial-tree": {
+      "type": "concept",
+      "title": "Árboles binomiales",
+      "week": "week-01",
+      "prerequisites": [],
+      "buildsOn": [],
+      "usedBy": ["binomial-heap"],
+      "operations": [],
+      "sourceSlides": ["Sem_1_Heaps_I-1.pdf#29-32"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "definición recursiva + conteo combinatorio",
+      "status": "pending"
+    },
+    "binomial-heap": {
+      "type": "structure",
+      "title": "Montículo binomial",
+      "week": "week-01",
+      "prerequisites": ["binary-heap", "binomial-tree"],
+      "buildsOn": ["binomial-tree"],
+      "usedBy": ["fibonacci-heap"],
+      "operations": [
+        "find-min",
+        "binomial-link",
+        "union",
+        "insert",
+        "extract-min",
+        "decrease-key",
+        "delete"
+      ],
+      "sourceSlides": ["Sem_1_Heaps_I-1.pdf#28-58"],
+      "hasVisualization": true,
+      "visualizationType": "tree",
+      "complexityStyleFromProfessor": "estructural + amortizado",
+      "status": "pending"
+    },
+
+    "potential-method": {
+      "type": "concept",
+      "title": "El método del potencial",
+      "week": "week-02",
+      "prerequisites": [],
+      "buildsOn": [],
+      "usedBy": ["fibonacci-heap", "fat-nodes"],
+      "operations": [],
+      "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (1)-1.pdf#32-33"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "potential-method",
+      "status": "pending"
+    },
+    "fibonacci-heap": {
+      "type": "structure",
+      "title": "Montículo de Fibonacci",
+      "week": "week-02",
+      "prerequisites": ["binomial-heap", "potential-method"],
+      "buildsOn": ["binomial-heap"],
+      "usedBy": [],
+      "operations": [
+        "insert",
+        "union",
+        "cut",
+        "cascading-cut",
+        "decrease-key",
+        "extract-min",
+        "consolidate"
+      ],
+      "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (1)-1.pdf#4-43"],
+      "hasVisualization": true,
+      "visualizationType": "tree",
+      "complexityStyleFromProfessor": "potential-method",
+      "status": "pending"
+    },
+
+    "segment-tree": {
+      "type": "structure",
+      "title": "Segment tree",
+      "week": "week-03",
+      "prerequisites": [],
+      "buildsOn": [],
+      "usedBy": ["path-copying", "decomposable-search-problem", "segment-intersection-sweep-line"],
+      "operations": ["build", "update", "query"],
+      "sourceSlides": [],
+      "hasVisualization": true,
+      "visualizationType": "tree",
+      "supportConcept": true,
+      "status": "pending"
+    },
+    "pointer-machine": {
+      "type": "concept",
+      "title": "Modelo pointer machine",
+      "week": "week-03",
+      "prerequisites": [],
+      "buildsOn": [],
+      "usedBy": ["fat-nodes", "path-copying"],
+      "operations": [],
+      "sourceSlides": ["Sem_3_Persistencia-1.pdf#6-12"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "definición de modelo de cómputo",
+      "status": "pending"
+    },
+    "persistence-levels": {
+      "type": "concept",
+      "title": "Niveles de persistencia",
+      "week": "week-03",
+      "prerequisites": ["pointer-machine"],
+      "buildsOn": [],
+      "usedBy": ["fat-nodes", "path-copying"],
+      "operations": [],
+      "sourceSlides": ["Sem_3_Persistencia-1.pdf#13-20"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "taxonomía",
+      "status": "pending"
+    },
+    "fat-nodes": {
+      "type": "algorithm",
+      "title": "Nodos gordos",
+      "week": "week-03",
+      "prerequisites": ["pointer-machine", "persistence-levels", "potential-method"],
+      "buildsOn": ["persistence-levels"],
+      "usedBy": [],
+      "operations": [
+        "read-field",
+        "write-field",
+        "node-split",
+        "bidirectional-fat-nodes",
+        "version-tree-linearization"
+      ],
+      "sourceSlides": ["Sem_3_Persistencia-1.pdf#21-43"],
+      "hasVisualization": true,
+      "visualizationType": "persistent",
+      "complexityStyleFromProfessor": "potential-method",
+      "status": "pending"
+    },
+    "path-copying": {
+      "type": "algorithm",
+      "title": "Path copying",
+      "week": "week-03",
+      "prerequisites": ["pointer-machine", "persistence-levels", "segment-tree"],
+      "buildsOn": ["persistence-levels"],
+      "usedBy": ["segment-intersection-sweep-line"],
+      "operations": ["stack-push", "segment-tree-update", "query-old-version", "trie-insert"],
+      "sourceSlides": ["Sem_3_Persistencia-1.pdf#48-70"],
+      "hasVisualization": true,
+      "visualizationType": "persistent",
+      "complexityStyleFromProfessor": "conteo directo del camino",
+      "status": "pending"
+    },
+    "retroactivity": {
+      "type": "concept",
+      "title": "Retroactividad",
+      "week": "week-03",
+      "prerequisites": ["persistence-levels"],
+      "buildsOn": [],
+      "usedBy": [
+        "commutative-invertible-retroactivity",
+        "decomposable-search-problem",
+        "rollback-method",
+        "retroactive-priority-queue"
+      ],
+      "operations": ["insert-retroactive", "delete-retroactive", "query"],
+      "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf#8-20"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "definición de modelo y taxonomía",
+      "status": "pending"
+    },
+    "commutative-invertible-retroactivity": {
+      "type": "algorithm",
+      "title": "Retroactividad conmutativa e invertible",
+      "week": "week-03",
+      "prerequisites": ["retroactivity"],
+      "buildsOn": ["retroactivity"],
+      "usedBy": [],
+      "operations": ["insert-retroactive", "delete-retroactive"],
+      "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf#21-28"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "argumento algebraico",
+      "status": "pending"
+    },
+    "decomposable-search-problem": {
+      "type": "concept",
+      "title": "Problemas de búsqueda descomponibles",
+      "week": "week-03",
+      "prerequisites": ["retroactivity", "segment-tree"],
+      "buildsOn": ["retroactivity"],
+      "usedBy": [],
+      "operations": ["decomposability", "time-segment-tree-build", "update", "query"],
+      "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf#29-37"],
+      "hasVisualization": true,
+      "visualizationType": "tree",
+      "complexityStyleFromProfessor": "reducción estructural",
+      "status": "pending"
+    },
+    "rollback-method": {
+      "type": "algorithm",
+      "title": "Método de rollback",
+      "week": "week-03",
+      "prerequisites": ["retroactivity"],
+      "buildsOn": ["retroactivity"],
+      "usedBy": [],
+      "operations": ["rollback-replay", "amortized-cost"],
+      "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf#38-44"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "conteo directo del trabajo rehecho",
+      "status": "pending"
+    },
+    "retroactive-priority-queue": {
+      "type": "structure",
+      "title": "Cola de prioridad retroactiva",
+      "week": "week-03",
+      "prerequisites": ["retroactivity", "binary-heap"],
+      "buildsOn": ["retroactivity"],
+      "usedBy": [],
+      "operations": ["insert-retroactive", "bridge", "compute-m", "delete-retroactive"],
+      "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf#45-64"],
+      "hasVisualization": true,
+      "visualizationType": "persistent",
+      "complexityStyleFromProfessor": "argumento estructural",
+      "status": "pending"
+    },
+
+    "balanced-bst": {
+      "type": "structure",
+      "title": "Árbol binario de búsqueda balanceado",
+      "week": "week-04",
+      "prerequisites": [],
+      "buildsOn": [],
+      "usedBy": ["range-tree", "segment-intersection-sweep-line", "splay-tree"],
+      "operations": ["search", "insert", "predecessor", "successor"],
+      "sourceSlides": [],
+      "hasVisualization": true,
+      "visualizationType": "tree",
+      "supportConcept": true,
+      "status": "pending"
+    },
+    "fenwick-tree": {
+      "type": "structure",
+      "title": "Fenwick tree",
+      "week": "week-04",
+      "prerequisites": [],
+      "buildsOn": [],
+      "usedBy": ["segment-intersection-sweep-line"],
+      "operations": ["update", "prefix-query"],
+      "sourceSlides": [],
+      "hasVisualization": false,
+      "supportConcept": true,
+      "status": "pending"
+    },
+    "orthogonal-range-search": {
+      "type": "concept",
+      "title": "Búsqueda ortogonal por rangos",
+      "week": "week-04",
+      "prerequisites": [],
+      "buildsOn": [],
+      "usedBy": ["range-tree", "layered-range-tree"],
+      "operations": ["existence", "count", "enumeration"],
+      "sourceSlides": ["Sem4_Orthogonal_Range_Search.pdf#5-42"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "conteo estructural directo",
+      "status": "pending"
+    },
+    "range-tree": {
+      "type": "structure",
+      "title": "Range tree",
+      "week": "week-04",
+      "prerequisites": ["orthogonal-range-search", "balanced-bst"],
+      "buildsOn": ["balanced-bst"],
+      "usedBy": ["layered-range-tree", "d2-bound-x", "d3-separation-node"],
+      "operations": [
+        "build-1d",
+        "predecessor-successor",
+        "range-query-1d",
+        "existence-count",
+        "enumeration",
+        "build-2d",
+        "range-query-2d",
+        "d-dimensions"
+      ],
+      "sourceSlides": ["Sem4_Orthogonal_Range_Search.pdf#23-65"],
+      "hasVisualization": true,
+      "visualizationType": "range-tree",
+      "complexityStyleFromProfessor": "conteo estructural / multiplicidad",
+      "status": "pending"
+    },
+    "planar-point-location": {
+      "type": "concept",
+      "title": "Localización de puntos en el plano",
+      "week": "week-04",
+      "prerequisites": [],
+      "buildsOn": [],
+      "usedBy": ["vertical-ray-shooting"],
+      "operations": ["locate", "edge-update"],
+      "sourceSlides": ["Sem4_Planar_Point_Location.pdf#5-23"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "análisis por reducción",
+      "status": "pending"
+    },
+    "vertical-ray-shooting": {
+      "type": "concept",
+      "title": "Vertical ray shooting",
+      "week": "week-04",
+      "prerequisites": ["planar-point-location"],
+      "buildsOn": ["planar-point-location"],
+      "usedBy": ["segment-intersection-sweep-line", "dominance-2d"],
+      "operations": ["ray-query"],
+      "sourceSlides": ["Sem4_Planar_Point_Location.pdf#18-23"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "reducción",
+      "status": "pending"
+    },
+    "segment-intersection-sweep-line": {
+      "type": "algorithm",
+      "title": "Intersección de segmentos con barrido",
+      "week": "week-04",
+      "prerequisites": ["vertical-ray-shooting", "segment-tree", "balanced-bst", "path-copying"],
+      "buildsOn": ["vertical-ray-shooting"],
+      "usedBy": [],
+      "operations": [
+        "segment-activation",
+        "intersection-count",
+        "crossing-order",
+        "persistent-online-query"
+      ],
+      "sourceSlides": ["Sem4_Planar_Point_Location.pdf#24-51"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "reducción + herencia de cota",
+      "status": "pending"
+    },
+
+    "fractional-cascading": {
+      "type": "algorithm",
+      "title": "Fractional cascading",
+      "week": "week-05",
+      "prerequisites": ["range-tree"],
+      "buildsOn": [],
+      "usedBy": ["layered-range-tree", "generalized-fractional-cascading"],
+      "operations": ["build", "query"],
+      "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026+%286%29.pdf#12-26"],
+      "hasVisualization": true,
+      "visualizationType": "range-tree",
+      "complexityStyleFromProfessor": "conteo directo + serie geométrica",
+      "status": "pending"
+    },
+    "layered-range-tree": {
+      "type": "structure",
+      "title": "Layered range tree",
+      "week": "week-05",
+      "prerequisites": ["range-tree", "fractional-cascading"],
+      "buildsOn": ["range-tree", "fractional-cascading"],
+      "usedBy": [],
+      "operations": ["sorted-array-replacement", "bridge-build", "range-query-2d"],
+      "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026+%286%29.pdf#27-42"],
+      "hasVisualization": true,
+      "visualizationType": "range-tree",
+      "complexityStyleFromProfessor": "conteo directo de pasos",
+      "status": "pending"
+    },
+    "dominance-2d": {
+      "type": "structure",
+      "title": "Dominancia 2D (D₁)",
+      "week": "week-05",
+      "prerequisites": ["vertical-ray-shooting"],
+      "buildsOn": ["vertical-ray-shooting"],
+      "usedBy": ["d2-bound-x"],
+      "operations": ["ray-reformulation", "subdivision-build", "dominance-query"],
+      "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#16-31"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "conteo directo output-sensitive",
+      "status": "pending"
+    },
+    "d2-bound-x": {
+      "type": "structure",
+      "title": "D₂ — acotar x",
+      "week": "week-05",
+      "prerequisites": ["dominance-2d", "range-tree"],
+      "buildsOn": ["dominance-2d"],
+      "usedBy": ["d3-separation-node"],
+      "operations": ["build", "query"],
+      "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#32-34"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "composición estructural",
+      "status": "pending"
+    },
+    "d3-separation-node": {
+      "type": "structure",
+      "title": "D₃ — nodo de separación",
+      "week": "week-05",
+      "prerequisites": ["d2-bound-x"],
+      "buildsOn": ["d2-bound-x"],
+      "usedBy": ["d4-bound-z"],
+      "operations": ["build", "locate-separation-node", "query"],
+      "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#35-43"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "composición estructural",
+      "status": "pending"
+    },
+    "d4-bound-z": {
+      "type": "structure",
+      "title": "D₄ — acotar z",
+      "week": "week-05",
+      "prerequisites": ["d3-separation-node"],
+      "buildsOn": ["d3-separation-node"],
+      "usedBy": ["generalized-fractional-cascading"],
+      "operations": ["build"],
+      "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#44-50"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "composición estructural",
+      "status": "pending"
+    },
+    "generalized-fractional-cascading": {
+      "type": "algorithm",
+      "title": "Fractional cascading generalizado",
+      "week": "week-05",
+      "prerequisites": ["fractional-cascading", "d4-bound-z"],
+      "buildsOn": ["fractional-cascading"],
+      "usedBy": [],
+      "operations": ["applicability", "bounded-degree-check", "composition"],
+      "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#51-53"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "conteo directo",
+      "status": "pending"
+    },
+    "bst-computational-model": {
+      "type": "concept",
+      "title": "Modelo computacional del BST",
+      "week": "week-05",
+      "prerequisites": ["balanced-bst"],
+      "buildsOn": [],
+      "usedBy": ["search-sequence-properties", "dynamic-optimality", "splay-tree"],
+      "operations": ["pointer-move", "rotate", "search"],
+      "sourceSlides": ["Sem5_Dynamic_Optimality_I.pdf#13-28"],
+      "hasVisualization": true,
+      "visualizationType": "tree",
+      "complexityStyleFromProfessor": "definición de modelo de costo",
+      "status": "pending"
+    },
+    "search-sequence-properties": {
+      "type": "concept",
+      "title": "Propiedades de secuencias de búsqueda",
+      "week": "week-05",
+      "prerequisites": ["bst-computational-model"],
+      "buildsOn": ["bst-computational-model"],
+      "usedBy": ["dynamic-optimality", "splay-tree"],
+      "operations": [],
+      "sourceSlides": ["Sem5_Dynamic_Optimality_I.pdf#29-50"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "amortized",
+      "status": "pending"
+    },
+    "dynamic-optimality": {
+      "type": "concept",
+      "title": "Optimalidad dinámica",
+      "week": "week-05",
+      "prerequisites": ["bst-computational-model", "search-sequence-properties"],
+      "buildsOn": ["search-sequence-properties"],
+      "usedBy": ["splay-tree"],
+      "operations": [],
+      "sourceSlides": ["Sem5_Dynamic_Optimality_I.pdf#51-58"],
+      "hasVisualization": false,
+      "complexityStyleFromProfessor": "análisis competitivo",
+      "status": "pending"
+    },
+    "splay-tree": {
+      "type": "structure",
+      "title": "Splay tree",
+      "week": "week-05",
+      "prerequisites": ["bst-computational-model", "dynamic-optimality", "balanced-bst"],
+      "buildsOn": ["bst-computational-model"],
+      "usedBy": [],
+      "operations": ["splay", "zig", "zig-zig", "zig-zag", "search"],
+      "sourceSlides": ["Sem5_Dynamic_Optimality_I.pdf#59-75"],
+      "hasVisualization": true,
+      "visualizationType": "tree",
+      "complexityStyleFromProfessor": "amortized",
+      "status": "pending"
+    }
+  }
+}

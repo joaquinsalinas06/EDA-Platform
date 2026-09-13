@@ -1,0 +1,69 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { knowledgeMap } from '../../lib/knowledge-map';
+
+export async function getStaticPaths() {
+  const weeks = await getCollection('weeks');
+  return weeks.map((week) => ({ params: { week: week.id }, props: { week } }));
+}
+
+const { week } = Astro.props;
+const { Content } = await render(week);
+const topics = knowledgeMap.weeks.find((w) => w.id === week.id)?.topics ?? [];
+---
+
+<Base title={week.data.title} crumb={week.id}>
+  <header class="stagger mb-12">
+    <p class="tag">{week.id}</p>
+    <h1 class="mt-2 max-w-[20ch] text-[clamp(2.25rem,4.5vw,3.25rem)] leading-[1.05] font-semibold tracking-[-0.035em]">
+      {week.data.title}
+    </h1>
+    <hr class="draw mt-6 border-0 border-t-2 border-[var(--ink)]" />
+  </header>
+
+  <div class="prose mb-16"><Content /></div>
+
+  <section>
+    <div class="mb-5 flex items-baseline gap-4">
+      <h2 class="tag">Temas</h2>
+      <span class="h-px flex-1 bg-[var(--rule)]"></span>
+    </div>
+
+    <ul class="grid gap-3 sm:grid-cols-2">
+      {
+        topics.map((id) => {
+          const t = knowledgeMap.topics[id];
+          const ready = t?.status === 'generated';
+          return (
+            <li class="reveal">
+              <a
+                href={ready ? `/structures/${id}` : '#'}
+                class:list={[
+                  'group flex items-center justify-between gap-4 rounded-lg border p-4 no-underline transition-all',
+                  ready
+                    ? 'border-[var(--rule)] hover:border-[var(--accent)]'
+                    : 'pointer-events-none border-dashed border-[var(--rule)] opacity-55',
+                ]}
+              >
+                <span>
+                  <span class="tag">{t?.supportConcept ? 'concepto de apoyo' : t?.type}</span>
+                  <span class="mt-1 block text-[1.0625rem] font-medium group-hover:text-[var(--accent)]">
+                    {t?.title ?? id}
+                  </span>
+                </span>
+                <span class="tag shrink-0">{ready ? '↗' : 'pendiente'}</span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </section>
+
+  {
+    week.data.sourceFiles.length > 0 && (
+      <p class="tag mt-10">fuente · {week.data.sourceFiles.join(' · ')}</p>
+    )
+  }
+</Base>

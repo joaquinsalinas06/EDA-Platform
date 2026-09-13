@@ -1,0 +1,65 @@
+---
+import Base from './Base.astro';
+import type { Meta } from '../lib/schemas';
+
+interface Props {
+  meta: Meta;
+  section: string;
+  tabs: { href: string; label: string }[];
+  rail?: boolean;
+}
+const { meta, section, tabs, rail = false } = Astro.props;
+---
+
+<Base title={meta.title} crumb={`${meta.week}/${meta.id}`} rail={rail}>
+  <header class="stagger mb-10">
+    {
+      meta.placeholder && (
+        <p class="mb-6 inline-flex items-center gap-2 rounded border border-dashed border-[var(--rule)] bg-[var(--fill)] px-3 py-1.5">
+          <span class="tag">contenido de ejemplo</span>
+          <span class="text-[0.8125rem] text-[var(--muted)]">
+            no es material del curso — se reemplaza cuando entre la semana real
+          </span>
+        </p>
+      )
+    }
+
+    <p class="tag">
+      {meta.week} · {meta.type === 'structure' ? 'estructura' : 'algoritmo'}
+    </p>
+
+    <h1 class="mt-2 text-[clamp(2.25rem,4.5vw,3.25rem)] leading-[1.05] font-semibold tracking-[-0.035em]">
+      {meta.title}
+    </h1>
+
+    <p class="mt-3 font-mono text-[0.8125rem] text-[var(--faint)]">{meta.id}</p>
+
+    <hr class="draw mt-6 border-0 border-t-2 border-[var(--ink)]" />
+  </header>
+
+  <nav class="mb-12 flex flex-wrap gap-1 border-b border-[var(--rule)]" aria-label="Secciones">
+    {
+      tabs.map((tab) => {
+        const active = tab.label === section;
+        return (
+          <a
+            href={tab.href}
+            aria-current={active}
+            class:list={[
+              '-mb-px border-b-2 px-3 py-2.5 text-[0.875rem] no-underline transition-colors',
+              active
+                ? 'border-[var(--accent)] font-medium text-[var(--accent)]'
+                : 'border-transparent text-[var(--muted)] hover:border-[var(--rule)] hover:text-[var(--ink)]',
+            ]}
+          >
+            {tab.label}
+          </a>
+        );
+      })
+    }
+  </nav>
+
+  <slot />
+
+  <slot name="rail" slot="rail" />
+</Base>

@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import KnowledgeMapNav from '../components/KnowledgeMapNav.astro';
+import SearchDialog from '../components/SearchDialog';
+import { buildSearchIndex } from '../lib/search-index';
 
 interface Props {
   title: string;
@@ -9,6 +11,10 @@ interface Props {
   rail?: boolean;
 }
 const { title, crumb, rail = false } = Astro.props;
+
+// El índice sale entero del knowledge map + la colección `docs`: nada
+// escrito a mano, igual que la navegación.
+const searchIndex = await buildSearchIndex();
 ---
 
 <html lang="es">
@@ -41,13 +47,16 @@ const { title, crumb, rail = false } = Astro.props;
             </>
           )
         }
-        <button
-          id="theme"
-          aria-label="Cambiar tema"
-          class="tag ml-auto shrink-0 rounded border border-[var(--rule)] px-2.5 py-1 transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
-        >
-          tema
-        </button>
+        <div class="ml-auto flex shrink-0 items-center gap-2">
+          <SearchDialog client:idle index={searchIndex} />
+          <button
+            id="theme"
+            aria-label="Cambiar tema"
+            class="tag rounded border border-[var(--rule)] px-2.5 py-1 transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          >
+            tema
+          </button>
+        </div>
       </div>
     </header>
 

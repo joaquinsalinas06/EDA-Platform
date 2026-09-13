@@ -3,17 +3,33 @@ import { knowledgeMap } from '../lib/knowledge-map';
 
 // La navegación sale entera del knowledge map: no hay rutas escritas a mano.
 const current = Astro.url.pathname;
+
+// La semana que contiene el tema activo se abre siempre, sin importar lo que
+// diga localStorage — no tiene sentido navegar a un tema y que su propia
+// semana aparezca colapsada.
+const activeWeek = knowledgeMap.weeks.find((week) =>
+  week.topics.some((id) => current === `/structures/${id}` || current.startsWith(`/structures/${id}/`)),
+)?.id;
 ---
 
 <nav class="min-w-0 lg:sticky lg:top-20 lg:h-fit" aria-label="Mapa del curso">
+  <span hidden data-active-week={activeWeek} />
   <div class="stagger">
     {
       knowledgeMap.weeks.map((week) => (
-        <section class="mb-7">
-          <a href={`/weeks/${week.id}`} class="tag mb-2 block no-underline hover:text-[var(--accent)]">
-            {week.id}
-          </a>
-          <ul class="space-y-px">
+        <details class="group mb-7 [&_summary::-webkit-details-marker]:hidden" data-week={week.id} open>
+          <summary class="mb-2 flex cursor-pointer list-none items-center gap-1.5 no-underline hover:text-[var(--accent)]">
+            <svg
+              viewBox="0 0 10 10"
+              class="h-2.5 w-2.5 shrink-0 fill-[var(--faint)] transition-transform duration-200 group-open:rotate-90"
+              aria-hidden="true"
+            >
+              <path d="M2 1 L8 5 L2 9 Z" />
+            </svg>
+            <span class="tag">{week.id}</span>
+          </summary>
+
+          <ul class="space-y-px pl-4">
             {week.topics.map((id) => {
               const t = knowledgeMap.topics[id];
               const href = `/structures/${id}`;
@@ -50,8 +66,40 @@ const current = Astro.url.pathname;
               );
             })}
           </ul>
-        </section>
+        </details>
       ))
     }
   </div>
 </nav>
+
+<script>
+  // Recuerda qué semanas dejó abiertas o cerradas cada quien, por semana.
+  // La semana activa ya llegó abierta desde el server (arriba); acá sólo se
+  // restaura el estado de las demás y se persiste lo que el usuario cambie.
+  const KEY = (id: string) => `nav:week:${id}`;
+
+  const activeWeek = document.querySelector<HTMLElement>('[data-active-week]')?.dataset.activeWeek;
+
+  for (const el of document.querySelectorAll<HTMLDetailsElement>('details[data-week]')) {
+    const id = el.dataset.week!;
+    if (id === activeWeek) continue; // la semana activa manda: siempre abierta
+
+    try {
+      const saved = localStorage.getItem(KEY(id));
+      if (saved !== null) el.open = saved === '1';
+    } catch {
+      // localStorage puede fallar (ventana privada, cuota); se queda abierta
+      // (el estado por defecto del servidor).
+    }
+  }
+
+  for (const el of document.querySelectorAll<HTMLDetailsElement>('details[data-week]')) {
+    el.addEventListener('toggle', () => {
+      try {
+        localStorage.setItem(KEY(el.dataset.week!), el.open ? '1' : '0');
+      } catch {
+        // per-viewer, no crítico si no persiste
+      }
+    });
+  }
+</script>

@@ -1,10 +1,96 @@
 import { z } from 'astro/zod';
+import { NODE_STATES } from '../visualizations/canvas-types.ts';
 
 // Única fuente de verdad de los contratos. La importan: el build de Astro
 // (src/content.config.ts, src/lib/structures.ts) y scripts/check-knowledge-map.mjs.
 // No duplicar ninguno de estos schemas en otro archivo.
 
 export const VISUALIZATION_TYPES = ['tree', 'graph', 'persistent', 'range-tree'] as const;
+
+// Los distintos "modos" de layout dentro de una familia. `tree` y `layers`
+// son de range-tree; los otros tres de persistent. hasVisualization/
+// visualizationType no cambian — esto sólo afina cómo se posiciona.
+export const VISUALIZATION_MODES = ['path-copying', 'version-tree', 'fat-node', 'tree', 'layers'] as const;
+
+// El nodo de una visualización. TODO lo añadido aquí sobre {id, value,
+// parent} es opcional: el frontmatter ya escrito (max-heapify, build-max-heap,
+// union, binomial-link) sólo usa esos tres campos y sigue validando igual.
+const vizNode = z.object({
+  id: z.string(),
+  value: z.union([z.string(), z.number()]),
+  parent: z.string().nullable().default(null),
+  state: z.enum(NODE_STATES).optional(),
+  /** Panel/versión al que pertenece (path copying: v0/v1; range-tree 2D: primary/secondary). */
+  version: z.string().optional(),
+  panel: z.string().optional(),
+  /** Nodo gordo: registro de modificaciones, en orden. */
+  fields: z
+    .array(
+      z.object({
+        name: z.string(),
+        value: z.union([z.string(), z.number()]),
+        time: z.number().int().optional(),
+      }),
+    )
+    .optional(),
+});
+
+const vizLink = z.object({
+  from: z.string(),
+  to: z.string(),
+  kind: z.enum(['tree', 'shared', 'pointer']).default('tree'),
+  label: z.string().optional(),
+});
+
+const vizArray = z.object({
+  id: z.string(),
+  label: z.string().optional(),
+  row: z.number().int().min(0),
+  slot: z.enum(['left', 'right', 'full']).default('full'),
+  cells: z.array(z.union([z.string(), z.number()])).min(1),
+  states: z.array(z.enum(NODE_STATES)).optional(),
+});
+
+export const visualizationSchema = z.object({
+  type: z.enum(VISUALIZATION_TYPES),
+  /** default de todos los pasos; cada paso puede sobreescribirlo. */
+  mode: z.enum(VISUALIZATION_MODES).optional(),
+  steps: z
+    .array(
+      z.object({
+        note: z.string(),
+        // `nodes` pasa de requerido a con default: estrictamente más
+        // permisivo que antes, así que nada que validaba deja de validar.
+        nodes: z.array(vizNode).default([]),
+        highlight: z.array(z.string()).default([]),
+        mode: z.enum(VISUALIZATION_MODES).optional(),
+        links: z.array(vizLink).optional(),
+        /** Paneles de versión, en orden de izquierda a derecha (persistent: path-copying). */
+        versions: z.array(z.object({ id: z.string(), label: z.string() })).optional(),
+        /** Paneles del 2D anidado (range-tree), colgados de `anchor`. */
+        panels: z.array(z.object({ id: z.string(), label: z.string(), anchor: z.string().optional() })).optional(),
+        /** Punteros entrantes que un split puede redirigir (fat-node). */
+        ports: z.array(z.object({ id: z.string(), label: z.string().optional(), to: z.string() })).optional(),
+        /** Arreglos en capas (layered range tree / fractional cascading). */
+        arrays: z.array(vizArray).optional(),
+        /** Si falta, se derivan por lower_bound — ver range-tree/layout.ts. */
+        bridges: z
+          .array(
+            z.object({
+              from: z.string(),
+              fromIndex: z.number().int().min(0),
+              to: z.string(),
+              toIndex: z.number().int().min(0),
+              active: z.boolean().default(false),
+            }),
+          )
+          .optional(),
+        /** La secuencia de Euler acumulada, la etiqueta `[l,r]` de una consulta, etc. */
+        caption: z.string().optional(),
+      }),
+    )
+    .min(1),
+});
 
 const complexityCase = z.object({
   // Sólo la cota que el profesor sí da es obligatoria. En este curso casi nunca

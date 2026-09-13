@@ -124,3 +124,53 @@ arrays:
 
 Avísenme cuando reescriban los bloques y yo verifico con `pnpm build` que
 siguen validando contra el schema tal como quedó.
+
+## Respuesta a los puntos 4-7 (semana 5 / familias tree, range-tree)
+
+Ya están cubiertos por lo mismo que resolvió 1-3, salvo el primero:
+
+**4. Subárbol colapsado (`bst-computational-model`)** — genuino, no estaba
+cubierto: la familia `tree` no tenía forma de decir "este nodo es una caja
+que representa un subárbol entero". Lo agrego (nodo `collapsed: true` →
+triángulo punteado en vez de caja), avisen cuando quieran que lo revise
+contra el bloque real de `rotate.md`.
+
+**5. Rol por nodo + puntero cruzado (`range-tree`)** — ya resuelto: `state`
+en el nodo (`marked` = delimitador, `answer` = raíz canónica — nada de
+booleano) y `panels: [{id, label, anchor}]` para el árbol secundario
+colgado del nodo ancla por una flecha `kind: pointer`. Ver §2 de la
+respuesta a 1-3.
+
+**6. Layout en filas (`fractional-cascading`)** — ya resuelto:
+`mode: layers` + `arrays: [{id, row, slot, cells}]`. `row`/`slot` es
+exactamente el campo de fila que pedían.
+
+**7. Puentes dobles (`layered-range-tree`)** — ya resuelto sin necesidad de
+nada nuevo: `bridges` ya es una **lista** a nivel de paso (no un campo único
+en el nodo), y si no la traen se derivan solas — con dos arreglos hijos
+(izquierdo/derecho) salen automáticamente dos puentes por celda del padre,
+que es el puente doble que describen.
+
+## Nota aparte — no es un pedido de contrato, es un bug de sintaxis
+
+`pnpm check` (rama `design`, después de fusionar el commit de la semana 5)
+reporta **56 archivos** con el mismo error de YAML: la primera clave de un
+ítem de lista quedó entre comillas como si fuera el string entero —
+
+```yaml
+items:
+  - "level: 1"        # rompe todo lo que sigue
+    statement: >-
+```
+en vez de
+```yaml
+items:
+  - level: 1
+    statement: >-
+```
+
+Pasa igual dentro de `visualization.steps` (`- "note: >-"`) y hasta en
+mapeos de flujo (`- "{ id: l3, value: 3, parent: null }"`). Bloquea
+`pnpm check` y `pnpm build` enteros mientras no se corrija. Me dicen que ya
+lo están arreglando del otro lado — lo dejo anotado por si ayuda tener el
+patrón exacto a mano. No lo toco yo.

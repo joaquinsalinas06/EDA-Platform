@@ -110,6 +110,57 @@ for (const folder of folders) {
   }
 }
 
+// 5. Frontmatter de todos los .md de contenido.
+// El fallo recurrente de los subagentes es un string con ": " sin comillas, que
+// YAML convierte en un mapa. El build de Astro lo caza, pero el build no se
+// puede correr mientras hay agentes escribiendo — y aquí sí.
+const walk = (dir) =>
+  fs.existsSync(dir)
+    ? fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+        const full = path.join(dir, e.name);
+        return e.isDirectory() ? walk(full) : e.name.endsWith('.md') ? [full] : [];
+      })
+    : [];
+
+const strings = (where, value) => {
+  if (!Array.isArray(value)) return;
+  value.forEach((v, i) => {
+    if (typeof v !== 'string') {
+      fail(`${where}[${i}] no es texto — ¿un ": " sin comillas en el YAML? → ${JSON.stringify(v)}`);
+    }
+  });
+};
+
+for (const file of [...walk(STRUCTURES), ...walk(path.join(CONTENT, 'weeks'))]) {
+  const raw = fs.readFileSync(file, 'utf8');
+  const fm = raw.match(/^---\n([\s\S]*?)\n---\n/);
+  if (!fm) continue;
+  const rel = path.relative(ROOT, file);
+  let data;
+  try {
+    data = YAML.parse(fm[1]);
+  } catch (e) {
+    fail(`${rel}: frontmatter YAML inválido — ${e.message.split('\n')[0]}`);
+    continue;
+  }
+  if (!data || typeof data !== 'object') continue;
+  strings(`${rel} canExplain`, data.canExplain);
+  strings(`${rel} canDo`, data.canDo);
+  for (const [i, item] of (data.items ?? []).entries()) {
+    if (typeof item !== 'object' || item === null) {
+      fail(`${rel} items[${i}] no es un objeto`);
+      continue;
+    }
+    for (const k of ['statement', 'solution']) {
+      if (k in item && typeof item[k] !== 'string') {
+        fail(`${rel} items[${i}].${k} no es texto — ¿un ": " sin comillas?`);
+      }
+    }
+    strings(`${rel} items[${i}].hints`, item.hints);
+    if (!item.hints?.length) fail(`${rel} items[${i}] no tiene pistas`);
+  }
+}
+
 for (const w of warnings) console.warn(`  ~ ${w}`);
 
 if (errors.length) {

@@ -1,0 +1,133 @@
+---
+kind: theory
+title: "Cola de prioridad retroactiva"
+---
+
+## ¿Qué problema resuelve?
+
+Una [priority queue / montículo](/structures/binary-heap) soporta `Insert(k)`
+y `Delete-Min`, cada una en `O(lg n)`. El profesor plantea volverla
+**retroactiva parcial** (ver [Retroactividad](/structures/retroactivity)):
+poder insertar o eliminar operaciones en el pasado de su línea de tiempo, y
+consultar el estado actual — sin pagar el costo genérico de los métodos ya
+vistos. El [método de rollback](/structures/rollback-method) resolvería
+esto en `O(r)` (`r` = operaciones después del cambio), y el enfoque de
+[problemas de búsqueda descomponibles](/structures/decomposable-search-problem)
+daría `O(lg n · lg m)` — y ni siquiera aplica limpio, porque `Delete-Min` no
+es un problema descomponible simple. La meta explícita es `O(lg n)`
+amortizado por operación retroactiva: el mismo orden que las operaciones
+originales de la cola.
+
+## Intuición
+
+La pieza que hace esto posible es entender **qué le pasa realmente al
+presente** cuando se inserta una operación en el pasado. A pesar de la
+aparente cascada — insertar `k` en el tiempo `t` podría, en principio,
+desplazar en cadena todos los `Delete-Min` posteriores — el profesor
+muestra que el efecto neto en el presente es mínimo: **o `k` termina en la
+cola actual, o reemplaza a exactamente un elemento en el conjunto de los ya
+eliminados. Nunca más que eso.** Encontrar cuál de los dos casos ocurre, y
+cuál es ese elemento, es todo el problema — y ahí es donde entra el
+**puente**: un instante donde la cola "se corta limpio" y nada de lo que
+sobrevivió hasta ese punto puede haber sido eliminado después. El puente
+más cercano acota exactamente cuánto pasado hay que mirar.
+
+## Estructura interna
+
+Se mantiene la línea de tiempo retroactiva (ver
+[Retroactividad](/structures/retroactivity)) de operaciones `Insert(k)` /
+`Delete-Min` sobre la cola, más:
+
+- Un [montículo](/structures/binary-heap) con el estado actual, `Q_ahora`.
+- Una estructura de **puentes** (ver [Bridge](/structures/retroactive-priority-queue/operations/bridge))
+  sobre esa línea de tiempo.
+- "Con la estructura de puentes mantenida sobre un árbol balanceado" —
+  textual del profesor (páginas 63-64) — se asume un **BST balanceado
+  indexado por tiempo, con información agregada** (el máximo de lo no
+  presente en `Q_ahora`) en cada subárbol (página 59). El profesor da por
+  conocidos tanto el BST balanceado como la idea de agregado por subárbol;
+  no explica cómo se mantienen los puentes dinámicamente al insertar o
+  eliminar — es el hueco técnico central que el material deja abierto.
+
+## Operaciones
+
+- [Bridge](/structures/retroactive-priority-queue/operations/bridge) — el
+  concepto central: cuándo un instante de la línea de tiempo es un corte
+  limpio, y por qué eso acota el trabajo de todo lo demás.
+- [Compute-M](/structures/retroactive-priority-queue/operations/compute-m) —
+  calcula el efecto neto de una inserción retroactiva usando el puente más
+  cercano, en vez del recorrido ingenuo `O(r)`.
+- [Insert-retroactive](/structures/retroactive-priority-queue/operations/insert-retroactive) —
+  la única operación con desarrollo propio del profesor: fórmula del efecto
+  neto, ejemplo trabajado incluido.
+- [Delete-retroactive](/structures/retroactive-priority-queue/operations/delete-retroactive) —
+  el mazo sólo la menciona en el enunciado del resultado final, sin
+  desarrollo propio.
+
+> **Nota de apoyo** (no está en las diapositivas): esta estructura es
+> **retroactiva parcial**, no completa (ver la distinción en
+> [Retroactividad](/structures/retroactivity)). Por eso `Query` no tiene
+> tratamiento propio en el mazo: sólo se consulta el presente (`Q_ahora`,
+> ya sea con `Find-Min` o leyendo el montículo directamente), nunca un
+> estado pasado arbitrario. El mapa de este curso lista `query` como
+> operación del *modelo* de retroactividad, no de este caso de estudio en
+> particular — aquí no aparece como archivo propio porque el profesor no
+> le da ningún tratamiento específico para la priority queue.
+
+## Análisis de complejidad
+
+El estilo del profesor aquí **no es una recurrencia ni un potencial**: es
+un **argumento estructural sobre el problema**. El corazón no es un
+análisis de costos paso a paso, sino un teorema sobre qué hace realmente
+una inserción retroactiva (páginas 50-51): "A pesar de la cascada
+aparente, insertar k en el tiempo t tiene, en el presente, un efecto neto
+muy simple: o bien k termina en `Q_ahora`, o bien reemplaza (en el conjunto
+de elementos eliminados) a exactamente un elemento — ¡nunca más que eso!"
+
+A partir de ahí, el costo de una inserción retroactiva se reduce al costo
+de calcular ese elemento (`M`), y `M` se acota usando el puente más cercano
+más un BST balanceado con información agregada. Pero la cota final —
+`O(lg n)` amortizado — **no se demuestra en el mazo**: se cita como
+resultado externo. Textual (páginas 63-64): "El resultado (Demaine, Iacono,
+Langerman, 2007): con la estructura de puentes mantenida sobre un árbol
+balanceado, Insert y Delete retroactivos parciales sobre una priority queue
+cuestan `O(lg n)` amortizado — el mismo orden que las operaciones
+originales." El cierre pedagógico (página 64) confirma el estilo: es un
+ejemplo de cómo entender la estructura del problema (que el efecto de una
+inserción retroactiva se reduce a un único intercambio) permite superar por
+mucho la cota genérica `O(r)` del rollback.
+
+> **Nota de apoyo** (no está en las diapositivas): el mazo no dice cómo se
+> mantienen los puentes bajo inserciones y eliminaciones sucesivas — sólo
+> que "se mantienen" sobre el árbol balanceado. El razonamiento amortizado
+> detrás del `O(lg n)` (por qué en promedio no hay que recalcular todos los
+> puentes en cada operación) no aparece en el material; es exactamente el
+> hueco que el paper citado (Demaine–Iacono–Langerman 2007) llena y el
+> profesor no.
+
+## Tabla de complejidad
+
+La tabla se genera desde `meta.yaml`. El profesor casi nunca distingue
+mejor/promedio/peor ni menciona espacio en este curso; aquí tampoco. La
+única cota derivada explícitamente en el mazo mismo es el `O(r)` del
+cálculo ingenuo de `M` (dado como lo que el puente evita); el `O(lg n)`
+amortizado de Insert y Delete retroactivos es una cita, no una derivación
+propia.
+
+## Ejemplos
+
+Ver [Ejemplos](/structures/retroactive-priority-queue/examples). El
+ejemplo trabajado del profesor (páginas 60-62) es, según el análisis, "el
+mejor ejemplo concreto de las tres semanas" — y va sin marca de derivado.
+
+## Comparación con estructuras relacionadas
+
+| | Costo de Insert / Delete retroactivos |
+| --- | --- |
+| [Método de rollback](/structures/rollback-method) | `O(r)` |
+| [Segment Tree genérico](/structures/decomposable-search-problem) | `O(lg n · lg m)` (y no aplica limpio: Delete-Min no es descomponible simple) |
+| Priority queue retroactiva (puentes + BST balanceado) | `O(lg n)` amortizado |
+
+## Prueba de dominio
+
+Ver [Prueba de dominio](/structures/retroactive-priority-queue/mastery-check).

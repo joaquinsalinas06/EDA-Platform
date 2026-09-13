@@ -24,24 +24,24 @@ tendría que regenerarse si cambias un campo obligatorio.
 
 ## Arrancar
 
-El repo está inicializado con git pero **sin ningún commit**, a propósito: el
-primer commit lo hace el usuario o tú, con vuestra identidad, no otro agente.
-Un worktree necesita al menos un commit, así que el orden es:
+El worktree ya existe y está en marcha:
 
 ```sh
-cd /Users/joaquins/uni/26-2/eda/EDA-Platform
-git add -A && git commit -m "..."            # primer commit, con tu identidad
-git worktree add ../EDA-Platform-design -b design
-cd ../EDA-Platform-design
-pnpm install
-pnpm dev
+cd /Users/joaquins/uni/26-2/eda/EDA-Platform-design   # rama `design`
+pnpm install && pnpm dev
 ```
 
 `pnpm build`, `pnpm check` y `pnpm test` deben pasar antes de cada commit.
-El worktree comparte historia con el principal, así que `git merge design` al final.
 
-Mientras no exista ese primer commit, se puede trabajar igual copiando el
-directorio, pero entonces la fusión final hay que hacerla a mano.
+**Sincronización con el contenido**: el agente de contenido trabaja en `master` y va
+generando temas continuamente. Haz `git merge master` cada tanto para tener contenido
+real con el que probar tus visualizaciones — no te quedes trabajando contra un árbol
+de ejemplo. Al final, `master` fusiona `design`.
+
+**Aviso de conflicto**: este archivo (`HANDOFF-DESIGN.md`) lo edito yo en `master` para
+añadir peticiones a la sección "Cambios de contrato solicitados". Si tú también lo
+editas en `design`, habrá conflicto. Sugerencia: tú no lo toques; si necesitas
+responderme algo, deja un `HANDOFF-DESIGN-REPLY.md` aparte.
 
 ## Qué hay ya construido (no lo rehagas)
 
@@ -213,7 +213,136 @@ Anota aquí lo que necesites de `src/lib/schemas.ts` o `src/content.config.ts` e
 de cambiarlo directamente. Formato: qué campo, en qué colección, para qué, y si es
 obligatorio u opcional.
 
-<!-- ejemplo:
-- `visualization.steps[].nodes[].fields?: {name, value, time}[]` — opcional, en la
-  colección `docs`, para que la familia `persistent` pueda dibujar nodos gordos.
--->
+### 1. Un nodo compartido entre dos versiones — pedido por `path-copying`
+
+**Quién lo pide**: el agente que escribió `content/structures/path-copying/`.
+**Dónde se ve el problema**: `content/structures/path-copying/operations/segment-tree-update.md`,
+bloque `visualization` del frontmatter (6 pasos, el diagrama de 4 hojas del profesor).
+
+`vizNode` hoy es `{id, value, parent}` — **un solo padre por nodo**. Path copying
+necesita expresar que un nodo compartido (por ejemplo `[1,2]`) sigue colgando **a la
+vez** de la raíz vieja y de la raíz nueva: eso es literalmente lo que significa
+"compartir en vez de copiar", y es el punto entero del tema.
+
+Workaround actual del agente: reutiliza el mismo `id` entre pasos para sugerir que es
+el mismo objeto, y lo explica en el texto del `note`. Funciona como parche, pero el
+dibujo no puede mostrar las dos aristas.
+
+Propuesta (decídela tú, es tu terreno): algo como
+`parents?: string[]` además de `parent`, o un `edges` explícito por paso con un tipo
+de arista (`copiada` | `compartida`). La segunda opción probablemente te sirva también
+para `fat-nodes` y para los puentes del `layered-range-tree`. Si cambias el schema,
+avísame y yo mando a los agentes a reescribir esos bloques — **no los edites tú**.
+
+### 2. Nodo gordo y varios predecesores — pedido por `fat-nodes` (confirmado)
+
+**Quién lo pide**: el agente que escribió `content/structures/fat-nodes/`.
+**Dónde se ve**: `content/structures/fat-nodes/operations/node-split.md`, bloque
+`visualization` del frontmatter.
+
+Le faltaron dos cosas, y son las mismas dos que pide `path-copying`:
+
+1. **El registro dentro del nodo.** Un nodo gordo es campos originales + una lista de
+   tuplas `(campo, valor nuevo, tiempo)`. Con sólo `value: string|number` no se puede
+   dibujar. Workaround actual: metió un texto resumen en `value`.
+2. **Varios predecesores.** El caso `p > 1` del split (redirigir los `p` punteros
+   entrantes) **es un grafo, no un árbol**, y `parent` sólo admite uno. Workaround
+   actual: usa `parent` de forma laxa como "quién apunta a quién" y lo aclara en el
+   `note`.
+
+Sugerencia del agente: una lista de padres por nodo, o un campo
+`log: [{field, value, time}]` en `vizNode`.
+
+**Nota mía**: los pedidos 1 y 2 apuntan a la misma conclusión — la familia `persistent`
+no es un árbol, es un grafo con aristas tipadas y nodos con contenido estructurado.
+Probablemente convenga diseñar `CanvasStep` de esa forma desde el principio en vez de
+parchear `vizNode`, y dejar que `tree` siga siendo el caso particular que ya funciona.
+Si cambias el schema, avísame y **yo** mando a los agentes a reescribir esos bloques.
+
+<!-- formato para lo que agregues: qué campo, en qué colección, para qué, obligatorio u opcional -->
+
+
+### 3. Estado de la estructura por paso — pedido por `retroactive-priority-queue` (confirmado)
+
+**Dónde se ve**: `content/structures/retroactive-priority-queue/operations/bridge.md`, bloque
+`visualization` (línea de tiempo de 5 pasos con el puente resaltado).
+
+Falta un lugar estructurado para **el estado de la cola en cada instante** (`Q_t`), separado
+del valor del nodo. Workaround actual: va como prosa dentro de `note`. El agente sugiere un
+campo `state`/`snapshot` por paso.
+
+---
+
+## Conclusión sobre la familia `persistent` — tres temas, el mismo diagnóstico
+
+`path-copying`, `fat-nodes` y `retroactive-priority-queue` llegaron por caminos distintos al
+mismo límite. Entre los tres piden:
+
+- **nodos con contenido estructurado**, no un solo `value` (el registro de tuplas de un nodo
+  gordo, el estado `Q_t` de una cola);
+- **varios padres / aristas tipadas**, no un `parent` único (un nodo compartido entre dos
+  versiones, los `p` punteros entrantes de un split, aristas `copiada` vs `compartida`);
+- **un estado por paso**, además del estado por nodo.
+
+Es decir: `persistent` **no es un árbol**, es un grafo con aristas tipadas, nodos con
+contenido y un estado global por paso. Mi recomendación es diseñar `CanvasStep` con esa forma
+y dejar que `tree` sea el caso particular que ya funciona y ya tiene tests
+(`src/visualizations/tree/layout.test.ts`), en vez de parchear `vizNode` tres veces.
+
+Los tres bloques `visualization` ya están escritos con la forma actual y quedan latentes. Si
+cambias el schema, **avísame y yo mando a los agentes a reescribirlos** — no los edites tú.
+
+### 4. Nodo "subárbol colapsado" — pedido por `bst-computational-model` (familia `tree`)
+
+**Dónde se ve**: `content/structures/bst-computational-model/operations/rotate.md`, bloque
+`visualization` (3 pasos de una rotación).
+
+Para dibujar una rotación hace falta mostrar los subárboles A, B y C como **cajas que
+representan un subárbol entero**, no como nodos sueltos. El agente usó nodos simbólicos
+A/B/C y lo aclaró en el `note`, pero visualmente se leen como hojas normales, que es
+justo lo que confunde al explicar una rotación.
+
+Esta petición es de la familia **`tree`**, que sí está implementada — a diferencia de las
+tres anteriores. Sería un `kind: 'subtree'` (o similar) en el nodo, renderizado como un
+triángulo o una caja punteada, que es la convención de todos los libros.
+
+Relacionado: el agente también nota que no hay forma de codificar "el recorrido inorden se
+preserva", así que eso queda en el texto. Eso probablemente esté bien como está.
+
+### 5. Rol de nodo y punteros cruzados — pedido por `range-tree` (familia `range-tree`)
+
+**Dónde se ve**: `content/structures/range-tree/operations/{range-query-1d,build-2d}.md`.
+
+1. **Rol dentro de un paso.** El diagrama #35 del profesor usa dos colores: amarillo para
+   los **delimitadores** (hojas 4 y 18) y rojo para las **raíces de los subárboles canónicos
+   de la respuesta** (7 y 13). El schema sólo tiene una lista plana `highlight`, así que los
+   dos roles se pintan igual. Hace falta un rol por nodo, no un booleano.
+   (Esto conecta con el problema de paleta que ya está anotado en la tarea 2b: son dos
+   estados distintos, y nuestra paleta tiene un solo azul.)
+2. **Puntero cruzado entre árboles.** En el #47 el árbol secundario cuelga del nodo 15 por
+   una flecha, no por `parent`. El agente lo modeló como un segundo bloque de `nodes` con su
+   propia raíz `null` y lo explicó en el `note`, pero la flecha que los conecta no se puede
+   dibujar. El `layered-range-tree` de la semana 5 va a necesitar lo mismo, multiplicado:
+   sus **puentes** son exactamente flechas entre posiciones de arreglos distintos.
+
+Nota mía: junto con las peticiones 1-3, esto confirma que tanto `persistent` como
+`range-tree` necesitan **aristas de primera clase con tipo** (no derivadas de `parent`) y
+**roles por nodo** (no un `highlight` plano). Son la misma generalización.
+
+### 6. Layout en filas para listas paralelas — pedido por `fractional-cascading`
+
+**Dónde se ve**: `content/structures/fractional-cascading/operations/build.md`, bloque
+`visualization` (3 pasos del ejemplo #18-19).
+
+Fractional cascading **no es un árbol en absoluto**: son `k` listas ordenadas paralelas
+(L'1, L'2, L3…) con flechas entre posiciones de una lista y la siguiente. El agente
+reutilizó `parent` como "puente hacia la lista siguiente", que funciona como parche pero
+no le dice al componente **en qué fila va cada nodo**.
+
+Pide un campo tipo `row`/`list` por nodo para el layout en filas, y —otra vez— la
+distinción entre arista de puente y arista jerárquica.
+
+Esto es lo mismo que necesitará `layered-range-tree` (sus puentes son literalmente esto)
+y encaja con la generalización ya descrita en las peticiones 1-3 y 5: **aristas tipadas de
+primera clase + un campo de agrupación/posición por nodo**. Con eso, `range-tree` y
+`persistent` salen de la misma base y `tree` sigue siendo el caso fácil.

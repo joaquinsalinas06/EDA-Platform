@@ -1,19 +1,48 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import {
+  NODE_W,
+  NODE_H,
+  CELL_W,
+  CELL_H,
+  PORT_R,
+  LINE_H,
+  STATE_LABEL,
+  resolveState,
+  resolveEdgeState,
+  nodeStyle,
+  edgeStyle,
+  type CanvasNode,
+  type CanvasEdge,
+  type CanvasGroup,
+  type CanvasText,
+  type CanvasStep,
+} from '../visualizations/canvas-types.ts';
 
-export type CanvasNode = { id: string; label: string; x: number; y: number };
-export type CanvasEdge = { from: string; to: string };
-export type CanvasStep = {
-  note: string;
-  nodes: CanvasNode[];
-  edges: CanvasEdge[];
-  highlight: string[];
-};
+// Tipos y constantes viven en canvas-types.ts (puro, sin JSX: lo importan los
+// layout.ts de cada familia, y `node --test` no puede quitar JSX de un .tsx).
+// Se re-exportan aquí para que nada que ya importe de este archivo — como
+// TreeVisualization.tsx — tenga que cambiar.
+export type { CanvasNode, CanvasEdge, CanvasGroup, CanvasText, CanvasStep };
 
 type Props = {
   steps: CanvasStep[];
   height?: number;
   width?: number;
 };
+
+/** Extremo de una arista recortado contra el borde de la caja destino, para
+ * que una punta de flecha no quede enterrada bajo el nodo. Sólo se usa si la
+ * arista pide `arrow` — las aristas de árbol siguen yendo centro a centro,
+ * exactamente como hoy. */
+function trimToBox(from: { x: number; y: number }, to: CanvasNode): { x: number; y: number } {
+  const w = (to.w ?? NODE_W) / 2;
+  const h = (to.h ?? NODE_H) / 2;
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  if (dx === 0 && dy === 0) return { x: to.x, y: to.y };
+  const scale = 1 / Math.max(Math.abs(dx) / w, Math.abs(dy) / h);
+  return { x: to.x - dx * scale, y: to.y - dy * scale };
+}
 
 /**
  * Base compartida de todas las familias de visualización (árboles, grafos,
@@ -28,6 +57,7 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
   const [i, setI] = useState(0);
   const [playing, setPlaying] = useState(false);
   const box = useRef<HTMLDivElement>(null);
+  const arrowId = useId();
 
   const last = steps.length - 1;
   const step = steps[Math.min(i, last)];
@@ -72,6 +102,8 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
 
   const pos = new Map(step.nodes.map((n) => [n.id, n]));
   const progress = steps.length > 1 ? (i / last) * 100 : 100;
+  const groups = step.groups ?? [];
+  const annotations = step.annotations ?? [];
 
   return (
     <figure
@@ -105,27 +137,98 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
           role="img"
           aria-label={step.note}
         >
+          <defs>
+            <marker
+              id={`${arrowId}-ink`}
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+            >
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)" />
+            </marker>
+            <marker
+              id={`${arrowId}-accent`}
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+            >
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" />
+            </marker>
+          </defs>
+
+          {groups.map((g) => (
+            <g key={g.id} style={{ transition: 'transform 450ms cubic-bezier(.2,.7,.3,1)' }}>
+              <rect
+                x={g.x}
+                y={g.y}
+                width={g.w}
+                height={g.h}
+                rx={6}
+                fill={g.style === 'ghost' ? 'transparent' : 'color-mix(in srgb, var(--muted) 6%, transparent)'}
+                stroke="var(--rule)"
+                strokeWidth={1}
+                strokeDasharray={g.style === 'ghost' ? '3 3' : undefined}
+              />
+              {g.label && (
+                <text
+                  x={g.x + 8}
+                  y={g.y + 14}
+                  fontSize={10}
+                  fontFamily="var(--font-mono)"
+                  letterSpacing="0.06em"
+                  fill="var(--faint)"
+                  style={{ textTransform: 'uppercase' }}
+                >
+                  {g.label}
+                </text>
+              )}
+            </g>
+          ))}
+
           {step.edges.map((e) => {
             const a = pos.get(e.from);
-            const b = pos.get(e.to);
-            if (!a || !b) return null;
-            const live = step.highlight.includes(e.from) || step.highlight.includes(e.to);
+            const bRaw = pos.get(e.to);
+            if (!a || !bRaw) return null;
+            const state = resolveEdgeState(e, step.highlight);
+            const visual = edgeStyle(e.kind ?? 'tree', state);
+            const b = e.arrow ? trimToBox(a, bRaw) : bRaw;
+            const curve = e.curve ?? 0;
+            const mx = (a.x + b.x) / 2;
+            const my = (a.y + b.y) / 2;
+            const dx = b.x - a.x;
+            const dy = b.y - a.y;
+            const len = Math.hypot(dx, dy) || 1;
+            const cx = mx - (dy / len) * curve;
+            const cy = my + (dx / len) * curve;
+            const d = curve === 0 ? `M${a.x},${a.y} L${b.x},${b.y}` : `M${a.x},${a.y} Q${cx},${cy} ${b.x},${b.y}`;
             return (
-              <line
-                key={`${e.from}-${e.to}`}
-                x1={a.x}
-                y1={a.y}
-                x2={b.x}
-                y2={b.y}
-                stroke={live ? 'var(--accent)' : 'var(--rule)'}
-                strokeWidth={live ? 2 : 1.5}
+              <path
+                key={e.id ?? `${e.from}-${e.to}`}
+                d={d}
+                fill="none"
+                stroke={visual.stroke}
+                strokeWidth={visual.strokeWidth}
+                strokeDasharray={visual.dash}
+                markerEnd={e.arrow ? `url(#${state === 'active' ? `${arrowId}-accent` : `${arrowId}-ink`})` : undefined}
                 style={{ transition: 'all 450ms cubic-bezier(.2,.7,.3,1)' }}
               />
             );
           })}
 
           {step.nodes.map((n) => {
-            const on = step.highlight.includes(n.id);
+            const state = resolveState(n, step.highlight);
+            const visual = nodeStyle(state);
+            const shape = n.shape ?? 'box';
+            const [defaultW, defaultH] = shape === 'cell' ? [CELL_W, CELL_H] : [NODE_W, NODE_H];
+            const w = n.w ?? defaultW;
+            const h = n.h ?? defaultH;
+
             return (
               <g
                 key={n.id}
@@ -134,31 +237,130 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
                   transition: 'transform 450ms cubic-bezier(.2,.7,.3,1)',
                 }}
               >
-                <rect
-                  x={-19}
-                  y={-16}
-                  width={38}
-                  height={32}
-                  rx={5}
-                  fill={on ? 'var(--accent)' : 'var(--paper)'}
-                  stroke={on ? 'var(--accent)' : 'var(--rule)'}
-                  strokeWidth="1.5"
-                  style={{ transition: 'fill 300ms, stroke 300ms' }}
-                />
-                <text
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fontSize="14"
-                  fontWeight="500"
-                  fontFamily="var(--font-mono)"
-                  fill={on ? 'var(--accent-ink)' : 'var(--ink)'}
-                  style={{ transition: 'fill 300ms' }}
-                >
-                  {n.label}
-                </text>
+                <title>
+                  {n.label} — {STATE_LABEL[state]}
+                </title>
+
+                {shape === 'port' ? (
+                  <circle
+                    r={PORT_R}
+                    fill={visual.fill}
+                    stroke={visual.stroke}
+                    strokeWidth={visual.strokeWidth}
+                    opacity={visual.opacity}
+                    style={{ transition: 'fill 300ms, stroke 300ms, opacity 300ms' }}
+                  />
+                ) : shape === 'record' ? (
+                  <>
+                    <rect
+                      x={-w / 2}
+                      y={-h / 2}
+                      width={w}
+                      height={h}
+                      rx={4}
+                      fill={visual.fill}
+                      stroke={visual.stroke}
+                      strokeWidth={visual.strokeWidth}
+                      strokeDasharray={visual.dash}
+                      opacity={visual.opacity}
+                      style={{ transition: 'fill 300ms, stroke 300ms, opacity 300ms' }}
+                    />
+                    {visual.double && (
+                      <rect
+                        x={-w / 2 + 3}
+                        y={-h / 2 + 3}
+                        width={w - 6}
+                        height={h - 6}
+                        rx={2}
+                        fill="none"
+                        stroke={visual.stroke}
+                        strokeWidth={1}
+                      />
+                    )}
+                    {(n.lines ?? [n.label]).map((line, idx) => (
+                      <text
+                        key={idx}
+                        x={0}
+                        y={-h / 2 + LINE_H * (idx + 0.5)}
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        fontSize={11}
+                        fontFamily="var(--font-mono)"
+                        fill={visual.text}
+                      >
+                        {line}
+                      </text>
+                    ))}
+                    {n.divider !== undefined && (
+                      <line
+                        x1={-w / 2 + 4}
+                        x2={w / 2 - 4}
+                        y1={-h / 2 + LINE_H * (n.divider + 1)}
+                        y2={-h / 2 + LINE_H * (n.divider + 1)}
+                        stroke={visual.stroke}
+                        strokeWidth={1}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <rect
+                      x={-w / 2}
+                      y={-h / 2}
+                      width={w}
+                      height={h}
+                      rx={shape === 'cell' ? 2 : 5}
+                      fill={visual.fill}
+                      stroke={visual.stroke}
+                      strokeWidth={visual.strokeWidth}
+                      strokeDasharray={visual.dash}
+                      opacity={visual.opacity}
+                      style={{ transition: 'fill 300ms, stroke 300ms, opacity 300ms' }}
+                    />
+                    {visual.double && (
+                      <rect
+                        x={-w / 2 + 3}
+                        y={-h / 2 + 3}
+                        width={w - 6}
+                        height={h - 6}
+                        rx={2}
+                        fill="none"
+                        stroke={visual.stroke}
+                        strokeWidth={1}
+                      />
+                    )}
+                    <text
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      fontSize={shape === 'cell' ? 12 : 14}
+                      fontWeight={500}
+                      fontFamily="var(--font-mono)"
+                      fill={visual.text}
+                      opacity={visual.opacity}
+                      style={{ transition: 'fill 300ms' }}
+                    >
+                      {n.label}
+                    </text>
+                  </>
+                )}
               </g>
             );
           })}
+
+          {annotations.map((a) => (
+            <text
+              key={a.id}
+              x={a.x}
+              y={a.y}
+              textAnchor={a.anchor ?? 'start'}
+              fontSize={a.size ?? 12}
+              fontFamily="var(--font-mono)"
+              fill={a.state === 'active' ? 'var(--accent)' : a.state === 'muted' ? 'var(--faint)' : 'var(--muted)'}
+              style={{ transition: 'fill 300ms' }}
+            >
+              {a.text}
+            </text>
+          ))}
         </svg>
       </div>
 

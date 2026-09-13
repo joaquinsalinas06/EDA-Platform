@@ -1,0 +1,30 @@
+---
+// Único sitio con conocimiento del despacho familia → componente.
+//
+// El registro real (qué familias existen y si tienen componente) vive en
+// src/visualizations/registry.ts, con un `satisfies` que obliga a declarar
+// cada miembro de VISUALIZATION_TYPES — añadir uno sin registrar su
+// componente ahí es error de compilación, no el fallo silencioso que había
+// antes con `graph`.
+//
+// Astro necesita resolver el entrypoint de hidratación de `client:visible`
+// en tiempo de compilación: pasar el componente como valor dinámico
+// (`<Family client:visible ...>`) revienta el build con
+// `NoMatchingImport: Could not render 'Family'`. Por eso el despacho en sí
+// es una cadena de ifs — pero acotada a este único archivo de ~10 líneas, y
+// sigue siendo el registro quien decide qué familias existen.
+import { VISUALIZATIONS } from '../visualizations/registry';
+import TreeVisualization from '../visualizations/tree/TreeVisualization';
+import PersistentVisualization from '../visualizations/persistent/PersistentVisualization';
+import RangeTreeVisualization from '../visualizations/range-tree/RangeTreeVisualization';
+
+interface Props {
+  viz: { type: keyof typeof VISUALIZATIONS; steps: any[] };
+}
+
+const { viz } = Astro.props;
+---
+
+{viz.type === 'tree' && <TreeVisualization client:visible steps={viz.steps} />}
+{viz.type === 'persistent' && <PersistentVisualization client:visible steps={viz.steps} />}
+{viz.type === 'range-tree' && <RangeTreeVisualization client:visible steps={viz.steps} />}

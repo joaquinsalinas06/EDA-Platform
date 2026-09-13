@@ -7,7 +7,7 @@ import MasteryChecklist from '../../components/MasteryChecklist.astro';
 import SectionRail from '../../components/SectionRail.astro';
 import CodeEditor from '../../components/CodeEditor';
 import ExerciseBlock from '../../components/ExerciseBlock';
-import TreeVisualization from '../../visualizations/tree/TreeVisualization';
+import Visualization from '../../components/Visualization.astro';
 import { loadMeta, readCppSteps } from '../../lib/structures';
 
 // Una sola ruta para todos los documentos de una estructura: la teoría vive en
@@ -59,11 +59,7 @@ const hasRail = headings.some((h) => h.depth === 2);
   {data.kind === 'theory' && <PrerequisiteBanner id={structure} />}
   {data.kind === 'theory' && <ComplexityTable meta={meta} />}
 
-  {
-    data.kind === 'operation' && data.visualization?.type === 'tree' && (
-      <TreeVisualization client:visible steps={data.visualization.steps} />
-    )
-  }
+  {data.kind === 'operation' && data.visualization && <Visualization viz={data.visualization} />}
   {data.kind === 'operation' && cppSteps.length > 0 && <CodeEditor client:visible steps={cppSteps} />}
 
   {data.kind === 'mastery' && <MasteryChecklist canExplain={data.canExplain} canDo={data.canDo} />}

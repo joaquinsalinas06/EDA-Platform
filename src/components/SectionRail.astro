@@ -67,10 +67,22 @@ const sections = headings.filter((h) => h.depth === 2);
 <script>
   // Resalta en azul la sección que estás leyendo. Sin esto, en una página
   // larga no hay forma de saber dónde vas.
-  const links = document.querySelectorAll<HTMLElement>('[data-rail]');
-  if (links.length) {
+  //
+  // Este componente se remonta en cada navegación (no está persistido: cada
+  // página tiene sus propias secciones), pero su script es TEXTUALMENTE
+  // idéntico en todas las páginas — con el router de Astro activo, un
+  // <script> cuyo contenido ya se ejecutó una vez no se vuelve a ejecutar en
+  // navegaciones futuras. `astro:page-load` sí dispara en cada una
+  // (incluida la primera), así que la inicialización va ahí, no suelta.
+  let observer: IntersectionObserver | undefined;
+
+  function initSectionRail() {
+    observer?.disconnect();
+    const links = document.querySelectorAll<HTMLElement>('[data-rail]');
+    if (!links.length) return;
+
     const on = 'border-l-[var(--accent)]';
-    const observer = new IntersectionObserver(
+    observer = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
@@ -89,4 +101,6 @@ const sections = headings.filter((h) => h.depth === 2);
       if (target) observer.observe(target);
     }
   }
+
+  document.addEventListener('astro:page-load', initSectionRail);
 </script>

@@ -1,26 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { VISUALIZATION_TYPES } from './lib/schemas';
-
-// Un nodo de visualización: lista plana, el layout lo calcula el componente.
-const vizNode = z.object({
-  id: z.string(),
-  value: z.union([z.string(), z.number()]),
-  parent: z.string().nullable().default(null),
-});
-
-const visualization = z.object({
-  type: z.enum(VISUALIZATION_TYPES),
-  steps: z
-    .array(
-      z.object({
-        note: z.string(),
-        nodes: z.array(vizNode),
-        highlight: z.array(z.string()).default([]),
-      }),
-    )
-    .min(1),
-});
+import { visualizationSchema } from './lib/schemas';
 
 const theory = z.object({
   kind: z.literal('theory'),
@@ -33,7 +13,7 @@ const operation = z.object({
   order: z.number().int(),
   /** Archivos en cpp/structures/<id>/, en orden progresivo: nodo → implementación completa. */
   cppSteps: z.array(z.string()).default([]),
-  visualization: visualization.optional(),
+  visualization: visualizationSchema.optional(),
 });
 
 const examples = z.object({

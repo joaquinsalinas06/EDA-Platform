@@ -46,3 +46,21 @@ test('un árbol degenerado se abanica en vez de apilarse en vertical', () => {
 test('sin nodos no revienta', () => {
   assert.deepEqual(layout([]), []);
 });
+
+test('un nodo `collapsed` (subárbol entero) conserva la marca y se posiciona como hoja', () => {
+  // El caso real: una rotación con A/B/C como subárboles completos colgando
+  // de n y p — no son claves sueltas, tienen que dibujarse distinto.
+  const tree: TreeNode[] = [
+    { id: 'p', value: 'p', parent: null },
+    { id: 'n', value: 'n', parent: 'p' },
+    { id: 'C', value: 'C', parent: 'p', collapsed: true },
+    { id: 'A', value: 'A', parent: 'n', collapsed: true },
+    { id: 'B', value: 'B', parent: 'n', collapsed: true },
+  ];
+  const n = byId(layout(tree));
+  assert.equal(n.get('A')!.collapsed, true);
+  assert.equal(n.get('B')!.collapsed, true);
+  assert.equal(n.get('C')!.collapsed, true);
+  assert.equal(n.get('p')!.collapsed, undefined, 'un nodo normal no debería quedar marcado');
+  assert.equal(n.get('n')!.collapsed, undefined);
+});

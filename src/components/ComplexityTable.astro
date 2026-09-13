@@ -1,23 +1,14 @@
 ---
 import type { Meta } from '../lib/schemas';
+import { growthWeight } from '../lib/complexity';
 
 interface Props {
   meta: Meta;
 }
 const { meta } = Astro.props;
 const rows = Object.entries(meta.complexity);
-
-// Peso relativo del crecimiento, sólo para dar escala visual a la notación.
-const WEIGHT: Record<string, number> = {
-  'O(1)': 1,
-  'O(log n)': 2,
-  'O(log^2 n)': 3,
-  'O(√n)': 4,
-  'O(n)': 7,
-  'O(n log n)': 8,
-  'O(n²)': 10,
-};
-const weight = (o: string) => WEIGHT[o.replace(/\s+/g, ' ').trim()] ?? 5;
+const HEAP_FAMILY = ['binary-heap', 'binomial-heap', 'fibonacci-heap'];
+const comparable = HEAP_FAMILY.includes(meta.id);
 ---
 
 {
@@ -25,7 +16,14 @@ const weight = (o: string) => WEIGHT[o.replace(/\s+/g, ' ').trim()] ?? 5;
     <section class="reveal my-12">
       <div class="mb-4 flex items-baseline justify-between gap-4">
         <h2 class="tag">Complejidad</h2>
-        <span class="tag">{meta.professorAnalysisStyle}</span>
+        <div class="flex items-baseline gap-4">
+          {comparable && (
+            <a href="/compare" class="tag no-underline hover:text-[var(--accent)]">
+              comparar con otros montículos ↗
+            </a>
+          )}
+          <span class="tag">{meta.professorAnalysisStyle}</span>
+        </div>
       </div>
 
       <div class="overflow-hidden rounded-lg border border-[var(--rule)]">
@@ -75,7 +73,7 @@ const weight = (o: string) => WEIGHT[o.replace(/\s+/g, ' ').trim()] ?? 5;
                     <span class="flex h-1.5 w-24 overflow-hidden rounded-full bg-[var(--sunken)]">
                       <span
                         class="h-full rounded-full bg-[var(--accent)]"
-                        style={`width:${weight(c.worst) * 10}%`}
+                        style={`width:${growthWeight(c.worst) * 10}%`}
                       />
                     </span>
                   </td>

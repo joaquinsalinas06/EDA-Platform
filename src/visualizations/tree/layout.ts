@@ -1,5 +1,13 @@
-export type TreeNode = { id: string; value: string | number; parent: string | null };
-export type LaidOut = { id: string; label: string; x: number; y: number };
+export type TreeNode = {
+  id: string;
+  value: string | number;
+  parent: string | null;
+  /** Este nodo representa un subárbol entero (p.ej. "A"/"B"/"C" en una
+   * rotación), no una clave suelta — se dibuja como un triángulo, la
+   * convención de los libros, no como una caja normal. */
+  collapsed?: boolean;
+};
+export type LaidOut = { id: string; label: string; x: number; y: number; collapsed?: boolean };
 
 export const W = 640;
 const ROW = 56;
@@ -38,7 +46,7 @@ export function layout(nodes: TreeNode[]): LaidOut[] {
     else if (rx.length) cx = Math.min(...rx) - 0.5;
     else cx = column++;
 
-    out.push({ id: node.id, label: String(node.value), x: cx, y: depth });
+    out.push({ id: node.id, label: String(node.value), x: cx, y: depth, collapsed: node.collapsed });
     return cx;
   };
 

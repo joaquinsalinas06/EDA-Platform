@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       El profesor da cuatro nombres: parcial, total (full), confluente y
       funcional. ¿Cuál de los cuatro NO es un nivel de persistencia, sino
@@ -16,7 +16,7 @@ items:
       crea nodos nuevos, y con esa técnica se puede lograr cualquiera de los
       otros tres niveles (parcial, total o confluente), típicamente a costo
       de un poco más de espacio.
-  - level: 2
+  - "level: 2"
     statement: >-
       Traza el grafo de versiones que resulta de esta secuencia sobre una
       estructura con persistencia TOTAL: crear v0; set sobre v0 produce v1;
@@ -31,7 +31,7 @@ items:
       un hijo (v3). Esto NO sería posible en persistencia parcial, porque ahí
       sólo se puede escribir sobre la versión más reciente — una vez creada
       v1, parcial no permitiría volver a escribir sobre v0 para producir v2.
-  - level: 3
+  - "level: 3"
     statement: >-
       Implementa en C++ una función que, dado un vector de pares
       `(version_padre, version_creada)` que describe cómo se construyó cada
@@ -50,7 +50,7 @@ items:
       es exactamente la versión anterior, la secuencia cabe en parcial; en
       cuanto una escritura tiene un padre distinto (una rama), hace falta
       total.
-  - level: 4
+  - "level: 4"
     statement: >-
       Un editor de texto guarda cada cambio como una nueva versión y permite
       "deshacer" (volver a una versión anterior) y seguir editando desde ahí,
@@ -69,7 +69,7 @@ items:
       reciente — eso es exactamente lo que total permite (y lo que hace que
       el grafo de versiones sea un árbol, no una línea) y parcial prohíbe.
       Confluente sería más de lo necesario: nunca se pide fusionar dos ramas.
-  - level: 5
+  - "level: 5"
     statement: >-
       Diseña (en prosa, sin código) un escenario de control de versiones
       donde el nivel de persistencia mínimo necesario sea CONFLUENTE, y
@@ -87,7 +87,7 @@ items:
       versión combinada necesita dos padres (una arista desde cada rama), y
       eso convierte el grafo de versiones en un DAG — la definición misma de
       confluente.
-  - level: 6
+  - "level: 6"
     statement: >-
       Demuestra que persistencia total es estrictamente más general que
       persistencia parcial: es decir, (a) toda secuencia de operaciones

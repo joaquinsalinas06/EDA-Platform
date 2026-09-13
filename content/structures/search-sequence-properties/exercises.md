@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       El profesor da cinco propiedades, cada una con su cota "amortizada".
       ¿Cuál de las cinco es la única que aplica sólo a una secuencia fija
@@ -17,7 +17,7 @@ items:
       costo en función de un parámetro que depende de la secuencia
       concreta (k_i, p_k, t_i, t_ij); acceso secuencial sólo dice qué pasa
       cuando la secuencia es exactamente {1, 2, ..., n}, sin parámetro.
-  - level: 2
+  - "level: 2"
     statement: >-
       Traza la propiedad del conjunto de trabajo sobre la secuencia
       {1, 3, 7, 3, 2, 3} (la del gráfico #43) para las posiciones i=2, i=4
@@ -34,7 +34,7 @@ items:
       t_6 = 1. Ambas búsquedas repetidas de 3 cuestan O(log 1) = O(1)
       amortizado, mucho más barato que si se tratara como una búsqueda
       cualquiera en el peor caso general O(log n).
-  - level: 3
+  - "level: 3"
     statement: >-
       Implementa en C++ una función `int k_i(const std::vector<int>& seq, int i)`
       que, dado un vector de una secuencia de búsqueda (1-indexada
@@ -51,7 +51,7 @@ items:
       del profesor, `seq[i-1]` es `x_i` y `seq[i-2]` es `x_{i-1}`). Para
       {1,3,2,5,4,6}: k_2 = |3-1| = 2, k_3 = |2-3| = 1, k_4 = |5-2| = 3,
       k_5 = |4-5| = 1, k_6 = |6-4| = 2 — coincide con el gráfico #36.
-  - level: 4
+  - "level: 4"
     statement: >-
       El Lema 1 dice que la propiedad del puntero dinámico implica la de
       acceso secuencial. Adapta el argumento para mostrar por qué eso es
@@ -70,7 +70,7 @@ items:
       caso particular de la propiedad del puntero dinámico, y el Lema 1 se
       sostiene: la propiedad más general (puntero dinámico) implica la más
       específica (acceso secuencial) cuando se instancia con k_i = 1.
-  - level: 5
+  - "level: 5"
     statement: >-
       El comentario del profesor dice que puntero dinámico y conjunto de
       trabajo son "ortogonales": ninguna implica a la otra. Diseña una
@@ -92,7 +92,7 @@ items:
       cumple el mismo patrón: buena para conjunto de trabajo en las
       repeticiones de b, mala para puntero dinámico en el salto hacia y
       desde LEJOS.
-  - level: 6
+  - "level: 6"
     statement: >-
       Demuestra el Lema 2 ("la propiedad del conjunto de trabajo implica la
       de cota de entropía") en el caso particular donde la secuencia

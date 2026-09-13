@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       Un montículo binomial tiene 11 nodos. ¿Qué árboles binomiales
       (órdenes) lo componen, y cuántas raíces tiene en total?
@@ -12,7 +12,7 @@ items:
     solution: >-
       11 = 1011₂ = 8 + 2 + 1, así que el montículo tiene un B3 (8 nodos),
       un B1 (2 nodos) y un B0 (1 nodo): tres raíces en total.
-  - level: 2
+  - "level: 2"
     statement: >-
       Traza a mano Insert(H, 4) sobre el montículo de dos raíces
       {6, 3(hijo 9)} (un B0 de llave 6 y un B1 de raíz 3 con hijo 9).
@@ -27,7 +27,7 @@ items:
       existente (raíz 3, hijo 9): segundo acarreo. Como 3 ≤ 4, 4 se enlaza
       como hijo de 3. Resultado: un único B2 con raíz 3, hijos 4 (con hijo
       6) y 9.
-  - level: 3
+  - "level: 3"
     statement: >-
       Implementa Binomial-Link en C++ siguiendo la firma
       `void binomialLink(Node* y, Node* z)` del Algoritmo 5, sin mirar
@@ -47,7 +47,7 @@ items:
           z->degree++;
       }
       ```
-  - level: 4
+  - "level: 4"
     statement: >-
       El Algoritmo 7 (Union) trata como caso especial "una tercera raíz z
       después de y con grado(z) = grado(x)". Explica, con un ejemplo
@@ -70,7 +70,7 @@ items:
       enlazar todavía, dejando que x y z (ahora consecutivas) se comparen
       en la siguiente vuelta, y que z compita correctamente contra el
       árbol que ya tenía grado 2.
-  - level: 5
+  - "level: 5"
     statement: >-
       Diseña Decrease-Key-Múltiple(H, lista de pares (x, k)): dado un
       montículo H y una lista de m pares (nodo, nueva llave), aplica
@@ -89,7 +89,7 @@ items:
       No hace falta ningún supuesto sobre el orden de la lista para esa
       cota; ordenarla no la mejora, porque el peor caso de cada llamada
       individual ya está acotado y no se acumula superlinealmente.
-  - level: 6
+  - "level: 6"
     statement: >-
       Demuestra, usando el argumento estructural del profesor (conteo de
       raíces y nodos), que un montículo binomial con n nodos tiene a lo

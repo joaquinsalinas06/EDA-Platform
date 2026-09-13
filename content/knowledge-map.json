@@ -421,7 +421,7 @@
       "sourceSlides": ["Sem4_Planar_Point_Location.pdf#24-51"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "reducción + herencia de cota",
-      "status": "pending"
+      "status": "generated"
     },
 
     "fractional-cascading": {
@@ -450,7 +450,7 @@
       "hasVisualization": true,
       "visualizationType": "range-tree",
       "complexityStyleFromProfessor": "conteo directo de pasos",
-      "status": "pending"
+      "status": "generated"
     },
     "dominance-2d": {
       "type": "structure",
@@ -463,7 +463,7 @@
       "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#16-31"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "conteo directo output-sensitive",
-      "status": "pending"
+      "status": "generated"
     },
     "d2-bound-x": {
       "type": "structure",
@@ -476,7 +476,7 @@
       "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#32-34"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "composición estructural",
-      "status": "pending"
+      "status": "generated"
     },
     "d3-separation-node": {
       "type": "structure",
@@ -489,7 +489,7 @@
       "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#35-43"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "composición estructural",
-      "status": "pending"
+      "status": "generated"
     },
     "d4-bound-z": {
       "type": "structure",
@@ -502,7 +502,7 @@
       "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#44-50"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "composición estructural",
-      "status": "pending"
+      "status": "generated"
     },
     "generalized-fractional-cascading": {
       "type": "algorithm",
@@ -515,7 +515,7 @@
       "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#51-53"],
       "hasVisualization": false,
       "complexityStyleFromProfessor": "conteo directo",
-      "status": "pending"
+      "status": "generated"
     },
     "bst-computational-model": {
       "type": "concept",
@@ -569,7 +569,7 @@
       "hasVisualization": true,
       "visualizationType": "tree",
       "complexityStyleFromProfessor": "amortized",
-      "status": "pending"
+      "status": "generated"
     }
   }
 }

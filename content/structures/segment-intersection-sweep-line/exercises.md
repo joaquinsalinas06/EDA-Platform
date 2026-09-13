@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       Según el material (#34), un segmento horizontal con x1 ≤ x2 se activa
       en un momento preciso respecto a x1 y se desactiva en un momento
@@ -13,7 +13,7 @@ items:
       Se activa "antes de procesar el punto x1" y se desactiva "después de
       procesar el punto x2" (#34) — así un segmento vertical en x1 o x2 sí
       cuenta la intersección en ambos extremos.
-  - level: 2
+  - "level: 2"
     statement: >-
       Traza el barrido del caso "Normal" de examples.md (H1 [1..6, y=3],
       H2 [4..7, y=5], V1 en x=4, y=[0..5]) y di cuántas intersecciones
@@ -25,7 +25,7 @@ items:
       En x=4 están activos H1 (activado en x=1) y H2 (activado antes de
       procesar x=4). `RSQ(0,5)` sobre las posiciones activas da 2: V1 cruza
       a ambos.
-  - level: 3
+  - "level: 3"
     statement: >-
       Implementa el caso simple completo (segmentos horizontales y
       verticales, sin intersecciones de la misma orientación) usando un
@@ -38,7 +38,7 @@ items:
       Ver `full-implementation.cpp`: cada segmento vertical hace una
       consulta RSQ sobre el Fenwick tree de posiciones activas, y el
       resultado se compara contra probar todos los pares H×V directamente.
-  - level: 4
+  - "level: 4"
     statement: >-
       El caso simple exige "no hay intersecciones de segmentos con la misma
       orientación" (#29). Adapta la estructura para que además reporte
@@ -53,7 +53,7 @@ items:
       solapados en esa y — se reporta la violación en vez de sumarla como
       si fueran independientes, porque el caso simple no define qué hacer
       con ese conteo.
-  - level: 5
+  - "level: 5"
     statement: >-
       Diseña, sin implementar, cómo extenderías el caso general offline
       (#40-47) a una consulta online usando persistencia (#49-51), sin usar
@@ -69,7 +69,7 @@ items:
       evento ≤ x_i y se usa esa versión — un criterio explícito que el
       material no da (hueco declarado en `persistent-online-query.md`), pero
       consistente con que la BBST no cambia entre eventos consecutivos.
-  - level: 6
+  - "level: 6"
     statement: >-
       El profesor atribuye el costo del caso simple a la estructura elegida:
       "Usando un Segment tree o un Fenwick tree se puede resolver este caso

@@ -10,57 +10,57 @@ cppSteps:
 visualization:
   type: tree
   steps:
-    - note: >-
+    - "note: >-"
         Derivado del pseudocódigo; no aparece en las diapositivas (que sólo
         traen el ejemplo de Max-Heapify aislado). Se reutiliza el mismo
         arreglo, ahora tratado como entrada arbitraria de Build-Max-Heap:
         A = [4, 14, 10, 8, 2, 9, 3], n=7, así que se recorre i = ⌊7/2⌋=3 hasta 1.
       highlight: []
       nodes:
-        - { id: n1, value: 4, parent: null }
-        - { id: n2, value: 14, parent: n1 }
-        - { id: n3, value: 10, parent: n1 }
-        - { id: n4, value: 8, parent: n2 }
-        - { id: n5, value: 2, parent: n2 }
-        - { id: n6, value: 9, parent: n3 }
-        - { id: n7, value: 3, parent: n3 }
-    - note: >-
+        - "{ id: n1, value: 4, parent: null }"
+        - "{ id: n2, value: 14, parent: n1 }"
+        - "{ id: n3, value: 10, parent: n1 }"
+        - "{ id: n4, value: 8, parent: n2 }"
+        - "{ id: n5, value: 2, parent: n2 }"
+        - "{ id: n6, value: 9, parent: n3 }"
+        - "{ id: n7, value: 3, parent: n3 }"
+    - "note: >-"
         i=3: Max-Heapify(A,3,7). A[3]=10 contra hijos A[6]=9 y A[7]=3: 10 ya
         es el mayor de los tres, "largest" se queda en 3, no hay intercambio.
       highlight: [n3, n6, n7]
       nodes:
-        - { id: n1, value: 4, parent: null }
-        - { id: n2, value: 14, parent: n1 }
-        - { id: n3, value: 10, parent: n1 }
-        - { id: n4, value: 8, parent: n2 }
-        - { id: n5, value: 2, parent: n2 }
-        - { id: n6, value: 9, parent: n3 }
-        - { id: n7, value: 3, parent: n3 }
-    - note: >-
+        - "{ id: n1, value: 4, parent: null }"
+        - "{ id: n2, value: 14, parent: n1 }"
+        - "{ id: n3, value: 10, parent: n1 }"
+        - "{ id: n4, value: 8, parent: n2 }"
+        - "{ id: n5, value: 2, parent: n2 }"
+        - "{ id: n6, value: 9, parent: n3 }"
+        - "{ id: n7, value: 3, parent: n3 }"
+    - "note: >-"
         i=2: Max-Heapify(A,2,7). A[2]=14 contra hijos A[4]=8 y A[5]=2: 14 ya
         es el mayor, no hay intercambio.
       highlight: [n2, n4, n5]
       nodes:
-        - { id: n1, value: 4, parent: null }
-        - { id: n2, value: 14, parent: n1 }
-        - { id: n3, value: 10, parent: n1 }
-        - { id: n4, value: 8, parent: n2 }
-        - { id: n5, value: 2, parent: n2 }
-        - { id: n6, value: 9, parent: n3 }
-        - { id: n7, value: 3, parent: n3 }
-    - note: >-
+        - "{ id: n1, value: 4, parent: null }"
+        - "{ id: n2, value: 14, parent: n1 }"
+        - "{ id: n3, value: 10, parent: n1 }"
+        - "{ id: n4, value: 8, parent: n2 }"
+        - "{ id: n5, value: 2, parent: n2 }"
+        - "{ id: n6, value: 9, parent: n3 }"
+        - "{ id: n7, value: 3, parent: n3 }"
+    - "note: >-"
         i=1: Max-Heapify(A,1,7). Aquí sí hay violación: A[1]=4 es menor que
         A[2]=14. Esta es exactamente la secuencia de intercambios del ejemplo
         de Max-Heapify (ver esa operación) — termina en [14, 8, 10, 4, 2, 9, 3].
       highlight: [n1, n2]
       nodes:
-        - { id: n1, value: 14, parent: null }
-        - { id: n2, value: 8, parent: n1 }
-        - { id: n3, value: 10, parent: n1 }
-        - { id: n4, value: 4, parent: n2 }
-        - { id: n5, value: 2, parent: n2 }
-        - { id: n6, value: 9, parent: n3 }
-        - { id: n7, value: 3, parent: n3 }
+        - "{ id: n1, value: 14, parent: null }"
+        - "{ id: n2, value: 8, parent: n1 }"
+        - "{ id: n3, value: 10, parent: n1 }"
+        - "{ id: n4, value: 4, parent: n2 }"
+        - "{ id: n5, value: 2, parent: n2 }"
+        - "{ id: n6, value: 9, parent: n3 }"
+        - "{ id: n7, value: 3, parent: n3 }"
 ---
 
 ## Qué hace

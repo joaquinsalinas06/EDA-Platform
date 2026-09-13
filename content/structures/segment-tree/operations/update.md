@@ -11,43 +11,43 @@ cppSteps:
 visualization:
   type: tree
   steps:
-    - note: >-
+    - "note: >-"
         Actualizar la posición 4 arranca en la raíz [1,4]. Su hijo derecho
         [3,4] cubre la posición 4, así que la recursión sigue por ahí; el
         hijo izquierdo [1,2] no se toca.
       highlight: ["n14"]
       nodes:
-        - { id: n14, value: "[1,4]", parent: null }
-        - { id: n12, value: "[1,2]", parent: n14 }
-        - { id: n34, value: "[3,4]", parent: n14 }
-        - { id: n11, value: "[1,1]", parent: n12 }
-        - { id: n22, value: "[2,2]", parent: n12 }
-        - { id: n33, value: "[3,3]", parent: n34 }
-        - { id: n44, value: "[4,4]", parent: n34 }
-    - note: >-
+        - '{ id: n14, value: "[1,4]", parent: null }'
+        - '{ id: n12, value: "[1,2]", parent: n14 }'
+        - '{ id: n34, value: "[3,4]", parent: n14 }'
+        - '{ id: n11, value: "[1,1]", parent: n12 }'
+        - '{ id: n22, value: "[2,2]", parent: n12 }'
+        - '{ id: n33, value: "[3,3]", parent: n34 }'
+        - '{ id: n44, value: "[4,4]", parent: n34 }'
+    - "note: >-"
         En [3,4], la posición 4 cae en el hijo derecho [4,4]; el hijo
         izquierdo [3,3] no se toca.
       highlight: ["n34"]
       nodes:
-        - { id: n14, value: "[1,4]", parent: null }
-        - { id: n12, value: "[1,2]", parent: n14 }
-        - { id: n34, value: "[3,4]", parent: n14 }
-        - { id: n11, value: "[1,1]", parent: n12 }
-        - { id: n22, value: "[2,2]", parent: n12 }
-        - { id: n33, value: "[3,3]", parent: n34 }
-        - { id: n44, value: "[4,4]", parent: n34 }
-    - note: >-
+        - '{ id: n14, value: "[1,4]", parent: null }'
+        - '{ id: n12, value: "[1,2]", parent: n14 }'
+        - '{ id: n34, value: "[3,4]", parent: n14 }'
+        - '{ id: n11, value: "[1,1]", parent: n12 }'
+        - '{ id: n22, value: "[2,2]", parent: n12 }'
+        - '{ id: n33, value: "[3,3]", parent: n34 }'
+        - '{ id: n44, value: "[4,4]", parent: n34 }'
+    - "note: >-"
         [4,4] es la hoja buscada: se escribe el nuevo valor directamente.
       highlight: ["n44"]
       nodes:
-        - { id: n14, value: "[1,4]", parent: null }
-        - { id: n12, value: "[1,2]", parent: n14 }
-        - { id: n34, value: "[3,4]", parent: n14 }
-        - { id: n11, value: "[1,1]", parent: n12 }
-        - { id: n22, value: "[2,2]", parent: n12 }
-        - { id: n33, value: "[3,3]", parent: n34 }
-        - { id: n44, value: "[4,4]", parent: n34 }
-    - note: >-
+        - '{ id: n14, value: "[1,4]", parent: null }'
+        - '{ id: n12, value: "[1,2]", parent: n14 }'
+        - '{ id: n34, value: "[3,4]", parent: n14 }'
+        - '{ id: n11, value: "[1,1]", parent: n12 }'
+        - '{ id: n22, value: "[2,2]", parent: n12 }'
+        - '{ id: n33, value: "[3,3]", parent: n34 }'
+        - '{ id: n44, value: "[4,4]", parent: n34 }'
+    - "note: >-"
         De regreso, se recalculan [3,4] y [1,4] combinando sus hijos. El
         camino completo raíz → [3,4] → [4,4] es el único que cambió; [1,2],
         [1,1], [2,2], [3,3] quedan intactos. Este es exactamente el camino
@@ -56,13 +56,13 @@ visualization:
         sección path-copying, página 57).
       highlight: ["n14", "n34", "n44"]
       nodes:
-        - { id: n14, value: "[1,4]", parent: null }
-        - { id: n12, value: "[1,2]", parent: n14 }
-        - { id: n34, value: "[3,4]", parent: n14 }
-        - { id: n11, value: "[1,1]", parent: n12 }
-        - { id: n22, value: "[2,2]", parent: n12 }
-        - { id: n33, value: "[3,3]", parent: n34 }
-        - { id: n44, value: "[4,4]", parent: n34 }
+        - '{ id: n14, value: "[1,4]", parent: null }'
+        - '{ id: n12, value: "[1,2]", parent: n14 }'
+        - '{ id: n34, value: "[3,4]", parent: n14 }'
+        - '{ id: n11, value: "[1,1]", parent: n12 }'
+        - '{ id: n22, value: "[2,2]", parent: n12 }'
+        - '{ id: n33, value: "[3,3]", parent: n34 }'
+        - '{ id: n44, value: "[4,4]", parent: n34 }'
 ---
 
 <!-- Concepto de apoyo: no hay diapositiva que citar. Esta operación es la

@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       En la linea de tiempo ins(5)@1, ins(2)@2, del-min@3, ins(8)@4,
       del-min@5 (con Q_ahora = {8}), ¿cual de estos tiempos es un puente:
@@ -17,7 +17,7 @@ items:
       en Q_ahora = {8}. El unico puente en este ejemplo es el inicio de la
       linea de tiempo (Q = vacio antes de t=1), que es trivialmente
       subconjunto de cualquier cosa.
-  - level: 2
+  - "level: 2"
     statement: >-
       Traza a mano Insert(2,5, 'insert(3)') sobre la linea de tiempo
       ins(5)@1, ins(2)@2, del-min@3, ins(8)@4, del-min@5 (Q_ahora = {8}).
@@ -31,7 +31,7 @@ items:
       se inserta 5 en Q_ahora (que pasa de {8} a {8, 5}), y 3 pasa a
       formar parte del conjunto de eliminados en el lugar donde antes
       estaba 5.
-  - level: 3
+  - "level: 3"
     statement: >-
       Implementa una funcion es_puente(t_prima, estado_en_t_prima,
       Q_ahora) que devuelva true si t_prima es un puente, usando
@@ -45,7 +45,7 @@ items:
       q_ahora) { return std::includes(q_ahora.begin(), q_ahora.end(),
       q_tprima.begin(), q_tprima.end()); } — std::includes ya maneja el
       caso vacio correctamente (todo esta contenido en todo).
-  - level: 4
+  - "level: 4"
     statement: >-
       Adapta Compute-M para que, en vez de recorrer todo lo eliminado
       desde t (metodo ingenuo O(r)), use el puente mas cercano antes de t
@@ -61,7 +61,7 @@ items:
       : k' no esta en Q_ahora }; M = max({k} union candidatos). Es
       exactamente lo que hace step-3-compute-m.cpp, con un assert
       comparando ambos metodos.
-  - level: 5
+  - "level: 5"
     statement: >-
       Disena un caso de prueba (una linea de tiempo completa) donde el
       puente mas cercano antes de t NO sea el inicio de la linea de
@@ -81,7 +81,7 @@ items:
       "eliminado desde t" como concepto separado — solo necesita
       insertados y el filtro contra Q_ahora, que es lo que permite el
       agregado por subarbol del BST balanceado.
-  - level: 6
+  - "level: 6"
     statement: >-
       Demuestra que el efecto neto de Insert(t, 'insert(k)') nunca puede
       reemplazar a mas de un elemento entre los eliminados (la afirmacion

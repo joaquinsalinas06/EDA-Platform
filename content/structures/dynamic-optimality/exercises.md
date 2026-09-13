@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       El profesor dice que "por el momento es un problema abierto" (#56) si
       existe un BST O(1)-competitivo. ¿Por qué esto NO es lo mismo que decir
@@ -17,7 +17,7 @@ items:
       se ha demostrado que ningún algoritmo pueda serlo. La tercera
       posibilidad correcta es "se desconoce cuál de las dos es cierta" — no
       "es falso" ni "es cierto pero no publicado".
-  - level: 2
+  - "level: 2"
     statement: >-
       Para llaves {1, 2, 3, 4} y secuencia S = (1,1,1,1,4,4,4,4) (ver
       examples.md, caso Normal), el programa acompañante da costo estático =
@@ -35,7 +35,7 @@ items:
       en la frontera entre el bloque de 1 y el de 4 (pagando el costo de
       unas pocas rotaciones), y así mantener ambos bloques baratos por
       separado — algo que un árbol fijo no puede hacer.
-  - level: 3
+  - "level: 3"
     statement: >-
       El programa acompañante (full-implementation.cpp) calcula OPT(S) para
       n ≤ 4 por búsqueda exhaustiva sobre todos los BST posibles. ¿Por qué
@@ -53,7 +53,7 @@ items:
       una limitación del programa, es que el espacio de búsqueda es
       inherentemente exponencial y calcular OPT(S) por fuerza bruta no
       escala — parte de por qué la pregunta de este tema sigue abierta.
-  - level: 4
+  - "level: 4"
     statement: >-
       La definición del profesor es específicamente "O(1)-competitivo"
       (#53). Adapta la definición para un algoritmo "c-competitivo" con c
@@ -70,7 +70,7 @@ items:
       que el factor multiplicativo ya no es fijo — puede crecer (lentamente)
       con n. El resultado conocido (#58) logra esta versión relajada, no la
       O(1) que sigue abierta.
-  - level: 5
+  - "level: 5"
     statement: >-
       Diseña (en prosa, sin implementarlo) el esquema de un argumento que
       alguien tendría que dar para EXHIBIR que un algoritmo online es
@@ -90,7 +90,7 @@ items:
       por caso como en el programa de fuerza bruta) el argumento no cierra
       para secuencias arbitrarias — que es, en esencia, por qué esto sigue
       sin probarse.
-  - level: 6
+  - "level: 6"
     statement: >-
       Demuestra que, para toda secuencia S, OPT(S) es a lo más el costo del
       mejor árbol ESTÁTICO posible para S (el que no rota entre accesos).

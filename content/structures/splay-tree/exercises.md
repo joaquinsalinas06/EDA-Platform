@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       Dado que x es hijo derecho de p, y p es hijo derecho de a, ¿qué caso
       de Splay aplica: zig, zig-zig o zig-zag? ¿Y si x es hijo izquierdo de
@@ -13,7 +13,7 @@ items:
     solution: >-
       El primero es zig-zig (derecha-derecha, mismo lado). El segundo es
       zig-zag (izquierda de p, pero p es derecha de a: lados opuestos).
-  - level: 2
+  - "level: 2"
     statement: >-
       Traza a mano `Search(5)` sobre el árbol `4(2(1,3),6(5,7))` (el mismo
       del ejemplo mínimo). Indica qué caso de Splay se aplica en cada
@@ -25,7 +25,7 @@ items:
       Una sola iteración: zig-zag (5 izquierdo de 6, 6 derecho de 4).
       Rotate(5) sobre 6, luego Rotate(5) sobre 4. Resultado:
       `5(4(2(1,3),null),6(null,7))`.
-  - level: 3
+  - "level: 3"
     statement: >-
       Implementa `zigZig(x)` en C++ sobre la estructura de nodo con
       punteros a padre, izquierdo y derecho (ver `step-1-node.cpp` y
@@ -44,7 +44,7 @@ items:
       como raíz y p como su hijo directo, tal como en el diagrama #65 (no
       como un hijo de segundo nivel, que sería el resultado de
       move-to-root).
-  - level: 4
+  - "level: 4"
     statement: >-
       El modelo BST de este curso sólo define Buscar (#22-23); la
       literatura estándar de splay trees también define Insert y Delete.
@@ -61,7 +61,7 @@ items:
       Search(x): descender, luego splayar el nodo relevante. El profesor no
       define esta operación (el modelo sólo tiene Buscar), así que esta
       adaptación es una extensión, no un hueco del material.
-  - level: 5
+  - "level: 5"
     statement: >-
       Diseña una secuencia de búsquedas de longitud m sobre un splay tree
       de n nodos donde el costo REAL total (sumando cada búsqueda
@@ -83,7 +83,7 @@ items:
       [search-sequence-properties](/structures/search-sequence-properties):
       repetir un valor reciente es exactamente lo que un BST estático no
       puede aprovechar y un splay tree sí.
-  - level: 6
+  - "level: 6"
     statement: >-
       Demuestra por qué el algoritmo "move-to-root" (rotar (x, p) primero y
       (x, a) después, en vez del orden de zig-zig) NO puede lograr la cota

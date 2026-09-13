@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       De las tres operaciones — existencia, conteo, enumeración — ¿cuál es
       la única que el profesor describe como "output-sensitive"? Responde
@@ -12,7 +12,7 @@ items:
     solution: >-
       Enumeración: es la única cuyo costo incluye un término "+ k" que
       depende del tamaño de la respuesta.
-  - level: 2
+  - "level: 2"
     statement: >-
       Sobre el arreglo ordenado `{3, 4, 7, 9, 13, 15, 18, 27}`, traza a
       mano la caja `[10, 20]`: da el resultado de existencia, conteo y
@@ -23,7 +23,7 @@ items:
     solution: >-
       Existencia: verdadero (13 ≤ 20). Conteo: 6 - 4 + 1 = 3. Enumeración:
       {13, 15, 18}.
-  - level: 3
+  - "level: 3"
     statement: >-
       Implementa `count(puntos, caja)` para el caso 2D por fuerza bruta:
       recibe un vector de puntos (x, y) y una caja [xl, xr] × [yl, yr], y
@@ -36,7 +36,7 @@ items:
       xl ≤ x ≤ xr y yl ≤ y ≤ yu se cumplen simultáneamente — exactamente
       `in_box` de `step-2-in-box.cpp` aplicada dentro de un ciclo, sin
       ordenar nada primero: O(n) por consulta.
-  - level: 4
+  - "level: 4"
     statement: >-
       Adapta el algoritmo de conteo de este tema (arreglo ordenado, d = 1)
       para que en vez de contar cuántos puntos hay en [l, r], cuente
@@ -49,7 +49,7 @@ items:
       frontera (sucesor de l, predecesor de r, resta de índices) y se
       resta de n: fuera = n - dentro, sin ningún recorrido adicional,
       manteniendo O(log n).
-  - level: 5
+  - "level: 5"
     statement: >-
       Diseña (sin implementar) una variante de "conteo" para d = 2 que siga
       sin depender de k, usando únicamente lo que este tema ya estableció
@@ -66,7 +66,7 @@ items:
       — es precisamente el problema que un arreglo no resuelve bien
       anidado (#22) y que [range-tree](/structures/range-tree) sí resuelve
       con un árbol secundario por dimensión.
-  - level: 6
+  - "level: 6"
     statement: >-
       Demuestra por qué ninguna estructura puede responder "enumeración" en
       tiempo O(log n) puro (sin el término + k), sin importar qué tan

@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       El profesor dice que persistencia y retroactividad son ideas "duales".
       De las siguientes dos afirmaciones sobre modificar el pasado, ¿cuál
@@ -18,7 +18,7 @@ items:
       paralelo, o sea hay más de una versión viva. (b) es retroactividad:
       "el presente se actualiza" implica que sólo existe una línea de
       tiempo, y ese cambio la reescribe.
-  - level: 2
+  - "level: 2"
     statement: >-
       Sobre la línea de tiempo add(5)@1, add(3)@2, add(10)@3 (Query(ahora) =
       18), traza el efecto de Insert-retroactive(1.5, add(100)) seguido de
@@ -32,7 +32,7 @@ items:
       add(5)@1, add(100)@1.5, add(3)@2, add(10)@3 — Query(ahora) = 118.
       Después de Delete-retroactive(2): se retira add(3)@2 — línea de
       tiempo add(5)@1, add(100)@1.5, add(10)@3 — Query(ahora) = 115.
-  - level: 3
+  - "level: 3"
     statement: >-
       Implementa la versión ingenua de Query(t) para una línea de tiempo de
       operaciones add(x): dado un vector de pares (tiempo, delta) y un
@@ -47,7 +47,7 @@ items:
       el tiempo de la entrada es <= t, y devolver el total al final —
       exactamente el pseudocódigo derivado de Query en operations/query.md,
       con costo O(m).
-  - level: 4
+  - "level: 4"
     statement: >-
       El modelo se definió sobre "una operación op" genérica en un tiempo t.
       Adapta la interfaz Insert-retroactive/Delete-retroactive/Query a una
@@ -65,7 +65,7 @@ items:
       una línea de la línea de tiempo": puede requerir recalcular pop()
       subsecuentes. El curso no desarrolla este caso para pilas; sí lo hace,
       para colas de prioridad, en retroactive-priority-queue.
-  - level: 5
+  - "level: 5"
     statement: >-
       Diseña, en prosa, la interfaz retroactiva parcial (no completa) para
       el contador de add(x): especifica exactamente qué formas de
@@ -82,7 +82,7 @@ items:
       sólo hay que poder responder consultas sobre el estado más reciente —
       nunca hay que poder reconstruir un estado intermedio arbitrario del
       pasado, que es justamente lo que exige la variante completa.
-  - level: 6
+  - "level: 6"
     statement: >-
       Demuestra que, bajo la versión ingenua de las tres operaciones (tal
       como están en operations/insert-retroactive.md,

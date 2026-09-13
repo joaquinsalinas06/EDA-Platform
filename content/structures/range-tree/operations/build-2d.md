@@ -10,29 +10,29 @@ cppSteps:
 visualization:
   type: range-tree
   steps:
-    - note: >-
+    - "note: >-"
         Reproduce la diapositiva #47: árbol primario en X sobre los puntos
         (3,10) (4,7) (7,11) (9,6) (13,0) (15,−2) (18,3) (27,1) — misma forma
         que el árbol 1D de build-1d (las llaves X son las mismas: 3,4,7,9,
         13,15,18,27), pero cada hoja ahora es un punto (x,y) completo.
       highlight: []
       nodes:
-        - { id: r9, value: 9, parent: null }
-        - { id: n4, value: 4, parent: r9 }
-        - { id: n3i, value: 3, parent: n4 }
-        - { id: p3, value: 10, parent: n3i }
-        - { id: p4, value: 7, parent: n3i }
-        - { id: n7i, value: 7, parent: n4 }
-        - { id: p7, value: 11, parent: n7i }
-        - { id: p9, value: 6, parent: n7i }
-        - { id: n15, value: 15, parent: r9 }
-        - { id: n13i, value: 13, parent: n15 }
-        - { id: p13, value: 0, parent: n13i }
-        - { id: p15, value: -2, parent: n13i }
-        - { id: n18i, value: 18, parent: n15 }
-        - { id: p18, value: 3, parent: n18i }
-        - { id: p27, value: 1, parent: n18i }
-    - note: >-
+        - "{ id: r9, value: 9, parent: null }"
+        - "{ id: n4, value: 4, parent: r9 }"
+        - "{ id: n3i, value: 3, parent: n4 }"
+        - "{ id: p3, value: 10, parent: n3i }"
+        - "{ id: p4, value: 7, parent: n3i }"
+        - "{ id: n7i, value: 7, parent: n4 }"
+        - "{ id: p7, value: 11, parent: n7i }"
+        - "{ id: p9, value: 6, parent: n7i }"
+        - "{ id: n15, value: 15, parent: r9 }"
+        - "{ id: n13i, value: 13, parent: n15 }"
+        - "{ id: p13, value: 0, parent: n13i }"
+        - "{ id: p15, value: -2, parent: n13i }"
+        - "{ id: n18i, value: 18, parent: n15 }"
+        - "{ id: p18, value: 3, parent: n18i }"
+        - "{ id: p27, value: 1, parent: n18i }"
+    - "note: >-"
         Cada nodo del primario (incluidas las hojas) tiene además un
         puntero a un range tree secundario ordenado por Y, construido sobre
         los mismos puntos de su subárbol. Aquí sólo el del nodo 15 (#47):
@@ -42,13 +42,13 @@ visualization:
         ese puntero cruzado; ver nota al final del bloque de operaciones.
       highlight: [n15]
       nodes:
-        - { id: y0, value: 0, parent: null }
-        - { id: yneg2i, value: -2, parent: y0 }
-        - { id: pleaf15, value: -2, parent: yneg2i }
-        - { id: pleaf13, value: 0, parent: yneg2i }
-        - { id: y1i, value: 1, parent: y0 }
-        - { id: pleaf27, value: 1, parent: y1i }
-        - { id: pleaf18, value: 3, parent: y1i }
+        - "{ id: y0, value: 0, parent: null }"
+        - "{ id: yneg2i, value: -2, parent: y0 }"
+        - "{ id: pleaf15, value: -2, parent: yneg2i }"
+        - "{ id: pleaf13, value: 0, parent: yneg2i }"
+        - "{ id: y1i, value: 1, parent: y0 }"
+        - "{ id: pleaf27, value: 1, parent: y1i }"
+        - "{ id: pleaf18, value: 3, parent: y1i }"
 ---
 
 ## Qué hace

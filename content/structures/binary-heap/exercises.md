@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       ¿Cuál de estos arreglos representa un montículo máximo válido?
       (a) [16, 14, 10, 8, 7, 9, 3, 2, 4, 1]
@@ -17,7 +17,7 @@ items:
       es porque la raíz debería ser el máximo global y en cambio es el
       mínimo. (c) tampoco: A[2]=4 tiene como hijo A[4]=14, que es mayor,
       violando el invariante.
-  - level: 2
+  - "level: 2"
     statement: >-
       Traza a mano Max-Heapify(A, 1, 8) sobre A = [5, 14, 10, 8, 2, 9, 3, 12].
       Escribe el arreglo después de cada intercambio.
@@ -32,7 +32,7 @@ items:
       Paso 3: en i=4, A[4]=5 contra su único hijo A[8]=12 (no hay A[9]); 12
       es mayor, se intercambia: [14, 8, 10, 12, 2, 9, 3, 5]. Paso 4: en i=8,
       es hoja, termina. Resultado final: [14, 8, 10, 12, 2, 9, 3, 5].
-  - level: 3
+  - "level: 3"
     statement: >-
       Implementa Build-Max-Heap(A, n) usando la Max-Heapify iterativa de
       full-implementation.cpp, sin usar recursión en ninguna de las dos funciones.
@@ -46,7 +46,7 @@ items:
       llegar a la posición i, todo lo que está a su derecha con índice mayor
       a i ya es un montículo válido (invariante del bucle, procesado en
       orden decreciente).
-  - level: 4
+  - "level: 4"
     statement: >-
       Adapta Max-Heapify y Build-Max-Heap para un MIN-heap (el que usarías
       para implementar Dijkstra, como en heaps/B_dijkstra.cpp). ¿Qué
@@ -62,7 +62,7 @@ items:
       Build-Max-Heap, Insert subiendo mientras el hijo sea menor que el
       padre— es una traducción mecánica del mismo argumento. Es la simetría
       max<->min descrita en theory.md.
-  - level: 5
+  - "level: 5"
     statement: >-
       Diseña Increase-Key para este montículo máximo: cambia la llave de la
       posición i a un valor mayor y restaura el invariante. Justifica por
@@ -77,7 +77,7 @@ items:
       menor que sus hijos (si ya era >= antes, sigue siéndolo con un valor
       mayor); sólo puede romper el invariante hacia el padre, que sift_up
       corrige.
-  - level: 6
+  - "level: 6"
     statement: >-
       Demuestra por qué Build-Max-Heap cuesta Θ(n) y no O(n log n), usando
       el argumento del profesor de suma agregada sobre niveles.

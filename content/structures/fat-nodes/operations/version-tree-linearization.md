@@ -8,146 +8,146 @@ cppSteps:
 visualization:
   type: persistent
   steps:
-    - note: "Se entra a la versión 1 (la raíz). Se marca el tiempo (₁."
+    - 'note: "Se entra a la versión 1 (la raíz). Se marca el tiempo (₁."'
       highlight: ["1"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
-    - note: "Se entra a la versión 2 (primer hijo de 1). Se marca (₂."
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
+    - 'note: "Se entra a la versión 2 (primer hijo de 1). Se marca (₂."'
       highlight: ["2"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
-    - note: "Se entra a la versión 4 (primer hijo de 2, sin hijos propios). Se marca (₄."
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
+    - 'note: "Se entra a la versión 4 (primer hijo de 2, sin hijos propios). Se marca (₄."'
       highlight: ["4"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
-    - note: "4 no tiene hijos: se sale de inmediato. Se marca )₄."
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
+    - 'note: "4 no tiene hijos: se sale de inmediato. Se marca )₄."'
       highlight: ["4"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
-    - note: "Se entra a la versión 5 (segundo hijo de 2). Se marca (₅."
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
+    - 'note: "Se entra a la versión 5 (segundo hijo de 2). Se marca (₅."'
       highlight: ["5"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
-    - note: "5 tampoco tiene hijos: se sale. Se marca )₅."
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
+    - 'note: "5 tampoco tiene hijos: se sale. Se marca )₅."'
       highlight: ["5"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
-    - note: "Ya se visitaron los dos hijos de 2: se sale de 2. Se marca )₂."
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
+    - 'note: "Ya se visitaron los dos hijos de 2: se sale de 2. Se marca )₂."'
       highlight: ["2"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
-    - note: "Se entra a la versión 3 (segundo hijo de 1). Se marca (₃."
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
+    - 'note: "Se entra a la versión 3 (segundo hijo de 1). Se marca (₃."'
       highlight: ["3"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
-    - note: "Se entra a la versión 6 (primer hijo de 3). Se marca (₆."
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
+    - 'note: "Se entra a la versión 6 (primer hijo de 3). Se marca (₆."'
       highlight: ["6"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
-    - note: "6 no tiene hijos: se sale. Se marca )₆."
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
+    - 'note: "6 no tiene hijos: se sale. Se marca )₆."'
       highlight: ["6"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
-    - note: "Se entra a la versión 7 (segundo hijo de 3). Se marca (₇."
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
+    - 'note: "Se entra a la versión 7 (segundo hijo de 3). Se marca (₇."'
       highlight: ["7"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
-    - note: "7 tampoco tiene hijos: se sale. Se marca )₇."
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
+    - 'note: "7 tampoco tiene hijos: se sale. Se marca )₇."'
       highlight: ["7"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
-    - note: "Ya se visitaron los dos hijos de 3: se sale de 3. Se marca )₃."
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
+    - 'note: "Ya se visitaron los dos hijos de 3: se sale de 3. Se marca )₃."'
       highlight: ["3"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
-    - note: "Ya se visitaron los dos hijos de 1: se sale de 1. Se marca )₁. Secuencia completa: (₁(₂(₄)₄(₅)₅)₂(₃(₆)₆(₇)₇)₃)₁."
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
+    - 'note: "Ya se visitaron los dos hijos de 1: se sale de 1. Se marca )₁. Secuencia completa: (₁(₂(₄)₄(₅)₅)₂(₃(₆)₆(₇)₇)₃)₁."'
       highlight: ["1"]
       nodes:
-        - { id: "1", value: "1", parent: null }
-        - { id: "2", value: "2", parent: "1" }
-        - { id: "3", value: "3", parent: "1" }
-        - { id: "4", value: "4", parent: "2" }
-        - { id: "5", value: "5", parent: "2" }
-        - { id: "6", value: "6", parent: "3" }
-        - { id: "7", value: "7", parent: "3" }
+        - '{ id: "1", value: "1", parent: null }'
+        - '{ id: "2", value: "2", parent: "1" }'
+        - '{ id: "3", value: "3", parent: "1" }'
+        - '{ id: "4", value: "4", parent: "2" }'
+        - '{ id: "5", value: "5", parent: "2" }'
+        - '{ id: "6", value: "6", parent: "3" }'
+        - '{ id: "7", value: "7", parent: "3" }'
 ---
 
 ## Qué hace

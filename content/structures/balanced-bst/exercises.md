@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       El range tree 1D se construye, según el profesor, "usando árboles
       binarios de búsqueda balanceados que almacenen a los puntos en las
@@ -19,7 +19,7 @@ items:
       nodos internos no son datos, son sólo delimitadores (guardan un valor
       que orienta la búsqueda hacia la hoja correcta) — la búsqueda siempre
       termina bajando hasta una hoja, nunca se detiene antes.
-  - level: 2
+  - "level: 2"
     statement: >-
       Sobre el árbol de 5 nodos de `theory.md` (raíz `20`, hijo izq `10`,
       hijo der `30` con hijo izq `27` y der `40`), traza a mano
@@ -38,7 +38,7 @@ items:
       actualiza, bajamos a la derecha (`40`). En `40`, 35 < 40 → candidato a
       sucesor = 40, bajamos a la izquierda (nulo). Termina: Successor(35) =
       40.
-  - level: 3
+  - "level: 3"
     statement: >-
       Implementa `int height(Node*)` y una función `bool isBalanced(Node*)`
       que recorra el árbol una sola vez y devuelva `false` en cuanto
@@ -62,7 +62,7 @@ items:
       cadena de tres nodos en línea recta (p. ej. 10 con hijo derecho 20 con
       hijo derecho 30, sin rebalancear) el nodo raíz tiene subárbol
       izquierdo de altura -1 y derecho de altura 1, diferencia 2 → `false`.
-  - level: 4
+  - "level: 4"
     statement: >-
       El barrido de segmentos usa `Successor(y)` sobre la estructura que
       mantiene el orden de los cruces con la recta de barrido, y la
@@ -83,7 +83,7 @@ items:
       la misma cota O(lg n) que ya tenía `Successor`, sólo que ahora
       medible operación por operación, que es justo lo que necesita el
       barrido para argumentar el costo total sobre las n consultas.
-  - level: 5
+  - "level: 5"
     statement: >-
       Diseña (en pseudocódigo, sin implementarlo) cómo construirías, a
       partir de un arreglo ya ordenado de n puntos, un árbol binario de
@@ -106,7 +106,7 @@ items:
       división es exacta (mitad y mitad), la altura queda en ⌈lg n⌉ sin
       necesitar ningún rebalanceo posterior — el árbol nace balanceado
       porque los datos ya venían ordenados.
-  - level: 6
+  - "level: 6"
     statement: >-
       La semana 5 (modelo computacional BST) trata la rotación como
       primitiva de costo O(1) sin definirla en detalle. Demuestra, a partir

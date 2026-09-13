@@ -10,22 +10,22 @@ cppSteps:
 visualization:
   type: tree
   steps:
-    - note: >-
+    - "note: >-"
         Dos raíces del mismo grado (dos B0): comparamos sus llaves. La
         precondición de Binomial-Link es key(y) >= key(z), así que y=7 y
         z=3.
       highlight: ["y", "z"]
       nodes:
-        - { id: y, value: 7, parent: null }
-        - { id: z, value: 3, parent: null }
-    - note: >-
+        - "{ id: y, value: 7, parent: null }"
+        - "{ id: z, value: 3, parent: null }"
+    - "note: >-"
         y (la llave mayor) se vuelve el hijo más a la izquierda de z (la
         llave menor): así se conserva la propiedad de min-heap del árbol
         resultante, un B1 con raíz 3.
       highlight: ["z"]
       nodes:
-        - { id: z, value: 3, parent: null }
-        - { id: y, value: 7, parent: z }
+        - "{ id: z, value: 3, parent: null }"
+        - "{ id: y, value: 7, parent: z }"
 ---
 
 <!-- derivado del pseudocódigo del Algoritmo 5; no aparece en las diapositivas

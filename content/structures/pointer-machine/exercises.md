@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       El profesor da tres reglas para la máquina de punteros. Nómbralas y di,
       para la figura del mazo (cadena raíz -> 7 -> 2 -> 7 -> 42), cuál regla
@@ -17,7 +17,7 @@ items:
       es la que explica que sólo se pueda entrar por la raíz: no hay otra
       forma de llegar al segundo nodo (`2`) que pasar primero por el primero
       (`7`).
-  - level: 2
+  - "level: 2"
     statement: >-
       Traza el costo de leer el dato del último nodo (`42`) de la figura del
       mazo, paso a paso, usando sólo las tres reglas del modelo. ¿Cuántas
@@ -31,7 +31,7 @@ items:
       el campo dato del nodo `42` (O(1)). Son 5 operaciones de O(1) cada
       una — 4 punteros seguidos más 1 lectura final —, es decir O(1) por
       paso pero O(k) en total para llegar al nodo en la posición k.
-  - level: 3
+  - "level: 3"
     statement: >-
       Implementa en C++ (respetando las tres reglas: nodos con O(1) campos,
       sin aritmética de direcciones ni acceso indexado) una función que
@@ -47,7 +47,7 @@ items:
       struct `Node` con un campo dato y un puntero `next`, y una función
       `follow_count` que parte de la raíz y cuenta cada `cur = cur->next`
       hasta el último nodo. Para una cadena de 4 nodos el conteo da 3.
-  - level: 4
+  - "level: 4"
     statement: >-
       Adapta el conteo del nivel 3 para un árbol binario (cada nodo con
       punteros `left` y `right` en vez de un único `next`) y compáralo con
@@ -66,7 +66,7 @@ items:
       sin pasar por los elementos intermedios — no existe en el modelo
       pointer machine: ahí sólo se puede leer/escribir un campo o seguir un
       puntero, nunca calcular una dirección arbitraria.
-  - level: 5
+  - "level: 5"
     statement: >-
       Diseña (en prosa, no en código) una estructura enlazada donde una sola
       operación de "actualizar el dato de un nodo" viole la regla 3 del
@@ -85,7 +85,7 @@ items:
       punteros entrantes), así que no puede acotarse en O(1) bajo la regla
       3 — se necesitaría descomponerla en varias operaciones O(1), una por
       cada puntero entrante, para que el modelo siga aplicando.
-  - level: 6
+  - "level: 6"
     statement: >-
       Demuestra, usando sólo las tres reglas del modelo, que el costo de
       llegar del nodo raíz a un nodo a profundidad `d` (siguiendo únicamente

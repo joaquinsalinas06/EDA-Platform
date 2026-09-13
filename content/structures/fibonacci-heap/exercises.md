@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       ¿Cuál de estas afirmaciones sobre un montículo de Fibonacci es
       correcta?
@@ -20,7 +20,7 @@ items:
       binomiales. (b) es falsa: el invariante "las raíces nunca están
       marcadas" es explícito en el mazo (página 20); marca(x) sólo tiene
       sentido si x tiene padre.
-  - level: 2
+  - "level: 2"
     statement: >-
       Traza a mano Consolidate(H) sobre una lista de raíces con cuatro
       árboles de grado 0, con llaves 12, 4, 9 y 6 (en ese orden de
@@ -42,7 +42,7 @@ items:
       Binomial-Link(6, 4) hace de 6 hijo de 4; A[1] se limpia, d=2, A[2]
       vacío, A[2] ← 4. Lista de raíces final: una sola raíz, 4, de grado
       2, con hijos 12 y 6 (y 6 a su vez tiene como hijo a 9). min(H) = 4.
-  - level: 3
+  - "level: 3"
     statement: >-
       Implementa Cut(H, x, p) y Cascading-Cut(H, y) en C++ siguiendo la
       firma de step-4-cut-cascading.cpp, sin mirar la solución de
@@ -59,7 +59,7 @@ items:
       y->parent; if (z != nullptr) { if (!y->mark) y->mark = true; else {
       cut(y, z); cascadingCut(z); } } } — exactamente los Algoritmos 9 y
       10 del profesor, línea por línea.
-  - level: 4
+  - "level: 4"
     statement: >-
       Adapta este montículo de Fibonacci (que es de mínimo, como lo enseñó
       el profesor) para que funcione como montículo de MÁXIMO. ¿Qué
@@ -78,7 +78,7 @@ items:
       raíces, Cut y Cascading-Cut (no comparan llaves, sólo mueven
       punteros y marcas), ni la cota de grado D(n) = O(lg n) (es un
       argumento estructural, no depende del sentido del orden).
-  - level: 5
+  - "level: 5"
     statement: >-
       Diseña Find-Min(H) y Delete(H, x) para este montículo de Fibonacci.
       El mazo de la semana 2 no da pseudocódigo de ninguna de las dos
@@ -98,7 +98,7 @@ items:
       real, O(1) amortizado) más el de Extract-Min (O(D(n)) amortizado),
       dominado por O(lg n) — coincide con la O(lg n) de la tabla de
       semana 1.
-  - level: 6
+  - "level: 6"
     statement: >-
       Demuestra, usando el método del potencial con Φ(H) = t(H) + 2·m(H),
       que el costo amortizado de Decrease-Key es O(1), incluyendo el caso

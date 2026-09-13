@@ -346,3 +346,18 @@ Esto es lo mismo que necesitará `layered-range-tree` (sus puentes son literalme
 y encaja con la generalización ya descrita en las peticiones 1-3 y 5: **aristas tipadas de
 primera clase + un campo de agrupación/posición por nodo**. Con eso, `range-tree` y
 `persistent` salen de la misma base y `tree` sigue siendo el caso fácil.
+
+### 7. Puentes dobles — pedido por `layered-range-tree` (familia `range-tree`)
+
+**Dónde se ve**: `content/structures/layered-range-tree/operations/bridge-build.md`.
+
+Un puente real es **una posición del arreglo padre apuntando a la vez a dos posiciones,
+en dos arreglos hijos distintos** (izquierdo y derecho). Con `parent` único sólo se puede
+expresar una de las dos, así que el agente modeló `parent` como "de qué celda hija vino
+este valor en el merge" y el doble puente no se puede dibujar.
+
+Pide algo como `bridges: [{toArrayId, position}]` — una **lista**, no un campo único.
+
+Esto es la confirmación más fuerte de la conclusión general: **las aristas tienen que ser
+de primera clase y múltiples por nodo**. Cinco de las siete peticiones de esta lista son la
+misma cosa vista desde temas distintos.

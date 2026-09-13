@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - level: 1
+  - "level: 1"
     statement: >-
       De las siguientes cuatro figuras, ¿cuáles podrían ser un árbol
       binomial `B_k`? (a) un nodo con 3 hijos, todos hoja. (b) un nodo con
@@ -15,7 +15,7 @@ items:
       2, 1 y 0 (raíces de B_2, B_1 y B_0). (a) tiene tres hijos todos de
       grado 0, lo que no corresponde a ningún B_k. (c) y (d) no tienen la
       forma recursiva B_{k-1} + B_{k-1}.
-  - level: 2
+  - "level: 2"
     statement: >-
       Traza la construcción de B_3 a partir de dos copias de B_2, indicando
       qué nodo se convierte en hijo de cuál y cuántos nodos, qué altura y
@@ -28,7 +28,7 @@ items:
       raíz de uno se cuelga como hijo izquierdo de la raíz del otro. El
       árbol resultante, B_3, tiene 2·4=8 nodos, altura 1+2=3, y la raíz
       queda con grado 3 (sus dos hijos originales más el nuevo).
-  - level: 3
+  - "level: 3"
     statement: >-
       Implementa en C++ una función `build(k)` que construya B_k por enlace
       recursivo (representación hijo-izquierdo/hermano-derecho) a partir de
@@ -41,7 +41,7 @@ items:
       llama build(k-1) dos veces, hace que la raíz de la segunda copia
       apunte con next_sibling al primer hijo actual de la primera y luego
       la asigna como new first_child.
-  - level: 4
+  - "level: 4"
     statement: >-
       Adapta build(k) para que, además de construir B_k, devuelva un mapa de
       profundidad → cantidad de nodos en esa profundidad, sin usar la
@@ -54,7 +54,7 @@ items:
       cada nodo visitado y se incrementa un contador por profundidad. El
       resultado, para cualquier k, debe coincidir exactamente con C(k,i)
       para cada i de 0 a k.
-  - level: 5
+  - "level: 5"
     statement: >-
       Diseña (sin implementar) un algoritmo que, dado un árbol arbitrario
       con la representación hijo-izquierdo/hermano-derecho, decida si es un
@@ -70,7 +70,7 @@ items:
       mismo chequeo recursivamente). Si en algún punto el grado o la
       recursión no calzan, se rechaza. Costo O(n) porque cada nodo se visita
       una vez.
-  - level: 6
+  - "level: 6"
     statement: >-
       Demuestra por inducción sobre k que el número de nodos a profundidad i
       en B_k es exactamente C(k,i), usando la construcción B_k = B_{k-1} + B_{k-1}.

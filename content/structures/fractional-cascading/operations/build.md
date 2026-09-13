@@ -10,55 +10,55 @@ cppSteps:
 visualization:
   type: range-tree
   steps:
-    - note: >-
+    - "note: >-"
         L3 es la última lista: no se modifica. Todo lo que sigue promueve
         elementos hacia ella, nunca al revés.
       highlight: ["l3-4", "l3-9", "l3-13", "l3-18", "l3-22"]
       nodes:
-        - { id: l3-4, value: 4, parent: null }
-        - { id: l3-9, value: 9, parent: null }
-        - { id: l3-13, value: 13, parent: null }
-        - { id: l3-18, value: 18, parent: null }
-        - { id: l3-22, value: 22, parent: null }
-    - note: >-
+        - "{ id: l3-4, value: 4, parent: null }"
+        - "{ id: l3-9, value: 9, parent: null }"
+        - "{ id: l3-13, value: 13, parent: null }"
+        - "{ id: l3-18, value: 18, parent: null }"
+        - "{ id: l3-22, value: 22, parent: null }"
+    - "note: >-"
         Se construye L'2 = L2 ∪ {mitad de L3}. Los elementos promovidos
         (9 y 18, marcados con ∗ en el material) guardan un puente: un
         puntero a su posición exacta en L3. El resto de L'2 (3, 5, 12) son
         propios de L2, sin puente.
       highlight: ["lp2-9", "lp2-18"]
       nodes:
-        - { id: l3-4, value: 4, parent: null }
-        - { id: l3-9, value: 9, parent: null }
-        - { id: l3-13, value: 13, parent: null }
-        - { id: l3-18, value: 18, parent: null }
-        - { id: l3-22, value: 22, parent: null }
-        - { id: lp2-3, value: 3, parent: null }
-        - { id: lp2-5, value: 5, parent: null }
-        - { id: lp2-9, value: "9*", parent: l3-9 }
-        - { id: lp2-12, value: 12, parent: null }
-        - { id: lp2-18, value: "18*", parent: l3-18 }
-    - note: >-
+        - "{ id: l3-4, value: 4, parent: null }"
+        - "{ id: l3-9, value: 9, parent: null }"
+        - "{ id: l3-13, value: 13, parent: null }"
+        - "{ id: l3-18, value: 18, parent: null }"
+        - "{ id: l3-22, value: 22, parent: null }"
+        - "{ id: lp2-3, value: 3, parent: null }"
+        - "{ id: lp2-5, value: 5, parent: null }"
+        - '{ id: lp2-9, value: "9*", parent: l3-9 }'
+        - "{ id: lp2-12, value: 12, parent: null }"
+        - '{ id: lp2-18, value: "18*", parent: l3-18 }'
+    - "note: >-"
         Se construye L'1 = L1 ∪ {mitad de L'2}. Los promovidos (5 y 12,
         tomados de L'2) guardan puente hacia su posición en L'2. Nótese que
         L'2 ya tenía sus propios puentes hacia L3: el puente no se
         "reexplica" en cada nivel, sólo baja un paso a la vez.
       highlight: ["lp1-5", "lp1-12"]
       nodes:
-        - { id: l3-4, value: 4, parent: null }
-        - { id: l3-9, value: 9, parent: null }
-        - { id: l3-13, value: 13, parent: null }
-        - { id: l3-18, value: 18, parent: null }
-        - { id: l3-22, value: 22, parent: null }
-        - { id: lp2-3, value: 3, parent: null }
-        - { id: lp2-5, value: 5, parent: null }
-        - { id: lp2-9, value: "9*", parent: l3-9 }
-        - { id: lp2-12, value: 12, parent: null }
-        - { id: lp2-18, value: "18*", parent: l3-18 }
-        - { id: lp1-2, value: 2, parent: null }
-        - { id: lp1-5, value: "5*", parent: lp2-5 }
-        - { id: lp1-8, value: 8, parent: null }
-        - { id: lp1-12, value: "12*", parent: lp2-12 }
-        - { id: lp1-15, value: 15, parent: null }
+        - "{ id: l3-4, value: 4, parent: null }"
+        - "{ id: l3-9, value: 9, parent: null }"
+        - "{ id: l3-13, value: 13, parent: null }"
+        - "{ id: l3-18, value: 18, parent: null }"
+        - "{ id: l3-22, value: 22, parent: null }"
+        - "{ id: lp2-3, value: 3, parent: null }"
+        - "{ id: lp2-5, value: 5, parent: null }"
+        - '{ id: lp2-9, value: "9*", parent: l3-9 }'
+        - "{ id: lp2-12, value: 12, parent: null }"
+        - '{ id: lp2-18, value: "18*", parent: l3-18 }'
+        - "{ id: lp1-2, value: 2, parent: null }"
+        - '{ id: lp1-5, value: "5*", parent: lp2-5 }'
+        - "{ id: lp1-8, value: 8, parent: null }"
+        - '{ id: lp1-12, value: "12*", parent: lp2-12 }'
+        - "{ id: lp1-15, value: 15, parent: null }"
 ---
 
 <!-- Derivado del pseudocódigo del profesor (#16-17); no hay bloque de

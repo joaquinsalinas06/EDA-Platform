@@ -10,21 +10,21 @@ cppSteps:
 visualization:
   type: tree
   steps:
-    - note: >-
+    - "note: >-"
         Caso zig-zag: x, su padre p y su abuelo a están en zigzag — lados
         OPUESTOS (aquí, x hijo derecho de p, p hijo izquierdo de a). Es la
         forma que hay que comparar contra zig-zig: mismos tres niveles,
         orientación distinta (#66).
       highlight: [x, p, a]
       nodes:
-        - { id: a, value: a, parent: null }
-        - { id: p, value: p, parent: a }
-        - { id: D, value: D, parent: a }
-        - { id: A, value: A, parent: p }
-        - { id: x, value: x, parent: p }
-        - { id: B, value: B, parent: x }
-        - { id: C, value: C, parent: x }
-    - note: >-
+        - "{ id: a, value: a, parent: null }"
+        - "{ id: p, value: p, parent: a }"
+        - "{ id: D, value: D, parent: a }"
+        - "{ id: A, value: A, parent: p }"
+        - "{ id: x, value: x, parent: p }"
+        - "{ id: B, value: B, parent: x }"
+        - "{ id: C, value: C, parent: x }"
+    - "note: >-"
         Primera rotación: se rota el par (x, p) — x sube a la posición de
         p, y B (hijo izquierdo de x) pasa a ser hijo derecho de p. A
         diferencia de zig-zig, aquí SÍ se rota x primero: no hay "abuelo
@@ -32,14 +32,14 @@ visualization:
         opuestas y no se refuerzan entre sí.
       highlight: [x, p]
       nodes:
-        - { id: a, value: a, parent: null }
-        - { id: x, value: x, parent: a }
-        - { id: D, value: D, parent: a }
-        - { id: p, value: p, parent: x }
-        - { id: C, value: C, parent: x }
-        - { id: A, value: A, parent: p }
-        - { id: B, value: B, parent: p }
-    - note: >-
+        - "{ id: a, value: a, parent: null }"
+        - "{ id: x, value: x, parent: a }"
+        - "{ id: D, value: D, parent: a }"
+        - "{ id: p, value: p, parent: x }"
+        - "{ id: C, value: C, parent: x }"
+        - "{ id: A, value: A, parent: p }"
+        - "{ id: B, value: B, parent: p }"
+    - "note: >-"
         Segunda rotación: se rota el par (x, a) — x sube a la raíz, y C
         (hijo derecho de x) pasa a ser hijo izquierdo de a. Resultado: x en
         la raíz con p y a como sus dos hijos directos (no en cascada, como
@@ -47,13 +47,13 @@ visualization:
         casos (#66).
       highlight: [x, a]
       nodes:
-        - { id: x, value: x, parent: null }
-        - { id: p, value: p, parent: x }
-        - { id: a, value: a, parent: x }
-        - { id: A, value: A, parent: p }
-        - { id: B, value: B, parent: p }
-        - { id: C, value: C, parent: a }
-        - { id: D, value: D, parent: a }
+        - "{ id: x, value: x, parent: null }"
+        - "{ id: p, value: p, parent: x }"
+        - "{ id: a, value: a, parent: x }"
+        - "{ id: A, value: A, parent: p }"
+        - "{ id: B, value: B, parent: p }"
+        - "{ id: C, value: C, parent: a }"
+        - "{ id: D, value: D, parent: a }"
 ---
 
 ## Qué hace

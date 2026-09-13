@@ -1,0 +1,75 @@
+---
+kind: operation
+title: Construcción
+order: 1
+cppSteps:
+  - step-1-node.cpp
+  - step-2-build.cpp
+  - full-implementation.cpp
+---
+
+## Qué hace
+
+Arma la estructura D₃ completa: un árbol de rango sobre `y` en el que cada
+nodo interno guarda, sobre los puntos de sus dos hijos, dos estructuras
+satélite.
+
+## Intuición
+
+Construir un BST balanceado ordenado por `y` es la parte fácil (es la misma
+idea que ya usa [range-tree](/structures/range-tree)). Lo que hace a D₃
+distinto es qué se cuelga de cada nodo: no una copia genérica de D₂ para todo
+el subárbol, sino **dos** copias específicas, una por cada hijo, elegidas
+para que en el nodo de separación de cualquier consulta futura ya sobre una
+de las dos direcciones ("normal" a la derecha, "invertida" a la izquierda —
+ver [Estructura interna](/structures/d3-separation-node)).
+
+## Algoritmo
+
+Textual del profesor (#37-39): "Un árbol de rango sobre y (no sobre x). Cada
+nodo v de este árbol guarda dos estructuras satélite, sobre los puntos de sus
+dos hijos: en derecha(v), una estructura D₂ normal (acotada por arriba,
+y ≤ b2); en izquierda(v), una estructura D₂ invertida, D₂′ (acotada por
+abajo, y ≥ a2)."
+
+1. Ordenar los puntos por `y` y construir el árbol de rango balanceado
+   (mediana como raíz, recursión en las dos mitades — igual que
+   [range-tree](/structures/range-tree)).
+2. En cada nodo `v` con hijos, construir:
+   - una [D₂](/structures/d2-bound-x) normal sobre los puntos del subárbol
+     derecho de `v`;
+   - una D₂′ invertida sobre los puntos del subárbol izquierdo de `v`.
+
+## Pseudocódigo
+
+El mazo no da pseudocódigo para esta sección; es descripción en prosa
+(#37-39). No se inventa uno formal más allá de la construcción recursiva
+estándar de un árbol de rango, ya cubierta por
+[range-tree](/structures/range-tree).
+
+## C++
+
+Ver `step-1-node.cpp` (el nodo y sus dos satélites) y `step-2-build.cpp` (la
+construcción recursiva) en el editor de arriba.
+
+## Complejidad temporal
+
+El profesor no la da para esta operación (ver [Análisis de complejidad](/structures/d3-separation-node#análisis-de-complejidad)
+en la teoría). No se inventa una cota propia.
+
+## Complejidad espacial
+
+Tampoco la da el mazo.
+
+## Ejemplo
+
+Ver [Ejemplos](/structures/d3-separation-node/examples).
+
+## Casos límite
+
+- Árbol con un solo punto: no hay hijos, así que ninguno de los dos satélites
+  se construye (ambos vacíos). No lo discute el profesor; es la lectura
+  directa de la construcción recursiva.
+- Todos los puntos con el mismo `y`: el mazo no lo trata; el desempate de
+  cuál va a la izquierda o derecha de la mediana queda igual que en
+  [range-tree](/structures/range-tree).

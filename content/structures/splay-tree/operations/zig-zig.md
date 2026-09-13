@@ -10,21 +10,21 @@ cppSteps:
 visualization:
   type: tree
   steps:
-    - note: >-
+    - "note: >-"
         Caso zig-zig: x, su padre p y su abuelo a están en línea, del
         MISMO lado (aquí, x hijo izquierdo de p, p hijo izquierdo de a).
         Antes de tocar nada: éste es el árbol de tres niveles que hay que
         reacomodar (#65). A, B, C, D son subárboles completos.
       highlight: [x, p, a]
       nodes:
-        - { id: a, value: a, parent: null }
-        - { id: p, value: p, parent: a }
-        - { id: D, value: D, parent: a }
-        - { id: x, value: x, parent: p }
-        - { id: C, value: C, parent: p }
-        - { id: A, value: A, parent: x }
-        - { id: B, value: B, parent: x }
-    - note: >-
+        - "{ id: a, value: a, parent: null }"
+        - "{ id: p, value: p, parent: a }"
+        - "{ id: D, value: D, parent: a }"
+        - "{ id: x, value: x, parent: p }"
+        - "{ id: C, value: C, parent: p }"
+        - "{ id: A, value: A, parent: x }"
+        - "{ id: B, value: B, parent: x }"
+    - "note: >-"
         Primera rotación — se rota el par (p, a), NO el par (x, p): p sube
         a la posición de a, a baja a ser hijo derecho de p, y C (que era
         hijo derecho de p) pasa a ser hijo izquierdo de a. x no se toca
@@ -33,14 +33,14 @@ visualization:
         primero.
       highlight: [p, a]
       nodes:
-        - { id: p, value: p, parent: null }
-        - { id: x, value: x, parent: p }
-        - { id: a, value: a, parent: p }
-        - { id: A, value: A, parent: x }
-        - { id: B, value: B, parent: x }
-        - { id: C, value: C, parent: a }
-        - { id: D, value: D, parent: a }
-    - note: >-
+        - "{ id: p, value: p, parent: null }"
+        - "{ id: x, value: x, parent: p }"
+        - "{ id: a, value: a, parent: p }"
+        - "{ id: A, value: A, parent: x }"
+        - "{ id: B, value: B, parent: x }"
+        - "{ id: C, value: C, parent: a }"
+        - "{ id: D, value: D, parent: a }"
+    - "note: >-"
         Segunda rotación: ahora sí se rota el par (x, p), igual que un Zig
         simple. x sube a la raíz, p baja a su hijo derecho, y B (hijo
         derecho de x) pasa a ser hijo izquierdo de p. Resultado final:
@@ -48,13 +48,13 @@ visualization:
         colgando en cascada del lado derecho, no del mismo lado que antes.
       highlight: [x, p]
       nodes:
-        - { id: x, value: x, parent: null }
-        - { id: A, value: A, parent: x }
-        - { id: p, value: p, parent: x }
-        - { id: B, value: B, parent: p }
-        - { id: a, value: a, parent: p }
-        - { id: C, value: C, parent: a }
-        - { id: D, value: D, parent: a }
+        - "{ id: x, value: x, parent: null }"
+        - "{ id: A, value: A, parent: x }"
+        - "{ id: p, value: p, parent: x }"
+        - "{ id: B, value: B, parent: p }"
+        - "{ id: a, value: a, parent: p }"
+        - "{ id: C, value: C, parent: a }"
+        - "{ id: D, value: D, parent: a }"
 ---
 
 ## Qué hace

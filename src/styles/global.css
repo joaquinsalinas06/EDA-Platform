@@ -5,6 +5,7 @@
 @import "@fontsource/ibm-plex-mono/400.css";
 @import "@fontsource/ibm-plex-mono/500.css";
 @import "@fontsource/ibm-plex-mono/600.css";
+@import "katex/dist/katex.min.css";
 
 /* ── Manual técnico ─────────────────────────────────────────────────────────
    Sans para leer, mono para datos (código, complejidad, ids, contadores).
@@ -309,6 +310,27 @@ a:hover {
   font-size: inherit;
   white-space: pre;
   color: inherit;
+}
+
+/* ── Matemáticas (KaTeX) ─────────────────────────────────────────────────
+   Se conserva la fuente matemática de KaTeX (Plex no tiene glifos como Σ,
+   ⌊⌋, Φ̂; se verían peor con una sustitución forzada). Sólo se hereda el
+   color de la prosa — KaTeX ya usa currentColor, esto es la confirmación
+   explícita para que nunca salga texto negro fijo sobre fondo oscuro — y
+   se ajusta el tamaño para que no desentone junto al cuerpo de 17px.
+   Una fórmula en línea vive dentro de las 72ch de la prosa; una fórmula en
+   bloque (`$$...$$`) usa el mismo tratamiento de ancho completo + scroll
+   horizontal que el código y las tablas, para que una sumatoria larga no
+   rompa el layout en móvil. */
+.katex {
+  color: var(--ink);
+  font-size: 1.02em;
+}
+.katex-display {
+  margin: 2rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
 }
 
 .prose blockquote {

@@ -37,7 +37,13 @@ const { meta, section, tabs, rail = false } = Astro.props;
     <hr class="draw mt-6 border-0 border-t-2 border-[var(--ink)]" />
   </header>
 
-  <nav class="mb-12 flex flex-wrap gap-1 border-b border-[var(--rule)]" aria-label="Secciones">
+  <!--
+    flex-nowrap + overflow-x-auto: con 11 pestañas (binary-heap: teoría + 8
+    operaciones + ejemplos/ejercicios/dominio) flex-wrap alternaba entre 1 y 2
+    filas según el ancho de viewport y el largo de cada label — inconsistente
+    y quebraba la barra inferior a la mitad. Siempre una sola fila, scrolleable.
+  -->
+  <nav class="mb-12 flex flex-nowrap gap-1 overflow-x-auto border-b border-[var(--rule)]" aria-label="Secciones">
     {
       tabs.map((tab) => {
         const active = tab.label === section;
@@ -46,7 +52,7 @@ const { meta, section, tabs, rail = false } = Astro.props;
             href={tab.href}
             aria-current={active}
             class:list={[
-              '-mb-px border-b-2 px-3 py-2.5 text-[0.875rem] no-underline transition-colors',
+              '-mb-px shrink-0 border-b-2 px-3 py-2.5 text-[0.875rem] whitespace-nowrap no-underline transition-colors',
               active
                 ? 'border-[var(--accent)] font-medium text-[var(--accent)]'
                 : 'border-transparent text-[var(--muted)] hover:border-[var(--rule)] hover:text-[var(--ink)]',

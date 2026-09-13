@@ -111,11 +111,42 @@ donde vas, el nivel de un ejercicio. Nunca decorativo, nunca gradientes.
   (`.stagger`), interpolación de nodos en las visualizaciones, y la visualización
   **se reproduce sola** la primera vez que entra en pantalla.
 
+### Estados en las visualizaciones — un solo azul
+
+`--accent` marca **únicamente lo ACTIVO**: el nodo que la operación toca en el
+paso actual. Nunca hay un segundo color de señal. El profesor usa amarillo y
+rojo en sus diapositivas (delimitador / respuesta); nosotros traducimos esos
+estados a **relleno, contorno, opacidad y trazo**, nunca a tono. El vocabulario
+es cerrado — siete estados, definidos en `src/visualizations/canvas-types.ts`
+y verificados por `canvas-types.test.ts`:
+
+| estado | relleno | contorno | opacidad | significa |
+| --- | --- | --- | --- | --- |
+| `idle` | `--paper` | `--rule` fino | 1 | estructura en reposo |
+| `active` | `--accent` | `--accent` | 1 | **lo que se toca en este paso — único uso del azul** |
+| `marked` | `--paper` | `--ink` + doble contorno | 1 | delimitador / frontera (el amarillo del profesor) |
+| `answer` | `--slab` (losa llena) | `--slab` | 1 | respuesta canónica (el rojo del profesor) |
+| `shared` | `--sunken` | `--rule` discontinuo | 0.75 | compartido con la versión anterior, no se tocó |
+| `copied` | `--paper` | `--ink` grueso | 1 | nodo nuevo de esta versión |
+| `muted` | `--fill` | `--rule` discontinuo | 0.45 | descartado / podado |
+
+Aristas: `tree` sólida; `shared` discontinua y curvada (cruza entre versiones);
+`pointer` sólida con punta de flecha. Una arista sólo se pinta de azul cuando
+une algo activo.
+
+**Doble contorno = frontera. Losa llena = respuesta. Discontinuo = no es tuyo
+o ya no cuenta. Opacidad baja = descartado. Azul = ahora.**
+
+Es fiel al material, no una concesión: el profesor ya dibuja los puentes del
+fractional cascading con línea punteada, no con color. Como el estado se
+codifica en el trazo, cada nodo lleva un `<title>` con su estado en palabras
+("hoja 4 — delimitador") para quien usa lector de pantalla.
+
 ## Pendiente
 
 - Borrar `demo-bst` y `week-00` cuando entre la primera estructura real.
-- Familias de visualización `graph`, `persistent`, `range-tree` (el componente
-  base ya está listo para recibirlas).
+- Familia de visualización `graph` (`persistent` y `range-tree` ya están
+  implementadas — ver `src/visualizations/{persistent,range-tree}/`).
 - Ejecutar C++ en el navegador: hoy el editor es editable pero no corre.
 
 ## Documentación de Astro

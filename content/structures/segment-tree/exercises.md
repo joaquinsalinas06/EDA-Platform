@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       Para el arreglo A = [1, 2, 3, 4], dibuja el segment tree de 4 hojas
       (combinar = suma) e identifica qué rango representa cada nodo interno.
@@ -12,7 +12,7 @@ items:
     solution: >-
       Raíz [1,4], hijo izquierdo [1,2], hijo derecho [3,4], hojas [1,1],
       [2,2], [3,3], [4,4] — el mismo árbol de theory.md.
-  - "level: 2"
+  - level: 2
     statement: >-
       Sobre ese mismo árbol, traza paso a paso Update(pos=4, val=10): qué
       nodos visita, en qué orden, y qué valores quedan al final.
@@ -23,7 +23,7 @@ items:
       Camino [1,4] → [3,4] → [4,4]. Se escribe 10 en la hoja [4,4]; al
       volver, [3,4] = 3+10 = 13 y [1,4] = 3+13 = 16. [1,2], [1,1], [2,2],
       [3,3] no se tocan.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa Build, Update y Query para suma sobre un arreglo de
       tamaño arbitrario (no necesariamente potencia de 2), usando un arreglo
@@ -35,7 +35,7 @@ items:
       Ver cpp/structures/segment-tree/full-implementation.cpp: build, update
       y query recursivos, con el arreglo de tamaño 4n como respaldo del
       árbol implícito.
-  - "level: 4"
+  - level: 4
     statement: >-
       Adapta tu implementación para que combinar sea mínimo en vez de suma.
       ¿Qué dos cosas del código tienes que cambiar, y qué NO tienes que
@@ -48,7 +48,7 @@ items:
       Query de 0 a +infinito. Build y Update quedan idénticos: la
       generalidad de "cualquier función asociativa" es justamente lo que
       permite este cambio sin tocar el resto.
-  - "level: 5"
+  - level: 5
     statement: >-
       El mazo de persistencia usa este mismo Update para volver el segment
       tree persistente por path copying: en vez de mutar el nodo, se crea
@@ -67,7 +67,7 @@ items:
       hijos "sustituidos"; todo lo demás son punteros compartidos con la
       versión vieja — es exactamente el diagrama de la semana 3
       (raíz→[3,4]→[4,4] en naranja, el resto compartido).
-  - "level: 6"
+  - level: 6
     statement: >-
       El otro mazo de la semana 3 construye un segment tree sobre el EJE
       DEL TIEMPO (cada hoja es un instante t, no un dato) para dar

@@ -9,7 +9,7 @@ cppSteps:
 visualization:
   type: tree
   steps:
-    - "note: >-"
+    - note: >-
         Configuración antes de rotar. p es el padre, n es el hijo que se va a
         levantar. A, B y C son subárboles completos (no nodos sueltos): A y B
         cuelgan de n, C cuelga de p. El recorrido inorden de este árbol es
@@ -17,12 +17,12 @@ visualization:
         preservar.
       highlight: [p, n]
       nodes:
-        - "{ id: p, value: p, parent: null }"
-        - "{ id: n, value: n, parent: p }"
-        - "{ id: C, value: C, parent: p }"
-        - "{ id: A, value: A, parent: n }"
-        - "{ id: B, value: B, parent: n }"
-    - "note: >-"
+        - { id: p, value: p, parent: null }
+        - { id: n, value: n, parent: p }
+        - { id: C, value: C, parent: p }
+        - { id: A, value: A, parent: n }
+        - { id: B, value: B, parent: n }
+    - note: >-
         Right Rotation(n): n sube a la posición de p, p baja a ser hijo
         derecho de n. El subárbol B, que era el hijo derecho de n, pasa a ser
         el hijo izquierdo de p — es el único subárbol que cambia de padre; A
@@ -31,12 +31,12 @@ visualization:
         A, B o C.
       highlight: [n, p]
       nodes:
-        - "{ id: n, value: n, parent: null }"
-        - "{ id: A, value: A, parent: n }"
-        - "{ id: p, value: p, parent: n }"
-        - "{ id: B, value: B, parent: p }"
-        - "{ id: C, value: C, parent: p }"
-    - "note: >-"
+        - { id: n, value: n, parent: null }
+        - { id: A, value: A, parent: n }
+        - { id: p, value: p, parent: n }
+        - { id: B, value: B, parent: p }
+        - { id: C, value: C, parent: p }
+    - note: >-
         El recorrido inorden del árbol resultante es A, n, B, p, C — idéntico
         al de antes de rotar. Eso es lo que hace que rotar sea una operación
         válida sobre un BST: reorganiza la forma (y por lo tanto la
@@ -46,11 +46,11 @@ visualization:
         inicial.
       highlight: [n, p]
       nodes:
-        - "{ id: n, value: n, parent: null }"
-        - "{ id: A, value: A, parent: n }"
-        - "{ id: p, value: p, parent: n }"
-        - "{ id: B, value: B, parent: p }"
-        - "{ id: C, value: C, parent: p }"
+        - { id: n, value: n, parent: null }
+        - { id: A, value: A, parent: n }
+        - { id: p, value: p, parent: n }
+        - { id: B, value: B, parent: p }
+        - { id: C, value: C, parent: p }
 ---
 
 ## Qué hace

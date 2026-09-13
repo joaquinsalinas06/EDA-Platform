@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       El profesor dice que el método de rollback se usa "cuando nada de lo
       anterior aplica". ¿Cuáles son las dos propiedades cuya ausencia
@@ -17,7 +17,7 @@ items:
       atajo "Insert(t, op) ≡ Insert(ahora, op)"; el método de rollback sólo
       exige invertibilidad, y paga el precio de la falta de conmutatividad
       rehaciendo todo en orden.
-  - "level: 2"
+  - level: 2
     statement: >-
       Dado el log `[(t=1, +2), (t=2, +3), (t=3, −1)]` (contador final = 4),
       traza paso a paso `Insert(t=1.5, +10)`: qué se deshace, qué se aplica,
@@ -30,7 +30,7 @@ items:
       4−(−1)=5, luego 5−3=2 (estado justo después de (t=1,+2)). Aplicar:
       2+10=12. Rehacer en orden: 12+3=15, luego 15−1=14. Costo: O(2) ×
       (costo de una operación).
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa (en pseudocódigo o C++) la función `insert_retroactivo(log,
       t, op)` que sigue exactamente los cuatro pasos del profesor: deshacer
@@ -45,7 +45,7 @@ items:
       operaciones posteriores, se inserta la nueva en el log, y se rehacen
       (aplicando la operación original, en orden) las que se habían
       deshecho.
-  - "level: 4"
+  - level: 4
     statement: >-
       Adapta el método de rollback para que funcione también con
       `Delete(t)`: eliminar la operación que estaba en el tiempo t. ¿Qué
@@ -59,7 +59,7 @@ items:
       omite la operación que estaba ahí (no se vuelve a aplicar al rehacer).
       El costo sigue siendo O(r) × (costo de una operación), con el mismo r
       = operaciones posteriores a t.
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña (sin implementar) una estrategia que reduzca el costo cuando
       se sabe de antemano que la mayoría de las inserciones retroactivas
@@ -76,7 +76,7 @@ items:
       estructura es una priority queue específicamente, retroactive-priority-queue
       da O(lg n) amortizado, mejor aún. El rollback queda como último
       recurso cuando ninguna de las dos aplica.
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra por qué la cota O(r) del método de rollback es, en general,
       ajustada (no se puede mejorar con este esquema) usando el argumento

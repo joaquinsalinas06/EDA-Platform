@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       Para i = 12 (binario 1100), calcula lowbit(i) y di qué rango cubre
       tree[12].
@@ -11,7 +11,7 @@ items:
       - "El rango que cubre tree[i] es (i - lowbit(i), i]."
     solution: >-
       lowbit(12) = 4 (1100 & 0100 = 0100). tree[12] cubre (8, 12].
-  - "level: 2"
+  - level: 2
     statement: >-
       Sobre un arreglo de n=8, traza Update(i=5, delta=+3): qué posiciones
       de tree toca, en qué orden.
@@ -21,7 +21,7 @@ items:
     solution: >-
       5 (lowbit=1) → 6 (lowbit=2) → 8 (lowbit=8) → 16 (>8, termina).
       Toca tree[5], tree[6], tree[8].
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa Update y Prefix-query sobre un arreglo, e inicializa tree
       con n llamadas a Update en vez de un Build separado (Fenwick no lo
@@ -32,7 +32,7 @@ items:
     solution: >-
       Ver cpp/structures/fenwick-tree/full-implementation.cpp: update y
       prefix_query iterativos, con inicialización vía n updates.
-  - "level: 4"
+  - level: 4
     statement: >-
       Adapta Prefix-query para responder suma de rango(l, r). ¿Por qué esta
       adaptación SÍ funciona para suma pero NO funcionaría si la operación
@@ -46,7 +46,7 @@ items:
       mínimo no hay forma de "quitar" el mínimo de un prefijo más chico del
       mínimo de uno más grande — no existe la operación inversa, así que la
       misma adaptación no tiene sentido.
-  - "level: 5"
+  - level: 5
     statement: >-
       El profesor ofrece Segment tree o Fenwick tree para el caso simple del
       barrido (segmentos horizontales/verticales, sin intersecciones de la
@@ -63,7 +63,7 @@ items:
       pidiera, por ejemplo, la altura máxima activa en el rango en vez del
       conteo — mínimo/máximo no son invertibles, y ahí sólo el segment tree
       (con combine = min o max) sirve.
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra por qué ninguna adaptación de Update/Prefix-query puede dar
       O(lg n) para "máximo de un prefijo" con el mismo arreglo tree de

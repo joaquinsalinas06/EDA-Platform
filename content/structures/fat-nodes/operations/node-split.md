@@ -11,43 +11,43 @@ cppSteps:
 visualization:
   type: persistent
   steps:
-    - "note: >-"
+    - note: >-
         El registro de n está lleno (2p = 4 entradas, el máximo). La
         próxima escritura ya no cabe: dispara node-split. a1 es uno de
         los p predecesores que apuntan a n.
       highlight: ["n_old"]
       nodes:
-        - '{ id: a1, value: "a1", parent: null }'
-        - '{ id: n_old, value: "n (registro lleno 4/4)", parent: a1 }'
-    - "note: >-"
+        - { id: a1, value: "a1", parent: null }
+        - { id: n_old, value: "n (registro lleno 4/4)", parent: a1 }
+    - note: >-
         Nace un nodo nuevo n', limpio: registro vacío, valores actuales
         copiados de n (los que leerCampo devolvería justo antes de esta
         escritura). n (viejo) todavía no se toca.
       highlight: ["n_new"]
       nodes:
-        - '{ id: a1, value: "a1", parent: null }'
-        - '{ id: n_old, value: "n (registro lleno 4/4)", parent: a1 }'
-        - '{ id: n_new, value: "n' (registro vacío)", parent: null }'
-    - "note: >-"
+        - { id: a1, value: "a1", parent: null }
+        - { id: n_old, value: "n (registro lleno 4/4)", parent: a1 }
+        - { id: n_new, value: "n' (registro vacío)", parent: null }
+    - note: >-
         Se redirige el puntero entrante de a1 hacia n' — esto es, en sí
         mismo, una escritura de campo sobre a1 (no una mutación mágica).
         Con p = 1 predecesor esto basta; con p > 1 se repite por cada
         predecesor.
       highlight: ["a1", "n_new"]
       nodes:
-        - '{ id: a1, value: "a1", parent: null }'
-        - '{ id: n_old, value: "n (congelado)", parent: null }'
-        - '{ id: n_new, value: "n' (registro: 1/4)", parent: a1 }'
-    - "note: >-"
+        - { id: a1, value: "a1", parent: null }
+        - { id: n_old, value: "n (congelado)", parent: null }
+        - { id: n_new, value: "n' (registro: 1/4)", parent: a1 }
+    - note: >-
         n (viejo) queda congelado e intacto: sigue siendo la respuesta
         correcta para cualquier lectura con tiempo anterior al split. La
         estructura vive ahora repartida entre n (pasado) y n' (presente
         en adelante).
       highlight: ["n_old"]
       nodes:
-        - '{ id: a1, value: "a1", parent: null }'
-        - '{ id: n_old, value: "n (congelado, consultable)", parent: null }'
-        - '{ id: n_new, value: "n' (registro: 1/4)", parent: a1 }'
+        - { id: a1, value: "a1", parent: null }
+        - { id: n_old, value: "n (congelado, consultable)", parent: null }
+        - { id: n_new, value: "n' (registro: 1/4)", parent: a1 }
 ---
 
 ## Qué hace

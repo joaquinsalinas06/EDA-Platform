@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       En el range tree 1D con hojas {3, 4, 7, 9, 13, 15, 18, 27}
       (diapositiva #29), ¿qué guarda el nodo interno cuyos descendientes
@@ -14,7 +14,7 @@ items:
       Guarda 13: el máximo del subárbol izquierdo de ese nodo (que sólo
       contiene la hoja 13). Ningún interno guarda un punto real; sólo el
       valor que permite decidir hacia qué lado seguir buscando.
-  - "level: 2"
+  - level: 2
     statement: >-
       Traza la consulta [5,16] sobre ese mismo árbol: ¿cuáles son las dos
       hojas delimitadoras, cuál es el nodo P, y cuáles son los subárboles
@@ -28,7 +28,7 @@ items:
       es la raíz (9). Subárboles canónicos de la respuesta: el interno 7
       (hojas 7, 9) y el interno 13 (hojas 13, 15) — respuesta total {7, 9,
       13, 15}, exactamente la diapositiva #35.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa Existe(raiz, l1, r1) usando la descomposición canónica de
       range-query-1d en vez de recorrer todas las hojas. ¿Qué complejidad
@@ -42,7 +42,7 @@ items:
       paga por completo la búsqueda de los subárboles canónicos; no hace
       falta descender a las hojas porque la sola existencia de un subárbol
       en la lista ya certifica que hay al menos un punto en rango.
-  - "level: 4"
+  - level: 4
     statement: >-
       El árbol secundario del nodo 15 en el range tree 2D (diapositiva #47)
       tiene raíz 0, hijos −2 y 1. Si se agregara un noveno punto (20, −5) al
@@ -60,7 +60,7 @@ items:
       da inserción para el range tree (es una estructura estática): en la
       práctica esto exige reconstruir el subárbol afectado, no actualizarlo
       incrementalmente.
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña, a alto nivel, cómo extenderías el range tree 2D a 3
       dimensiones para resolver Rectangle Sum con pesos (el ejercicio del
@@ -78,7 +78,7 @@ items:
       en X y Y; existence-count se convierte en "sumar pesos" en vez de
       "sumar contadores" — mismo mecanismo O(log² n), sólo cambia el dato
       agregado en cada nodo, no la estructura ni el algoritmo de búsqueda.
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra que, para cualquier consulta [l1,r1] sobre un range tree 1D
       con n hojas, la descomposición canónica produce a lo más O(log n)

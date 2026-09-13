@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       El profesor lista cuatro problemas descomponibles: mínimo, máximo,
       suma y "existe un elemento con propiedad P". Para cada uno, ¿cuál es
@@ -12,7 +12,7 @@ items:
     solution: >-
       Mínimo → f = mín; Máximo → f = máx; Suma → f = +; Existencia →
       f = ∨ (el resultado sobre A∪B es "sí" si existe en A o existe en B).
-  - "level: 2"
+  - level: 2
     statement: >-
       Sobre el árbol de 4 hojas de examples.md (f = suma, m = 4, inicialmente
       todo en 0), traza qué nodos se actualizan y con qué valores al hacer
@@ -25,7 +25,7 @@ items:
       recalcula [1,4] = 0 + 3 = 3. [1,2] y [1,1], [2,2], [3,3] no se tocan.
       Query(t=4) pide [1,4], que es exactamente el rango de la raíz: la
       respuesta es valor(raíz) = 3, sin descomponer en más nodos.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa InsertRetroactive(t, delta) sobre un segment tree de suma
       con m posiciones fijas, reutilizando el Update de segment tree que ya
@@ -38,7 +38,7 @@ items:
       activo[t]). Es el mismo Update de segment tree; lo único nuevo es
       llevar activo[] aparte para poder invertir la operación en Delete sin
       tener que recordar qué valor había antes en la hoja.
-  - "level: 4"
+  - level: 4
     statement: >-
       Adapta el mismo segment tree sobre el tiempo, pero ahora con f = máx
       en vez de f = suma, para responder "¿cuál fue el valor máximo
@@ -55,7 +55,7 @@ items:
       afecta ningún máx. Delete(t) ahora no puede simplemente "restar": hay
       que volver a poner el neutro (-∞) en esa hoja, perdiendo el valor que
       tenía — consistente con que máx no es invertible como sí lo es +.
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña, sin escribir código, cómo darías retroactividad completa a
       "¿cuántos elementos distintos hay insertados hasta el tiempo t?"
@@ -72,7 +72,7 @@ items:
       elementos, no sólo el conteo, así que no hay f en O(1) sobre los
       resúmenes "cardinalidad". El segment tree sobre el tiempo de este tema
       no aplica directamente aquí, igual que no aplica a Delete-Min.
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra por qué el overhead de este método es multiplicativo y no
       aditivo: si la estructura original responde una consulta en O(q),

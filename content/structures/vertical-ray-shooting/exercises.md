@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       El profesor dice que se puede "caracterizar la cara de cada punto
       según el primer segmento que 'choque'" un rayo vertical. ¿Qué problema
@@ -16,7 +16,7 @@ items:
       del mapa cae el punto de consulta?"; vertical ray shooting la convierte
       en "¿cuál es el primer segmento que toca un rayo vertical desde ese
       punto?".
-  - "level: 2"
+  - level: 2
     statement: >-
       Dado el segmento horizontal S = ((2,5), (10,5)) y el punto de consulta
       (6,2), traza el rayo vertical hacia arriba desde (6,2) y di a qué
@@ -27,7 +27,7 @@ items:
     solution: >-
       Sí: x=6 está entre 2 y 10, así que el rayo cruza S a altura y=5 —
       es el caso mínimo trazado en examples.md.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa ray-query por fuerza bruta en C++: recibe un punto (x,y) y
       un vector de segmentos, y devuelve el índice del primer segmento que
@@ -40,7 +40,7 @@ items:
       Ver cpp/structures/vertical-ray-shooting/full-implementation.cpp —
       recorre todos los segmentos, calcula la altura de cruce de los que
       cubren x_i, y se queda con el mínimo por encima de y_i.
-  - "level: 4"
+  - level: 4
     statement: >-
       Adapta tu solución del nivel 3 para que resuelva ray shooting hacia
       abajo en vez de hacia arriba, sin duplicar la lógica de filtrado.
@@ -51,7 +51,7 @@ items:
       Se mantiene el mismo filtro por rango en x y el mismo cálculo de
       altura de cruce; sólo se invierte la comparación (maximizar en vez de
       minimizar, y la condición y <= y_i en vez de y >= y_i).
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña una estructura para resolver muchas consultas de ray-query
       sobre el mismo conjunto fijo de segmentos, más rápido que O(n) por
@@ -66,7 +66,7 @@ items:
       persistente, el orden de los segmentos activos; cada consulta se
       responde con un Successor(y_i) sobre el estado de la recta en x=x_i,
       en O(log n) por consulta.
-  - "level: 6"
+  - level: 6
     statement: >-
       Justifica por qué "el primer segmento que toca el rayo" es una
       caracterización válida de la cara: dos puntos en la misma cara del

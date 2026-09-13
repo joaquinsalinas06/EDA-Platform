@@ -11,21 +11,21 @@ cppSteps:
 visualization:
   type: tree
   steps:
-    - "note: >-"
+    - note: >-
         Insertamos 10 en el árbol de partida {raíz 30, hijo izq 20}.
         Descendemos como en un BST común: 10 < 30, vamos a la izquierda.
       highlight: ["n30"]
       nodes:
-        - "{ id: n30, value: 30, parent: null }"
-        - "{ id: n20, value: 20, parent: n30 }"
-    - "note: >-"
+        - { id: n30, value: 30, parent: null }
+        - { id: n20, value: 20, parent: n30 }
+    - note: >-
         10 < 20, seguimos a la izquierda; el hijo izquierdo de 20 es nulo,
         así que 10 se inserta ahí como nueva hoja.
       highlight: ["n20"]
       nodes:
-        - "{ id: n30, value: 30, parent: null }"
-        - "{ id: n20, value: 20, parent: n30 }"
-    - "note: >-"
+        - { id: n30, value: 30, parent: null }
+        - { id: n20, value: 20, parent: n30 }
+    - note: >-
         10 insertado. Al subir recalculando alturas, el nodo 30 queda con
         subárbol izquierdo de altura 2 (20-10) y subárbol derecho de altura
         0 (vacío): el invariante de balance se rompe en 30 (caso
@@ -33,10 +33,10 @@ visualization:
         izquierda).
       highlight: ["n30", "n20", "n10"]
       nodes:
-        - "{ id: n30, value: 30, parent: null }"
-        - "{ id: n20, value: 20, parent: n30 }"
-        - "{ id: n10, value: 10, parent: n20 }"
-    - "note: >-"
+        - { id: n30, value: 30, parent: null }
+        - { id: n20, value: 20, parent: n30 }
+        - { id: n10, value: 10, parent: n20 }
+    - note: >-
         Se corrige con una rotación derecha sobre 30: 20 sube a raíz del
         subárbol, 30 pasa a ser su hijo derecho. El recorrido in-order
         (10, 20, 30) no cambia — sigue siendo un BST válido — y ahora
@@ -44,9 +44,9 @@ visualization:
         restaurado sin tocar ningún otro nodo del árbol.
       highlight: ["n20"]
       nodes:
-        - "{ id: n20, value: 20, parent: null }"
-        - "{ id: n10, value: 10, parent: n20 }"
-        - "{ id: n30, value: 30, parent: n20 }"
+        - { id: n20, value: 20, parent: null }
+        - { id: n10, value: 10, parent: n20 }
+        - { id: n30, value: 30, parent: n20 }
 ---
 
 <!-- Concepto de apoyo: no hay diapositiva que citar. Esta es la operación

@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       El profesor da dos cotas para el mismo problema: "O(k lg n)" para la
       búsqueda ingenua y "O(k + lg n)" con fractional cascading. ¿Cuál de las
@@ -15,7 +15,7 @@ items:
       Es la cota de query: O(k + lg n). En este mazo, k es el número de
       listas L1, ..., Lk en las que se busca el mismo valor x — no el tamaño
       de la respuesta, que es como se usa k en el resto del curso.
-  - "level: 2"
+  - level: 2
     statement: >-
       Con L3 = [4, 9, 13, 18, 22], L'2 = [3, 5, 9*, 12, 18*] y
       L'1 = [2, 5*, 8, 12*, 15] (el ejemplo de #18-19), traza la consulta de
@@ -29,7 +29,7 @@ items:
       cercano hacia L'2 es el de 12* (el último promovido), que aterriza
       cerca del final de L'2; desde ahí, el ajuste O(1) encuentra 18* en
       L'2, cuyo puente baja directo a la posición de 18 en L3.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa build para k = 2 listas ordenadas (arreglos de enteros):
       dada L1 y L2 (L2 es la última, no cambia), construye L'1 = L1 ∪
@@ -43,7 +43,7 @@ items:
       fusionar esos valores con L1 en un solo arreglo ordenado, guardando en
       cada elemento promovido el índice de origen en L2 como puente. Ver
       step-2-augmented-list.cpp y step-3-build.cpp.
-  - "level: 4"
+  - level: 4
     statement: >-
       El material generaliza esto a "conteo directo + serie geométrica" para
       el tamaño. Si en vez de promover la mitad de cada lista se promoviera
@@ -59,7 +59,7 @@ items:
       produce una serie geométrica convergente y el tamaño total sigue
       siendo O(n). Promover TODO (factor 1) es precisamente el caso donde la
       serie deja de converger — eso es lo que dispara el tamaño a Θ(kn).
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña una variante de query que, en vez de reportar sólo si x está en
       cada lista, reporte la posición de inserción de x en cada Li (útil
@@ -74,7 +74,7 @@ items:
       en vez de sólo comparar igualdad con x, se registra la posición de
       inserción en L'i (y, si Li y L'i difieren, se traduce esa posición a
       la lista original Li, algo que el material no detalla explícitamente).
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra por qué "O(k + lg n)" de fractional cascading y "O(k + lg n)"
       del argumento de tamaño (serie geométrica) no son la misma prueba

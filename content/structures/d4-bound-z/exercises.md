@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       D₄ guarda, en cada nodo de su árbol de rango, dos estructuras
       satélite. ¿Cuáles son, y cuál va a la derecha y cuál a la izquierda?
@@ -12,7 +12,7 @@ items:
     solution: >-
       A la derecha, una D₃ normal (acotada por arriba, z ≤ b3); a la
       izquierda, una D₃ invertida (acotada por abajo, z ≥ a3).
-  - "level: 2"
+  - level: 2
     statement: >-
       Traza la construcción de D₄ para los puntos con z ∈ {2, 5, 9}: dibuja
       el árbol de rango sobre z y anota qué satélite cuelga de cada nodo.
@@ -24,7 +24,7 @@ items:
     solution: >-
       Raíz z=5. Hijo derecho z=9: satélite D₃ normal sobre {9}. Hijo
       izquierdo z=2: satélite D₃ invertida sobre {2}.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa el `build` de D₄ reutilizando la misma función que
       construye el árbol de rango de D3-separation-node, parametrizada por
@@ -38,7 +38,7 @@ items:
       Una función `build_range_tree(puntos, extraer_clave)` genérica; D₃ la
       llama con `extraer_clave = [](p){ return p.y; }` y D₄ con
       `extraer_clave = [](p){ return p.z; }`. El resto del código es idéntico.
-  - "level: 4"
+  - level: 4
     statement: >-
       Si el profesor hubiera decidido acotar z primero y luego y (en vez de
       x, y, z en ese orden), ¿qué tendría que cambiar en la construcción de
@@ -54,7 +54,7 @@ items:
       estructura de la dimensión anterior como satélite normal/invertida.
       El orden x→y→z es una elección del profesor, no una restricción de la
       técnica.
-  - "level: 5"
+  - level: 5
     statement: >-
       El mapa de conocimiento sólo le da a D₄ la operación `build`, sin
       consulta propia. Diseña, en prosa, cómo se vería una consulta de D₄
@@ -73,7 +73,7 @@ items:
       consulta completa de D₃ (que internamente hace lo mismo un nivel
       abajo, sobre y). El material no desarrolla esto explícitamente para
       D₄ porque se hereda literalmente de D₃.
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra por qué el costo de D₄ sin fractional cascading es
       O(lg² n + k) y no O(lg³ n + k), a pesar de que hay tres niveles de

@@ -11,19 +11,19 @@ cppSteps:
 visualization:
   type: persistent
   steps:
-    - "note: >-"
+    - note: >-
         El ejemplo trabajado del profesor (páginas 60-62): ins(5) en t=1,
         ins(2) en t=2, del-min en t=3 (elimina el mínimo, 2), ins(8) en
         t=4, del-min en t=5 (elimina el mínimo, 5). Estado antes de tocar
         nada: Q_ahora = {8}.
       highlight: ["t5"]
       nodes:
-        - '{ id: t1, value: "ins(5)", parent: null }'
-        - '{ id: t2, value: "ins(2)", parent: t1 }'
-        - '{ id: t3, value: "del-min -> quita 2", parent: t2 }'
-        - '{ id: t4, value: "ins(8)", parent: t3 }'
-        - '{ id: t5, value: "del-min -> quita 5 (Q_ahora={8})", parent: t4 }'
-    - "note: >-"
+        - { id: t1, value: "ins(5)", parent: null }
+        - { id: t2, value: "ins(2)", parent: t1 }
+        - { id: t3, value: "del-min -> quita 2", parent: t2 }
+        - { id: t4, value: "ins(8)", parent: t3 }
+        - { id: t5, value: "del-min -> quita 5 (Q_ahora={8})", parent: t4 }
+    - note: >-
         Se pide Insert(2.5, 'insert(3)'): insertar 3 en el tiempo 2.5,
         entre t=2 y t=3. Compute-M busca el puente más cercano antes de
         2.5 — en esta línea de tiempo es el inicio (no hay puente
@@ -31,25 +31,25 @@ visualization:
         porque lo eliminado desde t=2.5 es {2, 5}.
       highlight: ["t2", "t3"]
       nodes:
-        - '{ id: t1, value: "ins(5)", parent: null }'
-        - '{ id: t2, value: "ins(2)", parent: t1 }'
-        - '{ id: "t2.5", value: "ins(3) <- se inserta aqui (M=5 != 3)", parent: t2 }'
-        - '{ id: t3, value: "del-min -> quita 2", parent: "t2.5" }'
-        - '{ id: t4, value: "ins(8)", parent: t3 }'
-        - '{ id: t5, value: "del-min -> quita 5", parent: t4 }'
-    - "note: >-"
+        - { id: t1, value: "ins(5)", parent: null }
+        - { id: t2, value: "ins(2)", parent: t1 }
+        - { id: "t2.5", value: "ins(3) <- se inserta aqui (M=5 != 3)", parent: t2 }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5" }
+        - { id: t4, value: "ins(8)", parent: t3 }
+        - { id: t5, value: "del-min -> quita 5", parent: t4 }
+    - note: >-
         Como M=5 ≠ k=3, el efecto neto es un único intercambio: 5 entra a
         Q_ahora (sobrevive) y 3 toma su lugar entre los eliminados. Toda
         la cascada aparente (revisar si cada del-min posterior cambia de
         víctima) se resuelve sin recorrerla: Q_ahora pasa de {8} a {8, 5}.
       highlight: ["t3", "t5"]
       nodes:
-        - '{ id: t1, value: "ins(5)", parent: null }'
-        - '{ id: t2, value: "ins(2)", parent: t1 }'
-        - '{ id: "t2.5", value: "ins(3)", parent: t2 }'
-        - '{ id: t3, value: "del-min -> quita 2", parent: "t2.5" }'
-        - '{ id: t4, value: "ins(8)", parent: t3 }'
-        - '{ id: t5, value: "del-min -> quita 3 (Q_ahora={8,5})", parent: t4 }'
+        - { id: t1, value: "ins(5)", parent: null }
+        - { id: t2, value: "ins(2)", parent: t1 }
+        - { id: "t2.5", value: "ins(3)", parent: t2 }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5" }
+        - { id: t4, value: "ins(8)", parent: t3 }
+        - { id: t5, value: "del-min -> quita 3 (Q_ahora={8,5})", parent: t4 }
 ---
 
 ## Qué hace

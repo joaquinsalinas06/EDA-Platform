@@ -9,7 +9,7 @@ cppSteps:
 visualization:
   type: tree
   steps:
-    - "note: >-"
+    - note: >-
         El segment tree sobre el eje del tiempo, vacío: m=4 franjas de
         tiempo t=1..4 (mismo árbol de 4 hojas de /structures/segment-tree,
         reinterpretado — cada hoja ya no es A[i], es un instante de la línea
@@ -17,14 +17,14 @@ visualization:
         hay ninguna operación retroactiva insertada todavía.
       highlight: []
       nodes:
-        - '{ id: n14, value: "[1,4]", parent: null }'
-        - '{ id: n12, value: "[1,2]", parent: n14 }'
-        - '{ id: n34, value: "[3,4]", parent: n14 }'
-        - '{ id: n11, value: "[1,1]", parent: n12 }'
-        - '{ id: n22, value: "[2,2]", parent: n12 }'
-        - '{ id: n33, value: "[3,3]", parent: n34 }'
-        - '{ id: n44, value: "[4,4]", parent: n34 }'
-    - "note: >-"
+        - { id: n14, value: "[1,4]", parent: null }
+        - { id: n12, value: "[1,2]", parent: n14 }
+        - { id: n34, value: "[3,4]", parent: n14 }
+        - { id: n11, value: "[1,1]", parent: n12 }
+        - { id: n22, value: "[2,2]", parent: n12 }
+        - { id: n33, value: "[3,3]", parent: n34 }
+        - { id: n44, value: "[4,4]", parent: n34 }
+    - note: >-
         Insert(t=2, op) con efecto +5: es un Update de segment tree en la
         posición 2 (el mismo Update que ya conocemos — no hay nada nuevo que
         analizar aquí). El camino raíz→hoja es [1,4] → [1,2] → [2,2]:
@@ -33,14 +33,14 @@ visualization:
         afecta ninguna franja anterior.
       highlight: ["n14", "n12", "n22"]
       nodes:
-        - '{ id: n14, value: "[1,4]", parent: null }'
-        - '{ id: n12, value: "[1,2]", parent: n14 }'
-        - '{ id: n34, value: "[3,4]", parent: n14 }'
-        - '{ id: n11, value: "[1,1]", parent: n12 }'
-        - '{ id: n22, value: "[2,2]", parent: n12 }'
-        - '{ id: n33, value: "[3,3]", parent: n34 }'
-        - '{ id: n44, value: "[4,4]", parent: n34 }'
-    - "note: >-"
+        - { id: n14, value: "[1,4]", parent: null }
+        - { id: n12, value: "[1,2]", parent: n14 }
+        - { id: n34, value: "[3,4]", parent: n14 }
+        - { id: n11, value: "[1,1]", parent: n12 }
+        - { id: n22, value: "[2,2]", parent: n12 }
+        - { id: n33, value: "[3,3]", parent: n34 }
+        - { id: n44, value: "[4,4]", parent: n34 }
+    - note: >-
         Query(t=1): pregunta "¿qué pasó hasta el instante 1?", que es el
         rango [1,1]. El nodo [1,1] cae completamente dentro del rango
         pedido: se devuelve su valor (0) sin bajar al subárbol de [2,2] en
@@ -48,14 +48,14 @@ visualization:
         vida de esta consulta — por eso no la afecta.
       highlight: ["n11"]
       nodes:
-        - '{ id: n14, value: "[1,4]", parent: null }'
-        - '{ id: n12, value: "[1,2]", parent: n14 }'
-        - '{ id: n34, value: "[3,4]", parent: n14 }'
-        - '{ id: n11, value: "[1,1]", parent: n12 }'
-        - '{ id: n22, value: "[2,2]", parent: n12 }'
-        - '{ id: n33, value: "[3,3]", parent: n34 }'
-        - '{ id: n44, value: "[4,4]", parent: n34 }'
-    - "note: >-"
+        - { id: n14, value: "[1,4]", parent: null }
+        - { id: n12, value: "[1,2]", parent: n14 }
+        - { id: n34, value: "[3,4]", parent: n14 }
+        - { id: n11, value: "[1,1]", parent: n12 }
+        - { id: n22, value: "[2,2]", parent: n12 }
+        - { id: n33, value: "[3,3]", parent: n34 }
+        - { id: n44, value: "[4,4]", parent: n34 }
+    - note: >-
         Query(t=3): pregunta por el rango [1,3], que NO coincide con ningún
         nodo del árbol de un solo golpe. Se reparte en exactamente dos nodos
         canónicos, completamente dentro del rango pedido: [1,2] (valor 5,
@@ -65,13 +65,13 @@ visualization:
         hoja [2,2] directamente, gracias al resumen ya guardado en [1,2].
       highlight: ["n12", "n33"]
       nodes:
-        - '{ id: n14, value: "[1,4]", parent: null }'
-        - '{ id: n12, value: "[1,2]", parent: n14 }'
-        - '{ id: n34, value: "[3,4]", parent: n14 }'
-        - '{ id: n11, value: "[1,1]", parent: n12 }'
-        - '{ id: n22, value: "[2,2]", parent: n12 }'
-        - '{ id: n33, value: "[3,3]", parent: n34 }'
-        - '{ id: n44, value: "[4,4]", parent: n34 }'
+        - { id: n14, value: "[1,4]", parent: null }
+        - { id: n12, value: "[1,2]", parent: n14 }
+        - { id: n34, value: "[3,4]", parent: n14 }
+        - { id: n11, value: "[1,1]", parent: n12 }
+        - { id: n22, value: "[2,2]", parent: n12 }
+        - { id: n33, value: "[3,3]", parent: n34 }
+        - { id: n44, value: "[4,4]", parent: n34 }
 ---
 
 <!-- No hay diapositiva que dibuje esto (huecos del análisis: "carencia

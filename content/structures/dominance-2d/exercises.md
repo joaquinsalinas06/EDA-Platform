@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       ¿Cuál de estas afirmaciones describe correctamente la reformulación de
       D_1? (a) el punto se convierte en un rayo horizontal y la consulta en
@@ -14,7 +14,7 @@ items:
     solution: >-
       (b). El punto (y_i, z_i) se convierte en un rayo vertical hacia
       z=+∞, y la consulta (b2,b3) en un rayo horizontal hacia y=-∞ (#20).
-  - "level: 2"
+  - level: 2
     statement: >-
       Traza ConsultaDominancia(S, b2=3, b3=6) sobre los puntos
       (1,5), (2,1), (4,4), (5,2), en el mismo estilo de la tabla de
@@ -27,7 +27,7 @@ items:
       Columnas visitadas en orden: y=1 (z=5 > 6? no, 5≤6, se reporta),
       y=2 (z=1≤6, se reporta). La caminata se detiene al llegar a y=4,
       porque ya no es < b2=3. Resultado: {(1,5), (2,1)}, k=2.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa ConsultaDominancia tal como aparece en el pseudocódigo del
       profesor (#30-31), usando el modelo de columnas acumulativas de
@@ -41,7 +41,7 @@ items:
       las columnas acumulativas ordenadas por y, camina reportando cada
       punto con z ≤ b3 mientras y ≤ b2, y compara el resultado contra un
       recorrido lineal de fuerza bruta.
-  - "level: 4"
+  - level: 4
     statement: >-
       Adapta ConsultaDominancia para que, en vez de reportar los puntos
       dominados, sólo cuente cuántos hay (una consulta de "conteo de
@@ -55,7 +55,7 @@ items:
       en O(lg n) sin recorrer las k caras — pero eso exige precomputar y
       guardar esos contadores durante subdivision-build, algo que el
       profesor no da: es una adaptación, no algo que el material resuelva.
-  - "level: 5"
+  - level: 5
     statement: >-
       D_2 va a guardar, en cada nodo de otro árbol, una copia de D_1 sobre
       los puntos de su subárbol (#33). Diseña, a alto nivel, por qué una
@@ -71,7 +71,7 @@ items:
       plana de O(n) segmentos, se puede instanciar una vez por nodo sin
       arrastrar un árbol dentro de otro árbol — el acoplamiento queda en
       "una subdivisión por nodo", no en "un árbol de árboles por nodo".
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra por qué el número de caras "vacías" visitadas por
       ConsultaDominancia no puede crecer con n, usando el grado acotado de

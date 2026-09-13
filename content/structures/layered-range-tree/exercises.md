@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       ¿Cuál de estas dos afirmaciones describe correctamente por qué el
       Layered Range Tree no necesita decidir "qué mitad promover" como en
@@ -16,7 +16,7 @@ items:
       (b). Como el arreglo del padre ES la unión de los de sus dos hijos,
       todo elemento del padre viene de alguno de los dos — no hace falta
       elegir cuáles promover, todos llevan puente (#31).
-  - "level: 2"
+  - level: 2
     statement: >-
       Dado el padre [2, 6, 7, 10] formado al mezclar el hijo izquierdo
       [2, 7] y el hijo derecho [6, 10], traza a mano puenteIzq y
@@ -30,7 +30,7 @@ items:
       puntero del hijo izquierdo se detiene en 1 (7 es el primer elemento
       del hijo izquierdo que no es menor que 6) y el del derecho en 0
       (6 mismo).
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa la función que calcula puenteIzq y puenteDer con dos
       punteros a partir de dos arreglos ya ordenados y su merge, sin usar
@@ -42,7 +42,7 @@ items:
       Ver `step-2-bridges.cpp`: un solo bucle sobre el arreglo del padre,
       con dos `while` internos (uno por hijo) que avanzan el puntero
       mientras el valor del hijo sea menor que el valor actual del padre.
-  - "level: 4"
+  - level: 4
     statement: >-
       Adapta la consulta de rango 2D para que, en vez de contar puntos,
       reporte sus coordenadas Y dentro del rango, sin perder la ventaja de
@@ -57,7 +57,7 @@ items:
       total queda O(lg n + k), con k el tamaño de la respuesta — el mismo
       patrón que enumeration en range-tree, ahora con O(1) por nodo
       canónico en vez de O(lg n).
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña, sin implementarlo, cómo extenderías el Layered Range Tree a
       3 dimensiones aplicando cascading sólo en la dimensión intermedia
@@ -73,7 +73,7 @@ items:
       O(lg n) (#42), al costo de un puntero extra por elemento en esa
       dimensión — ninguna estructura nueva, sólo el mismo mecanismo de
       puentes repetido un nivel más.
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra por qué el puente puenteIzq[i] calculado durante el merge
       (con dos punteros) es exactamente el mismo valor que se obtendría

@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       El profesor define el costo amortizado como `ĉᵢ = cᵢ + Φ(Dᵢ) −
       Φ(Dᵢ₋₁)`. ¿Cuál de los tres símbolos de la derecha representa "el costo
@@ -15,7 +15,7 @@ items:
       `cᵢ` es el costo real de la operación i. `Dᵢ₋₁` es el estado de la
       estructura después de la operación i−1, es decir, justo antes de que
       empiece la operación i.
-  - "level: 2"
+  - level: 2
     statement: >-
       Para Union (páginas 34-35), el profesor da `cᵢ = O(1)` y `ΔΦ = 0`.
       Traza el cálculo completo de `ĉᵢ` a partir de la definición y explica
@@ -29,7 +29,7 @@ items:
       circulares de raíces no cambia el número total de árboles en la lista
       de raíces (`t(H)`) ni el número de nodos marcados (`m(H)`): sólo une
       dos listas, no agrega ni quita árboles ni toca marcas.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa en C++ una función `delta_phi(int delta_t, int delta_m)`
       que, dado el cambio en el número de árboles (`Δt`) y el cambio en el
@@ -47,7 +47,7 @@ items:
       `c` cortes: `delta_m = 2 - c`, entonces
       `delta_phi(c, 2 - c) == c + 2*(2 - c) == c + 4 - 2c == 4 - c`, que
       coincide con la cota del mazo `ΔΦ ≤ 4 − c`.
-  - "level: 4"
+  - level: 4
     statement: >-
       El mazo aplica `Φ(H) = t(H) + 2·m(H)` sólo al montículo de Fibonacci.
       Si en cambio se analizara una estructura donde cada operación agrega
@@ -66,7 +66,7 @@ items:
       validez sólo pide que Φ nunca caiga bajo su valor inicial — no que la
       cota resultante sea ajustada. (Que la cota sea *útil* es una decisión
       de diseño distinta de que sea *válida*.)
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña una función de potencial `Φ` (distinta de `t(H) + 2·m(H)`) para
       un montículo de Fibonacci que también haga que Decrease-Key sea O(1)
@@ -84,7 +84,7 @@ items:
       `1 − k = 0`, es decir `k = 2` — que es exactamente lo que eligió el
       profesor. Cualquier `k ≠ 2` deja un término `c(1−k)` que crece con `c`,
       y Decrease-Key deja de ser O(1) amortizado.
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra que la condición de validez ("Φ nunca cae por debajo de su
       valor inicial") es exactamente lo que hace falta para que

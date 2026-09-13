@@ -9,81 +9,81 @@ cppSteps:
 visualization:
   type: range-tree
   steps:
-    - "note: >-"
+    - note: >-
         Derivado del algoritmo; el mazo sólo muestra el árbol ya construido
         (diapositiva #29). Punto de partida: los n=8 puntos ya ordenados por
         su llave, que serán las hojas: 3, 4, 7, 9, 13, 15, 18, 27.
       highlight: []
       nodes:
-        - "{ id: l3, value: 3, parent: null }"
-        - "{ id: l4, value: 4, parent: null }"
-        - "{ id: l7, value: 7, parent: null }"
-        - "{ id: l9, value: 9, parent: null }"
-        - "{ id: l13, value: 13, parent: null }"
-        - "{ id: l15, value: 15, parent: null }"
-        - "{ id: l18, value: 18, parent: null }"
-        - "{ id: l27, value: 27, parent: null }"
-    - "note: >-"
+        - { id: l3, value: 3, parent: null }
+        - { id: l4, value: 4, parent: null }
+        - { id: l7, value: 7, parent: null }
+        - { id: l9, value: 9, parent: null }
+        - { id: l13, value: 13, parent: null }
+        - { id: l15, value: 15, parent: null }
+        - { id: l18, value: 18, parent: null }
+        - { id: l27, value: 27, parent: null }
+    - note: >-
         Se emparejan hojas consecutivas y se crea un padre por par, que
         guarda el máximo del subárbol izquierdo: (3,4)→3, (7,9)→7,
         (13,15)→13, (18,27)→18. Esto ya corresponde al nivel de internos
         más bajo del diagrama #29.
       highlight: [n3i, n7i, n13i, n18i]
       nodes:
-        - "{ id: n3i, value: 3, parent: null }"
-        - "{ id: l3, value: 3, parent: n3i }"
-        - "{ id: l4, value: 4, parent: n3i }"
-        - "{ id: n7i, value: 7, parent: null }"
-        - "{ id: l7, value: 7, parent: n7i }"
-        - "{ id: l9, value: 9, parent: n7i }"
-        - "{ id: n13i, value: 13, parent: null }"
-        - "{ id: l13, value: 13, parent: n13i }"
-        - "{ id: l15, value: 15, parent: n13i }"
-        - "{ id: n18i, value: 18, parent: null }"
-        - "{ id: l18, value: 18, parent: n18i }"
-        - "{ id: l27, value: 27, parent: n18i }"
-    - "note: >-"
+        - { id: n3i, value: 3, parent: null }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: null }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n13i, value: 13, parent: null }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: null }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
         Se repite un nivel arriba: (n3i,n7i)→4 (máximo del subárbol
         izquierdo, que son las hojas 3,4,7,9), (n13i,n18i)→15 (máximo de
         13,15,18,27). Coincide con el segundo nivel del diagrama #29.
       highlight: [n4, n15]
       nodes:
-        - "{ id: n4, value: 4, parent: null }"
-        - "{ id: n3i, value: 3, parent: n4 }"
-        - "{ id: l3, value: 3, parent: n3i }"
-        - "{ id: l4, value: 4, parent: n3i }"
-        - "{ id: n7i, value: 7, parent: n4 }"
-        - "{ id: l7, value: 7, parent: n7i }"
-        - "{ id: l9, value: 9, parent: n7i }"
-        - "{ id: n15, value: 15, parent: null }"
-        - "{ id: n13i, value: 13, parent: n15 }"
-        - "{ id: l13, value: 13, parent: n13i }"
-        - "{ id: l15, value: 15, parent: n13i }"
-        - "{ id: n18i, value: 18, parent: n15 }"
-        - "{ id: l18, value: 18, parent: n18i }"
-        - "{ id: l27, value: 27, parent: n18i }"
-    - "note: >-"
+        - { id: n4, value: 4, parent: null }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: null }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
         Último emparejamiento: (n4,n15)→9 (máximo del subárbol izquierdo,
         las hojas 3,4,7,9). Árbol completo, idéntico al de la diapositiva
         #29: raíz 9, hijos 4 y 15, siguiente nivel 3, 7, 13, 18, hojas
         3, 4, 7, 9, 13, 15, 18, 27.
       highlight: [r9]
       nodes:
-        - "{ id: r9, value: 9, parent: null }"
-        - "{ id: n4, value: 4, parent: r9 }"
-        - "{ id: n3i, value: 3, parent: n4 }"
-        - "{ id: l3, value: 3, parent: n3i }"
-        - "{ id: l4, value: 4, parent: n3i }"
-        - "{ id: n7i, value: 7, parent: n4 }"
-        - "{ id: l7, value: 7, parent: n7i }"
-        - "{ id: l9, value: 9, parent: n7i }"
-        - "{ id: n15, value: 15, parent: r9 }"
-        - "{ id: n13i, value: 13, parent: n15 }"
-        - "{ id: l13, value: 13, parent: n13i }"
-        - "{ id: l15, value: 15, parent: n13i }"
-        - "{ id: n18i, value: 18, parent: n15 }"
-        - "{ id: l18, value: 18, parent: n18i }"
-        - "{ id: l27, value: 27, parent: n18i }"
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
 ---
 
 ## Qué hace

@@ -11,7 +11,7 @@ cppSteps:
 visualization:
   type: tree
   steps:
-    - "note: >-"
+    - note: >-
         Estado antes del corte: la cadena G → P → C (abuelo, padre, hijo).
         P ya está marcado (perdió un hijo antes de este momento) — el
         gris indica esa marca. G y C no están marcados. C acaba de perder
@@ -19,28 +19,28 @@ visualization:
         cortar.
       highlight: ["C"]
       nodes:
-        - '{ id: G, value: "G", parent: null }'
-        - '{ id: P, value: "P (marcado)", parent: G }'
-        - '{ id: C, value: "C", parent: P }'
-    - "note: >-"
+        - { id: G, value: "G", parent: null }
+        - { id: P, value: "P (marcado)", parent: G }
+        - { id: C, value: "C", parent: P }
+    - note: >-
         Cut(H, C, P): C se separa de P y se agrega como raíz nueva, sin
         padre y sin marca (las raíces nunca están marcadas). grado(P) baja
         en 1.
       highlight: ["C", "P"]
       nodes:
-        - '{ id: G, value: "G", parent: null }'
-        - '{ id: P, value: "P (marcado)", parent: G }'
-        - '{ id: C, value: "C (nueva raíz)", parent: null }'
-    - "note: >-"
+        - { id: G, value: "G", parent: null }
+        - { id: P, value: "P (marcado)", parent: G }
+        - { id: C, value: "C (nueva raíz)", parent: null }
+    - note: >-
         Cascading-Cut(H, P): como P SÍ estaba marcado, no basta con
         marcarlo de nuevo — se corta también, y la cascada sigue hacia el
         padre de P, que es G.
       highlight: ["P"]
       nodes:
-        - '{ id: G, value: "G", parent: null }'
-        - '{ id: P, value: "P (se corta)", parent: G }'
-        - '{ id: C, value: "C", parent: null }'
-    - "note: >-"
+        - { id: G, value: "G", parent: null }
+        - { id: P, value: "P (se corta)", parent: G }
+        - { id: C, value: "C", parent: null }
+    - note: >-
         Cut(H, P, G): P se separa de G y se agrega como raíz, sin marca.
         Cascading-Cut(H, G): G no tiene padre (es raíz), así que la
         cascada se detiene aquí sin marcar a G. Resultado final: G, P y C
@@ -48,9 +48,9 @@ visualization:
         que muestra el mazo tras el ejemplo (páginas 16-18).
       highlight: ["G", "P", "C"]
       nodes:
-        - '{ id: G, value: "G", parent: null }'
-        - '{ id: P, value: "P", parent: null }'
-        - '{ id: C, value: "C", parent: null }'
+        - { id: G, value: "G", parent: null }
+        - { id: P, value: "P", parent: null }
+        - { id: C, value: "C", parent: null }
 ---
 
 ## Qué hace

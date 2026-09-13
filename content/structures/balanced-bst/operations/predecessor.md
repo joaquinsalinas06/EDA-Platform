@@ -11,7 +11,7 @@ cppSteps:
 visualization:
   type: tree
   steps:
-    - "note: >-"
+    - note: >-
         Buscamos Predecessor(25) sobre el árbol de theory.md (raíz 20, hijo
         izq 10, hijo der 30 con hijo izq 27 y der 40). Se desciende como en
         Search, guardando en "candidato" el último nodo del que se dobló a
@@ -20,33 +20,33 @@ visualization:
         por el hijo derecho.
       highlight: ["n20"]
       nodes:
-        - "{ id: n20, value: 20, parent: null }"
-        - "{ id: n10, value: 10, parent: n20 }"
-        - "{ id: n30, value: 30, parent: n20 }"
-        - "{ id: n27, value: 27, parent: n30 }"
-        - "{ id: n40, value: 40, parent: n30 }"
-    - "note: >-"
+        - { id: n20, value: 20, parent: null }
+        - { id: n10, value: 10, parent: n20 }
+        - { id: n30, value: 30, parent: n20 }
+        - { id: n27, value: 27, parent: n30 }
+        - { id: n40, value: 40, parent: n30 }
+    - note: >-
         En 30: 25 es menor, así que 30 NO puede ser el predecesor (sería
         mayor que 25) y no se actualiza el candidato; se sigue por el hijo
         izquierdo.
       highlight: ["n30"]
       nodes:
-        - "{ id: n20, value: 20, parent: null }"
-        - "{ id: n10, value: 10, parent: n20 }"
-        - "{ id: n30, value: 30, parent: n20 }"
-        - "{ id: n27, value: 27, parent: n30 }"
-        - "{ id: n40, value: 40, parent: n30 }"
-    - "note: >-"
+        - { id: n20, value: 20, parent: null }
+        - { id: n10, value: 10, parent: n20 }
+        - { id: n30, value: 30, parent: n20 }
+        - { id: n27, value: 27, parent: n30 }
+        - { id: n40, value: 40, parent: n30 }
+    - note: >-
         En 27: 25 es menor, tampoco se actualiza el candidato (27 > 25); el
         hijo izquierdo de 27 es nulo, así que la búsqueda termina aquí. El
         candidato sigue siendo 20: es el predecesor de 25.
       highlight: ["n27"]
       nodes:
-        - "{ id: n20, value: 20, parent: null }"
-        - "{ id: n10, value: 10, parent: n20 }"
-        - "{ id: n30, value: 30, parent: n20 }"
-        - "{ id: n27, value: 27, parent: n30 }"
-        - "{ id: n40, value: 40, parent: n30 }"
+        - { id: n20, value: 20, parent: null }
+        - { id: n10, value: 10, parent: n20 }
+        - { id: n30, value: 30, parent: n20 }
+        - { id: n27, value: 27, parent: n30 }
+        - { id: n40, value: 40, parent: n30 }
 ---
 
 <!-- Concepto de apoyo: no hay diapositiva que citar. Predecessor es la

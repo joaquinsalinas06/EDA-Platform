@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       El profesor exige dos propiedades para aplicar esta técnica:
       conmutatividad e invertibilidad. Da la definición de cada una, en tus
@@ -17,7 +17,7 @@ items:
       operación `opₓ⁻¹` tal que aplicar ambas en sucesión (`opₓ` seguida de
       `opₓ⁻¹`) deja la estructura exactamente en el estado en el que estaba
       antes de aplicar `opₓ`.
-  - "level: 2"
+  - level: 2
     statement: >-
       Sobre el acumulador del ejemplo normal (tabla hash, historial real
       `Insert("b")` en t=1, `Insert("c")` en t=2), traza paso a paso qué
@@ -35,7 +35,7 @@ items:
       retroactivamente esa operación se resuelve como
       `Delete(t=0) ≡ Insert(ahora, Delete("a"))`, la inversa de
       `Insert("a")`: `H = {b, c}` — vuelve exactamente al estado anterior.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa en C++ una clase `Accumulator` con un entero interno y un
       método `add(int delta)` que suma `delta` al total. Agrega
@@ -56,7 +56,7 @@ items:
       a.delete_retroactive(2); assert(a.total() == before);` el total
       vuelve a su valor original porque `insert_retroactive(2)` y
       `delete_retroactive(2)` son operación e inversa exacta.
-  - "level: 4"
+  - level: 4
     statement: >-
       Se tiene una estructura con la operación `SetBit(i)` (pone el bit `i`
       de un entero en 1; si ya estaba en 1, no cambia nada) y su aparente
@@ -75,7 +75,7 @@ items:
       como par fijo no cumplen invertibilidad en el sentido estricto que
       pide la técnica (aplicar op y luego op⁻¹ debe devolver exactamente el
       estado previo, sea cual sea).
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña la operación retroactiva correspondiente a "restar Δ del
       contador" (`Sub(Δ)`) para el mismo acumulador del ejercicio 3, sin
@@ -93,7 +93,7 @@ items:
       demostró que `Add` conmuta y es invertible para cualquier argumento
       entero (positivo o negativo); no hace falta un nuevo argumento de
       conmutatividad/invertibilidad para `Sub`.
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra formalmente por qué conmutatividad e invertibilidad, juntas,
       son *suficientes* para que `Delete(t)` produzca el mismo presente que

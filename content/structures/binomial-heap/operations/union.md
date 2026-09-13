@@ -12,33 +12,33 @@ cppSteps:
 visualization:
   type: tree
   steps:
-    - "note: >-"
+    - note: >-
         Mezclamos las dos listas de raíces por grado: quedan dos B0 (10 y
         6) seguidos de dos B1 (4 con hijo 9, y 2 con hijo 7). Recorremos
         consolidando pares consecutivos del mismo grado, como sumar en
         binario con acarreo.
       highlight: ["n10", "n6"]
       nodes:
-        - "{ id: n10, value: 10, parent: null }"
-        - "{ id: n6, value: 6, parent: null }"
-        - "{ id: n4, value: 4, parent: null }"
-        - "{ id: n9, value: 9, parent: n4 }"
-        - "{ id: n2, value: 2, parent: null }"
-        - "{ id: n7, value: 7, parent: n2 }"
-    - "note: >-"
+        - { id: n10, value: 10, parent: null }
+        - { id: n6, value: 6, parent: null }
+        - { id: n4, value: 4, parent: null }
+        - { id: n9, value: 9, parent: n4 }
+        - { id: n2, value: 2, parent: null }
+        - { id: n7, value: 7, parent: n2 }
+    - note: >-
         10 >= 6, así que 10 se enlaza como hijo de 6 (Binomial-Link): nace
         un B1 con raíz 6. Comparamos ahora ese B1 (raíz 6) con el B1 de raíz
         4 — pero hay una TERCERA raíz de grado 1 después (el 2), así que no
         enlazamos todavía: avanzamos para no perder esa tercera raíz.
       highlight: ["n6", "n4", "n2"]
       nodes:
-        - "{ id: n6, value: 6, parent: null }"
-        - "{ id: n10, value: 10, parent: n6 }"
-        - "{ id: n4, value: 4, parent: null }"
-        - "{ id: n9, value: 9, parent: n4 }"
-        - "{ id: n2, value: 2, parent: null }"
-        - "{ id: n7, value: 7, parent: n2 }"
-    - "note: >-"
+        - { id: n6, value: 6, parent: null }
+        - { id: n10, value: 10, parent: n6 }
+        - { id: n4, value: 4, parent: null }
+        - { id: n9, value: 9, parent: n4 }
+        - { id: n2, value: 2, parent: null }
+        - { id: n7, value: 7, parent: n2 }
+    - note: >-
         Ahora comparamos 4 y 2 (ya no hay una tercera raíz de grado 1
         después). 4 >= 2, se enlaza como hijo de 2: nace un B2 con raíz 2
         (hijos 4 y 7; 4 conserva a 9 como su propio hijo). El montículo
@@ -46,12 +46,12 @@ visualization:
         3 + 3 = 6 = 110 en binario.
       highlight: ["n2", "n4"]
       nodes:
-        - "{ id: n6, value: 6, parent: null }"
-        - "{ id: n10, value: 10, parent: n6 }"
-        - "{ id: n2, value: 2, parent: null }"
-        - "{ id: n4, value: 4, parent: n2 }"
-        - "{ id: n9, value: 9, parent: n4 }"
-        - "{ id: n7, value: 7, parent: n2 }"
+        - { id: n6, value: 6, parent: null }
+        - { id: n10, value: 10, parent: n6 }
+        - { id: n2, value: 2, parent: null }
+        - { id: n4, value: 4, parent: n2 }
+        - { id: n9, value: 9, parent: n4 }
+        - { id: n7, value: 7, parent: n2 }
 ---
 
 <!-- derivado del pseudocódigo del Algoritmo 7; no hay diagrama de Union

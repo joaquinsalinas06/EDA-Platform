@@ -11,60 +11,60 @@ cppSteps:
 visualization:
   type: persistent
   steps:
-    - "note: >-"
+    - note: >-
         Versión v1 del segment tree de 4 hojas: raíz [1,4], hijos [1,2] y
         [3,4], hojas [1,1], [2,2], [3,3], [4,4]. Se va a actualizar la
         posición 4.
       highlight: []
       nodes:
-        - '{ id: v1-root, value: "[1,4]", parent: null }'
-        - '{ id: v1-12, value: "[1,2]", parent: v1-root }'
-        - '{ id: v1-34, value: "[3,4]", parent: v1-root }'
-        - '{ id: v1-11, value: "[1,1]", parent: v1-12 }'
-        - '{ id: v1-22, value: "[2,2]", parent: v1-12 }'
-        - '{ id: v1-33, value: "[3,3]", parent: v1-34 }'
-        - '{ id: v1-44, value: "[4,4]", parent: v1-34 }'
-    - "note: >-"
+        - { id: v1-root, value: "[1,4]", parent: null }
+        - { id: v1-12, value: "[1,2]", parent: v1-root }
+        - { id: v1-34, value: "[3,4]", parent: v1-root }
+        - { id: v1-11, value: "[1,1]", parent: v1-12 }
+        - { id: v1-22, value: "[2,2]", parent: v1-12 }
+        - { id: v1-33, value: "[3,3]", parent: v1-34 }
+        - { id: v1-44, value: "[4,4]", parent: v1-34 }
+    - note: >-
         Update(v1, l=1, r=4, pos=4): en la raíz, m=2 y pos=4 > m, así que
         se desciende por el hijo derecho [3,4], no por [1,2].
       highlight: ["v1-root", "v1-34"]
       nodes:
-        - '{ id: v1-root, value: "[1,4]", parent: null }'
-        - '{ id: v1-12, value: "[1,2]", parent: v1-root }'
-        - '{ id: v1-34, value: "[3,4]", parent: v1-root }'
-        - '{ id: v1-11, value: "[1,1]", parent: v1-12 }'
-        - '{ id: v1-22, value: "[2,2]", parent: v1-12 }'
-        - '{ id: v1-33, value: "[3,3]", parent: v1-34 }'
-        - '{ id: v1-44, value: "[4,4]", parent: v1-34 }'
-    - "note: >-"
+        - { id: v1-root, value: "[1,4]", parent: null }
+        - { id: v1-12, value: "[1,2]", parent: v1-root }
+        - { id: v1-34, value: "[3,4]", parent: v1-root }
+        - { id: v1-11, value: "[1,1]", parent: v1-12 }
+        - { id: v1-22, value: "[2,2]", parent: v1-12 }
+        - { id: v1-33, value: "[3,3]", parent: v1-34 }
+        - { id: v1-44, value: "[4,4]", parent: v1-34 }
+    - note: >-
         En [3,4], m=3 y pos=4 > m: se desciende por el hijo derecho [4,4],
         no por [3,3]. [1,2] no participa de este descenso.
       highlight: ["v1-34", "v1-44"]
       nodes:
-        - '{ id: v1-root, value: "[1,4]", parent: null }'
-        - '{ id: v1-12, value: "[1,2]", parent: v1-root }'
-        - '{ id: v1-34, value: "[3,4]", parent: v1-root }'
-        - '{ id: v1-11, value: "[1,1]", parent: v1-12 }'
-        - '{ id: v1-22, value: "[2,2]", parent: v1-12 }'
-        - '{ id: v1-33, value: "[3,3]", parent: v1-34 }'
-        - '{ id: v1-44, value: "[4,4]", parent: v1-34 }'
-    - "note: >-"
+        - { id: v1-root, value: "[1,4]", parent: null }
+        - { id: v1-12, value: "[1,2]", parent: v1-root }
+        - { id: v1-34, value: "[3,4]", parent: v1-root }
+        - { id: v1-11, value: "[1,1]", parent: v1-12 }
+        - { id: v1-22, value: "[2,2]", parent: v1-12 }
+        - { id: v1-33, value: "[3,3]", parent: v1-34 }
+        - { id: v1-44, value: "[4,4]", parent: v1-34 }
+    - note: >-
         Caso base en [4,4]: l=r=4. Se crea un nodo nuevo, copia de [4,4],
         con el valor actualizado. El [4,4] de v1 no se toca.
       highlight: ["v2-44"]
       nodes:
-        - '{ id: v1-44, value: "[4,4] (v1)", parent: v1-34 }'
-        - '{ id: v2-44, value: "[4,4]' (v2)", parent: null }'
-    - "note: >-"
+        - { id: v1-44, value: "[4,4] (v1)", parent: v1-34 }
+        - { id: v2-44, value: "[4,4]' (v2)", parent: null }
+    - note: >-
         Al volver de la recursión, [3,4]' se copia: su hijo izquierdo
         apunta al [3,3] de v1 tal cual (compartido, sin copiar), y su hijo
         derecho apunta al [4,4]' nuevo.
       highlight: ["v2-34"]
       nodes:
-        - '{ id: v2-34, value: "[3,4]'", parent: null }'
-        - '{ id: v1-33, value: "[3,3]", parent: v2-34 }'
-        - '{ id: v2-44, value: "[4,4]'", parent: v2-34 }'
-    - "note: >-"
+        - { id: v2-34, value: "[3,4]'", parent: null }
+        - { id: v1-33, value: "[3,3]", parent: v2-34 }
+        - { id: v2-44, value: "[4,4]'", parent: v2-34 }
+    - note: >-
         Al volver a la raíz, [1,4]' se copia: su hijo izquierdo apunta al
         [1,2] de v1 completo (con sus hojas [1,1] y [2,2], compartido sin
         tocar), y su hijo derecho apunta al [3,4]' nuevo. Solo los tres
@@ -73,13 +73,13 @@ visualization:
         y consultable por su propia raíz.
       highlight: ["v2-root", "v2-34", "v2-44"]
       nodes:
-        - '{ id: v2-root, value: "[1,4]'", parent: null }'
-        - '{ id: v1-12, value: "[1,2]", parent: v2-root }'
-        - '{ id: v2-34, value: "[3,4]'", parent: v2-root }'
-        - '{ id: v1-11, value: "[1,1]", parent: v1-12 }'
-        - '{ id: v1-22, value: "[2,2]", parent: v1-12 }'
-        - '{ id: v1-33, value: "[3,3]", parent: v2-34 }'
-        - '{ id: v2-44, value: "[4,4]'", parent: v2-34 }'
+        - { id: v2-root, value: "[1,4]'", parent: null }
+        - { id: v1-12, value: "[1,2]", parent: v2-root }
+        - { id: v2-34, value: "[3,4]'", parent: v2-root }
+        - { id: v1-11, value: "[1,1]", parent: v1-12 }
+        - { id: v1-22, value: "[2,2]", parent: v1-12 }
+        - { id: v1-33, value: "[3,3]", parent: v2-34 }
+        - { id: v2-44, value: "[4,4]'", parent: v2-34 }
 ---
 
 ## Qué hace

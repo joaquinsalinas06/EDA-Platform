@@ -11,7 +11,7 @@ cppSteps:
 visualization:
   type: range-tree
   steps:
-    - "note: >-"
+    - note: >-
         Reproduce la diapositiva #35: consulta [l1,r1] = [5,16] sobre el
         árbol de build-1d. Primer paso: calcular los delimitadores con
         predecessor-successor. Predecessor(5)=hoja 4, Successor(16)=hoja 18
@@ -19,44 +19,44 @@ visualization:
         no hay campo de color, ver nota al final del bloque de operaciones).
       highlight: [l4, l18]
       nodes:
-        - "{ id: r9, value: 9, parent: null }"
-        - "{ id: n4, value: 4, parent: r9 }"
-        - "{ id: n3i, value: 3, parent: n4 }"
-        - "{ id: l3, value: 3, parent: n3i }"
-        - "{ id: l4, value: 4, parent: n3i }"
-        - "{ id: n7i, value: 7, parent: n4 }"
-        - "{ id: l7, value: 7, parent: n7i }"
-        - "{ id: l9, value: 9, parent: n7i }"
-        - "{ id: n15, value: 15, parent: r9 }"
-        - "{ id: n13i, value: 13, parent: n15 }"
-        - "{ id: l13, value: 13, parent: n13i }"
-        - "{ id: l15, value: 15, parent: n13i }"
-        - "{ id: n18i, value: 18, parent: n15 }"
-        - "{ id: l18, value: 18, parent: n18i }"
-        - "{ id: l27, value: 27, parent: n18i }"
-    - "note: >-"
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
         P = LCA(hoja 4, hoja 18) = la raíz (9): los caminos hacia las dos
         hojas delimitadoras ya se separan en el primer paso (izquierda hacia
         4, derecha hacia 18). Desde aquí se recorren los dos caminos por
         separado.
       highlight: [r9]
       nodes:
-        - "{ id: r9, value: 9, parent: null }"
-        - "{ id: n4, value: 4, parent: r9 }"
-        - "{ id: n3i, value: 3, parent: n4 }"
-        - "{ id: l3, value: 3, parent: n3i }"
-        - "{ id: l4, value: 4, parent: n3i }"
-        - "{ id: n7i, value: 7, parent: n4 }"
-        - "{ id: l7, value: 7, parent: n7i }"
-        - "{ id: l9, value: 9, parent: n7i }"
-        - "{ id: n15, value: 15, parent: r9 }"
-        - "{ id: n13i, value: 13, parent: n15 }"
-        - "{ id: l13, value: 13, parent: n13i }"
-        - "{ id: l15, value: 15, parent: n13i }"
-        - "{ id: n18i, value: 18, parent: n15 }"
-        - "{ id: l18, value: 18, parent: n18i }"
-        - "{ id: l27, value: 27, parent: n18i }"
-    - "note: >-"
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
         Camino izquierdo (hacia la hoja 4): en el nodo 4 el camino dobla a
         la izquierda (hacia el 3, donde está la hoja 4); el hermano derecho
         no visitado, nodo 7, queda ENTERO dentro de [5,16] (cubre las hojas
@@ -64,65 +64,65 @@ visualization:
         el diagrama del profesor).
       highlight: [n4, n7i]
       nodes:
-        - "{ id: r9, value: 9, parent: null }"
-        - "{ id: n4, value: 4, parent: r9 }"
-        - "{ id: n3i, value: 3, parent: n4 }"
-        - "{ id: l3, value: 3, parent: n3i }"
-        - "{ id: l4, value: 4, parent: n3i }"
-        - "{ id: n7i, value: 7, parent: n4 }"
-        - "{ id: l7, value: 7, parent: n7i }"
-        - "{ id: l9, value: 9, parent: n7i }"
-        - "{ id: n15, value: 15, parent: r9 }"
-        - "{ id: n13i, value: 13, parent: n15 }"
-        - "{ id: l13, value: 13, parent: n13i }"
-        - "{ id: l15, value: 15, parent: n13i }"
-        - "{ id: n18i, value: 18, parent: n15 }"
-        - "{ id: l18, value: 18, parent: n18i }"
-        - "{ id: l27, value: 27, parent: n18i }"
-    - "note: >-"
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
         En el nodo 3, el camino dobla a la derecha (hacia la hoja 4): el
         hermano izquierdo, hoja 3, queda fuera de [5,16] y no se agrega.
         Se llega a la hoja 4 — el delimitador izquierdo, que sigue excluido.
       highlight: [n3i, l4]
       nodes:
-        - "{ id: r9, value: 9, parent: null }"
-        - "{ id: n4, value: 4, parent: r9 }"
-        - "{ id: n3i, value: 3, parent: n4 }"
-        - "{ id: l3, value: 3, parent: n3i }"
-        - "{ id: l4, value: 4, parent: n3i }"
-        - "{ id: n7i, value: 7, parent: n4 }"
-        - "{ id: l7, value: 7, parent: n7i }"
-        - "{ id: l9, value: 9, parent: n7i }"
-        - "{ id: n15, value: 15, parent: r9 }"
-        - "{ id: n13i, value: 13, parent: n15 }"
-        - "{ id: l13, value: 13, parent: n13i }"
-        - "{ id: l15, value: 15, parent: n13i }"
-        - "{ id: n18i, value: 18, parent: n15 }"
-        - "{ id: l18, value: 18, parent: n18i }"
-        - "{ id: l27, value: 27, parent: n18i }"
-    - "note: >-"
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
         Camino derecho (hacia la hoja 18), simétrico: en el nodo 15 el
         camino dobla a la derecha (hacia el 18); el hermano izquierdo no
         visitado, nodo 13, queda ENTERO dentro de [5,16] (cubre las hojas
         13 y 15) — segundo subárbol canónico de la respuesta.
       highlight: [n15, n13i]
       nodes:
-        - "{ id: r9, value: 9, parent: null }"
-        - "{ id: n4, value: 4, parent: r9 }"
-        - "{ id: n3i, value: 3, parent: n4 }"
-        - "{ id: l3, value: 3, parent: n3i }"
-        - "{ id: l4, value: 4, parent: n3i }"
-        - "{ id: n7i, value: 7, parent: n4 }"
-        - "{ id: l7, value: 7, parent: n7i }"
-        - "{ id: l9, value: 9, parent: n7i }"
-        - "{ id: n15, value: 15, parent: r9 }"
-        - "{ id: n13i, value: 13, parent: n15 }"
-        - "{ id: l13, value: 13, parent: n13i }"
-        - "{ id: l15, value: 15, parent: n13i }"
-        - "{ id: n18i, value: 18, parent: n15 }"
-        - "{ id: l18, value: 18, parent: n18i }"
-        - "{ id: l27, value: 27, parent: n18i }"
-    - "note: >-"
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
         En el nodo 18, el camino dobla a la izquierda (hacia la hoja 18): el
         hermano derecho, hoja 27, queda fuera de [5,16] y no se agrega. Se
         llega a la hoja 18 — el delimitador derecho, excluido. Respuesta
@@ -130,21 +130,21 @@ visualization:
         los puntos de [5,16].
       highlight: [n18i, l18]
       nodes:
-        - "{ id: r9, value: 9, parent: null }"
-        - "{ id: n4, value: 4, parent: r9 }"
-        - "{ id: n3i, value: 3, parent: n4 }"
-        - "{ id: l3, value: 3, parent: n3i }"
-        - "{ id: l4, value: 4, parent: n3i }"
-        - "{ id: n7i, value: 7, parent: n4 }"
-        - "{ id: l7, value: 7, parent: n7i }"
-        - "{ id: l9, value: 9, parent: n7i }"
-        - "{ id: n15, value: 15, parent: r9 }"
-        - "{ id: n13i, value: 13, parent: n15 }"
-        - "{ id: l13, value: 13, parent: n13i }"
-        - "{ id: l15, value: 15, parent: n13i }"
-        - "{ id: n18i, value: 18, parent: n15 }"
-        - "{ id: l18, value: 18, parent: n18i }"
-        - "{ id: l27, value: 27, parent: n18i }"
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
 ---
 
 ## Qué hace

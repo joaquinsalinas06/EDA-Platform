@@ -13,35 +13,35 @@ cppSteps:
 visualization:
   type: tree
   steps:
-    - "note: >-"
+    - note: >-
         Estado inicial (derivado, no está en las diapositivas): tres
         raíces sueltas de grado 0 con llaves 7, 3 y 5, resultado de haber
         subido los hijos de la antigua raíz mínima en Extract-Min. A[d]
         está vacío para todo d.
       highlight: ["r7", "r3", "r5"]
       nodes:
-        - "{ id: r7, value: 7, parent: null }"
-        - "{ id: r3, value: 3, parent: null }"
-        - "{ id: r5, value: 5, parent: null }"
-    - "note: >-"
+        - { id: r7, value: 7, parent: null }
+        - { id: r3, value: 3, parent: null }
+        - { id: r5, value: 5, parent: null }
+    - note: >-
         Se procesa la raíz 7 (grado 0): A[0] está vacío, así que sólo se
         guarda A[0] = 7. Nada se enlaza todavía.
       highlight: ["r7"]
       nodes:
-        - "{ id: r7, value: 7, parent: null }"
-        - "{ id: r3, value: 3, parent: null }"
-        - "{ id: r5, value: 5, parent: null }"
-    - "note: >-"
+        - { id: r7, value: 7, parent: null }
+        - { id: r3, value: 3, parent: null }
+        - { id: r5, value: 5, parent: null }
+    - note: >-
         Se procesa la raíz 3 (grado 0): A[0] ya tiene a 7. Como
         llave(3) < llave(7), NO se intercambia (3 ya es el menor);
         Binomial-Link(7, 3) hace de 7 hijo de 3. A[0] se limpia, d pasa a
         1, y como A[1] está vacío, se guarda A[1] = 3 (ahora de grado 1).
       highlight: ["r3", "r7"]
       nodes:
-        - "{ id: r3, value: 3, parent: null }"
-        - "{ id: r7, value: 7, parent: r3 }"
-        - "{ id: r5, value: 5, parent: null }"
-    - "note: >-"
+        - { id: r3, value: 3, parent: null }
+        - { id: r7, value: 7, parent: r3 }
+        - { id: r5, value: 5, parent: null }
+    - note: >-
         Se procesa la raíz 5 (grado 0): A[0] está vacío (se limpió en el
         paso anterior), así que sólo se guarda A[0] = 5. Fin del
         recorrido: quedan A[0] = 5 y A[1] = 3(con hijo 7) — todos los
@@ -49,9 +49,9 @@ visualization:
         en un montículo binomial.
       highlight: ["r5"]
       nodes:
-        - "{ id: r3, value: 3, parent: null }"
-        - "{ id: r7, value: 7, parent: r3 }"
-        - "{ id: r5, value: 5, parent: null }"
+        - { id: r3, value: 3, parent: null }
+        - { id: r7, value: 7, parent: r3 }
+        - { id: r5, value: 5, parent: null }
 ---
 
 ## Qué hace

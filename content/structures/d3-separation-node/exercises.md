@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       ¿Cuál de estas afirmaciones sobre el nodo de separación de D₃ es
       correcta? (a) Es siempre la raíz del árbol de rango sobre y.
@@ -18,7 +18,7 @@ items:
       falsa en general: el ejemplo normal de examples.md muestra un caso
       donde la separación ocurre más abajo. (c) es falsa: v_split
       depende de AMBOS caminos, no de uno solo.
-  - "level: 2"
+  - level: 2
     statement: >-
       Con el árbol del ejemplo normal (raíz 6, hijos 3 y 9, nietos 1/4 y
       8/11) traza a mano la localización del nodo de separación para
@@ -31,7 +31,7 @@ items:
       En la raíz (6): a2=2 ≤ 6 → izquierda; b2=9 > 6 → derecha. Ya se
       separan en la raíz: v_split = 6. derecha(v_split) = {8,9,11},
       izquierda(v_split) = {1,3,4}.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa localizarNodoDeSeparacion(raiz, a2, b2) en C++ siguiendo
       el pseudocódigo de locate-separation-node.md, usando el struct Node
@@ -44,7 +44,7 @@ items:
       contra la clave de cada nodo, y se detiene devolviendo el nodo
       actual en cuanto uno cae a la izquierda y el otro a la derecha (o
       coincide con la clave).
-  - "level: 4"
+  - level: 4
     statement: >-
       Adapta la consulta de dos disparos para que, además de [x1,x2] y
       [a2,b2], acepte un tercer parámetro opcional b3 que filtre también
@@ -60,7 +60,7 @@ items:
       correcto pero no es lo que hace D₄: D₄ repite la misma construcción
       de D₃ un nivel más arriba (sobre z) para evitar pagar ese filtro
       lineal como O(n) — ver /structures/d4-bound-z.
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña una prueba (sin implementarla) que verifique que, para un
       árbol de rango sobre y con n puntos, el nodo de separación
@@ -76,7 +76,7 @@ items:
       ambas secuencias coinciden nodo a nodo; comparar ese nodo contra el
       resultado de localizarNodoDeSeparacion — deben ser el mismo. Esto
       es exactamente lo que hace el assert de full-implementation.cpp.
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra por qué el número de consultas satélite disparadas por
       D₃ es siempre exactamente 2, sin importar cuántos niveles tenga el

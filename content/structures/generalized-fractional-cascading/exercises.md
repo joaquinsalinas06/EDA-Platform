@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       El profesor da la condición de aplicabilidad como tres requisitos
       sobre un grafo. Lístalos, y di cuál de los tres es el que D4/D3 tiene
@@ -18,7 +18,7 @@ items:
       construcción; el tercero es el que Bounded-degree-check verifica
       explícitamente sobre D4/D3, contando que cada nodo tiene a lo más 5
       vecinos.
-  - "level: 2"
+  - level: 2
     statement: >-
       Sobre el grafo D4-like de examples.md (raíz con hijo-A, hijo-B,
       gemela-A, gemela-B), traza el camino de vértices que recorre una
@@ -34,7 +34,7 @@ items:
       visitar la raíz, pero sigue siendo un paso O(1) porque depende de la
       arista, no de si el vértice ya se visitó), y raíz→gemela-A (el salto
       a la estructura invertida, también O(1) según #53).
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa bounded_degree_check(graph, max_degree) que recorra un
       grafo de vértices con lista de vecinos y devuelva false apenas
@@ -52,7 +52,7 @@ items:
       `bounded_degree_check` en full-implementation.cpp, sólo que ese
       recorre todo el grafo para reportar TODOS los vértices en vez de
       cortar en el primero.
-  - "level: 4"
+  - level: 4
     statement: >-
       Adapta cascade_query_path para un camino donde el vértice de entrada
       no es el primero de una lista fija, sino que se elige en tiempo de
@@ -69,7 +69,7 @@ items:
       consultada (por ejemplo, qué rama de D3 seguir según el rango de y) —
       esa decisión no afecta el costo O(lg n + k): sigue habiendo una única
       búsqueda real (en el vértice que resulte elegido) y O(1) por paso.
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña, sin escribir código, un grafo de listas de 3 vértices donde
       fractional cascading generalizado NO aplica, aunque cada vértice
@@ -88,7 +88,7 @@ items:
       boletos en las aristas, cada paso volvería a costar una búsqueda
       completa (O(lg n) por paso, no O(1)), y la cota O(lg n + k) no se
       sostendría aunque el grafo tenga la forma correcta.
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra, con el argumento del profesor, por qué "grado acotado"
       significa específicamente "constante independiente de n" y no

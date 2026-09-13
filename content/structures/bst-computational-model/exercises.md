@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       ¿Cuáles son las tres únicas operaciones que define el modelo
       computacional del BST? ¿Cuáles de ellas cuestan O(1)?
@@ -13,7 +13,7 @@ items:
       pointer-move y rotate son O(1) (postulados, #19 y #20). search no es
       O(1): su costo es la profundidad de x, O(log n) en el mejor de los
       casos posibles y O(n) en el peor.
-  - "level: 2"
+  - level: 2
     statement: >-
       Dado el árbol con raíz 4, hijo izquierdo 2 (con hijos 1 y 3) e hijo
       derecho 6 (con hijos 5 y 7), traza Buscar(5) paso a paso listando cada
@@ -24,7 +24,7 @@ items:
     solution: >-
       4 (5 > 4, pointer-move derecha) → 6 (5 < 6, pointer-move izquierda) →
       5. Costo: 2 pointer-moves.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa una función que cuente cuántos pointer-moves hace
       Buscar(x) en un BST dado, usando únicamente los punteros a padre,
@@ -35,7 +35,7 @@ items:
     solution: >-
       Ver full-implementation.cpp: search(x) incrementa moveCount en cada
       llamada a moverA(...) hasta encontrar el nodo con valor x.
-  - "level: 4"
+  - level: 4
     statement: >-
       El modelo asume que toda búsqueda encuentra su valor (#24). Adapta
       Buscar(x) para que además funcione cuando x no está en el árbol, y
@@ -49,7 +49,7 @@ items:
       la profundidad del punto donde la búsqueda "debería" haber estado x,
       que sigue acotada por la altura del árbol — la misma cota O(log n) /
       O(n) según la forma, el modelo no distingue búsquedas fallidas.
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña una secuencia de rotaciones (usando sólo Rotate, sin Insert ni
       Delete) que transforme la cadena degenerada 1→2→3→4→5→6→7 (cada uno
@@ -63,7 +63,7 @@ items:
       hasta la raíz) reorganiza el resto en la forma balanceada, porque cada
       Right Rotation al subir 4 deja colgando correctamente el subárbol que
       queda entre él y su antiguo padre.
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra por qué "O(log n) es el mejor tiempo posible en el peor
       caso" (#26) para Buscar bajo este modelo: da el argumento de conteo

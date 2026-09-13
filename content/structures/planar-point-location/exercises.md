@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       El profesor nunca le da nombre de "estructura de datos" a Planar
       Point Location. ¿Por qué es más preciso llamarlo un problema? ¿Qué
@@ -22,7 +22,7 @@ items:
       preservar ni estado propio: es un planteamiento. Las estructuras
       concretas aparecen recién en la reducción: BBST, segment tree /
       Fenwick tree, persistencia sobre el BBST y retroactividad parcial.
-  - "level: 2"
+  - level: 2
     statement: >-
       Sobre el mapa del profesor (#9) con vértices (0,0) (0,4) (2,15)
       (8,0) (8,10) (10,15) (14,2) (14,8) (16,13) (16,21) (19,4) (20,15)
@@ -43,7 +43,7 @@ items:
       aproximadamente: el conteo impar cae sobre otro contorno, así que la
       etiqueta de cara es distinta aunque ambos puntos compartan la misma
       coordenada y=4.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa `locate` por fuerza bruta con el test de punto en
       polígono por conteo de cruces, sobre un mapa de al menos dos caras
@@ -62,7 +62,7 @@ items:
       arista de la cara, y `locateBruteForce` prueba las caras en orden,
       devolviendo la etiqueta de la primera que contiene al punto o
       "región infinita" si ninguna lo hace.
-  - "level: 4"
+  - level: 4
     statement: >-
       El profesor dice que, para el caso especial ortogonal, "usando un
       Segment tree o un Fenwick tree se puede resolver este caso especial
@@ -91,7 +91,7 @@ items:
       convierte en un RSQ sobre un eje: de ahí que un segment tree o
       Fenwick tree resuelvan el caso especial en O(n log n) — ver
       /structures/segment-tree y /structures/fenwick-tree.
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña, sin implementarlo, el esquema completo para responder
       `locate` en línea (online) con la cota O(log n) del profesor (#51):
@@ -119,7 +119,7 @@ items:
       de qué hace `Query` exactamente con ese sucesor para devolver una
       cara (hueco del material), pero el costo es el de un `Successor` en
       un BBST persistente: O(log n).
-  - "level: 6"
+  - level: 6
     statement: >-
       El profesor afirma que la retroactividad parcial para mapas
       ortogonales mantiene la consulta en O(log n), "lo cual es óptimo

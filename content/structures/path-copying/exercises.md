@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       El profesor dice que el stack persistente es "el caso degenerado del
       path copying". Explica en una frase por qué, comparando el largo del
@@ -18,7 +18,7 @@ items:
       camino raíz-hoja tiene O(lg n) nodos, así que Update copia ese
       número de nodos. El stack es el caso donde el camino relevante mide
       exactamente 1.
-  - "level: 2"
+  - level: 2
     statement: >-
       Traza Update sobre el segment tree de 4 hojas del profesor (raíz
       [1,4], hijos [1,2] y [3,4], hojas [1,1], [2,2], [3,3], [4,4]) para
@@ -33,7 +33,7 @@ items:
       Se comparten sin copiar: [3,4] completo (con sus hojas [3,3] y
       [4,4]) y [2,2], que cuelga de [1,2]' apuntando al mismo nodo de la
       versión vieja.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa Push para un stack persistente en C++, siguiendo el
       Algoritmo 2 del profesor. La firma debe devolver un puntero a la
@@ -46,7 +46,7 @@ items:
       Push(Node* s, int x) que hace `return new Node{x, s};` — el nodo
       viejo `s` nunca se modifica, así que sigue siendo un puntero válido
       a la versión anterior.
-  - "level: 4"
+  - level: 4
     statement: >-
       El pseudocódigo del profesor para Insert del trie persistente, tal
       como aparece en las diapositivas, no retorna dentro del caso base
@@ -62,7 +62,7 @@ items:
       y mover el resto (`c ← s[i]` en adelante) a un bloque `en otro caso`
       explícito. Así el caso base nunca llega a indexar `s[i]` cuando
       `i = |s|`. Ver operations/trie-insert.md para la versión corregida.
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña cómo adaptarías Update del segment tree persistente para que,
       además de devolver la raíz nueva, permita también "deshacer" — volver
@@ -81,7 +81,7 @@ items:
       puntero a su raíz (por ejemplo un arreglo indexado por número de
       versión), para poder "volver" a cualquiera de ellas y decidir desde
       cuál seguir escribiendo.
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra, usando conteo directo del camino (el estilo del profesor,
       no potencial ni amortizado), que insertar n cadenas de largo total

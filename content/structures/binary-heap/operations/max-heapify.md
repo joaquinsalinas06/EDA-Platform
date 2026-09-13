@@ -9,68 +9,68 @@ cppSteps:
 visualization:
   type: tree
   steps:
-    - "note: >-"
+    - note: >-
         Estado inicial, A = [4, 14, 10, 8, 2, 9, 3]. Se llama Max-Heapify(A, 1, 7):
         el subárbol podría estar roto sólo en la raíz.
       highlight: []
       nodes:
-        - "{ id: n1, value: 4, parent: null }"
-        - "{ id: n2, value: 14, parent: n1 }"
-        - "{ id: n3, value: 10, parent: n1 }"
-        - "{ id: n4, value: 8, parent: n2 }"
-        - "{ id: n5, value: 2, parent: n2 }"
-        - "{ id: n6, value: 9, parent: n3 }"
-        - "{ id: n7, value: 3, parent: n3 }"
-    - "note: >-"
+        - { id: n1, value: 4, parent: null }
+        - { id: n2, value: 14, parent: n1 }
+        - { id: n3, value: 10, parent: n1 }
+        - { id: n4, value: 8, parent: n2 }
+        - { id: n5, value: 2, parent: n2 }
+        - { id: n6, value: 9, parent: n3 }
+        - { id: n7, value: 3, parent: n3 }
+    - note: >-
         Se compara A[1]=4 contra sus dos hijos, A[2]=14 y A[3]=10. El mayor de
         los tres es A[2]=14, así que "largest" pasa a ser 2 y hay que intercambiar.
       highlight: [n1, n2, n3]
       nodes:
-        - "{ id: n1, value: 4, parent: null }"
-        - "{ id: n2, value: 14, parent: n1 }"
-        - "{ id: n3, value: 10, parent: n1 }"
-        - "{ id: n4, value: 8, parent: n2 }"
-        - "{ id: n5, value: 2, parent: n2 }"
-        - "{ id: n6, value: 9, parent: n3 }"
-        - "{ id: n7, value: 3, parent: n3 }"
-    - "note: >-"
+        - { id: n1, value: 4, parent: null }
+        - { id: n2, value: 14, parent: n1 }
+        - { id: n3, value: 10, parent: n1 }
+        - { id: n4, value: 8, parent: n2 }
+        - { id: n5, value: 2, parent: n2 }
+        - { id: n6, value: 9, parent: n3 }
+        - { id: n7, value: 3, parent: n3 }
+    - note: >-
         Se intercambian A[1] y A[2]: la raíz ya cumple el invariante localmente,
         pero el 4 bajó a la posición 2 y podría romperlo ahí. La llamada recursiva
         continúa en i=2.
       highlight: [n1, n2]
       nodes:
-        - "{ id: n1, value: 14, parent: null }"
-        - "{ id: n2, value: 4, parent: n1 }"
-        - "{ id: n3, value: 10, parent: n1 }"
-        - "{ id: n4, value: 8, parent: n2 }"
-        - "{ id: n5, value: 2, parent: n2 }"
-        - "{ id: n6, value: 9, parent: n3 }"
-        - "{ id: n7, value: 3, parent: n3 }"
-    - "note: >-"
+        - { id: n1, value: 14, parent: null }
+        - { id: n2, value: 4, parent: n1 }
+        - { id: n3, value: 10, parent: n1 }
+        - { id: n4, value: 8, parent: n2 }
+        - { id: n5, value: 2, parent: n2 }
+        - { id: n6, value: 9, parent: n3 }
+        - { id: n7, value: 3, parent: n3 }
+    - note: >-
         En i=2, A[2]=4 se compara contra sus hijos A[4]=8 y A[5]=2. El mayor es
         A[4]=8, así que "largest" pasa a ser 4.
       highlight: [n2, n4, n5]
       nodes:
-        - "{ id: n1, value: 14, parent: null }"
-        - "{ id: n2, value: 4, parent: n1 }"
-        - "{ id: n3, value: 10, parent: n1 }"
-        - "{ id: n4, value: 8, parent: n2 }"
-        - "{ id: n5, value: 2, parent: n2 }"
-        - "{ id: n6, value: 9, parent: n3 }"
-        - "{ id: n7, value: 3, parent: n3 }"
-    - "note: >-"
+        - { id: n1, value: 14, parent: null }
+        - { id: n2, value: 4, parent: n1 }
+        - { id: n3, value: 10, parent: n1 }
+        - { id: n4, value: 8, parent: n2 }
+        - { id: n5, value: 2, parent: n2 }
+        - { id: n6, value: 9, parent: n3 }
+        - { id: n7, value: 3, parent: n3 }
+    - note: >-
         Se intercambian A[2] y A[4]. Ahora i=4, que es hoja (no tiene hijos en
         n=7): "largest" queda igual a i, la recursión se detiene y el invariante
         de montículo máximo queda restaurado en todo el subárbol.
       highlight: [n2, n4]
       nodes:
-        - "{ id: n1, value: 14, parent: null }"
-        - "{ id: n2, value: 8, parent: n1 }"
-        - "{ id: n3, value: 10, parent: n1 }"
-        - "{ id: n4, value: 4, parent: n2 }"
-        - "{ id: n5, value: 2, parent: n2 }"
-        - "{ id: n6, value: 9, parent: n3 }"
-        - "{ id: n7, value: 3, parent: n3 }"
+        - { id: n1, value: 14, parent: null }
+        - { id: n2, value: 8, parent: n1 }
+        - { id: n3, value: 10, parent: n1 }
+        - { id: n4, value: 4, parent: n2 }
+        - { id: n5, value: 2, parent: n2 }
+        - { id: n6, value: 9, parent: n3 }
+        - { id: n7, value: 3, parent: n3 }
 ---
 
 ## Qué hace

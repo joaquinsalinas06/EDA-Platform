@@ -2,7 +2,7 @@
 kind: exercises
 title: Ejercicios
 items:
-  - "level: 1"
+  - level: 1
     statement: >-
       ¿Cuál de estas afirmaciones sobre nodos gordos es correcta?
       (a) El registro de modificaciones de un nodo crece sin límite a
@@ -20,7 +20,7 @@ items:
       se llena. (a) es falsa: si creciera sin límite, leer dejaría de ser
       O(1). (b) es falsa: el profesor especifica el orden contrario, "de
       más reciente a más antigua" (página 24).
-  - "level: 2"
+  - level: 2
     statement: >-
       Traza a mano las lecturas de un nodo n con p = 2 (registro máximo
       de 4 entradas). n nace en t=0 con valor=5. Se escribe valor=6 en
@@ -35,7 +35,7 @@ items:
       original). t=2: 6 (la entrada exacta). t=4: 6 (la más reciente con
       tiempo <= 4 sigue siendo la de t=2). t=5: 7. t=8: 7 (la de t=9
       todavía no aplica). t=9: 8.
-  - "level: 3"
+  - level: 3
     statement: >-
       Implementa escribirCampo(nodo, campo, valor, t) en C++ siguiendo la
       firma de step-3-write-field.cpp: SOLO el caso con espacio (asume
@@ -53,7 +53,7 @@ items:
       node->log.push_back({field, t, intVal, ptrVal}); return node; } —
       exactamente lo que hace la rama "con espacio" de writeField en
       full-implementation.cpp.
-  - "level: 4"
+  - level: 4
     statement: >-
       Adapta la técnica de nodos gordos al ejercicio del propio mazo
       (páginas 34-35): un BST con persistencia parcial. La pista del
@@ -76,7 +76,7 @@ items:
       genéricos value/next de esta implementación), y el puntero externo
       a la raíz de cada versión se modela igual que cualquier otro campo
       con su historial (ver "Casos límite" de node-split.md).
-  - "level: 5"
+  - level: 5
     statement: >-
       Diseña, a partir de la sola cota que da el profesor ("O(1)
       amortizado por operación", páginas 44-45, sin desarrollar la
@@ -100,7 +100,7 @@ items:
       fuente explícitamente no da la mecánica del "split más delicado",
       así que cualquier solución aquí debe presentarse como diseño
       propio, no como hecho del curso.
-  - "level: 6"
+  - level: 6
     statement: >-
       Demuestra, usando el método del potencial con
       Phi = suma sobre nodos de las entradas usadas en su registro, que

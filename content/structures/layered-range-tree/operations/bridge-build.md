@@ -9,65 +9,65 @@ cppSteps:
 visualization:
   type: range-tree
   steps:
-    - "note: >-"
+    - note: >-
         Antes de mezclar: el arreglo del hijo izquierdo [3, 8] y el del
         hijo derecho [5, 9], ya construidos (postorden). Todavía no existe
         el arreglo del padre ni ningún puente.
       highlight: ["L0", "L1", "R0", "R1"]
       nodes:
-        - "{ id: L0, value: 3, parent: null }"
-        - "{ id: L1, value: 8, parent: null }"
-        - "{ id: R0, value: 5, parent: null }"
-        - "{ id: R1, value: 9, parent: null }"
-    - "note: >-"
+        - { id: L0, value: 3, parent: null }
+        - { id: L1, value: 8, parent: null }
+        - { id: R0, value: 5, parent: null }
+        - { id: R1, value: 9, parent: null }
+    - note: >-
         Merge: el frente izquierdo (3) es menor que el derecho (5), así que
         3 entra en la posición 0 del padre. Ese elemento vino de L0 — su
         puente hacia el hijo izquierdo es "gratis": es la misma posición
         que el propio merge acaba de leer.
       highlight: ["P0", "L0"]
       nodes:
-        - "{ id: L0, value: 3, parent: null }"
-        - "{ id: L1, value: 8, parent: null }"
-        - "{ id: R0, value: 5, parent: null }"
-        - "{ id: R1, value: 9, parent: null }"
-        - "{ id: P0, value: 3, parent: L0 }"
-    - "note: >-"
+        - { id: L0, value: 3, parent: null }
+        - { id: L1, value: 8, parent: null }
+        - { id: R0, value: 5, parent: null }
+        - { id: R1, value: 9, parent: null }
+        - { id: P0, value: 3, parent: L0 }
+    - note: >-
         Ahora el frente izquierdo es 8 y el derecho 5: 5 es menor y entra
         en la posición 1 del padre, con puente hacia R0.
       highlight: ["P1", "R0"]
       nodes:
-        - "{ id: L0, value: 3, parent: null }"
-        - "{ id: L1, value: 8, parent: null }"
-        - "{ id: R0, value: 5, parent: null }"
-        - "{ id: R1, value: 9, parent: null }"
-        - "{ id: P0, value: 3, parent: L0 }"
-        - "{ id: P1, value: 5, parent: R0 }"
-    - "note: >-"
+        - { id: L0, value: 3, parent: null }
+        - { id: L1, value: 8, parent: null }
+        - { id: R0, value: 5, parent: null }
+        - { id: R1, value: 9, parent: null }
+        - { id: P0, value: 3, parent: L0 }
+        - { id: P1, value: 5, parent: R0 }
+    - note: >-
         Frente izquierdo 8, derecho 9: 8 entra en la posición 2 del padre,
         con puente hacia L1.
       highlight: ["P2", "L1"]
       nodes:
-        - "{ id: L0, value: 3, parent: null }"
-        - "{ id: L1, value: 8, parent: null }"
-        - "{ id: R0, value: 5, parent: null }"
-        - "{ id: R1, value: 9, parent: null }"
-        - "{ id: P0, value: 3, parent: L0 }"
-        - "{ id: P1, value: 5, parent: R0 }"
-        - "{ id: P2, value: 8, parent: L1 }"
-    - "note: >-"
+        - { id: L0, value: 3, parent: null }
+        - { id: L1, value: 8, parent: null }
+        - { id: R0, value: 5, parent: null }
+        - { id: R1, value: 9, parent: null }
+        - { id: P0, value: 3, parent: L0 }
+        - { id: P1, value: 5, parent: R0 }
+        - { id: P2, value: 8, parent: L1 }
+    - note: >-
         El hijo izquierdo se agotó: el único elemento que queda, 9, entra
         en la posición 3 del padre, con puente hacia R1. El arreglo
         mezclado del padre queda [3, 5, 8, 9].
       highlight: ["P3", "R1"]
       nodes:
-        - "{ id: L0, value: 3, parent: null }"
-        - "{ id: L1, value: 8, parent: null }"
-        - "{ id: R0, value: 5, parent: null }"
-        - "{ id: R1, value: 9, parent: null }"
-        - "{ id: P0, value: 3, parent: L0 }"
-        - "{ id: P1, value: 5, parent: R0 }"
-        - "{ id: P2, value: 8, parent: L1 }"
-        - "{ id: P3, value: 9, parent: R1 }"
+        - { id: L0, value: 3, parent: null }
+        - { id: L1, value: 8, parent: null }
+        - { id: R0, value: 5, parent: null }
+        - { id: R1, value: 9, parent: null }
+        - { id: P0, value: 3, parent: L0 }
+        - { id: P1, value: 5, parent: R0 }
+        - { id: P2, value: 8, parent: L1 }
+        - { id: P3, value: 9, parent: R1 }
 ---
 
 ## Qué hace

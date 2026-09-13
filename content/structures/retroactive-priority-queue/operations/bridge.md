@@ -9,39 +9,39 @@ cppSteps:
 visualization:
   type: persistent
   steps:
-    - "note: >-"
+    - note: >-
         (Ejemplo derivado, no de las diapositivas: el ejemplo del profesor
         no tiene un puente interior no trivial). Insertamos ins(10) en
         t=1. Q en este instante: {10}.
       highlight: ["t1"]
       nodes:
-        - '{ id: t1, value: "ins(10)", parent: null }'
-    - "note: >-"
+        - { id: t1, value: "ins(10)", parent: null }
+    - note: >-
         del-min en t=2 elimina el 10 (único elemento). Q en este instante
         queda vacío. Un conjunto vacío es subconjunto de cualquier cosa,
         así que t=2 es un puente: nada de lo que había "sobrevive" para
         poder contradecir la definición, porque no había nada.
       highlight: ["t2"]
       nodes:
-        - '{ id: t1, value: "ins(10)", parent: null }'
-        - '{ id: t2, value: "del-min -> quita 10", parent: t1 }'
-    - "note: >-"
+        - { id: t1, value: "ins(10)", parent: null }
+        - { id: t2, value: "del-min -> quita 10", parent: t1 }
+    - note: >-
         ins(1) en t=3. Q en este instante: {1}. Todavía no sabemos si 1
         sobrevivirá hasta el presente.
       highlight: ["t3"]
       nodes:
-        - '{ id: t1, value: "ins(10)", parent: null }'
-        - '{ id: t2, value: "del-min -> quita 10", parent: t1 }'
-        - '{ id: t3, value: "ins(1)", parent: t2 }'
-    - "note: >-"
+        - { id: t1, value: "ins(10)", parent: null }
+        - { id: t2, value: "del-min -> quita 10", parent: t1 }
+        - { id: t3, value: "ins(1)", parent: t2 }
+    - note: >-
         ins(2) en t=4. Q en este instante: {1, 2}.
       highlight: ["t4"]
       nodes:
-        - '{ id: t1, value: "ins(10)", parent: null }'
-        - '{ id: t2, value: "del-min -> quita 10", parent: t1 }'
-        - '{ id: t3, value: "ins(1)", parent: t2 }'
-        - '{ id: t4, value: "ins(2)", parent: t3 }'
-    - "note: >-"
+        - { id: t1, value: "ins(10)", parent: null }
+        - { id: t2, value: "del-min -> quita 10", parent: t1 }
+        - { id: t3, value: "ins(1)", parent: t2 }
+        - { id: t4, value: "ins(2)", parent: t3 }
+    - note: >-
         del-min en t=5 elimina el mínimo, 1. Q_ahora = {2}. Con Q_ahora ya
         fijo, revisamos t=2: su estado (vacío) es subconjunto de {2}, así
         que sigue siendo puente. t=1, t=3 y t=4 no lo son: sus estados
@@ -50,11 +50,11 @@ visualization:
         insertado antes de t=2 puede seguir vivo después.
       highlight: ["t2"]
       nodes:
-        - '{ id: t1, value: "ins(10)", parent: null }'
-        - '{ id: t2, value: "del-min -> quita 10 (PUENTE)", parent: t1 }'
-        - '{ id: t3, value: "ins(1)", parent: t2 }'
-        - '{ id: t4, value: "ins(2)", parent: t3 }'
-        - '{ id: t5, value: "del-min -> quita 1 (Q_ahora={2})", parent: t4 }'
+        - { id: t1, value: "ins(10)", parent: null }
+        - { id: t2, value: "del-min -> quita 10 (PUENTE)", parent: t1 }
+        - { id: t3, value: "ins(1)", parent: t2 }
+        - { id: t4, value: "ins(2)", parent: t3 }
+        - { id: t5, value: "del-min -> quita 1 (Q_ahora={2})", parent: t4 }
 ---
 
 ## Qué hace

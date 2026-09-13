@@ -241,7 +241,37 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
                   {n.label} — {STATE_LABEL[state]}
                 </title>
 
-                {shape === 'port' ? (
+                {shape === 'subtree' ? (
+                  // Convención de los libros para "esto es un subárbol
+                  // entero, no un nodo suelto": triángulo, vértice hacia el
+                  // padre (arriba), base ancha abajo. El estado (idle/active/
+                  // …) sigue viniendo de nodeStyle, igual que una caja.
+                  <>
+                    <polygon
+                      points={`0,${-h / 2} ${-w / 2},${h / 2} ${w / 2},${h / 2}`}
+                      fill={visual.fill}
+                      stroke={visual.stroke}
+                      strokeWidth={visual.strokeWidth}
+                      strokeDasharray={visual.dash}
+                      opacity={visual.opacity}
+                      style={{ transition: 'fill 300ms, stroke 300ms, opacity 300ms' }}
+                    />
+                    <text
+                      x={0}
+                      y={h / 2 - 11}
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      fontSize={13}
+                      fontWeight={500}
+                      fontFamily="var(--font-mono)"
+                      fill={visual.text}
+                      opacity={visual.opacity}
+                      style={{ transition: 'fill 300ms' }}
+                    >
+                      {n.label}
+                    </text>
+                  </>
+                ) : shape === 'port' ? (
                   <circle
                     r={PORT_R}
                     fill={visual.fill}

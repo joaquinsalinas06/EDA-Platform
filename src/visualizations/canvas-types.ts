@@ -31,7 +31,7 @@ export function boxWidth(text: string, fontSize = 14, min = NODE_W): number {
   return Math.max(min, text.length * charW(fontSize) + 2 * PAD_X);
 }
 
-export type NodeShape = 'box' | 'cell' | 'record' | 'port';
+export type NodeShape = 'box' | 'cell' | 'record' | 'port' | 'subtree';
 
 /**
  * Vocabulario cerrado de estados — ninguna familia inventa uno nuevo.

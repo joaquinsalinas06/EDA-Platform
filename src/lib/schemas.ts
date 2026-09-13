@@ -33,6 +33,9 @@ const vizNode = z.object({
       }),
     )
     .optional(),
+  /** Este nodo representa un subárbol entero (p.ej. A/B/C de una rotación),
+   * no una clave suelta — se dibuja como triángulo (familia `tree`). */
+  collapsed: z.boolean().optional(),
 });
 
 const vizLink = z.object({

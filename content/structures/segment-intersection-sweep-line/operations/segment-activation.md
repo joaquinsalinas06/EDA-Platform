@@ -6,6 +6,89 @@ cppSteps:
   - step-1-events.cpp
   - step-2-activation.cpp
   - full-implementation.cpp
+visualization:
+  type: range-tree
+  mode: layers
+  steps:
+    - note: >-
+        La recta de barrido arranca en x=0, antes de cualquier evento. H1
+        [x=1..6, y=3] y H2 [x=4..7, y=5] todavía no existen para el
+        barrido — ningún segmento horizontal está activo.
+      caption: "x=0: activos = {}"
+      mode: layers
+      arrays:
+        - id: ypos
+          label: "activos"
+          row: 0
+          cells: [3, 5]
+          states: [idle, idle]
+    - note: >-
+        El barrido llega a x=1: se activa H1 **antes** de procesar ese
+        punto (#34) — la regla de borde que hace que un segmento vertical
+        justo en x=1 sí cuente la intersección.
+      caption: "x=1: activa H1 (y=3)"
+      mode: layers
+      arrays:
+        - id: ypos
+          row: 0
+          cells: [3, 5]
+          states: [active, idle]
+    - note: >-
+        El barrido llega a x=4: se activa H2 (y=5) antes de procesar el
+        punto — ahora ambos segmentos horizontales están activos, y es
+        justo la x en la que llega V1.
+      caption: "x=4: activa H2 (y=5)"
+      mode: layers
+      arrays:
+        - id: ypos
+          row: 0
+          cells: [3, 5]
+          states: [active, active]
+    - note: >-
+        Con H1 y H2 activos, se procesa V1 [x=4, y=0..5]:
+        `RSQ(0, 5)` marca ambas posiciones — son exactamente los cruces
+        que aporta V1 en este instante (ver
+        [intersection-count](/structures/segment-intersection-sweep-line/operations/intersection-count)).
+      caption: "V1 consulta RSQ(0, 5) sobre los activos"
+      mode: layers
+      arrays:
+        - id: ypos
+          row: 0
+          cells: [3, 5]
+          states: [marked, marked]
+    - note: >-
+        Las dos posiciones activas caen dentro de `[0, 5]`: V1 cruza a H1 y
+        a H2, dos intersecciones nuevas. El barrido sigue de largo — V1 no
+        se activa ni desactiva, sólo consulta.
+      caption: "intersecciones acumuladas: 2"
+      mode: layers
+      arrays:
+        - id: ypos
+          row: 0
+          cells: [3, 5]
+          states: [answer, answer]
+    - note: >-
+        El barrido llega a x=6: se desactiva H1, **después** de procesar
+        ese punto (#34) — su rango [1,6] ya terminó y deja de aportar
+        cruces a cualquier vertical futuro.
+      caption: "x=6: desactiva H1"
+      mode: layers
+      arrays:
+        - id: ypos
+          row: 0
+          cells: [3, 5]
+          states: [muted, active]
+    - note: >-
+        x=7: se desactiva H2. El barrido termina sin segmentos activos —
+        el total de intersecciones que aportó todo el recorrido fue 2,
+        todas atribuidas a V1 en x=4.
+      caption: "x=7: desactiva H2 — activos: {} — total: 2"
+      mode: layers
+      arrays:
+        - id: ypos
+          row: 0
+          cells: [3, 5]
+          states: [muted, muted]
 ---
 
 ## Qué hace
@@ -61,10 +144,10 @@ aquí).
 
 ## Complejidad temporal
 
-O(log n) por activación o desactivación individual — heredado de la
+$O(\log n)$ por activación o desactivación individual — heredado de la
 actualización puntual del Fenwick tree
 ([fenwick-tree](/structures/fenwick-tree)); el profesor no separa esta
-operación del total O(n log n) del caso simple (#38), que es la cifra que
+operación del total $O(n \log n)$ del caso simple (#38), que es la cifra que
 reporta `meta.yaml`.
 
 ## Complejidad espacial

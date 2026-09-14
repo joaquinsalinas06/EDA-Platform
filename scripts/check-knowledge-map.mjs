@@ -87,7 +87,7 @@ for (const [id, t] of Object.entries(map.topics)) {
     // Toda operación del mapa necesita su archivo, y ninguno puede sobrar.
     const opsDir = path.join(STRUCTURES, id, 'operations');
     const files = fs.existsSync(opsDir)
-      ? fs.readdirSync(opsDir).filter((f) => f.endsWith('.md')).map((f) => f.replace(/\.md$/, ''))
+      ? fs.readdirSync(opsDir).filter((f) => /\.mdx?$/.test(f)).map((f) => f.replace(/\.mdx?$/, ''))
       : [];
     for (const op of t.operations) {
       if (!files.includes(op)) fail(`${id}: falta operations/${op}.md (el mapa lo lista)`);
@@ -97,7 +97,9 @@ for (const [id, t] of Object.entries(map.topics)) {
     }
   }
 
-  if (!fs.existsSync(path.join(STRUCTURES, id, 'theory.md'))) fail(`falta content/structures/${id}/theory.md`);
+  // Un tema puede escribirse en .mdx si intercala diagramas en la prosa.
+  const theory = ['theory.md', 'theory.mdx'].map((f) => path.join(STRUCTURES, id, f));
+  if (!theory.some((f) => fs.existsSync(f))) fail(`falta content/structures/${id}/theory.md(x)`);
 }
 
 // 4. Ninguna carpeta fuera del mapa (un subagente que escribió donde no debía).
@@ -118,7 +120,7 @@ const walk = (dir) =>
   fs.existsSync(dir)
     ? fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
         const full = path.join(dir, e.name);
-        return e.isDirectory() ? walk(full) : e.name.endsWith('.md') ? [full] : [];
+        return e.isDirectory() ? walk(full) : /\.mdx?$/.test(e.name) ? [full] : [];
       })
     : [];
 

@@ -7,6 +7,43 @@ cppSteps:
   - step-2-activation.cpp
   - step-3-intersection-count.cpp
   - full-implementation.cpp
+visualization:
+  type: range-tree
+  mode: layers
+  steps:
+    - note: >-
+        En x=4 llega V1 [x=4, y=0..5]. La estructura de activos ya tiene a
+        H1 (y=3) y H2 (y=5) prendidos — el mismo estado que deja
+        segment-activation en ese instante.
+      caption: "V1 cubre y ∈ [0, 5]"
+      mode: layers
+      arrays:
+        - id: ypos
+          label: "activos"
+          row: 0
+          cells: [3, 5]
+          states: [active, active]
+    - note: >-
+        RSQ(0, 5) sobre la estructura de activos: ambas posiciones (3 y 5)
+        caen dentro del rango — cada una cuenta como una intersección.
+      caption: "RSQ(0, 5) → ambas caen dentro"
+      mode: layers
+      arrays:
+        - id: ypos
+          row: 0
+          cells: [3, 5]
+          states: [answer, answer]
+    - note: >-
+        V1 aporta 2 intersecciones: cruza a H1 y a H2. El profesor atribuye
+        este costo al total O(n log n) del caso simple (#38), sin separar
+        activación de conteo.
+      caption: "V1 aporta 2 intersecciones"
+      mode: layers
+      arrays:
+        - id: ypos
+          row: 0
+          cells: [3, 5]
+          states: [answer, answer]
 ---
 
 ## Qué hace
@@ -53,11 +90,11 @@ actualiza.
 
 ## Complejidad temporal
 
-O(log n) por segmento vertical — el costo de una consulta de rango sobre el
+$O(\log n)$ por segmento vertical — el costo de una consulta de rango sobre el
 Fenwick tree o Segment tree elegido
 ([fenwick-tree](/structures/fenwick-tree),
 [segment-tree](/structures/segment-tree)). Sumado sobre los n eventos del
-barrido, el profesor reporta el total como O(n log n) (#38), sin separar el
+barrido, el profesor reporta el total como $O(n \log n)$ (#38), sin separar el
 costo de esta operación del de
 [segment-activation](/structures/segment-intersection-sweep-line/operations/segment-activation):
 ambas comparten la misma cota heredada.

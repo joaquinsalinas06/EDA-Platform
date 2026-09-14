@@ -52,13 +52,13 @@ Ver `step-7-delete.cpp` y `full-implementation.cpp` en el editor de arriba.
 
 ## Complejidad temporal
 
-`Θ(lg n)`, tal como aparece en la tabla comparativa. Se deriva igual que
-Decrease-Key: sustituir es O(1), y subir o bajar recorre a lo más un
-camino raíz-hoja de `⌊lg n⌋` aristas.
+$\Theta(\lg n)$, tal como aparece en la tabla comparativa. Se deriva igual que
+Decrease-Key: sustituir es $O(1)$, y subir o bajar recorre a lo más un
+camino raíz-hoja de $\lfloor \lg n \rfloor$ aristas.
 
 ## Complejidad espacial
 
-O(1) adicional.
+$O(1)$ adicional.
 
 ## Ejemplo
 

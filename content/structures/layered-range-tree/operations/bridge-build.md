@@ -8,66 +8,86 @@ cppSteps:
   - full-implementation.cpp
 visualization:
   type: range-tree
+  mode: layers
   steps:
     - note: >-
         Antes de mezclar: el arreglo del hijo izquierdo [3, 8] y el del
         hijo derecho [5, 9], ya construidos (postorden). Todavía no existe
         el arreglo del padre ni ningún puente.
-      highlight: ["L0", "L1", "R0", "R1"]
-      nodes:
-        - { id: L0, value: 3, parent: null }
-        - { id: L1, value: 8, parent: null }
-        - { id: R0, value: 5, parent: null }
-        - { id: R1, value: 9, parent: null }
+      mode: layers
+      arrays:
+        - { id: L, label: L, row: 1, slot: left, cells: [3, 8] }
+        - { id: R, label: R, row: 1, slot: right, cells: [5, 9] }
     - note: >-
         Merge: el frente izquierdo (3) es menor que el derecho (5), así que
         3 entra en la posición 0 del padre. Ese elemento vino de L0 — su
         puente hacia el hijo izquierdo es "gratis": es la misma posición
         que el propio merge acaba de leer.
-      highlight: ["P0", "L0"]
-      nodes:
-        - { id: L0, value: 3, parent: null }
-        - { id: L1, value: 8, parent: null }
-        - { id: R0, value: 5, parent: null }
-        - { id: R1, value: 9, parent: null }
-        - { id: P0, value: 3, parent: L0 }
+      mode: layers
+      arrays:
+        - { id: L, label: L, row: 1, slot: left, cells: [3, 8] }
+        - { id: R, label: R, row: 1, slot: right, cells: [5, 9] }
+        - { id: P, label: P, row: 0, cells: [3] }
+      bridges:
+        - { from: P, fromIndex: 0, to: L, toIndex: 0, active: true }
     - note: >-
         Ahora el frente izquierdo es 8 y el derecho 5: 5 es menor y entra
         en la posición 1 del padre, con puente hacia R0.
-      highlight: ["P1", "R0"]
-      nodes:
-        - { id: L0, value: 3, parent: null }
-        - { id: L1, value: 8, parent: null }
-        - { id: R0, value: 5, parent: null }
-        - { id: R1, value: 9, parent: null }
-        - { id: P0, value: 3, parent: L0 }
-        - { id: P1, value: 5, parent: R0 }
+      mode: layers
+      arrays:
+        - { id: L, label: L, row: 1, slot: left, cells: [3, 8] }
+        - { id: R, label: R, row: 1, slot: right, cells: [5, 9] }
+        - { id: P, label: P, row: 0, cells: [3, 5] }
+      bridges:
+        - { from: P, fromIndex: 0, to: L, toIndex: 0, active: false }
+        - { from: P, fromIndex: 1, to: R, toIndex: 0, active: true }
     - note: >-
         Frente izquierdo 8, derecho 9: 8 entra en la posición 2 del padre,
         con puente hacia L1.
-      highlight: ["P2", "L1"]
-      nodes:
-        - { id: L0, value: 3, parent: null }
-        - { id: L1, value: 8, parent: null }
-        - { id: R0, value: 5, parent: null }
-        - { id: R1, value: 9, parent: null }
-        - { id: P0, value: 3, parent: L0 }
-        - { id: P1, value: 5, parent: R0 }
-        - { id: P2, value: 8, parent: L1 }
+      mode: layers
+      arrays:
+        - { id: L, label: L, row: 1, slot: left, cells: [3, 8] }
+        - { id: R, label: R, row: 1, slot: right, cells: [5, 9] }
+        - { id: P, label: P, row: 0, cells: [3, 5, 8] }
+      bridges:
+        - { from: P, fromIndex: 0, to: L, toIndex: 0, active: false }
+        - { from: P, fromIndex: 1, to: R, toIndex: 0, active: false }
+        - { from: P, fromIndex: 2, to: L, toIndex: 1, active: true }
     - note: >-
         El hijo izquierdo se agotó: el único elemento que queda, 9, entra
         en la posición 3 del padre, con puente hacia R1. El arreglo
         mezclado del padre queda [3, 5, 8, 9].
-      highlight: ["P3", "R1"]
-      nodes:
-        - { id: L0, value: 3, parent: null }
-        - { id: L1, value: 8, parent: null }
-        - { id: R0, value: 5, parent: null }
-        - { id: R1, value: 9, parent: null }
-        - { id: P0, value: 3, parent: L0 }
-        - { id: P1, value: 5, parent: R0 }
-        - { id: P2, value: 8, parent: L1 }
-        - { id: P3, value: 9, parent: R1 }
+      mode: layers
+      arrays:
+        - { id: L, label: L, row: 1, slot: left, cells: [3, 8] }
+        - { id: R, label: R, row: 1, slot: right, cells: [5, 9] }
+        - { id: P, label: P, row: 0, cells: [3, 5, 8, 9] }
+      bridges:
+        - { from: P, fromIndex: 0, to: L, toIndex: 0, active: false }
+        - { from: P, fromIndex: 1, to: R, toIndex: 0, active: false }
+        - { from: P, fromIndex: 2, to: L, toIndex: 1, active: false }
+        - { from: P, fromIndex: 3, to: R, toIndex: 1, active: true }
+    - note: >-
+        Los dos detalles que casi siempre se rompen en la implementación:
+        (1) pIzq y pDer sólo avanzan, nunca retroceden — es la misma
+        invariante que hace a Merge Sort O(n) y no O(n lg n); calcular cada
+        puente con una búsqueda binaria independiente sería correcto pero
+        más lento, no lo que el merge ya regala gratis; (2) al terminar se
+        guarda un centinela — puenteIzq[4] = 2 y puenteDer[4] = 2, una
+        posición extra que apunta al final de cada hijo — para que
+        preguntar por una posición del padre que cae después del último
+        elemento nunca lea fuera de rango.
+      mode: layers
+      arrays:
+        - { id: L, label: L, row: 1, slot: left, cells: [3, 8] }
+        - { id: R, label: R, row: 1, slot: right, cells: [5, 9] }
+        - { id: P, label: P, row: 0, cells: [3, 5, 8, 9] }
+      bridges:
+        - { from: P, fromIndex: 0, to: L, toIndex: 0, active: false }
+        - { from: P, fromIndex: 1, to: R, toIndex: 0, active: false }
+        - { from: P, fromIndex: 2, to: L, toIndex: 1, active: false }
+        - { from: P, fromIndex: 3, to: R, toIndex: 1, active: false }
+      caption: "puenteIzq = [0,1,1,2,2]  puenteDer = [0,0,1,1,2]  (última posición = centinela)"
 ---
 
 ## Qué hace
@@ -80,7 +100,7 @@ más allá del propio merge.
 
 ## Intuición
 
-"Cada elemento del arreglo del padre sabe, en O(1), en qué posición cae
+"Cada elemento del arreglo del padre sabe, en $O(1)$, en qué posición cae
 dentro del arreglo de cada uno de sus dos hijos — son exactamente los
 índices pL y pR que ya usa el propio proceso de Merge para decidir de dónde
 tomó cada elemento." El merge, para decidir qué elemento copiar a
@@ -109,11 +129,11 @@ posición `i` del padre:
 > **Nota de apoyo** (no está en las diapositivas, pero es donde más se
 > equivoca la implementación): los punteros `pIzq`/`pDer` **nunca
 > retroceden** porque tanto el arreglo del padre como los de los hijos están
-> ordenados — es la misma razón por la que el propio merge cuesta O(n) y no
-> O(n lg n). Calcular cada puente con una búsqueda binaria independiente
+> ordenados — es la misma razón por la que el propio merge cuesta $O(n)$ y no
+> $O(n \lg n)$. Calcular cada puente con una búsqueda binaria independiente
 > (`lower_bound` por elemento) sería correcto pero **no** es lo que hace
 > gratis el merge: perdería el tiempo lineal y volvería a meter un factor
-> `lg n`. Al terminar, se guarda además un **centinela**: una posición extra
+> $\lg n$. Al terminar, se guarda además un **centinela**: una posición extra
 > `puenteIzq[tamaño] = tamaño(hijoIzq)` (y análogo para el derecho), para
 > que una búsqueda que cae después del último elemento tenga a dónde
 > apuntar sin leer fuera de rango.
@@ -143,7 +163,7 @@ punteros, sobre el resultado de `step-1-arrays.cpp`) y
 
 ## Complejidad temporal
 
-Ver `bridge-build` en la tabla de complejidad: `O(n lg n)` agregado sobre
+Ver `bridge-build` en la tabla de complejidad: $O(n \lg n)$ agregado sobre
 todo el árbol. Los dos punteros avanzan a lo más `tamaño del hijo` pasos
 cada uno por nodo, el mismo costo que el merge que ya se estaba haciendo —
 no agregan ningún factor extra.
@@ -151,7 +171,7 @@ no agregan ningún factor extra.
 ## Complejidad espacial
 
 Dos enteros de puente por posición del arreglo (uno por hijo), más el
-centinela: el mismo orden `O(n lg n)` total que los arreglos mismos. El
+centinela: el mismo orden $O(n \lg n)$ total que los arreglos mismos. El
 profesor lo redondea a "un puntero por elemento" (#40), aunque en realidad
 son dos — uno hacia cada hijo, como muestra el propio ejemplo de #32-33.
 

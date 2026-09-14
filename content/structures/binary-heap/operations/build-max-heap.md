@@ -78,10 +78,11 @@ hace falta tocarlas.
 
 ## Algoritmo
 
-1. Para `i` desde `⌊n/2⌋` hasta `1` (en orden decreciente): llamar
+1. Para `i` desde $\lfloor n/2 \rfloor$ hasta `1` (en orden decreciente): llamar
    `Max-Heapify(A, i, n)`.
-2. Toda posición `i > ⌊n/2⌋` es hoja y ya es trivialmente un montículo
-   máximo de un solo nodo, por eso el recorrido empieza en `⌊n/2⌋` y no en `n`.
+2. Toda posición con $i > \lfloor n/2 \rfloor$ es hoja y ya es trivialmente un
+   montículo máximo de un solo nodo, por eso el recorrido empieza en
+   $\lfloor n/2 \rfloor$ y no en `n`.
 
 ## Pseudocódigo
 
@@ -98,25 +99,23 @@ arriba.
 
 ## Complejidad temporal
 
-`Θ(n)`. El profesor **refuta explícitamente** la cota ingenua de llamar
-Max-Heapify (O(lg n)) por cada una de las n/2 posiciones, que daría
-`O(n lg n)`: la cota real es más ajustada porque la mayoría de los nodos
+$\Theta(n)$. El profesor **refuta explícitamente** la cota ingenua de llamar
+Max-Heapify ($O(\lg n)$) por cada una de las n/2 posiciones, que daría
+$O(n \lg n)$: la cota real es más ajustada porque la mayoría de los nodos
 están cerca de las hojas, donde Max-Heapify hace poco trabajo. Usa el lema
-de que a lo más `⌈n/2^(h+1)⌉` nodos están a altura `h`, y suma el costo real
-nivel por nivel:
+de que a lo más $\lceil n/2^{h+1} \rceil$ nodos están a altura `h`, y suma
+el costo real nivel por nivel:
 
-```
-T(n) ≤ Σ_{h=0}^{⌊lg n⌋} ⌈n/2^(h+1)⌉ · O(h) = O(n · Σ_{h=0}^{∞} h/2^h)
-```
+$$T(n) \le \sum_{h=0}^{\lfloor \lg n \rfloor} \lceil n/2^{h+1} \rceil \cdot O(h) = O\left(n \cdot \sum_{h=0}^{\infty} h/2^h\right)$$
 
 y cierra usando que esa serie geométrica derivada converge a 2, dando
-`T(n) = O(n)`. Es análisis agregado por sumatoria sobre niveles, no
+$T(n) = O(n)$. Es análisis agregado por sumatoria sobre niveles, no
 amortizado ni potencial.
 
 ## Complejidad espacial
 
 El profesor no la da. La construcción es in-place: no reserva arreglos
-adicionales (O(1) más allá de la pila de Max-Heapify).
+adicionales ($O(1)$ más allá de la pila de Max-Heapify).
 
 ## Ejemplo
 
@@ -128,9 +127,9 @@ que el ejemplo de Max-Heapify, terminando en `[14, 8, 10, 4, 2, 9, 3]`.
 ## Casos límite
 
 - **Arreglo ya es montículo**: cada llamada a Max-Heapify termina de
-  inmediato (ningún intercambio), pero igual se hacen las `⌊n/2⌋` llamadas.
-- **`n ≤ 1`**: `⌊n/2⌋ = 0`, el bucle no itera — un arreglo de 0 o 1
+  inmediato (ningún intercambio), pero igual se hacen las $\lfloor n/2 \rfloor$ llamadas.
+- **$n \le 1$**: $\lfloor n/2 \rfloor = 0$, el bucle no itera — un arreglo de 0 o 1
   elementos ya es trivialmente un montículo.
 - **Orden inverso** (el peor caso real para el número de intercambios):
-  sigue siendo `Θ(n)` total, no por elemento — es justamente lo que el
+  sigue siendo $\Theta(n)$ total, no por elemento — es justamente lo que el
   argumento agregado por niveles demuestra.

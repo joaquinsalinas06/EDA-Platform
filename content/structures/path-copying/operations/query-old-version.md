@@ -49,7 +49,7 @@ la misma función de query sobre cualquier raíz guardada.
 
 ## Complejidad temporal
 
-`O(lg n)`, exactamente el costo de una consulta cualquiera del segment
+$O(\lg n)$, exactamente el costo de una consulta cualquiera del segment
 tree, "sin ningún costo adicional por ser una versión del pasado" — no hay
 indirección extra ni reconstrucción: la versión vieja ya existe, completa,
 en memoria.

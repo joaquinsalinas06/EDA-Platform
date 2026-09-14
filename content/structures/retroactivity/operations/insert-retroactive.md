@@ -6,6 +6,46 @@ cppSteps:
   - step-1-timeline.cpp
   - step-2-insert-retroactive.cpp
   - full-implementation.cpp
+visualization:
+  type: persistent
+  steps:
+    - note: >-
+        Línea de tiempo real (ejemplo "Normal" de examples.md): tres
+        operaciones add(x). Σ acumulada hasta ahora = 18.
+      caption: "Σ = 18"
+      nodes:
+        - { id: t1, value: "add(5)", parent: null }
+        - { id: t2, value: "add(3)", parent: t1 }
+        - { id: t3, value: "add(10)", parent: t2 }
+    - note: >-
+        Se ubica t = 1.5, entre t1 y t2: ahí es donde entra la nueva
+        operación, no "al final" de la línea de tiempo.
+      caption: "insertar add(100) en t = 1.5"
+      highlight: ["t1", "t2"]
+      nodes:
+        - { id: t1, value: "add(5)", parent: null }
+        - { id: t2, value: "add(3)", parent: t1 }
+        - { id: t3, value: "add(10)", parent: t2 }
+    - note: >-
+        La nueva entrada se intercala en la línea de tiempo: t2 y t3 quedan
+        después de ella, no se pierde ningún orden relativo.
+      highlight: ["t15"]
+      nodes:
+        - { id: t1, value: "add(5)", parent: null }
+        - { id: t15, value: "add(100)", parent: t1, state: active }
+        - { id: t2, value: "add(3)", parent: t15 }
+        - { id: t3, value: "add(10)", parent: t2 }
+    - note: >-
+        Hay que rehacer todo lo que hay desde t = 1.5 en adelante (t15, t2,
+        t3) porque cada uno dependía del estado acumulado — es el costo
+        O(m) de la versión ingenua.
+      caption: "Σ = 118"
+      highlight: ["t15", "t2", "t3"]
+      nodes:
+        - { id: t1, value: "add(5)", parent: null }
+        - { id: t15, value: "add(100)", parent: t1, state: active }
+        - { id: t2, value: "add(3)", parent: t15, state: active }
+        - { id: t3, value: "add(10)", parent: t2, state: active }
 ---
 
 ## Qué hace
@@ -34,7 +74,7 @@ y debe reflejar el cambio.
 2. Colocar `op` ahí, desplazando lo que venía después de `t` sin
    eliminarlo.
 3. Recalcular el estado presente rehaciendo, en orden, todas las
-   operaciones desde `t` en adelante — costo `O(m)` si hay `m` operaciones
+   operaciones desde `t` en adelante — costo $O(m)$ si hay `m` operaciones
    en la línea de tiempo.
 
 Las técnicas de la semana ([retroactividad conmutativa e
@@ -63,15 +103,15 @@ dado.
 
 ## Complejidad temporal
 
-`O(m)` en la versión ingenua (m = número de operaciones en la línea de
+$O(m)$ en la versión ingenua (m = número de operaciones en la línea de
 tiempo), por rehacer todo lo que ocurre desde `t` en adelante. Es el número
 contra el que se compara cada técnica posterior; el modelo en sí no
 promete nada mejor.
 
 ## Complejidad espacial
 
-`O(1)` adicional sobre la línea de tiempo existente (sólo se agrega una
-entrada); la línea de tiempo completa ocupa `O(m)`.
+$O(1)$ adicional sobre la línea de tiempo existente (sólo se agrega una
+entrada); la línea de tiempo completa ocupa $O(m)$.
 
 ## Ejemplo
 
@@ -87,6 +127,6 @@ intacta y consultable.
   como en el uso normal, sin efecto retroactivo — ningún estado posterior
   necesita recalcularse porque no hay ninguno.
 - **Insertar en el tiempo más antiguo**: obliga a rehacer toda la línea de
-  tiempo, el caso `O(m)` completo.
+  tiempo, el caso $O(m)$ completo.
 - **Insertar en un `t` ya ocupado por otra operación**: el material no dice
   qué debe pasar (ver nota de apoyo en [theory.md](/structures/retroactivity)).

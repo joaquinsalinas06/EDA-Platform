@@ -160,4 +160,17 @@ const activeWeek = knowledgeMap.weeks.find((week) =>
   // persistida no se re-renderiza: sin esto, "activo" se quedaría congelado
   // en la página donde se montó por primera vez.
   document.addEventListener('astro:after-swap', syncActive);
+
+  // Igual que la barra de pestañas: aunque el nodo esté persistido, el swap
+  // de Astro puede resetear su scroll vertical al desmontarlo/remontarlo.
+  // Se guarda antes del swap y se restaura después.
+  let savedNavScroll = 0;
+  document.addEventListener('astro:before-swap', () => {
+    const nav = document.querySelector<HTMLElement>('[aria-label="Mapa del curso"]');
+    if (nav) savedNavScroll = nav.scrollTop;
+  });
+  document.addEventListener('astro:after-swap', () => {
+    const nav = document.querySelector<HTMLElement>('[aria-label="Mapa del curso"]');
+    if (nav) nav.scrollTop = savedNavScroll;
+  });
 </script>

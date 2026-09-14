@@ -44,7 +44,7 @@ arriba.
 
 ## Complejidad temporal
 
-Costo real `O(1)`: quitar `x` de una lista circular y agregarlo a otra son
+Costo real $O(1)$: quitar `x` de una lista circular y agregarlo a otra son
 ambas operaciones de reconexión de punteros, sin recorrer nada. El
 profesor lo da directo, sin distinguir amortizado — el análisis amortizado
 se hace sobre [Decrease-Key](/structures/fibonacci-heap/operations/decrease-key),
@@ -53,7 +53,7 @@ que es quien invoca `Cut` (a través de
 
 ## Complejidad espacial
 
-`O(1)` adicional.
+$O(1)$ adicional.
 
 ## Ejemplo
 
@@ -68,7 +68,7 @@ raíces de `H`, y pone `padre(x) ← nulo`, `marca(x) ← falso`
 - **`x` es el único hijo de `p`**: `grado(p)` pasa a `0`; el puntero de
   `p` a "algún hijo" debe quedar en nulo.
 - **`x` ya estaba marcado**: `Cut` lo desmarca igual — es la raíz que
-  hace que la cuenta de nodos marcados `m(H)` baje en el análisis de
+  hace que la cuenta de nodos marcados $m(H)$ baje en el análisis de
   potencial de Decrease-Key.
 - **`H` está vacío antes del corte**: no puede ocurrir en este mazo, porque
   `Cut` siempre se invoca sobre un nodo `x` con padre `p`, y si existe un

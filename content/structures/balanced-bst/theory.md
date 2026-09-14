@@ -18,11 +18,11 @@ title: Árbol binario de búsqueda balanceado
 
 Un árbol binario de búsqueda (BST) sin más garantías puede degenerar en una
 lista enlazada — por ejemplo, insertando llaves ya ordenadas — y entonces
-`Search`, `Insert`, `Predecessor` y `Successor` cuestan O(n) en vez de
-O(lg n). Un BST **balanceado** añade un invariante de forma (la altura de
+`Search`, `Insert`, `Predecessor` y `Successor` cuestan $O(n)$ en vez de
+$O(\lg n)$. Un BST **balanceado** añade un invariante de forma (la altura de
 los dos subárboles de cualquier nodo difiere en a lo más una constante) y
 restaura ese invariante tras cada `Insert` mediante **rotaciones**, para
-garantizar que la altura del árbol se mantenga siempre O(lg n).
+garantizar que la altura del árbol se mantenga siempre $O(\lg n)$.
 
 Esto es exactamente lo que el curso necesita en tres sitios que **no**
 enseñan cómo balancear, sólo lo usan como pieza dada:
@@ -36,7 +36,7 @@ enseñan cómo balancear, sólo lo usan como pieza dada:
   `Successor` para resolver la consulta online de localización de puntos.
 - **Modelo computacional BST (semana 5)**: la semana entera de optimalidad
   dinámica razona sobre el costo de moverse por punteros y de **rotar** un
-  nodo con su padre, ambos O(1); esta página define la rotación para que
+  nodo con su padre, ambos $O(1)$; esta página define la rotación para que
   ese análisis, que no se repite aquí, tenga sobre qué apoyarse.
 
 ## Intuición
@@ -45,7 +45,7 @@ Un BST balanceado es un BST común (para cualquier nodo, todo lo del
 subárbol izquierdo es menor y todo lo del subárbol derecho es mayor) al que
 se le exige, además, no crecer en forma de lista. Cada vez que una
 inserción rompe esa forma, una **rotación** reordena localmente tres nodos
-sin romper el orden de búsqueda, corrigiendo el desbalance en O(1).
+sin romper el orden de búsqueda, corrigiendo el desbalance en $O(1)$.
 
 ## Estructura interna
 
@@ -60,11 +60,11 @@ Invariante de forma: para todo nodo, la altura de su subárbol izquierdo y
 la de su subárbol derecho difieren en a lo más una constante fija. Está
 formulado así — una cota sobre la *diferencia* de alturas, no sobre la
 forma exacta — porque es la condición más débil que ya implica altura total
-O(lg n): no hace falta un árbol perfecto, sólo evitar que un lado crezca
+$O(\lg n)$: no hace falta un árbol perfecto, sólo evitar que un lado crezca
 sin control mientras el otro se queda plano.
 
 **Rotación** (la operación que el modelo computacional BST de la semana 5
-usa sin definirla en detalle): reestructura tres nodos en O(1) preservando
+usa sin definirla en detalle): reestructura tres nodos en $O(1)$ preservando
 el orden in-order. Con `p` como padre de `n`, e hijos `A`, `B` (de `n`) y
 `C` (de `p`):
 
@@ -116,14 +116,14 @@ razonamiento es el estándar de la literatura, por invariante de altura:
 
 - El invariante de balance (diferencia de alturas acotada por una
   constante en todo nodo) implica, por inducción sobre el tamaño del
-  subárbol, que la altura de un árbol con n nodos es O(lg n) — nunca O(n)
+  subárbol, que la altura de un árbol con n nodos es $O(\lg n)$ — nunca $O(n)$
   como en un BST sin balancear.
 - **Search / Predecessor / Successor**: cada una sigue un único camino
   desde la raíz (o hacia el padre), de longitud a lo más la altura del
-  árbol → O(lg n).
-- **Insert**: baja O(lg n) niveles para ubicar la nueva hoja y sube por el
-  mismo camino aplicando rotaciones de O(1) cada una para restaurar el
-  invariante → O(lg n) también.
+  árbol → $O(\lg n)$.
+- **Insert**: baja $O(\lg n)$ niveles para ubicar la nueva hoja y sube por el
+  mismo camino aplicando rotaciones de $O(1)$ cada una para restaurar el
+  invariante → $O(\lg n)$ también.
 
 ## Tabla de complejidad
 
@@ -139,12 +139,12 @@ Ver [Ejemplos](/structures/balanced-bst/examples).
 
 | | Altura | Search / Predecessor / Successor | Insert |
 | --- | --- | --- | --- |
-| BST sin balancear | O(n) en el peor caso (llaves ordenadas) | O(n) en el peor caso | O(n) en el peor caso |
-| BST balanceado | O(lg n) siempre | O(lg n) | O(lg n) (incluye rotaciones) |
+| BST sin balancear | $O(n)$ en el peor caso (llaves ordenadas) | $O(n)$ en el peor caso | $O(n)$ en el peor caso |
+| BST balanceado | $O(\lg n)$ siempre | $O(\lg n)$ | $O(\lg n)$ (incluye rotaciones) |
 
 El costo de mantener el invariante son las rotaciones en cada `Insert`;
-a cambio, `Search`, `Predecessor` y `Successor` nunca degradan a O(n), que
-es justo la garantía que necesitan el range tree (para no perder el O(lg n)
+a cambio, `Search`, `Predecessor` y `Successor` nunca degradan a $O(n)$, que
+es justo la garantía que necesitan el range tree (para no perder el $O(\lg n)$
 prometido en sus consultas) y el barrido de segmentos (para mantener el
 orden de los cruces sin degradar la consulta online).
 

@@ -58,12 +58,12 @@ en el editor de arriba.
 
 ## Complejidad temporal
 
-O(lg n): mismo argumento que Predecessor — un único descenso de longitud
-acotada por la altura del árbol, O(lg n) por el invariante de balance.
+$O(\lg n)$: mismo argumento que Predecessor — un único descenso de longitud
+acotada por la altura del árbol, $O(\lg n)$ por el invariante de balance.
 
 ## Complejidad espacial
 
-O(1) adicional (versión iterativa).
+$O(1)$ adicional (versión iterativa).
 
 ## Ejemplo
 

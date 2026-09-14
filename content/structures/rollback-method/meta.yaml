@@ -21,5 +21,6 @@ complexity:
     source: "CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf#41-44"
 
 professorAnalysisStyle: "conteo directo del trabajo rehecho, más un argumento de cota inferior (adversario informal)"
-hasVisualization: false
+hasVisualization: true
+visualizationType: persistent
 placeholder: false

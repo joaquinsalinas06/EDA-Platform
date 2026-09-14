@@ -55,18 +55,18 @@ llamada a `splay(v)`.
 
 ## Complejidad temporal
 
-O(log n) **amortizado** (#68: "Cada operación toma O(log n) (amortizado)").
+$O(\log n)$ **amortizado** (#68: "Cada operación toma $O(\log n)$ (amortizado)").
 El costo real de una llamada es descenso + Splay: el descenso cuesta
-exactamente la profundidad de x (hasta O(n) real, igual que en
+exactamente la profundidad de x (hasta $O(n)$ real, igual que en
 [`bst-computational-model`](/structures/bst-computational-model/operations/search)),
 y Splay cuesta lo mismo que esa profundidad (cada paso sube uno o dos
 niveles). El profesor da la cota sólo para el promedio sobre una secuencia
 de búsquedas, no para una búsqueda aislada, que en el peor caso real sigue
-siendo O(n).
+siendo $O(n)$.
 
 ## Complejidad espacial
 
-O(1) adicional.
+$O(1)$ adicional.
 
 ## Ejemplo
 
@@ -83,5 +83,5 @@ Ver [examples.md](/structures/splay-tree/examples).
   costo de una búsqueda fallida ni si se hace splay del último nodo
   visitado — la literatura estándar sí lo hace, pero eso excede el material.
 - **Árbol degenerado en cadena, x es la hoja más profunda**: costo real de
-  esta única búsqueda es O(n) — la cota amortizada de O(log n) sólo se
+  esta única búsqueda es $O(n)$ — la cota amortizada de $O(\log n)$ sólo se
   cumple promediada sobre la secuencia completa.

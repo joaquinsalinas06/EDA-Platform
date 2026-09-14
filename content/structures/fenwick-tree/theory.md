@@ -1,6 +1,101 @@
 ---
 kind: theory
 title: Fenwick tree
+visualization:
+  type: range-tree
+  mode: layers
+  steps:
+    - note: >-
+        El arreglo de índices 1..8. Cada índice `i` no guarda un elemento
+        suelto: guarda la suma de un rango que termina en `i`, cuyo tamaño
+        es `lowbit(i) = i & (-i)`. Antes de tocar ningún índice en
+        particular, este es el arreglo completo tal cual lo ve `tree[]`.
+      mode: layers
+      arrays:
+        - { id: idx, label: i, row: 0, cells: [1, 2, 3, 4, 5, 6, 7, 8] }
+    - note: >-
+        `i=5` es `0101` en binario: su bit más bajo activado aísla
+        `lowbit(5)=1`, así que sólo cubre el rango `(4,5]` — un solo
+        elemento. `i=6` es `0110`: `lowbit(6)=2`, cubre `(4,6]`, dos
+        elementos. `i=8` es `1000`: `lowbit(8)=8`, cubre `(0,8]`, el arreglo
+        entero. A más ceros al final de `i`, más grande el rango que cubre.
+      mode: layers
+      arrays:
+        - id: idx
+          label: i
+          row: 0
+          cells: [1, 2, 3, 4, 5, 6, 7, 8]
+          states: [idle, idle, idle, idle, marked, marked, idle, marked]
+        - id: rng
+          label: rango
+          row: 1
+          cells: ["4-5", "4-6", "0-8"]
+          states: [marked, marked, marked]
+      bridges:
+        - { from: idx, fromIndex: 4, to: rng, toIndex: 0, active: true }
+        - { from: idx, fromIndex: 5, to: rng, toIndex: 1, active: true }
+        - { from: idx, fromIndex: 7, to: rng, toIndex: 2, active: true }
+    - note: >-
+        Salto de `update`, que sube con `i += lowbit(i)`. Desde `i=5`
+        (`0101`), sumar `lowbit(5)=1` da `6` (`0110`): el bit `1` se apaga y
+        el bit `2` se prende — subir siempre apaga al menos un bit y activa
+        uno más alto, así que el rango que cubre el nuevo índice es
+        estrictamente mayor y todavía incluye la posición original.
+      mode: layers
+      arrays:
+        - id: idx
+          label: i
+          row: 0
+          cells: [1, 2, 3, 4, 5, 6, 7, 8]
+          states: [idle, idle, idle, idle, active, active, idle, idle]
+      bridges:
+        - { from: idx, fromIndex: 4, to: idx, toIndex: 5, active: true }
+    - note: >-
+        Segundo salto de `update`, desde `i=6` (`0110`): `lowbit(6)=2`,
+        `6+2=8` (`1000`). Ambos bits bajos de `6` se apagan de un golpe y se
+        prende el bit `8`: el próximo salto ya se sale de `[1,8]` y el
+        ciclo termina. La cadena completa para `update(5)` es
+        `5 → 6 → 8 → (16, fuera de rango)`.
+      mode: layers
+      arrays:
+        - id: idx
+          label: i
+          row: 0
+          cells: [1, 2, 3, 4, 5, 6, 7, 8]
+          states: [idle, idle, idle, idle, muted, active, idle, active]
+      bridges:
+        - { from: idx, fromIndex: 4, to: idx, toIndex: 5, active: false }
+        - { from: idx, fromIndex: 5, to: idx, toIndex: 7, active: true }
+    - note: >-
+        Salto de `prefix-query`, que baja con `i -= lowbit(i)` — la
+        dirección opuesta. Desde `i=7` (`0111`), `lowbit(7)=1`, `7-1=6`
+        (`0110`): se apaga sólo el bit más bajo. El rango `(6,7]` ya quedó
+        sumado; ahora falta cubrir `[1,6]`.
+      mode: layers
+      arrays:
+        - id: idx
+          label: i
+          row: 0
+          cells: [1, 2, 3, 4, 5, 6, 7, 8]
+          states: [idle, idle, idle, idle, idle, active, active, idle]
+      bridges:
+        - { from: idx, fromIndex: 6, to: idx, toIndex: 5, active: true }
+    - note: >-
+        Segundo y tercer salto de `prefix-query`: desde `i=6` (`0110`),
+        `lowbit(6)=2`, baja a `4` (`0100`); desde `i=4`, `lowbit(4)=4`, baja
+        a `0` y el ciclo termina. Cada salto apaga exactamente un bit, así
+        que con `⌈lg 8⌉=3` bits activos como máximo el ciclo no puede durar
+        más de 3 pasos. La cadena completa para `prefixQuery(7)` es
+        `7 → 6 → 4 → 0`, sumando `tree[7] + tree[6] + tree[4]`.
+      mode: layers
+      arrays:
+        - id: idx
+          label: i
+          row: 0
+          cells: [1, 2, 3, 4, 5, 6, 7, 8]
+          states: [idle, idle, idle, active, idle, muted, muted, idle]
+      bridges:
+        - { from: idx, fromIndex: 5, to: idx, toIndex: 3, active: true }
 ---
 
 > **Concepto de apoyo, no material del curso.** El profesor lo nombra una
@@ -15,7 +110,7 @@ title: Fenwick tree
 ## ¿Qué problema resuelve?
 
 Mantener un arreglo bajo `update` (sumar un valor a una posición) y
-`prefix-query` (suma de `A[1..i]`) en O(lg n) ambas — el mismo problema que
+`prefix-query` (suma de `A[1..i]`) en $O(\lg n)$ ambas — el mismo problema que
 resuelve el segment tree, pero restringido a sumas (o cualquier operación
 invertible), a cambio de un arreglo auxiliar de tamaño `n` en vez de un
 árbol de `2n-1` nodos.
@@ -78,15 +173,15 @@ codificado enteramente en la aritmética de bits sobre el índice.
 - [Update](/structures/fenwick-tree/operations/update) — suma un valor a la
   posición `i` y propaga el cambio a todos los índices cuyo rango la cubre.
 - [Prefix query](/structures/fenwick-tree/operations/prefix-query) — suma
-  `A[1..i]` combinando O(lg n) rangos ya precomputados.
+  `A[1..i]` combinando $O(\lg n)$ rangos ya precomputados.
 
 ## Análisis de complejidad
 
 No hay estilo del profesor que seguir (no hay diapositivas). El argumento
 estándar: tanto `i += lowbit(i)` como `i -= lowbit(i)` cambian el patrón de
 bits de `i` de forma monótona (el primero apaga y sube al menos un bit; el
-segundo apaga un bit) — con `lg n` bits en total, ninguno de los dos puede
-repetirse más de `lg n` veces antes de salir del rango `[1,n]` o llegar a 0.
+segundo apaga un bit) — con $\lg n$ bits en total, ninguno de los dos puede
+repetirse más de $\lg n$ veces antes de salir del rango `[1,n]` o llegar a 0.
 
 ## Tabla de complejidad
 
@@ -101,8 +196,8 @@ Ver [Ejemplos](/structures/fenwick-tree/examples).
 
 | | Update | Prefix-query | Memoria | Restricción |
 | --- | --- | --- | --- | --- |
-| [Segment tree](/structures/segment-tree) | O(lg n) | O(lg n) | O(n) (≈2n-1 nodos) | ninguna: cualquier función asociativa (suma, mínimo, máximo) |
-| Fenwick tree | O(lg n) | O(lg n) | O(n) (un arreglo) | sólo funciones **invertibles** (suma, XOR) |
+| [Segment tree](/structures/segment-tree) | $O(\lg n)$ | $O(\lg n)$ | $O(n)$ (≈2n-1 nodos) | ninguna: cualquier función asociativa (suma, mínimo, máximo) |
+| Fenwick tree | $O(\lg n)$ | $O(\lg n)$ | $O(n)$ (un arreglo) | sólo funciones **invertibles** (suma, XOR) |
 
 Esto es exactamente por qué el profesor ofrece los dos como alternativas
 para el caso simple del barrido (#38) y no en el caso general: ahí sólo se

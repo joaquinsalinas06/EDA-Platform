@@ -46,5 +46,6 @@ complexity:
     source: "Sem4_Planar_Point_Location.pdf#49-51"
 
 professorAnalysisStyle: "reducción + herencia de cota"
-hasVisualization: false
+hasVisualization: true
+visualizationType: range-tree
 placeholder: false

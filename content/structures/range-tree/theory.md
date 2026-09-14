@@ -8,8 +8,8 @@ title: Range tree
 Resuelve [búsqueda ortogonal por rangos](/structures/orthogonal-range-search)
 sobre puntos **estáticos**: existencia, conteo y enumeración de los puntos
 dentro de una caja. El profesor lo introduce como salida a un callejón sin
-salida: con un arreglo ordenado ya se resuelve el caso d=1 en
-O(log n + k), pero "si usamos arreglos, va a ser complicado aumentar
+salida: con un arreglo ordenado ya se resuelve el caso $d=1$ en
+$O(\log n + k)$, pero "si usamos arreglos, va a ser complicado aumentar
 dimensiones de manera anidada". El range tree reemplaza el arreglo por un
 [árbol binario de búsqueda balanceado](/structures/balanced-bst) precisamente
 porque un árbol **sí** se puede anidar: cada nodo puede colgar de sí mismo
@@ -18,10 +18,10 @@ otro range tree para la siguiente dimensión.
 ## Intuición
 
 La idea central: toda consulta de rango en un árbol ordenado se puede
-responder como la unión de **O(log n) subárboles canónicos** — subárboles
+responder como la unión de **$O(\log n)$ subárboles canónicos** — subárboles
 completos, disjuntos entre sí, cuya unión de hojas es exactamente el
-conjunto de puntos dentro del rango. Encontrar esos O(log n) subárboles
-cuesta O(log n); una vez encontrados, contarlos, verificar si hay alguno
+conjunto de puntos dentro del rango. Encontrar esos $O(\log n)$ subárboles
+cuesta $O(\log n)$; una vez encontrados, contarlos, verificar si hay alguno
 no vacío, o enumerar sus hojas son operaciones que se construyen encima sin
 volver a tocar el resto del árbol. Subir de dimensión es entonces "colgar
 otro range tree de cada nodo": cada subárbol canónico en X trae consigo un
@@ -93,22 +93,22 @@ Estilo del profesor: **conteo estructural / argumento de multiplicidad**
 concentran todo el análisis:
 
 - **Consulta 1D**: el camino de la raíz a cada delimitador tiene longitud
-  O(log n); en cada nodo de esos dos caminos se agrega a lo más un
-  subárbol canónico a la respuesta, así que hay O(log n) subárboles
-  ("tendremos O(log n) subárboles que contengan nuestra respuesta",
+  $O(\log n)$; en cada nodo de esos dos caminos se agrega a lo más un
+  subárbol canónico a la respuesta, así que hay $O(\log n)$ subárboles
+  ("tendremos $O(\log n)$ subárboles que contengan nuestra respuesta",
   Sem4_Orthogonal_Range_Search.pdf#33-34). Sumar sus contadores o recorrer
-  sus hojas cuesta O(log n) o O(log n + k) respectivamente — nunca se
-  plantea una recurrencia T(n).
+  sus hojas cuesta $O(\log n)$ o $O(\log n + k)$ respectivamente — nunca se
+  plantea una recurrencia $T(n)$.
 - **Multiplicidad al anidar dimensiones**: el espacio en 2D sale de contar
   en cuántos árboles secundarios vive cada hoja — "cada hoja debería estar
-  incluida en O(log n) subárboles" (#49) — y la consulta 2D sale de
-  multiplicar "una consulta de O(log n) en O(log n) árboles" (#50). Repetir
-  el argumento por cada dimensión adicional da O(log^d n + k) en consulta y
-  O(n log^(d-1) n) en espacio (#56-57).
+  incluida en $O(\log n)$ subárboles" (#49) — y la consulta 2D sale de
+  multiplicar "una consulta de $O(\log n)$ en $O(\log n)$ árboles" (#50). Repetir
+  el argumento por cada dimensión adicional da $O(\log^d n + k)$ en consulta y
+  $O(n \log^{d-1} n)$ en espacio (#56-57).
 
 El profesor cierra anunciando una mejora futura sin desarrollarla: "¿Es
-posible mejorarlo? Sí, se puede mejorar por un factor de O(log n) las
-consultas para d ≥ 2" (#58-59) — la resuelve fractional cascading, en la
+posible mejorarlo? Sí, se puede mejorar por un factor de $O(\log n)$ las
+consultas para $d \ge 2$" (#58-59) — la resuelve fractional cascading, en la
 semana 5.
 
 ## Tabla de complejidad
@@ -126,15 +126,15 @@ Ver [Ejemplos](/structures/range-tree/examples).
 
 | | Consulta | Espacio |
 | --- | --- | --- |
-| Arreglo ordenado (d=1) | O(log n + k) | O(n) |
-| Range tree (d=1) | O(log n + k) | O(n) |
-| Range tree (d=2) | O(log² n + k) | O(n log n) |
-| Range tree (d dimensiones) | O(log^d n + k) | O(n log^(d-1) n) |
+| Arreglo ordenado ($d=1$) | $O(\log n + k)$ | $O(n)$ |
+| Range tree ($d=1$) | $O(\log n + k)$ | $O(n)$ |
+| Range tree ($d=2$) | $O(\log^2 n + k)$ | $O(n \log n)$ |
+| Range tree ($d$ dimensiones) | $O(\log^d n + k)$ | $O(n \log^{d-1} n)$ |
 
-En d=1 el range tree iguala al arreglo ordenado (#20); su ventaja no es la
+En $d=1$ el range tree iguala al arreglo ordenado (#20); su ventaja no es la
 velocidad en 1D sino que, a diferencia del arreglo ("va a ser complicado
 aumentar dimensiones de manera anidada", #22), sí se anida — de ahí que
-recién en d≥2 el costo adicional en espacio y consulta aparezca, como
+recién en $d \ge 2$ el costo adicional en espacio y consulta aparezca, como
 precio de esa capacidad de anidamiento.
 
 ## Prueba de dominio

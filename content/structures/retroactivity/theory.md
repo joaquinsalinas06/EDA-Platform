@@ -9,7 +9,7 @@ Ejecutaste una secuencia larga de operaciones sobre una estructura de datos.
 Ahora te das cuenta de que **olvidaste una operación** en algún punto del
 pasado — o que una operación pasada **estuvo mal** y hay que borrarla. La
 solución ingenua es rehacer todo desde ese punto: si han pasado `m`
-operaciones desde entonces, eso cuesta `O(m)`. La pregunta que abre el mazo
+operaciones desde entonces, eso cuesta $O(m)$. La pregunta que abre el mazo
 es si se puede hacer mejor que reconstruir la secuencia entera cada vez que
 el pasado cambia.
 
@@ -20,7 +20,7 @@ llega después, con [retroactividad conmutativa e invertible](/structures/commut
 el [método de rollback](/structures/rollback-method) y el caso de estudio de
 la [priority queue retroactiva](/structures/retroactive-priority-queue): las
 cuatro toman esta interfaz como dada y compiten por acercarse a algo mejor
-que `O(m)`.
+que $O(m)$.
 
 ## Intuición
 
@@ -69,7 +69,7 @@ según dónde se permite cada tipo de operación:
 La observación del profesor sobre esta tabla: "igual que con persistencia,
 'parcial' suele ser significativamente más barato de lograr que 'completa'".
 El punto de referencia contra el que se mide todo el resto de la semana es
-la solución ingenua: `O(m)`, donde `m` es el número de operaciones en la
+la solución ingenua: $O(m)$, donde `m` es el número de operaciones en la
 línea de tiempo — rehacer todo desde el tiempo editado hasta el presente.
 
 ## Operaciones
@@ -84,12 +84,12 @@ Esta sección es, en las palabras del propio mazo, una **definición de
 modelo y taxonomía**: no hay una recurrencia ni un argumento amortizado que
 derivar aquí, porque el modelo en sí no fija una implementación. Lo único
 que se establece es el punto de referencia — la solución ingenua cuesta
-`O(m)`, rehaciendo la secuencia completa desde el tiempo editado — y la
+$O(m)$, rehaciendo la secuencia completa desde el tiempo editado — y la
 observación de que la variante parcial (consultar sólo el presente) suele
 ser más barata de lograr que la completa (consultar cualquier tiempo
 pasado), exactamente igual que ocurre con los niveles de persistencia.
 
-Cerrar esa brecha entre "rehacer todo" (`O(m)`) y algo mejor es precisamente
+Cerrar esa brecha entre "rehacer todo" ($O(m)$) y algo mejor es precisamente
 lo que hacen las cuatro técnicas que `usan` este modelo, cada una con su
 propio argumento de complejidad.
 
@@ -97,7 +97,7 @@ propio argumento de complejidad.
 
 No aplica: `meta.yaml` deja `complexity: {}` a propósito. El modelo de
 retroactividad no tiene un costo propio que tabular — el único número que
-da esta sección es el de referencia, la solución ingenua `O(m)`, y las
+da esta sección es el de referencia, la solución ingenua $O(m)$, y las
 cotas reales llegan con cada técnica (ver sus respectivas tablas de
 complejidad).
 
@@ -105,7 +105,7 @@ complejidad).
 
 Ver [examples.md](/structures/retroactivity/examples) — una línea de tiempo
 mínima, una edición retroactiva típica y el caso límite que motiva por qué
-`O(m)` no basta.
+$O(m)$ no basta.
 
 ## Comparación con estructuras relacionadas
 

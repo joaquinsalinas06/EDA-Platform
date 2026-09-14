@@ -11,21 +11,57 @@ visualization:
   type: tree
   steps:
     - note: >-
-        Dos raíces del mismo grado (dos B0): comparamos sus llaves. La
-        precondición de Binomial-Link es key(y) >= key(z), así que y=7 y
-        z=3.
+        Dos raíces sueltas del mismo grado k=0 (dos B0), cada una llegando
+        de su propio montículo: y=7 y z=3. En general cada raíz podría
+        traer ya subárboles colgando de vueltas anteriores de Union — por
+        eso el algoritmo sólo asume "mismo grado", no "sin hijos".
+      highlight: []
+      nodes:
+        - { id: y, value: 7, parent: null }
+        - { id: z, value: 3, parent: null }
+    - note: >-
+        Comparación: la precondición de Binomial-Link es key(y) >= key(z).
+        Se comparan las dos llaves de raíz para decidir cuál conserva la
+        propiedad de min-heap si se queda arriba.
       highlight: ["y", "z"]
       nodes:
         - { id: y, value: 7, parent: null }
         - { id: z, value: 3, parent: null }
     - note: >-
-        y (la llave mayor) se vuelve el hijo más a la izquierda de z (la
-        llave menor): así se conserva la propiedad de min-heap del árbol
-        resultante, un B1 con raíz 3.
+        Decisión: como key(y)=7 >= key(z)=3, z (la llave menor) gana y se
+        queda como raíz del árbol combinado; y (la llave mayor) es quien va
+        a moverse.
       highlight: ["z"]
       nodes:
+        - { id: y, value: 7, parent: null }
+        - { id: z, value: 3, parent: null, state: active }
+    - note: >-
+        Reconexión, primer puntero: siguiente-hermano(y) ← hijo(z). Como z
+        no tenía hijos antes (era un B0), ese puntero queda apuntando a
+        "nada" — pero el orden del algoritmo importa: este puntero se fija
+        ANTES de que hijo(z) se sobreescriba, para no perder la lista de
+        hijos previa de z si hubiera tenido alguno. y todavía no es hijo de
+        z (su padre sigue siendo null en este instante).
+      highlight: ["y", "z"]
+      nodes:
+        - { id: y, value: 7, parent: null, state: active }
+        - { id: z, value: 3, parent: null, state: active }
+    - note: >-
+        Reconexión, segundo puntero: hijo(z) ← y y padre(y) ← z. Recién
+        ahora y pasa a ser, formalmente, el hijo más a la izquierda de z;
+        grado(z) sube en 1 (de 0 a 1).
+      highlight: ["y", "z"]
+      nodes:
+        - { id: z, value: 3, parent: null, state: active }
+        - { id: y, value: 7, parent: z, state: active }
+    - note: >-
+        Estado final: un B1 con raíz 3 y un único hijo, 7. y es el nodo
+        recién reconectado (por eso sigue activo); el árbol ya cumple
+        min-heap: key(z)=3 <= key(y)=7.
+      highlight: []
+      nodes:
         - { id: z, value: 3, parent: null }
-        - { id: y, value: 7, parent: z }
+        - { id: y, value: 7, parent: z, state: active }
 ---
 
 <!-- derivado del pseudocódigo del Algoritmo 5; no aparece en las diapositivas
@@ -33,8 +69,8 @@ visualization:
 
 ## Qué hace
 
-Une dos árboles binomiales `B_{k-1}` del mismo grado en un solo árbol
-`B_k`, conservando la propiedad de min-heap.
+Une dos árboles binomiales $B_{k-1}$ del mismo grado en un solo árbol
+$B_k$, conservando la propiedad de min-heap.
 
 ## Intuición
 
@@ -71,18 +107,18 @@ copia de nodos.
 
 ## Complejidad temporal
 
-`O(1)` en el peor caso: sólo se mueven cuatro punteros y se incrementa un
+$O(1)$ en el peor caso: sólo se mueven cuatro punteros y se incrementa un
 contador. No hay recorrido de ninguna lista ni recursión — es lo que le
-permite a Union costar `O(lg n)` y no más.
+permite a Union costar $O(\lg n)$ y no más.
 
 ## Complejidad espacial
 
-`O(1)`: no se reserva memoria nueva, sólo se reconectan nodos existentes.
+$O(1)$: no se reserva memoria nueva, sólo se reconectan nodos existentes.
 
 ## Ejemplo
 
-Dos `B0`: uno con llave 7, otro con llave 3. Como `key(7) ≥ key(3)`,
-`Binomial-Link(y=7, z=3)` deja a 7 como hijo de 3: resulta un `B1` con raíz
+Dos $B_0$: uno con llave 7, otro con llave 3. Como `key(7) ≥ key(3)`,
+`Binomial-Link(y=7, z=3)` deja a 7 como hijo de 3: resulta un $B_1$ con raíz
 3 y un único hijo, 7. (Derivado a mano del pseudocódigo; el mazo no da
 valores.)
 

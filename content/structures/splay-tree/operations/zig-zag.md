@@ -14,46 +14,98 @@ visualization:
         Caso zig-zag: x, su padre p y su abuelo a están en zigzag — lados
         OPUESTOS (aquí, x hijo derecho de p, p hijo izquierdo de a). Es la
         forma que hay que comparar contra zig-zig: mismos tres niveles,
-        orientación distinta (#66).
+        orientación distinta (#66). A, B, C, D son subárboles completos,
+        dibujados colapsados: sólo importa de quién cuelgan.
       highlight: [x, p, a]
       nodes:
         - { id: a, value: a, parent: null }
         - { id: p, value: p, parent: a }
-        - { id: D, value: D, parent: a }
-        - { id: A, value: A, parent: p }
+        - { id: D, value: D, parent: a, collapsed: true }
+        - { id: A, value: A, parent: p, collapsed: true }
         - { id: x, value: x, parent: p }
-        - { id: B, value: B, parent: x }
-        - { id: C, value: C, parent: x }
+        - { id: B, value: B, parent: x, collapsed: true }
+        - { id: C, value: C, parent: x, collapsed: true }
     - note: >-
-        Primera rotación: se rota el par (x, p) — x sube a la posición de
-        p, y B (hijo izquierdo de x) pasa a ser hijo derecho de p. A
-        diferencia de zig-zig, aquí SÍ se rota x primero: no hay "abuelo
-        primero" que valga, porque los dos giros van en direcciones
-        opuestas y no se refuerzan entre sí.
+        Antes de mover nada: en zig-zag no hay "abuelo primero" que valga
+        como en zig-zig — los dos giros van en direcciones opuestas, así
+        que el único orden razonable es rotar (x, p) primero y (x, a)
+        después. Esto es lo que se va a rotar en este paso.
+      highlight: [x, p]
+      nodes:
+        - { id: a, value: a, parent: null }
+        - { id: p, value: p, parent: a }
+        - { id: D, value: D, parent: a, collapsed: true }
+        - { id: A, value: A, parent: p, collapsed: true }
+        - { id: x, value: x, parent: p }
+        - { id: B, value: B, parent: x, collapsed: true }
+        - { id: C, value: C, parent: x, collapsed: true }
+    - note: >-
+        Left-Rotate(x) en marcha: B, el hijo izquierdo de x, se desprende
+        de x — es el subárbol que cambia de padre en esta primera rotación.
+        p todavía cuelga de a, sin tocar.
+      highlight: [x]
+      nodes:
+        - { id: a, value: a, parent: null }
+        - { id: p, value: p, parent: a }
+        - { id: D, value: D, parent: a, collapsed: true }
+        - { id: A, value: A, parent: p, collapsed: true }
+        - { id: x, value: x, parent: p }
+        - { id: C, value: C, parent: x, collapsed: true }
+        - { id: B, value: B, parent: null, collapsed: true, state: marked }
+    - note: >-
+        Primera rotación completa: x subió a la posición de p; p bajó a
+        ser hijo izquierdo de x; B (que era hijo izquierdo de x) ahora es
+        hijo derecho de p. x sigue colgando de a, del mismo lado de
+        siempre — todavía falta la segunda rotación.
       highlight: [x, p]
       nodes:
         - { id: a, value: a, parent: null }
         - { id: x, value: x, parent: a }
-        - { id: D, value: D, parent: a }
+        - { id: D, value: D, parent: a, collapsed: true }
         - { id: p, value: p, parent: x }
-        - { id: C, value: C, parent: x }
-        - { id: A, value: A, parent: p }
-        - { id: B, value: B, parent: p }
+        - { id: A, value: A, parent: p, collapsed: true }
+        - { id: B, value: B, parent: p, collapsed: true }
+        - { id: C, value: C, parent: x, collapsed: true }
     - note: >-
-        Segunda rotación: se rota el par (x, a) — x sube a la raíz, y C
-        (hijo derecho de x) pasa a ser hijo izquierdo de a. Resultado: x en
-        la raíz con p y a como sus dos hijos directos (no en cascada, como
-        en zig-zig) — ésa es la diferencia visual que importa entre los dos
-        casos (#66).
+        Ahora toca el par (x, a). C, el hijo derecho de x, es el que va a
+        cambiar de padre en este segundo giro — de x a a.
       highlight: [x, a]
+      nodes:
+        - { id: a, value: a, parent: null }
+        - { id: x, value: x, parent: a }
+        - { id: D, value: D, parent: a, collapsed: true }
+        - { id: p, value: p, parent: x }
+        - { id: A, value: A, parent: p, collapsed: true }
+        - { id: B, value: B, parent: p, collapsed: true }
+        - { id: C, value: C, parent: x, collapsed: true }
+    - note: >-
+        Right-Rotate(x) en marcha: C se desprende de x y va camino a a. p
+        (con A y B ya colgando de él) se queda como hijo izquierdo de x sin
+        moverse otra vez.
+      highlight: [x]
       nodes:
         - { id: x, value: x, parent: null }
         - { id: p, value: p, parent: x }
+        - { id: A, value: A, parent: p, collapsed: true }
+        - { id: B, value: B, parent: p, collapsed: true }
+        - { id: a, value: a, parent: null }
+        - { id: D, value: D, parent: a, collapsed: true }
+        - { id: C, value: C, parent: null, collapsed: true, state: marked }
+    - note: >-
+        Resultado final: x en la raíz, con p Y a como sus dos hijos
+        DIRECTOS — no en cascada, como en zig-zig. Ésa es la forma que
+        distingue los dos casos: comparar contra el resultado final de
+        [zig-zig](/structures/splay-tree/operations/zig-zig), donde p y a
+        terminan uno colgando del otro en vez de ambos pegados a x.
+      highlight: [x]
+      nodes:
+        - { id: x, value: x, parent: null, state: answer }
+        - { id: p, value: p, parent: x }
         - { id: a, value: a, parent: x }
-        - { id: A, value: A, parent: p }
-        - { id: B, value: B, parent: p }
-        - { id: C, value: C, parent: a }
-        - { id: D, value: D, parent: a }
+        - { id: A, value: A, parent: p, collapsed: true }
+        - { id: B, value: B, parent: p, collapsed: true }
+        - { id: C, value: C, parent: a, collapsed: true }
+        - { id: D, value: D, parent: a, collapsed: true }
 ---
 
 ## Qué hace
@@ -101,7 +153,7 @@ arriba: `zigZag(x)` llama `rotate(x)` dos veces seguidas — a diferencia de
 
 ## Complejidad temporal
 
-O(1), costo real (no amortizado): dos rotaciones O(1) cada una, sin
+$O(1)$, costo real (no amortizado): dos rotaciones $O(1)$ cada una, sin
 importar el tamaño de A, B, C o D (#66). Igual que zig-zig, lo amortizado
 es propiedad de la secuencia de pasos de
 [`splay`](/structures/splay-tree/operations/splay) completo, no de este
@@ -109,7 +161,7 @@ paso solo.
 
 ## Complejidad espacial
 
-O(1) adicional.
+$O(1)$ adicional.
 
 ## Ejemplo
 
@@ -120,6 +172,6 @@ Ver [examples.md](/structures/splay-tree/examples).
 - **Espejo (derecho-izquierdo)**: x hijo izquierdo de p, p hijo derecho de
   a — simétrico. El deck sólo dibuja una orientación (#66); la espejada se
   deriva por simetría.
-- **A, B, C o D vacíos**: cada rotación sigue siendo O(1).
+- **A, B, C o D vacíos**: cada rotación sigue siendo $O(1)$.
 - **`a` era la raíz del árbol completo**: tras zig-zag, `x` es la nueva
   raíz global.

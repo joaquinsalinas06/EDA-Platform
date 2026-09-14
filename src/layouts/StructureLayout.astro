@@ -125,4 +125,20 @@ const { meta, section, tabs, rail = false } = Astro.props;
     }
   }
   document.addEventListener('astro:page-load', syncActiveTab);
+
+  // `transition:persist` reutiliza el mismo nodo de la barra de pestañas
+  // entre operaciones de una estructura, pero el swap de Astro lo desmonta y
+  // remonta en el documento nuevo — y ese desmontaje resetea `scrollLeft` en
+  // algunos navegadores aunque sea el mismo elemento. Se guarda antes del
+  // swap y se restaura después, para que la pestaña activa (que puede haber
+  // scrolleado la barra) no salte al principio.
+  let savedTabsScroll = 0;
+  document.addEventListener('astro:before-swap', () => {
+    const tabs = document.querySelector<HTMLElement>('[aria-label="Secciones"]');
+    if (tabs) savedTabsScroll = tabs.scrollLeft;
+  });
+  document.addEventListener('astro:after-swap', () => {
+    const tabs = document.querySelector<HTMLElement>('[aria-label="Secciones"]');
+    if (tabs) tabs.scrollLeft = savedTabsScroll;
+  });
 </script>

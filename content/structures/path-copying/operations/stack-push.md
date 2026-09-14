@@ -48,12 +48,12 @@ arriba.
 
 ## Complejidad temporal
 
-`O(1)`: crear un nodo y enlazarlo cuesta lo mismo sin importar cuántos
+$O(1)$: crear un nodo y enlazarlo cuesta lo mismo sin importar cuántos
 elementos tenga la pila o cuántas versiones existan.
 
 ## Complejidad espacial
 
-`O(1)` nuevo por operación: un solo nodo. Ninguna estructura anterior se
+$O(1)$ nuevo por operación: un solo nodo. Ninguna estructura anterior se
 copia ni se recorre.
 
 ## Ejemplo

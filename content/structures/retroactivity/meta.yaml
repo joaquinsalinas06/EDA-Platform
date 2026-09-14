@@ -22,5 +22,6 @@ usedBy:
 complexity: {}
 
 professorAnalysisStyle: "definición de modelo y taxonomía"
-hasVisualization: false
+hasVisualization: true
+visualizationType: persistent
 placeholder: false

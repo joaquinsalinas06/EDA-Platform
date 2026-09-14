@@ -10,7 +10,7 @@ tiene padre ni hijos que comparar. `Insert` sobre un montículo vacío
 termina sin ninguna comparación (la condición `i > 1` es falsa de
 inmediato), y `Extract-Min`/`Find-Min` sobre ese único elemento devuelven
 ese valor sin llamar Max-Heapify. Es el caso donde todas las operaciones
-degeneran a O(1) real, aunque su cota siga siendo O(lg n).
+degeneran a $O(1)$ real, aunque su cota siga siendo $O(\lg n)$.
 
 *(Derivado del pseudocódigo; no aparece en las diapositivas.)*
 
@@ -34,11 +34,11 @@ Ver la visualización completa en
 El peor caso real de Build-Max-Heap es un arreglo en orden creciente
 (`A = [1, 2, 3, 4, 5, 6, 7]`, que hace que casi todos los nodos internos
 necesiten hundirse hasta una hoja). Aun así, el análisis agregado por
-niveles del profesor demuestra que el total sigue siendo `Θ(n)`, no
-`O(n lg n)` — es justamente el caso que la cota ingenua (multiplicar
-`n/2` llamadas por `O(lg n)` cada una) sobreestima. Ningún caso de entrada
-hace que Build-Max-Heap supere Θ(n); la estructura que "arregla" la
-debilidad real del montículo binario —Union en Θ(n)— es el
+niveles del profesor demuestra que el total sigue siendo $\Theta(n)$, no
+$O(n \lg n)$ — es justamente el caso que la cota ingenua (multiplicar
+`n/2` llamadas por $O(\lg n)$ cada una) sobreestima. Ningún caso de entrada
+hace que Build-Max-Heap supere $\Theta(n)$; la estructura que "arregla" la
+debilidad real del montículo binario —Union en $\Theta(n)$— es el
 [montículo binomial](/structures/binomial-heap), según el resumen del
 profesor.
 

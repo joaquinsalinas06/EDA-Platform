@@ -34,13 +34,13 @@ insertar retroactivamente `Add(3, +2)` en t=0 (antes de t=1).
 1. **Insert retroactivo**: insertar `Insert("a")` en t=0 (antes de todo).
    Insertar una llave nueva conmuta con insertar cualquier otra llave
    distinta, así que `Insert(t=0, Insert("a")) ≡ Insert(ahora, Insert("a"))`:
-   se aplica directamente sobre `H` → `H = {a, b, c}`. Costo: `O(1)`
+   se aplica directamente sobre `H` → `H = {a, b, c}`. Costo: $O(1)$
    amortizado, el mismo que un `Insert` normal de tabla hash.
 2. **Delete retroactivo**: ahora se decide borrar la operación que insertó
    `"a"` en t=0. Como `Insert("a")` es invertible (su inversa es
    `Delete("a")`), se resuelve como `Delete(t=0) ≡ Insert(ahora,
    Delete("a"))`: se aplica `Delete("a")` sobre `H` → `H = {b, c}`. Costo:
-   el mismo `O(1)` amortizado de un `Delete` normal.
+   el mismo $O(1)$ amortizado de un `Delete` normal.
 
 En ningún paso se tocó ni se reprodujo el historial de `Insert("b")` /
 `Insert("c")`: el efecto se logró operando siempre sobre la tabla presente.
@@ -71,7 +71,7 @@ presente: dos operaciones reales, `Assign(5)` en t=1 y `Assign(9)` en t=2
   [rollback-method](/structures/rollback-method)).
 
 Un segundo contraejemplo, sobre invertibilidad: un acumulador de **máximo**
-(`Max(v)`) sí conmuta (`max(max(a,b),c) = max(a,max(b,c))`, el orden de
+(`Max(v)`) sí conmuta ($\max(\max(a,b),c) = \max(a, \max(b,c))$, el orden de
 aplicación no afecta el resultado final), pero **no es invertible**: una vez
 que `Max(9)` sobrescribe el máximo anterior, ese valor anterior se pierde —
 no existe `Max⁻¹` que lo reconstruya sin haberlo guardado aparte. Conmutar

@@ -28,5 +28,6 @@ complexity:
     source: "CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf#25-28"
 
 professorAnalysisStyle: "argumento algebraico (reducción por propiedades)"
-hasVisualization: false
+hasVisualization: true
+visualizationType: persistent
 placeholder: false

@@ -72,6 +72,52 @@ visualization:
         - { id: n22, value: "[2,2]", parent: n12 }
         - { id: n33, value: "[3,3]", parent: n34 }
         - { id: n44, value: "[4,4]", parent: n34 }
+    - note: >-
+        Segunda operación retroactiva: Insert(t=4, op) con efecto +8. Igual
+        que antes, es un Update en la posición 4: el camino raíz→hoja es
+        [1,4] → [3,4] → [4,4], otros O(lg m)=2 nodos intermedios. Nótese que
+        este camino NO comparte ningún nodo intermedio con el de t=2 salvo
+        la raíz — cada Update sólo toca el camino de SU propia hoja.
+      highlight: ["n14", "n34", "n44"]
+      nodes:
+        - { id: n14, value: "[1,4]", parent: null }
+        - { id: n12, value: "[1,2]", parent: n14 }
+        - { id: n34, value: "[3,4]", parent: n14 }
+        - { id: n11, value: "[1,1]", parent: n12 }
+        - { id: n22, value: "[2,2]", parent: n12 }
+        - { id: n33, value: "[3,3]", parent: n34 }
+        - { id: n44, value: "[4,4]", parent: n34 }
+    - note: >-
+        Query(t=4): pide el rango completo [1,4], que coincide exactamente
+        con la raíz. Un solo nodo canónico, cero descomposición: se lee
+        directamente valor([1,4]) = 5+8 = 13, la suma de las dos operaciones
+        insertadas hasta ahora. Es el caso más simple de Query: cuando el
+        rango pedido es toda la línea de tiempo, no hace falta bajar del
+        todo.
+      highlight: ["n14"]
+      nodes:
+        - { id: n14, value: "[1,4]", parent: null }
+        - { id: n12, value: "[1,2]", parent: n14 }
+        - { id: n34, value: "[3,4]", parent: n14 }
+        - { id: n11, value: "[1,1]", parent: n12 }
+        - { id: n22, value: "[2,2]", parent: n12 }
+        - { id: n33, value: "[3,3]", parent: n34 }
+        - { id: n44, value: "[4,4]", parent: n34 }
+    - note: >-
+        Delete(t=2) retroactivo: mismo camino [1,4] → [1,2] → [2,2] que
+        Insert(t=2, +5), pero escribiendo el neutro (0) en la hoja en vez
+        de +5. El recálculo hacia arriba deja [1,2] en 0 y la raíz en
+        0+8=8 — el efecto de la operación borrada desaparece de todo
+        resumen que lo incluía, sin tocar ningún nodo del lado de t=4.
+      highlight: ["n14", "n12", "n22"]
+      nodes:
+        - { id: n14, value: "[1,4]", parent: null, state: active }
+        - { id: n12, value: "[1,2]", parent: n14, state: active }
+        - { id: n34, value: "[3,4]", parent: n14, state: shared }
+        - { id: n11, value: "[1,1]", parent: n12 }
+        - { id: n22, value: "[2,2]", parent: n12, state: active }
+        - { id: n33, value: "[3,3]", parent: n34, state: shared }
+        - { id: n44, value: "[4,4]", parent: n34, state: shared }
 ---
 
 <!-- No hay diapositiva que dibuje esto (huecos del análisis: "carencia
@@ -135,13 +181,13 @@ Ver `step-2-time-node.cpp`, `step-3-time-segment-tree-build.cpp` y
 
 El profesor no da esta cota en esta sección — la anuncia como heredada, "la
 misma que ya conocemos". Se hereda directamente de
-[Build de segment tree](/structures/segment-tree/operations/build): `O(m)`,
-porque el árbol tiene `2m-1` nodos (`m` hojas, `m-1` internos) y cada uno se
-construye en `O(1)` combinando a sus dos hijos ya construidos.
+[Build de segment tree](/structures/segment-tree/operations/build): $O(m)$,
+porque el árbol tiene $2m-1$ nodos (`m` hojas, `m-1` internos) y cada uno se
+construye en $O(1)$ combinando a sus dos hijos ya construidos.
 
 ## Complejidad espacial
 
-No la da el profesor para este tema. Heredada del segment tree: `O(m)` nodos
+No la da el profesor para este tema. Heredada del segment tree: $O(m)$ nodos
 en total.
 
 ## Ejemplo
@@ -153,11 +199,11 @@ de `+`).
 ## Casos límite
 
 - **`m = 1`** (una sola operación en toda la línea de tiempo): el árbol es
-  una única hoja; construirlo es `O(1)` y no hay ningún nodo interno que
+  una única hoja; construirlo es $O(1)$ y no hay ningún nodo interno que
   combinar.
 - **`m` no es potencia de 2**: igual que en
   [segment-tree](/structures/segment-tree/operations/build#casos-límite), el
-  árbol queda desbalanceado en forma pero no en altura (`⌈lg m⌉`).
+  árbol queda desbalanceado en forma pero no en altura ($\lceil \lg m \rceil$).
 - **Ninguna operación insertada todavía (`m` franjas, todas vacías)**: cada
   hoja arranca en el elemento neutro de `f` (`0` para suma, `-∞` para máx,
   `+∞` para mín, `falso` para ∨) — es el estado inicial de la visualización

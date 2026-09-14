@@ -67,9 +67,9 @@ Hay otros agentes trabajando en paralelo.
   en el frontmatter. Si una operación es pieza de otra (un `link`, un `cut`, un
   `consolidate`), ponla antes en el `order` y que las demás la referencien en vez de
   repetirla.
-- **Matemáticas**: el renderizado de LaTeX **todavía no está configurado**. Usa bloques
-  de código o símbolos Unicode. **No uses `$...$`** — cuando KaTeX esté listo haremos
-  una conversión de todo el contenido de golpe.
+- **Matemáticas**: KaTeX **ya está configurado**. Usa `$...$` en línea y `$$...$$` en
+  bloque para fórmulas de verdad (sumatorias, Φ, recurrencias). Reserva los bloques de
+  código para pseudocódigo y trazas, no para matemáticas.
 
 ## Visualizaciones
 
@@ -78,8 +78,27 @@ Bloque `visualization` en el frontmatter de la operación, con pasos
 mirando y por qué**, no sólo el mecanismo — la visualización existe para entender el
 algoritmo paso a paso, no para decorar.
 
-Sólo la familia `tree` está implementada. Si tu tema declara `persistent` o
-`range-tree`, **escribe el bloque igual**: queda latente hasta que exista el componente.
+Las familias `tree`, `persistent` y `range-tree` **ya están implementadas**
+(`src/visualizations/`). Consulta `HANDOFF-DESIGN-REPLY.md` para los campos de cada
+una (`state`, `links`, `fields`, `ports`, `arrays`, `bridges`, `panels`, `caption`…).
+
+**Etiquetas de nodo CORTAS**: un valor, una clave, un rango. La explicación va en el
+`note` del paso o en `caption`, nunca dentro del nodo — una etiqueta larga se dibuja
+como una caja enorme y rompe el diagrama. Usa `state` para el rol (`active`, `marked`,
+`answer`, `shared`, `muted`), nunca texto ni colores nuevos: ver `AGENTS.md`
+§ "Estados en las visualizaciones".
+
+`theory.md` también acepta `visualization` en el frontmatter, igual que
+`operations/<op>.md` — si tu tema es un concepto sin operaciones y necesita
+diagrama, ponlo ahí.
+
+**Diagrama a mitad de la explicación**: si necesitas más de un diagrama, o uno
+que no vaya arriba de todo sino entre dos secciones de prosa, escribe el
+archivo como `.mdx` en vez de `.md` (incluida en la colección igual, el `id`
+no cambia) e importa el componente donde lo necesites — ver `AGENTS.md` §
+MDX para el formato exacto. Si un solo diagrama arriba te alcanza, quédate en
+`.md` con el frontmatter `visualization` de siempre; no compliques tu tema
+sin necesidad.
 
 **Si la forma de `nodes` no te alcanza, NO cambies el schema.** Escribe lo que puedas
 con la forma actual y **reporta en tu respuesta final exactamente qué campo te faltó**.

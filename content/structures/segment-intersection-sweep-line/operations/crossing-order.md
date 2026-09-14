@@ -8,6 +8,56 @@ cppSteps:
   - step-3-intersection-count.cpp
   - step-4-crossing-order.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  mode: tree
+  steps:
+    - note: >-
+        Caso "Límite" de examples.md: S1 va de (0,0) a (4,4) y S2 de (0,4) a
+        (4,0). En x=0, S1 cruza más abajo (y=0) que S2 (y=4): ese orden es
+        el que guarda la BBST de cruces.
+      caption: "x=0: orden [S1, S2]"
+      nodes:
+        - id: s1
+          value: "S1 (y=0)"
+          parent: null
+          state: active
+        - id: s2
+          value: "S2 (y=4)"
+          parent: s1
+          side: right
+          state: idle
+    - note: >-
+        El barrido avanza. En algún x intermedio (x=2) ambos segmentos
+        valen y=2: es el punto donde se cruzan — exactamente el tipo de
+        intersección que el caso simple excluye por regla (#29), porque no
+        es horizontal-vertical.
+      caption: "x=2: S1 y S2 se cruzan (y=2 ambos)"
+      nodes:
+        - id: s1
+          value: "S1 (y=2)"
+          parent: null
+          state: marked
+        - id: s2
+          value: "S2 (y=2)"
+          parent: s1
+          side: right
+          state: marked
+    - note: >-
+        Pasado el cruce, sus alturas se invirtieron: S2 ahora cruza más
+        abajo que S1. La BBST reordena la comparación (su comparador
+        depende de x, no es un valor fijo) y el nuevo orden queda [S2, S1].
+      caption: "x=4: orden [S2, S1]"
+      nodes:
+        - id: s2
+          value: "S2 (y=0)"
+          parent: null
+          state: active
+        - id: s1
+          value: "S1 (y=4)"
+          parent: s2
+          side: right
+          state: idle
 ---
 
 ## Qué hace
@@ -65,11 +115,11 @@ rol que cumpliría la
 
 ## Complejidad temporal
 
-O(log n) por inserción/eliminación — heredado directamente de
+$O(\log n)$ por inserción/eliminación — heredado directamente de
 [balanced-bst](/structures/balanced-bst): el profesor no analiza esta
 operación aparte, sólo declara que la BBST es la estructura elegida (#43).
 Sumada sobre n eventos y q consultas, el total del caso general offline es
-O((n+q) log n) (#47).
+$O((n+q) \log n)$ (#47).
 
 ## Complejidad espacial
 

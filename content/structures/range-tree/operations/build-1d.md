@@ -107,7 +107,7 @@ final es la de un árbol binario casi completo, sin necesidad de rotaciones.
 *(Derivado del pseudocódigo; el mazo no trae ninguno — sólo el resultado
 en la diapositiva #29.)*
 
-1. Ordenar los n puntos por su llave: O(n log n)
+1. Ordenar los n puntos por su llave: $O(n \log n)$
    (Sem4_Orthogonal_Range_Search.pdf#55).
 2. Colocarlos como hojas, en ese orden.
 3. Mientras haya más de un nodo en el nivel actual: emparejar nodos
@@ -141,13 +141,13 @@ arriba.
 
 ## Complejidad temporal
 
-O(n log n): domina el ordenamiento inicial; el ensamblado bottom-up visita
-cada uno de los O(n) nodos una sola vez
+$O(n \log n)$: domina el ordenamiento inicial; el ensamblado bottom-up visita
+cada uno de los $O(n)$ nodos una sola vez
 (Sem4_Orthogonal_Range_Search.pdf#28,55).
 
 ## Complejidad espacial
 
-O(n): un árbol binario casi completo con n hojas tiene a lo más 2n-1 nodos
+$O(n)$: un árbol binario casi completo con n hojas tiene a lo más $2n-1$ nodos
 en total (Sem4_Orthogonal_Range_Search.pdf#28).
 
 ## Ejemplo
@@ -161,5 +161,5 @@ Ver la visualización de arriba: construcción completa sobre
 - **n par en todos los niveles** (como el ejemplo, n=8=2³): el árbol queda
   perfectamente balanceado, cada nivel se empareja exacto.
 - **n con potencia de 2 no exacta**: algún nivel intermedio tiene un nodo
-  impar que sube sin pareja — el árbol sigue siendo O(log n) de altura,
+  impar que sube sin pareja — el árbol sigue siendo $O(\log n)$ de altura,
   sólo deja de ser perfecto.

@@ -11,10 +11,10 @@ cuesta cada movimiento, y las
 describen cinco patrones que hacen que una secuencia sea "fácil" — pero
 ninguna de las dos dice **cómo construir un árbol que aproveche esos
 patrones**. Un [BST balanceado](/structures/balanced-bst) garantiza
-O(lg n) en el peor caso, siempre, sin importar la secuencia — y por eso
+$O(\lg n)$ en el peor caso, siempre, sin importar la secuencia — y por eso
 mismo nunca sale más barato aunque la secuencia sea trivial (acceso
 secuencial, un conjunto de trabajo pequeño). El splay tree es la respuesta
-concreta: "Es un BST amortizado que siempre mueve el valor de búsqueda x_i a
+concreta: "Es un BST amortizado que siempre mueve el valor de búsqueda $x_i$ a
 la raíz del árbol mediante la función Splay" (#60). Es, además, el candidato
 que el profesor presenta (sin demostrarlo) a
 [dynamic-optimality](/structures/dynamic-optimality): la estructura que
@@ -59,27 +59,27 @@ búsqueda**: Splay(x), que siempre termina con x en la raíz.
 `professorAnalysisStyle: amortized` — y aquí la palabra no es una etiqueta
 externa: aparece en la propia definición de la estructura ("Es un BST
 **amortizado**", #60), en la cota de Splay ("complejidad **amortizada** de
-O(log n) por búsqueda", #63) y en la propiedad general ("Cada operación toma
-O(log n) (**amortizado**)", #68). Eso obliga a distinguir dos costos en todo
+$O(\log n)$ por búsqueda", #63) y en la propiedad general ("Cada operación toma
+$O(\log n)$ (**amortizado**)", #68). Eso obliga a distinguir dos costos en todo
 momento:
 
-- **Costo real** de un paso individual (`zig`, `zig-zig`, `zig-zag`): O(1)
-  cada uno — una o dos rotaciones, y cada rotación es O(1) por
+- **Costo real** de un paso individual (`zig`, `zig-zig`, `zig-zag`): $O(1)$
+  cada uno — una o dos rotaciones, y cada rotación es $O(1)$ por
   [el modelo BST](/structures/bst-computational-model/operations/rotate).
-  El costo real de **un** Splay(x) completo puede ser O(n): si x está a
-  profundidad n−1, hacen falta ~n/2 pasos, cada uno O(1), sumando O(n).
+  El costo real de **un** Splay(x) completo puede ser $O(n)$: si x está a
+  profundidad $n-1$, hacen falta ~$n/2$ pasos, cada uno $O(1)$, sumando $O(n)$.
 - **Costo amortizado**: promediado sobre cualquier secuencia de búsquedas,
-  el profesor da O(log n) por Splay (#63) y por operación en general (#68).
-  Una búsqueda aislada puede costar O(n) en el peor caso real; lo que la
+  el profesor da $O(\log n)$ por Splay (#63) y por operación en general (#68).
+  Una búsqueda aislada puede costar $O(n)$ en el peor caso real; lo que la
   cota amortizada garantiza es que esa búsqueda cara sólo puede ocurrir si
   "prepagó" con búsquedas baratas anteriores.
 
 > **Nota de apoyo** (no está en las diapositivas): el profesor **enuncia**
-> la cota O(log n) amortizada pero no la **demuestra** — no define una
-> función de potencial Φ, no da un argumento de rango, no prueba el Access
+> la cota $O(\log n)$ amortizada pero no la **demuestra** — no define una
+> función de potencial $\Phi$, no da un argumento de rango, no prueba el Access
 > Lemma. La demostración estándar en la literatura usa exactamente el
 > [método del potencial](/structures/potential-method) con
-> Φ = Σ log(tamaño del subárbol de cada nodo), pero eso no está en este
+> $\Phi = \sum \log(\text{tamaño del subárbol de cada nodo})$, pero eso no está en este
 > mazo: la cota se enuncia sin derivarla.
 
 **El punto que hay que entender de verdad**: por qué `zig-zig` rota primero
@@ -89,7 +89,7 @@ importante de este tema:
 
 > **Nota de apoyo** (no está en las diapositivas): rotar primero `p` (subir
 > a `x` un nivel, luego rotar de nuevo) es el algoritmo "move-to-root"
-> ingenuo, y **no** consigue la cota amortizada de O(log n). La razón es que
+> ingenuo, y **no** consigue la cota amortizada de $O(\log n)$. La razón es que
 > ese orden no reduce la profundidad de los nodos que quedaron "colgando" en
 > el camino tan agresivamente como rotar `a` primero: rotar el abuelo
 > primero hace que el subárbol que compartían `p` y `a` quede dividido de
@@ -103,11 +103,11 @@ importante de este tema:
 ## Tabla de complejidad
 
 La tabla se genera desde `meta.yaml`. Nota de lectura: `zig`, `zig-zig` y
-`zig-zag` llevan **costo real** O(1) (son los pasos atómicos); `splay` y
-`search` llevan **costo amortizado** O(log n) (son las cotas que promedian
+`zig-zag` llevan **costo real** $O(1)$ (son los pasos atómicos); `splay` y
+`search` llevan **costo amortizado** $O(\log n)$ (son las cotas que promedian
 sobre una secuencia). No hay fila de "peor caso real de una operación
 individual" para splay/search porque el profesor no la da — sí se discute
-en el análisis de arriba (puede ser O(n)).
+en el análisis de arriba (puede ser $O(n)$).
 
 ## Ejemplos
 
@@ -118,7 +118,7 @@ Ver [examples.md](/structures/splay-tree/examples).
 | | [balanced-bst](/structures/balanced-bst) | splay tree (aquí) |
 | --- | --- | --- |
 | invariante | forma (altura balanceada) | ninguno extra: sólo orden BST |
-| garantía | O(lg n) peor caso, **toda** operación | O(log n) sólo **amortizado** |
+| garantía | $O(\lg n)$ peor caso, **toda** operación | $O(\log n)$ sólo **amortizado** |
 | se adapta a la secuencia | no — mismo costo sin importar el patrón | sí — exhibe las cinco propiedades de [search-sequence-properties](/structures/search-sequence-properties) que un BST estático no puede |
 | optimalidad dinámica | no se plantea | es **el candidato** ([dynamic-optimality](/structures/dynamic-optimality)), conjetura abierta |
 
@@ -130,7 +130,7 @@ secuencia, pero "ninguna de las cuatro dice cómo lograr esa cota — eso es
 trabajo de una estructura concreta que se adapte a la secuencia". El splay
 tree es esa estructura (#69-72): las cumple todas. Lo que sigue sin
 responderse (#74-75) es si además cumple la propiedad unificada y si es
-O(1)-competitivo contra el óptimo offline — ambas abiertas.
+$O(1)$-competitivo contra el óptimo offline — ambas abiertas.
 
 ## Prueba de dominio
 

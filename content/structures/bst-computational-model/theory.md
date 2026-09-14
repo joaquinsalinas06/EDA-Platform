@@ -6,9 +6,9 @@ title: Modelo computacional del BST
 ## ¿Qué problema resuelve?
 
 Hasta este punto el curso sabe que un [BST balanceado](/structures/balanced-bst)
-resuelve Búsqueda en O(log n) en el peor caso, y ahí se detenía el análisis. El
+resuelve Búsqueda en $O(\log n)$ en el peor caso, y ahí se detenía el análisis. El
 profesor abre la semana con dos preguntas que ese resultado no contesta:
-"¿existe un BST tan bueno como todos los demás?" y "¿es O(log n) el mejor
+"¿existe un BST tan bueno como todos los demás?" y "¿es $O(\log n)$ el mejor
 tiempo posible para un BST?" — y responde de entrada: "No sabemos, sigue
 siendo un problema abierto." Para poder siquiera formular esas preguntas con
 precisión hace falta fijar, antes que nada, **qué cuenta como una operación y
@@ -48,7 +48,7 @@ El invariante no es nuevo — es el invariante de orden de un
 tercera flecha de puntero (**al padre**, no sólo a los hijos). Esa flecha
 extra es lo que permite postular movimiento en ambas direcciones (bajar a un
 hijo, subir al padre) como la misma operación de costo unitario, y es
-condición necesaria para que rotar sea O(1): sin puntero al padre, encontrarlo
+condición necesaria para que rotar sea $O(1)$: sin puntero al padre, encontrarlo
 para rotar costaría recorrer el árbol de nuevo.
 
 ## Operaciones
@@ -69,8 +69,8 @@ El estilo aquí no es una derivación: el profesor **postula** los costos, no
 los prueba. Dos reglas, ambas de costo unitario:
 
 1. "Moverse a través de un puntero — ir al padre o alguno de sus hijos en
-   O(1)." (#19)
-2. "Rotar un nodo x con su padre — también en O(1)." (#20)
+   $O(1)$." (#19)
+2. "Rotar un nodo x con su padre — también en $O(1)$." (#20)
 
 Sobre esas dos reglas se define el costo de Buscar(x): "Empezando desde el
 nodo raíz, se debe visitar el nodo con valor x." (#23) — es decir, el costo
@@ -81,7 +81,7 @@ profesor restringe incluso las búsquedas a las que sí encuentran el valor:
 "Asumiremos solo búsquedas en las que x sí se encuentra en el árbol." (#24)
 
 De ahí sale la observación que organiza el resto de la semana: "En el peor
-caso, ciertamente O(log n) es el mejor tiempo posible." (#26) pero "el
+caso, ciertamente $O(\log n)$ es el mejor tiempo posible." (#26) pero "el
 trabajo de las búsquedas depende de la secuencia de elementos que se buscan"
 (#27) — el peor caso sobre *un* árbol no es la métrica interesante, porque el
 mismo n admite árboles de forma muy distinta (uno balanceado, uno degenerado
@@ -97,7 +97,7 @@ exactamente lo que instrumenta el C++ de este tema.
 ## Tabla de complejidad
 
 La tabla de `meta.yaml` ya cubre las tres cotas (`pointer-move` y `rotate` en
-O(1), `search` en O(log n) en el peor caso). Lo que la tabla no puede decir:
+$O(1)$, `search` en $O(\log n)$ en el peor caso). Lo que la tabla no puede decir:
 la cota de `search` es sobre **la forma del árbol en el peor caso**, no una
 propiedad de la secuencia — esa distinción es precisamente lo que
 [`search-sequence-properties`](/structures/search-sequence-properties) viene
@@ -112,8 +112,8 @@ Ver [examples.md](/structures/bst-computational-model/examples).
 | | [BST balanceado](/structures/balanced-bst) | modelo computacional BST |
 | --- | --- | --- |
 | qué mide | cotas de Search/Insert bajo un invariante de balance activo | el costo de las operaciones primitivas (`pointer-move`, `rotate`) sobre *cualquier* forma de BST, balanceado o no |
-| qué rotación significa | el mecanismo que restaura el invariante de balance | una operación de costo O(1) del modelo, sin que el modelo exija usarla para balancear nada |
-| a qué pregunta sirve | "¿cómo mantengo O(log n) garantizado?" | "¿es O(log n) lo mejor posible, y depende de qué?" (#9-10) |
+| qué rotación significa | el mecanismo que restaura el invariante de balance | una operación de costo $O(1)$ del modelo, sin que el modelo exija usarla para balancear nada |
+| a qué pregunta sirve | "¿cómo mantengo $O(\log n)$ garantizado?" | "¿es $O(\log n)$ lo mejor posible, y depende de qué?" (#9-10) |
 
 ## Prueba de dominio
 

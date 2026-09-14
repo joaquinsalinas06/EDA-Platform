@@ -10,6 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "node scripts/check-knowledge-map.mjs",
+    "sync": "node scripts/sync-visualization-flags.mjs",
+    "shot": "node scripts/shot.mjs",
     "test": "node --test 'src/**/*.test.ts'",
     "astro": "astro"
   },
@@ -36,5 +38,8 @@
   },
   "allowScripts": {
     "esbuild": true
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
   }
 }

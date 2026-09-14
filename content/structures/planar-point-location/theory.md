@@ -85,21 +85,21 @@ la arma:
    material (ver más abajo).
 3. **Caso especial ortogonal → RSQ (Range Sum Query)** (#32, #38): "Usando
    un Segment tree o un Fenwick tree se puede resolver este caso especial
-   en O(n log n)". El profesor nombra ambas estructuras — [segment
+   en $O(n \log n)$". El profesor nombra ambas estructuras — [segment
    tree](/structures/segment-tree) y [Fenwick tree](/structures/fenwick-tree)
    — sin explicarlas aquí: son andamiaje del curso.
 4. **Caso general → BBST + persistencia** (#43, #49-51): el barrido se
    modela con un [BBST](/structures/balanced-bst) que ordena los cruces
    activos contra la recta de barrido, y se hace persistente (ver
    [persistencia sobre una estructura](/structures/persistence-levels))
-   para responder consultas *online* sin rehacer el barrido: `t_{x_i}` es
+   para responder consultas *online* sin rehacer el barrido: $t_{x_i}$ es
    la versión del BBST asociada al punto x_i, y la respuesta es
    `Query(t_{x_i}, Successor(y_i))` (#50). Esta fórmula queda sin definir
    en el mazo — ver huecos.
 5. **Caso dinámico restringido → retroactividad parcial** (#53-55): sólo
    para mapas ortogonales (aristas horizontales), insertar/eliminar puede
    resolverse con [retroactividad](/structures/retroactivity) parcial,
-   manteniendo la consulta en O(log n).
+   manteniendo la consulta en $O(\log n)$.
 
 **Huecos del material, dichos como tales, no rellenados:**
 
@@ -114,9 +114,9 @@ la arma:
   el mazo no desarrolla un algoritmo para el caso dinámico general. Sólo
   cita resultados de la literatura, sin derivarlos ni usarlos en el curso:
   Baumgarten, Jung y Mehlhorn (1994) dan consulta e inserción
-  O(log n · log log n) y eliminación O(log² n) (#60); Arge, Brodal y
-  Georgiadis (2006) dan consulta O(log n), inserción O(log^{1+ε} n) y
-  eliminación O(log^{2+ε} n) (#61). Se citan aquí como cultura del área,
+  $O(\log n \cdot \log \log n)$ y eliminación $O(\log^2 n)$ (#60); Arge, Brodal y
+  Georgiadis (2006) dan consulta $O(\log n)$, inserción $O(\log^{1+\epsilon} n)$ y
+  eliminación $O(\log^{2+\epsilon} n)$ (#61). Se citan aquí como cultura del área,
   no como contenido a implementar — de ahí que `edge-update` no tenga
   entrada en la tabla de complejidad de `meta.yaml`.
 

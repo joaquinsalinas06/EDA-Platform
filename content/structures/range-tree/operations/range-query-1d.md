@@ -15,15 +15,15 @@ visualization:
         Reproduce la diapositiva #35: consulta [l1,r1] = [5,16] sobre el
         árbol de build-1d. Primer paso: calcular los delimitadores con
         predecessor-successor. Predecessor(5)=hoja 4, Successor(16)=hoja 18
-        — ambos FUERA del rango (amarillo en el diagrama del profesor; aquí
-        no hay campo de color, ver nota al final del bloque de operaciones).
+        — ambos FUERA del rango: son los delimitadores (amarillo en el
+        diagrama del profesor, aquí `state: marked`).
       highlight: [l4, l18]
       nodes:
         - { id: r9, value: 9, parent: null }
         - { id: n4, value: 4, parent: r9 }
         - { id: n3i, value: 3, parent: n4 }
         - { id: l3, value: 3, parent: n3i }
-        - { id: l4, value: 4, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: marked }
         - { id: n7i, value: 7, parent: n4 }
         - { id: l7, value: 7, parent: n7i }
         - { id: l9, value: 9, parent: n7i }
@@ -32,7 +32,7 @@ visualization:
         - { id: l13, value: 13, parent: n13i }
         - { id: l15, value: 15, parent: n13i }
         - { id: n18i, value: 18, parent: n15 }
-        - { id: l18, value: 18, parent: n18i }
+        - { id: l18, value: 18, parent: n18i, state: marked }
         - { id: l27, value: 27, parent: n18i }
     - note: >-
         P = LCA(hoja 4, hoja 18) = la raíz (9): los caminos hacia las dos
@@ -41,11 +41,11 @@ visualization:
         separado.
       highlight: [r9]
       nodes:
-        - { id: r9, value: 9, parent: null }
+        - { id: r9, value: 9, parent: null, state: active }
         - { id: n4, value: 4, parent: r9 }
         - { id: n3i, value: 3, parent: n4 }
         - { id: l3, value: 3, parent: n3i }
-        - { id: l4, value: 4, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: marked }
         - { id: n7i, value: 7, parent: n4 }
         - { id: l7, value: 7, parent: n7i }
         - { id: l9, value: 9, parent: n7i }
@@ -54,22 +54,22 @@ visualization:
         - { id: l13, value: 13, parent: n13i }
         - { id: l15, value: 15, parent: n13i }
         - { id: n18i, value: 18, parent: n15 }
-        - { id: l18, value: 18, parent: n18i }
+        - { id: l18, value: 18, parent: n18i, state: marked }
         - { id: l27, value: 27, parent: n18i }
     - note: >-
         Camino izquierdo (hacia la hoja 4): en el nodo 4 el camino dobla a
         la izquierda (hacia el 3, donde está la hoja 4); el hermano derecho
         no visitado, nodo 7, queda ENTERO dentro de [5,16] (cubre las hojas
         7 y 9) — se agrega como subárbol canónico de la respuesta (rojo en
-        el diagrama del profesor).
+        el diagrama del profesor, aquí `state: answer`).
       highlight: [n4, n7i]
       nodes:
         - { id: r9, value: 9, parent: null }
-        - { id: n4, value: 4, parent: r9 }
+        - { id: n4, value: 4, parent: r9, state: active }
         - { id: n3i, value: 3, parent: n4 }
         - { id: l3, value: 3, parent: n3i }
-        - { id: l4, value: 4, parent: n3i }
-        - { id: n7i, value: 7, parent: n4 }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4, state: answer }
         - { id: l7, value: 7, parent: n7i }
         - { id: l9, value: 9, parent: n7i }
         - { id: n15, value: 15, parent: r9 }
@@ -77,7 +77,7 @@ visualization:
         - { id: l13, value: 13, parent: n13i }
         - { id: l15, value: 15, parent: n13i }
         - { id: n18i, value: 18, parent: n15 }
-        - { id: l18, value: 18, parent: n18i }
+        - { id: l18, value: 18, parent: n18i, state: marked }
         - { id: l27, value: 27, parent: n18i }
     - note: >-
         En el nodo 3, el camino dobla a la derecha (hacia la hoja 4): el
@@ -87,10 +87,10 @@ visualization:
       nodes:
         - { id: r9, value: 9, parent: null }
         - { id: n4, value: 4, parent: r9 }
-        - { id: n3i, value: 3, parent: n4 }
+        - { id: n3i, value: 3, parent: n4, state: active }
         - { id: l3, value: 3, parent: n3i }
-        - { id: l4, value: 4, parent: n3i }
-        - { id: n7i, value: 7, parent: n4 }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4, state: answer }
         - { id: l7, value: 7, parent: n7i }
         - { id: l9, value: 9, parent: n7i }
         - { id: n15, value: 15, parent: r9 }
@@ -98,7 +98,7 @@ visualization:
         - { id: l13, value: 13, parent: n13i }
         - { id: l15, value: 15, parent: n13i }
         - { id: n18i, value: 18, parent: n15 }
-        - { id: l18, value: 18, parent: n18i }
+        - { id: l18, value: 18, parent: n18i, state: marked }
         - { id: l27, value: 27, parent: n18i }
     - note: >-
         Camino derecho (hacia la hoja 18), simétrico: en el nodo 15 el
@@ -111,16 +111,16 @@ visualization:
         - { id: n4, value: 4, parent: r9 }
         - { id: n3i, value: 3, parent: n4 }
         - { id: l3, value: 3, parent: n3i }
-        - { id: l4, value: 4, parent: n3i }
-        - { id: n7i, value: 7, parent: n4 }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4, state: answer }
         - { id: l7, value: 7, parent: n7i }
         - { id: l9, value: 9, parent: n7i }
-        - { id: n15, value: 15, parent: r9 }
-        - { id: n13i, value: 13, parent: n15 }
+        - { id: n15, value: 15, parent: r9, state: active }
+        - { id: n13i, value: 13, parent: n15, state: answer }
         - { id: l13, value: 13, parent: n13i }
         - { id: l15, value: 15, parent: n13i }
         - { id: n18i, value: 18, parent: n15 }
-        - { id: l18, value: 18, parent: n18i }
+        - { id: l18, value: 18, parent: n18i, state: marked }
         - { id: l27, value: 27, parent: n18i }
     - note: >-
         En el nodo 18, el camino dobla a la izquierda (hacia la hoja 18): el
@@ -134,16 +134,16 @@ visualization:
         - { id: n4, value: 4, parent: r9 }
         - { id: n3i, value: 3, parent: n4 }
         - { id: l3, value: 3, parent: n3i }
-        - { id: l4, value: 4, parent: n3i }
-        - { id: n7i, value: 7, parent: n4 }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4, state: answer }
         - { id: l7, value: 7, parent: n7i }
         - { id: l9, value: 9, parent: n7i }
         - { id: n15, value: 15, parent: r9 }
-        - { id: n13i, value: 13, parent: n15 }
+        - { id: n13i, value: 13, parent: n15, state: answer }
         - { id: l13, value: 13, parent: n13i }
         - { id: l15, value: 15, parent: n13i }
-        - { id: n18i, value: 18, parent: n15 }
-        - { id: l18, value: 18, parent: n18i }
+        - { id: n18i, value: 18, parent: n15, state: active }
+        - { id: l18, value: 18, parent: n18i, state: marked }
         - { id: l27, value: 27, parent: n18i }
 ---
 
@@ -167,6 +167,15 @@ frontera. Al bajar por cada camino, cada vez que el camino se desvía hacia
 un lado, el subárbol hermano del otro lado queda **enteramente** dentro del
 rango (porque está acotado por el mismo `P` del lado correcto) — y se
 agrega de una sola vez, sin mirar sus hojas.
+
+> **Nota de apoyo** (no está en las diapositivas): en el diagrama de abajo, un
+> nodo con `state: answer` representa su **subárbol entero** aunque se dibuje
+> igual que cualquier otro nodo — la familia de visualización `range-tree` no
+> soporta dibujar un subárbol como triángulo colapsado (eso sólo existe en la
+> familia `tree`). Fíjate en el relleno (losa llena), no en la forma: cuando
+> ves `answer` en el nodo 7 o en el nodo 13, léelo como "todas las hojas
+> debajo de este nodo entraron a la respuesta de una sola vez", no como una
+> clave suelta.
 
 ## Algoritmo
 
@@ -218,16 +227,16 @@ de arriba.
 
 ## Complejidad temporal
 
-O(log n) para producir la lista de subárboles (dos caminos de altura
-O(log n), sumando O(log n) subárboles canónicos en total,
+$O(\log n)$ para producir la lista de subárboles (dos caminos de altura
+$O(\log n)$, sumando $O(\log n)$ subárboles canónicos en total,
 Sem4_Orthogonal_Range_Search.pdf#20,33-34); usarla para existencia, conteo
-o enumeración agrega O(1), O(1) u O(k) respectivamente por
+o enumeración agrega $O(1)$, $O(1)$ u $O(k)$ respectivamente por
 [existence-count](/structures/range-tree/operations/existence-count) y
 [enumeration](/structures/range-tree/operations/enumeration).
 
 ## Complejidad espacial
 
-O(log n) para la lista de subárboles canónicos devuelta (no se copian
+$O(\log n)$ para la lista de subárboles canónicos devuelta (no se copian
 hojas, sólo referencias a las raíces de esos subárboles).
 
 ## Ejemplo

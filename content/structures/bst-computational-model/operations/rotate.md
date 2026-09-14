@@ -19,23 +19,23 @@ visualization:
       nodes:
         - { id: p, value: p, parent: null }
         - { id: n, value: n, parent: p }
-        - { id: C, value: C, parent: p }
-        - { id: A, value: A, parent: n }
-        - { id: B, value: B, parent: n }
+        - { id: C, value: C, parent: p, collapsed: true }
+        - { id: A, value: A, parent: n, collapsed: true }
+        - { id: B, value: B, parent: n, collapsed: true }
     - note: >-
         Right Rotation(n): n sube a la posición de p, p baja a ser hijo
         derecho de n. El subárbol B, que era el hijo derecho de n, pasa a ser
         el hijo izquierdo de p — es el único subárbol que cambia de padre; A
-        y C se quedan donde estaban. Costo: O(1), un número constante de
+        y C se quedan donde estaban. Costo: $O(1)$, un número constante de
         reasignaciones de punteros (#20), sin importar cuántos nodos tengan
         A, B o C.
       highlight: [n, p]
       nodes:
         - { id: n, value: n, parent: null }
-        - { id: A, value: A, parent: n }
+        - { id: A, value: A, parent: n, collapsed: true }
         - { id: p, value: p, parent: n }
-        - { id: B, value: B, parent: p }
-        - { id: C, value: C, parent: p }
+        - { id: B, value: B, parent: p, collapsed: true }
+        - { id: C, value: C, parent: p, collapsed: true }
     - note: >-
         El recorrido inorden del árbol resultante es A, n, B, p, C — idéntico
         al de antes de rotar. Eso es lo que hace que rotar sea una operación
@@ -47,10 +47,10 @@ visualization:
       highlight: [n, p]
       nodes:
         - { id: n, value: n, parent: null }
-        - { id: A, value: A, parent: n }
+        - { id: A, value: A, parent: n, collapsed: true }
         - { id: p, value: p, parent: n }
-        - { id: B, value: B, parent: p }
-        - { id: C, value: C, parent: p }
+        - { id: B, value: B, parent: p, collapsed: true }
+        - { id: C, value: C, parent: p, collapsed: true }
 ---
 
 ## Qué hace
@@ -68,7 +68,7 @@ subárboles no se tocan. El mecanismo con los tres punteros exactos
 [`/structures/balanced-bst`](/structures/balanced-bst), que es quien lo usa
 para restaurar un invariante de balance; **este modelo no exige balancear
 nada** — sólo postula que ese giro, aplicado a cualquier nodo con su padre,
-cuesta O(1).
+cuesta $O(1)$.
 
 ## Algoritmo
 
@@ -109,13 +109,13 @@ punteros del pseudocódigo e incrementan un contador global de rotaciones.
 
 ## Complejidad temporal
 
-O(1). Postulado por el profesor (#20), no derivado: la reasignación de
+$O(1)$. Postulado por el profesor (#20), no derivado: la reasignación de
 punteros de arriba toca un número constante de nodos (`n`, `p`, `B` y el
 padre de `p`), sin importar cuántos nodos tengan los subárboles A, B o C.
 
 ## Complejidad espacial
 
-O(1) adicional.
+$O(1)$ adicional.
 
 ## Ejemplo
 
@@ -127,9 +127,9 @@ Ver la visualización de arriba y
 - **`n` es la raíz**: no tiene padre, así que no hay rotación posible;
   cualquier implementación debe rechazar este caso antes de llamarlo.
 - **`B` es `null`** (el subárbol que cambia de lado está vacío): la
-  reasignación sigue siendo O(1), sólo que uno de los punteros queda en
+  reasignación sigue siendo $O(1)$, sólo que uno de los punteros queda en
   `null` en vez de apuntar a un subárbol.
 - **Rotar y luego rotar de vuelta**: Left Rotation(p) después de
   Right Rotation(n) recupera exactamente la forma original — es la
-  propiedad que hace de `rotate` una operación reversible de costo O(1) en
+  propiedad que hace de `rotate` una operación reversible de costo $O(1)$ en
   cada dirección.

@@ -48,9 +48,9 @@ Lo que cambia entre estructuras es el largo del camino que hay que copiar:
 
 | | Stack | Segment Tree | Trie |
 | --- | --- | --- | --- |
-| Altura relevante | `1` | `O(lg n)` | `O(L)` |
-| Nodos copiados por operación | `1` | `O(lg n)` | `O(L)` |
-| Espacio nuevo por operación | `O(1)` | `O(lg n)` | `O(L)` |
+| Altura relevante | `1` | $O(\lg n)$ | $O(L)$ |
+| Nodos copiados por operación | `1` | $O(\lg n)$ | $O(L)$ |
+| Espacio nuevo por operación | $O(1)$ | $O(\lg n)$ | $O(L)$ |
 
 En los tres casos: path copying cuesta exactamente el largo del camino que
 cambia, sin importar qué tan grande sea el resto de la estructura.
@@ -69,7 +69,7 @@ recurrencia ni potencial de por medio. El argumento se repite igual en los
 tres ejemplos: la operación copia *exactamente un nodo por nivel* del
 camino que toca, así que el costo en tiempo y el espacio nuevo son ambos
 proporcionales al largo de ese camino. En genérico, sobre un árbol de
-altura `h`, path copying cuesta `O(h)` tiempo y `O(h)` espacio extra
+altura `h`, path copying cuesta $O(h)$ tiempo y $O(h)$ espacio extra
 (Sem_3_Persistencia-1.pdf#53-54).
 
 Esto contrasta deliberadamente con [nodos gordos](/structures/fat-nodes),

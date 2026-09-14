@@ -20,7 +20,7 @@ El caso más pequeño donde el árbol hace algo distinto al caso general es
 `m = 1`: una sola operación en la línea de tiempo. El segment tree es una
 única hoja, `Update` no toca ningún nodo intermedio y `Query` en ese único
 instante devuelve directamente el valor de la hoja — no hay overhead
-`O(lg m)` que pagar porque `lg 1 = 0`.
+$O(\lg m)$ que pagar porque $\lg 1 = 0$.
 
 ## Normal
 
@@ -42,7 +42,7 @@ reinterpretando cada rango como un rango de **tiempo**, no de arreglo:
 1. `Insert(t=2, op)` con efecto `+5`: es un `Update` de segment tree en la
    posición 2. Camino `[1,4] → [1,2] → [2,2]`: se escribe `5` en `[2,2]`, se
    recalcula `[1,2] = 0 + 5 = 5`, se recalcula `[1,4] = 5 + 0 = 5`. Dos
-   nodos intermedios tocados (`⌈lg 4⌉ = 2`), como anuncia la cota.
+   nodos intermedios tocados ($\lceil \lg 4 \rceil = 2$), como anuncia la cota.
 2. `Query(t=1)`: el rango de consulta es `[1,1]` (todo lo que pasó hasta el
    instante 1). El nodo `[1,1]` cae completamente dentro, se devuelve su
    valor sin bajar al subárbol de `[2,2]`: resultado `0`. La operación
@@ -63,7 +63,7 @@ reinterpretando cada rango como un rango de **tiempo**, no de arreglo:
 El caso patológico no es de tamaño, es de **aplicabilidad**: `Delete-Min`
 sobre una priority queue. El profesor lo señala explícitamente como el
 límite de este método (página 47): "`Delete-Min` no es un problema
-descomponible simple". La razón: no existe una `f` en `O(1)` que combine
+descomponible simple". La razón: no existe una `f` en $O(1)$ que combine
 "el mínimo de `A`" y "el mínimo de `B`" una vez que una de las dos mitades ya
 extrajo su mínimo — la respuesta depende de **qué otros elementos quedan**
 en cada mitad, no sólo del resultado agregado de cada una. Ver la operación

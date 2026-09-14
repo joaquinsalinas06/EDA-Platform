@@ -54,6 +54,16 @@ test('no-regresión del árbol: idle/active son exactamente lo que hoy hardcodea
   assert.equal(active.text, 'var(--accent-ink)');
 });
 
+test('`marked` usa --marked (ámbar) y `answer` usa --answer (carmesí) — nunca --accent', () => {
+  const marked = nodeStyle('marked');
+  assert.ok(marked.fill.includes('--marked') && !marked.fill.includes('--accent'));
+  assert.ok(marked.text.includes('--marked-ink'));
+
+  const answer = nodeStyle('answer');
+  assert.ok(answer.fill.includes('--answer') && !answer.fill.includes('--accent'));
+  assert.ok(answer.text.includes('--answer-ink'));
+});
+
 test('edgeStyle: una arista sólo se pinta de accent cuando está activa, nunca por su `kind`', () => {
   const kinds: Array<'tree' | 'shared' | 'pointer'> = ['tree', 'shared', 'pointer'];
   for (const kind of kinds) {

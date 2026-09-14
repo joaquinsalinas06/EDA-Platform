@@ -118,15 +118,15 @@ Ver `step-3-update.cpp` y `full-implementation.cpp` en el editor de arriba.
 
 ## Complejidad temporal
 
-O(lg n): la recursión sigue un único camino desde la raíz hasta una hoja, de
-altura ⌈lg n⌉, y hace O(1) de trabajo (una comparación y, al volver, una
-combinación) en cada nodo del camino.
+$O(\lg n)$: la recursión sigue un único camino desde la raíz hasta una hoja, de
+altura $\lceil \lg n \rceil$, y hace $O(1)$ de trabajo (una comparación y, al
+volver, una combinación) en cada nodo del camino.
 
 ## Complejidad espacial
 
-O(lg n) de la pila de recursión (o O(1) adicional en la versión iterativa);
-en la variante persistente de path-copying, O(lg n) nodos nuevos por
-versión — es justamente esa cota la que hace atractivo path copying frente a
+$O(\lg n)$ de la pila de recursión (o $O(1)$ adicional en la versión
+iterativa); en la variante persistente de path-copying, $O(\lg n)$ nodos
+nuevos por versión — es justamente esa cota la que hace atractivo path copying frente a
 copiar el árbol entero.
 
 ## Ejemplo
@@ -139,7 +139,7 @@ tocan — es el mismo camino resaltado en la visualización de arriba.
 
 ## Casos límite
 
-- **Árbol de una sola hoja (n = 1)**: `Update` escribe directo, sin
+- **Árbol de una sola hoja ($n = 1$)**: `Update` escribe directo, sin
   recursión.
 - **Actualizar con el mismo valor que ya tenía**: el algoritmo no lo detecta
   como caso especial; recalcula igual todo el camino (correcto pero no

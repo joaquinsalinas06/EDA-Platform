@@ -13,10 +13,41 @@ visualization:
   type: tree
   steps:
     - note: >-
-        Mezclamos las dos listas de raíces por grado: quedan dos B0 (10 y
-        6) seguidos de dos B1 (4 con hijo 9, y 2 con hijo 7). Recorremos
-        consolidando pares consecutivos del mismo grado, como sumar en
-        binario con acarreo.
+        Las dos listas de raíces, todavía separadas. H1 = {10 (grado 0), 4
+        con hijo 9 (grado 1)}. Cada raíz es un bit de la representación
+        binaria de n: H1 tiene 3 nodos = 11 en binario, dos bits prendidos
+        (grado 0 y grado 1).
+      highlight: []
+      nodes:
+        - { id: n10, value: 10, parent: null }
+        - { id: n4, value: 4, parent: null }
+        - { id: n9, value: 9, parent: n4 }
+    - note: >-
+        H2, también separada. H2 = {6 (grado 0), 2 con hijo 7 (grado 1)}:
+        otros 3 nodos, también 11 en binario. Union va a sumar estos dos
+        "11" bit a bit, con acarreo, igual que 3 + 3.
+      highlight: []
+      nodes:
+        - { id: n6, value: 6, parent: null }
+        - { id: n2, value: 2, parent: null }
+        - { id: n7, value: 7, parent: n2 }
+    - note: >-
+        Mezcla: las dos listas se intercalan ordenadas por grado, sin
+        enlazar nada todavía — es sólo "alinear los bits" antes de sumar.
+        Quedan, en orden de grado: 10, 6 (ambas grado 0), luego 4-con-9,
+        2-con-7 (ambas grado 1).
+      highlight: []
+      nodes:
+        - { id: n10, value: 10, parent: null }
+        - { id: n6, value: 6, parent: null }
+        - { id: n4, value: 4, parent: null }
+        - { id: n9, value: 9, parent: n4 }
+        - { id: n2, value: 2, parent: null }
+        - { id: n7, value: 7, parent: n2 }
+    - note: >-
+        Grado 0: hay 2 árboles (10 y 6) y ninguna tercera raíz de grado 0
+        después — se enlazan ya. Se comparan sus llaves para decidir quién
+        queda como raíz.
       highlight: ["n10", "n6"]
       nodes:
         - { id: n10, value: 10, parent: null }
@@ -26,25 +57,68 @@ visualization:
         - { id: n2, value: 2, parent: null }
         - { id: n7, value: 7, parent: n2 }
     - note: >-
-        10 >= 6, así que 10 se enlaza como hijo de 6 (Binomial-Link): nace
-        un B1 con raíz 6. Comparamos ahora ese B1 (raíz 6) con el B1 de raíz
-        4 — pero hay una TERCERA raíz de grado 1 después (el 2), así que no
-        enlazamos todavía: avanzamos para no perder esa tercera raíz.
-      highlight: ["n6", "n4", "n2"]
+        Binomial-Link(10, 6): 10 >= 6, así que 6 gana y 10 se vuelve su
+        hijo. Nace un B1 con raíz 6 — es el "acarreo" que se lleva al
+        grado 1, igual que el acarreo de sumar dos unos en binario.
+      highlight: ["n6", "n10"]
       nodes:
-        - { id: n6, value: 6, parent: null }
-        - { id: n10, value: 10, parent: n6 }
+        - { id: n6, value: 6, parent: null, state: active }
+        - { id: n10, value: 10, parent: n6, state: active }
         - { id: n4, value: 4, parent: null }
         - { id: n9, value: 9, parent: n4 }
         - { id: n2, value: 2, parent: null }
         - { id: n7, value: 7, parent: n2 }
     - note: >-
-        Ahora comparamos 4 y 2 (ya no hay una tercera raíz de grado 1
-        después). 4 >= 2, se enlaza como hijo de 2: nace un B2 con raíz 2
-        (hijos 4 y 7; 4 conserva a 9 como su propio hijo). El montículo
-        resultante queda con dos raíces: 6 (B1) y 2 (B2) — igual que
-        3 + 3 = 6 = 110 en binario.
+        Grado 1: ahora hay TRES árboles de grado 1 — el acarreo recién
+        nacido (6, colapsado aquí porque no es el foco de este paso), y los
+        dos B1 originales (4-con-9 y 2-con-7). Regla de la tercera raíz —
+        no se enlaza todavía: se avanza para no perder ninguno de los tres.
+      highlight: ["n6", "n4", "n2"]
+      nodes:
+        - { id: n6, value: 6, parent: null, collapsed: true }
+        - { id: n4, value: 4, parent: null }
+        - { id: n9, value: 9, parent: n4 }
+        - { id: n2, value: 2, parent: null }
+        - { id: n7, value: 7, parent: n2 }
+    - note: >-
+        Se avanza x al siguiente par: ahora comparamos 4 y 2, y ya no hay
+        una tercera raíz de grado 1 después de ellos — así que esta vez sí
+        se enlazan. El acarreo (6) queda aparte, sin tocar, como raíz final.
+      highlight: ["n4", "n2"]
+      nodes:
+        - { id: n6, value: 6, parent: null, collapsed: true }
+        - { id: n4, value: 4, parent: null }
+        - { id: n9, value: 9, parent: n4 }
+        - { id: n2, value: 2, parent: null }
+        - { id: n7, value: 7, parent: n2 }
+    - note: >-
+        Binomial-Link(4, 2): 4 >= 2, así que 2 gana y 4 se vuelve su hijo
+        (4 conserva a 9 como su propio hijo). Nace un B2 con raíz 2 — no
+        hay acarreo esta vez porque ya no queda ningún otro árbol de
+        grado 1 ni de grado 2 con quien enlazarlo.
       highlight: ["n2", "n4"]
+      nodes:
+        - { id: n6, value: 6, parent: null, collapsed: true }
+        - { id: n2, value: 2, parent: null, state: active }
+        - { id: n4, value: 4, parent: n2, state: active }
+        - { id: n9, value: 9, parent: n4 }
+        - { id: n7, value: 7, parent: n2 }
+    - note: >-
+        Grado 2: sólo 1 árbol (el B2 recién formado con raíz 2) — nada que
+        enlazar, se acarrea tal cual hasta el final de la lista.
+      highlight: ["n2"]
+      nodes:
+        - { id: n6, value: 6, parent: null, collapsed: true }
+        - { id: n2, value: 2, parent: null }
+        - { id: n4, value: 4, parent: n2 }
+        - { id: n9, value: 9, parent: n4 }
+        - { id: n7, value: 7, parent: n2 }
+    - note: >-
+        Estado final: dos raíces, 6 (B1, hijo 10) y 2 (B2, hijos 4 y 7; 4
+        conserva a 9) — igual que 3 + 3 = 6 = 110 en binario: bit de
+        grado 0 apagado (se consumió en el acarreo), bit de grado 1
+        prendido (el 6) y bit de grado 2 prendido (el 2).
+      highlight: []
       nodes:
         - { id: n6, value: 6, parent: null }
         - { id: n10, value: 10, parent: n6 }
@@ -105,22 +179,22 @@ igual, enlazar `next` bajo `x`, enlazar `x` bajo `next`).
 
 ## Complejidad temporal
 
-`O(lg n)`. Cada montículo de entrada tiene a lo mucho `O(lg n)` raíces, así
-que mezclar las dos listas cuesta `O(lg n)`. El recorrido de consolidación
+$O(\lg n)$. Cada montículo de entrada tiene a lo mucho $O(\lg n)$ raíces, así
+que mezclar las dos listas cuesta $O(\lg n)$. El recorrido de consolidación
 visita cada raíz de la lista mezclada a lo mucho una vez más que enlaza (a
-lo mucho `O(lg n)` enlaces), y cada Binomial-Link es `O(1)`. Total: `O(lg n)`.
+lo mucho $O(\lg n)$ enlaces), y cada Binomial-Link es $O(1)$. Total: $O(\lg n)$.
 
 ## Complejidad espacial
 
-`O(1)` adicional: Union reconecta los nodos existentes de `H1` y `H2`, no
+$O(1)$ adicional: Union reconecta los nodos existentes de `H1` y `H2`, no
 copia ni crea nodos nuevos (aparte de la cabeza del montículo resultado).
 
 ## Ejemplo
 
-`H1` con raíces `{10 (B0), 4-con-hijo-9 (B1)}` (3 nodos: `100` no, en
-realidad `11₂` = 3) y `H2` con raíces `{6 (B0), 2-con-hijo-7 (B1)}` (otros 3
-nodos, `11₂` = 3). `Union` da `3 + 3 = 6 = 110₂`: un `B1` (raíz 6, hijo 10)
-y un `B2` (raíz 2, hijos 4 y 7, y 4 conserva a 9). Ver la visualización
+`H1` con raíces `{10 (B0), 4-con-hijo-9 (B1)}` (3 nodos: en realidad
+$11_2$ = 3) y `H2` con raíces `{6 (B0), 2-con-hijo-7 (B1)}` (otros 3
+nodos, $11_2$ = 3). `Union` da $3 + 3 = 6 = 110_2$: un $B_1$ (raíz 6, hijo 10)
+y un $B_2$ (raíz 2, hijos 4 y 7, y 4 conserva a 9). Ver la visualización
 arriba para el paso a paso. (Derivado del pseudocódigo; el mazo no da
 valores.)
 

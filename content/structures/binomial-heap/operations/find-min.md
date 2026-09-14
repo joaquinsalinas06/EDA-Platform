@@ -16,7 +16,7 @@ Devuelve (sin quitar) el nodo con la menor llave de todo el montículo.
 
 ## Intuición
 
-En cada árbol `B_k` del montículo, la propiedad de min-heap garantiza que
+En cada árbol $B_k$ del montículo, la propiedad de min-heap garantiza que
 ningún nodo interno es menor que su raíz. Entonces el mínimo global tiene
 que estar en alguna raíz: basta recorrer la lista de raíces una vez y
 quedarse con la menor.
@@ -48,13 +48,13 @@ Ver `cpp/structures/binomial-heap/step-4-find-min.cpp`: `findMin` recorre
 
 ## Complejidad temporal
 
-`O(lg n)`: un montículo binomial con `n` nodos tiene a lo mucho
-`⌊lg n⌋ + 1` raíces (tantas como bits en la representación binaria de
-`n`), y Find-Min las recorre todas una vez.
+$O(\lg n)$: un montículo binomial con $n$ nodos tiene a lo mucho
+$\lfloor \lg n \rfloor + 1$ raíces (tantas como bits en la representación
+binaria de $n$), y Find-Min las recorre todas una vez.
 
 ## Complejidad espacial
 
-`O(1)`: sólo una variable para el mínimo visto hasta ahora.
+$O(1)$: sólo una variable para el mínimo visto hasta ahora.
 
 ## Ejemplo
 

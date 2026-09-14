@@ -14,17 +14,39 @@
 // es una cadena de ifs — pero acotada a este único archivo de ~10 líneas, y
 // sigue siendo el registro quien decide qué familias existen.
 import { VISUALIZATIONS } from '../visualizations/registry';
+import { visualizationSchema } from '../lib/schemas';
 import TreeVisualization from '../visualizations/tree/TreeVisualization';
 import PersistentVisualization from '../visualizations/persistent/PersistentVisualization';
 import RangeTreeVisualization from '../visualizations/range-tree/RangeTreeVisualization';
 
 interface Props {
-  viz: { type: keyof typeof VISUALIZATIONS; steps: any[] };
+  viz: { type: keyof typeof VISUALIZATIONS; mode?: string; steps: any[] };
 }
 
-const { viz } = Astro.props;
+const raw = Astro.props.viz;
+
+// Un .mdx pasa el objeto a mano y NO pasa por Zod, así que se queda sin los
+// valores por defecto del schema (`parent: null`, `highlight: []`…). Eso hacía
+// que un nodo raíz sin `parent` explícito no se reconociera como raíz y el
+// diagrama saliera VACÍO, en silencio. Validar aquí le da al MDX exactamente
+// el mismo contrato que al frontmatter, y un bloque mal escrito revienta el
+// build en vez de renderizar nada.
+const parsed = visualizationSchema.safeParse(raw);
+if (!parsed.success) {
+  throw new Error(
+    `Bloque visualization inválido en ${Astro.url.pathname}:\n` +
+      JSON.stringify(parsed.error.issues, null, 2),
+  );
+}
+const viz = parsed.data;
+
+// El `mode` del bloque es el DEFAULT de todos sus pasos (así lo declara
+// visualizationSchema). Los componentes sólo reciben `steps`, así que se
+// aplica aquí; si no, el mode a nivel de bloque se descartaba en silencio y
+// había que repetirlo paso por paso. El mode propio de un paso gana.
+const steps = viz.mode ? viz.steps.map((s) => ({ mode: viz.mode, ...s })) : viz.steps;
 ---
 
-{viz.type === 'tree' && <TreeVisualization client:visible steps={viz.steps} />}
-{viz.type === 'persistent' && <PersistentVisualization client:visible steps={viz.steps} />}
-{viz.type === 'range-tree' && <RangeTreeVisualization client:visible steps={viz.steps} />}
+{viz.type === 'tree' && <TreeVisualization client:visible steps={steps} />}
+{viz.type === 'persistent' && <PersistentVisualization client:visible steps={steps} />}
+{viz.type === 'range-tree' && <RangeTreeVisualization client:visible steps={steps} />}

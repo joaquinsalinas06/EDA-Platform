@@ -53,14 +53,14 @@ arriba.
 
 ## Complejidad temporal
 
-O(log n + k): O(log n) para hallar los subárboles canónicos
+$O(\log n + k)$: $O(\log n)$ para hallar los subárboles canónicos
 ([range-query-1d](/structures/range-tree/operations/range-query-1d)), más
 recorrer sus hojas — la suma de tamaños de subárboles disjuntos que caen en
 la respuesta es exactamente `k` (Sem4_Orthogonal_Range_Search.pdf#38).
 
 ## Complejidad espacial
 
-O(k) para la salida (además del O(log n) de la lista de subárboles).
+$O(k)$ para la salida (además del $O(\log n)$ de la lista de subárboles).
 
 ## Ejemplo
 
@@ -76,4 +76,4 @@ subárbol 13 da `13, 15`. Salida: `{7, 9, 13, 15}`.
 - **Ningún punto en rango**: `RangeQuery1D` no devuelve subárboles, la
   salida es la lista vacía.
 - **Todo el árbol en rango**: enumerar equivale a recorrer todas las hojas,
-  O(n) — coherente con `k = n` en la fórmula O(log n + k).
+  $O(n)$ — coherente con `k = n` en la fórmula $O(\log n + k)$.

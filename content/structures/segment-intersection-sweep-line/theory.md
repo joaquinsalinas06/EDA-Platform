@@ -32,22 +32,11 @@ cualquier segmento vertical que lo cruce en ese instante. Contar cruces se
 vuelve entonces contar cuántos segmentos horizontales están activos dentro
 del rango vertical que cubre el segmento vertical de turno.
 
-Diagrama del barrido en el caso simple (ejemplo derivado del pseudocódigo;
-no aparece en las diapositivas — el material no trae pseudocódigo ni
-ejemplo numérico, #34-38 es prosa pura):
-
-```
-y
-5 |        ┄┄┄┄┄┄┄┄●  H2 [x=4..7, y=5]
-4 |
-3 |   ●┄┄┄┄┄┄┄┄●          H1 [x=1..6, y=3]
-2 |        │
-1 |        │  V1 [x=4, y=0..5]
-0 +---│----│----│----│----│----│----│---- x
-  0   1    2    3    4    5    6    7
-
-barrido en x=4: H1 activo (1..6), H2 activo (4..7) → V1 cruza ambos → 2
-```
+Ver el barrido paso a paso, con H1 [x=1..6, y=3] y H2 [x=4..7, y=5]
+activándose y desactivándose, en
+[segment-activation](/structures/segment-intersection-sweep-line/operations/segment-activation);
+el conteo de V1 [x=4, y=0..5] cruzando a ambos, en
+[intersection-count](/structures/segment-intersection-sweep-line/operations/intersection-count).
 
 ## Estructura interna
 
@@ -71,7 +60,7 @@ barrido en una estructura ya cubierta.
   técnica que el material da por hecha.
 - **Consulta online** (#49-51): aplicar [path-copying](/structures/path-copying)
   sobre esa BBST convierte cada evento del barrido en una versión
-  persistente, así que una consulta a un instante `x_i` ya pasado no
+  persistente, así que una consulta a un instante $x_i$ ya pasado no
   necesita rehacer el barrido — sólo consulta la versión correspondiente.
 
 ## Operaciones
@@ -89,12 +78,12 @@ variante se atribuye directamente a la estructura elegida para representar
 el estado del barrido:
 
 - Caso simple: "Usando un Segment tree o un Fenwick tree se puede resolver
-  este caso especial en O(n log n)" (#38) — cita textual, el costo es el de
+  este caso especial en $O(n \log n)$" (#38) — cita textual, el costo es el de
   n activaciones/desactivaciones/consultas sobre esa estructura, sin
   desglose adicional.
-- Caso general offline: O((n+q) log n) total (#47) — n eventos y q consultas,
-  cada uno O(log n) sobre la BBST de cruces (#43).
-- Caso general online con persistencia: O(log n) por consulta (#51) — se
+- Caso general offline: $O((n+q) \log n)$ total (#47) — n eventos y q consultas,
+  cada uno $O(\log n)$ sobre la BBST de cruces (#43).
+- Caso general online con persistencia: $O(\log n)$ por consulta (#51) — se
   hereda del costo de consultar una versión persistente de la BBST, el mismo
   argumento de [path-copying](/structures/path-copying).
 
@@ -114,7 +103,7 @@ Ver [examples.md](/structures/segment-intersection-sweep-line/examples).
 | --- | --- | --- | --- |
 | estado del barrido | activo/inactivo por posición y | orden de cruces (BBST) | versión persistente de la BBST |
 | estructura que hereda el costo | segment-tree o fenwick-tree | balanced-bst | balanced-bst + path-copying |
-| costo total | O(n log n) (#38) | O((n+q) log n) (#47) | O(log n) por consulta (#51) |
+| costo total | $O(n \log n)$ (#38) | $O((n+q) \log n)$ (#47) | $O(\log n)$ por consulta (#51) |
 | restricción | sin intersecciones de la misma orientación (#29) | ninguna | ninguna |
 
 ## Prueba de dominio

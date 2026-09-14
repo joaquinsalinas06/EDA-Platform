@@ -62,6 +62,6 @@ persistente de la BBST en cada evento (ver
 consultar "¿cuál era el orden de cruces en x=1?" devuelve `[S1, S2]` sin
 necesidad de rehacer el barrido — la versión guardada en ese instante ya
 tiene la respuesta. Es el caso que hace evidente por qué el caso general
-online (O(log n) por consulta, #51) es estrictamente más útil que el
-offline (O((n+q) log n) total, #47) cuando no se conocen las consultas de
+online ($O(\log n)$ por consulta, #51) es estrictamente más útil que el
+offline ($O((n+q) \log n)$ total, #47) cuando no se conocen las consultas de
 antemano.

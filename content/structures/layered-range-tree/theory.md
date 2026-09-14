@@ -5,10 +5,10 @@ title: Layered range tree
 
 ## ¿Qué problema resuelve?
 
-Elimina el factor `lg n` de más que arrastra la consulta 2D del
+Elimina el factor $\lg n$ de más que arrastra la consulta 2D del
 [range tree](/structures/range-tree): en la versión ingenua, cada uno de los
-`O(lg n)` nodos canónicos en X dispara una búsqueda binaria completa en su
-árbol secundario de Y, para un total `O(lg² n)`. El profesor lo plantea como
+$O(\lg n)$ nodos canónicos en X dispara una búsqueda binaria completa en su
+árbol secundario de Y, para un total $O(\lg^2 n)$. El profesor lo plantea como
 la aplicación directa de [fractional cascading](/structures/fractional-cascading)
 a ese caso concreto: "Un Layered Range Tree aplica exactamente esa idea a las
 estructuras secundarias del árbol (que ya están relacionadas por mezcla
@@ -41,16 +41,16 @@ Cada nodo del árbol primario (el mismo árbol primario de
   `i` del arreglo del padre.
 
 > **Nota de apoyo** (no está en las diapositivas): el material no dice qué
-> hacer cuando `i` cae después del último elemento de un hijo. La
+> hacer cuando $i$ cae después del último elemento de un hijo. La
 > implementación necesita un **centinela**: una posición extra en cada
-> arreglo de puentes (de tamaño `|arreglo del nodo| + 1`) que apunta al final
+> arreglo de puentes (de tamaño $|\text{arreglo del nodo}| + 1$) que apunta al final
 > del arreglo del hijo, para que ninguna búsqueda intente leer fuera de
 > rango. Sin él, el caso "ningún elemento del hijo es mayor o igual" no
 > tiene a dónde apuntar.
 
 El invariante es más simple que el caso general de fractional cascading
 (#31 del material): ahí sólo se promueve la mitad de cada lista para no
-disparar el tamaño a `Θ(kn)`; aquí, como el arreglo del padre **es** la
+disparar el tamaño a $\Theta(kn)$; aquí, como el arreglo del padre **es** la
 unión de los de sus hijos, todo elemento del padre viene de alguno de los
 dos y por lo tanto todos llevan puente — no hay nada que decidir promover.
 
@@ -69,19 +69,19 @@ dos y por lo tanto todos llevan puente — no hay nada que decidir promover.
 Estilo del profesor: **conteo directo de pasos**, sin recurrencia, sin
 amortización, sin función potencial — el mismo estilo de
 [fractional cascading](/structures/fractional-cascading) aplicado ahora al
-árbol. La consulta ingenua hace `O(lg n)` nodos canónicos × `O(lg n)` de
+árbol. La consulta ingenua hace $O(\lg n)$ nodos canónicos × $O(\lg n)$ de
 búsqueda binaria en cada uno. La versión con puentes cambia ese `×` por un
-`+`: `O(lg n)` nodos canónicos × `O(1)` cada uno (tras una única búsqueda
-binaria real en la raíz) = `O(lg n)` en total — un factor de `lg n` menos.
+`+`: $O(\lg n)$ nodos canónicos × $O(1)$ cada uno (tras una única búsqueda
+binaria real en la raíz) = $O(\lg n)$ en total — un factor de $\lg n$ menos.
 El espacio no se re-deriva: el profesor lo afirma igual al del range tree
-ingenuo, `O(n lg n)`, con el argumento de que un puente por elemento (en
+ingenuo, $O(n \lg n)$, con el argumento de que un puente por elemento (en
 realidad dos: uno por hijo) no agrega memoria significativa.
 
 ## Tabla de complejidad
 
 La tabla se genera desde `meta.yaml`. El profesor sólo compara
-explícitamente la consulta (`O(lg² n)` → `O(lg n)`) y el espacio
-(`O(n lg n)` en ambos casos); no da un costo de tiempo de construcción
+explícitamente la consulta ($O(\lg^2 n)$ → $O(\lg n)$) y el espacio
+($O(n \lg n)$ en ambos casos); no da un costo de tiempo de construcción
 separado del de espacio, así que `sorted-array-replacement` y
 `bridge-build` heredan el mismo `O(n lg n)` agregado de la construcción del
 range tree 2D.
@@ -94,13 +94,13 @@ Ver [Ejemplos](/structures/layered-range-tree/examples).
 
 | | Consulta 2D | Espacio |
 | --- | --- | --- |
-| [Range tree](/structures/range-tree) (ingenuo) | O(lg² n) | O(n lg n) |
-| Layered range tree | O(lg n) | O(n lg n) |
+| [Range tree](/structures/range-tree) (ingenuo) | $O(\lg^2 n)$ | $O(n \lg n)$ |
+| Layered range tree | $O(\lg n)$ | $O(n \lg n)$ |
 
-El profesor generaliza además a `d` dimensiones: sin cascading,
-`O(lg^{d-1} n)` (la última dimensión ya usa un arreglo con una búsqueda
+El profesor generaliza además a $d$ dimensiones: sin cascading,
+$O(\lg^{d-1} n)$ (la última dimensión ya usa un arreglo con una búsqueda
 binaria, sin BST completo); aplicando cascading en las dimensiones
-intermedias, para `d > 2`, `O(lg^{d-2} n)`. Cada cascading adicional que se
+intermedias, para $d > 2$, $O(\lg^{d-2} n)$. Cada cascading adicional que se
 pueda encadenar quita, literalmente, un factor de `lg n` del tiempo de
 consulta, al costo de un puntero extra por elemento — no de una estructura
 nueva.

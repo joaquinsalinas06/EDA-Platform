@@ -7,6 +7,81 @@ cppSteps:
   - step-2-max-heapify.cpp
   - step-5-find-extract-min.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Derivado del pseudocódigo. Estado inicial, A = [14, 8, 10, 4, 2, 9,
+        3]: la raíz (posición 1) es el elemento que se extrae.
+      highlight: [n1]
+      nodes:
+        - { id: n1, value: 14, parent: null, state: active }
+        - { id: n2, value: 8, parent: n1 }
+        - { id: n3, value: 10, parent: n1 }
+        - { id: n4, value: 4, parent: n2 }
+        - { id: n5, value: 2, parent: n2 }
+        - { id: n6, value: 9, parent: n3 }
+        - { id: n7, value: 3, parent: n3 }
+    - note: >-
+        Se guarda el 14 como valor a devolver y se mueve el último elemento
+        (posición 7, valor 3) a la raíz para llenar el hueco sin romper la
+        forma de árbol casi completo; el montículo se achica a n=6, así que
+        la posición 7 deja de existir.
+      highlight: [n1]
+      nodes:
+        - { id: n1, value: 3, parent: null, state: active }
+        - { id: n2, value: 8, parent: n1 }
+        - { id: n3, value: 10, parent: n1 }
+        - { id: n4, value: 4, parent: n2 }
+        - { id: n5, value: 2, parent: n2 }
+        - { id: n6, value: 9, parent: n3 }
+    - note: >-
+        Max-Heapify(A, 1, 6): se compara A[1]=3 contra sus dos hijos,
+        A[2]=8 y A[3]=10. El mayor de los tres es A[3]=10, así que "largest"
+        pasa a ser 3 y hay que intercambiar.
+      highlight: [n1, n2, n3]
+      nodes:
+        - { id: n1, value: 3, parent: null }
+        - { id: n2, value: 8, parent: n1 }
+        - { id: n3, value: 10, parent: n1 }
+        - { id: n4, value: 4, parent: n2 }
+        - { id: n5, value: 2, parent: n2 }
+        - { id: n6, value: 9, parent: n3 }
+    - note: >-
+        Se intercambian A[1] y A[3]: el 10 sube a la raíz y el 3 baja a la
+        posición 3. i pasa a ser 3; la recursión continúa ahí.
+      highlight: [n1, n3]
+      nodes:
+        - { id: n1, value: 10, parent: null }
+        - { id: n2, value: 8, parent: n1 }
+        - { id: n3, value: 3, parent: n1, state: active }
+        - { id: n4, value: 4, parent: n2 }
+        - { id: n5, value: 2, parent: n2 }
+        - { id: n6, value: 9, parent: n3 }
+    - note: >-
+        En i=3, A[3]=3 sólo tiene hijo izquierdo (posición 6, valor 9): la
+        posición 7 ya no existe porque n=6. Se compara contra ese único hijo
+        y 9 es mayor, así que "largest" pasa a ser 6.
+      highlight: [n3, n6]
+      nodes:
+        - { id: n1, value: 10, parent: null }
+        - { id: n2, value: 8, parent: n1 }
+        - { id: n3, value: 3, parent: n1 }
+        - { id: n4, value: 4, parent: n2 }
+        - { id: n5, value: 2, parent: n2 }
+        - { id: n6, value: 9, parent: n3 }
+    - note: >-
+        Se intercambian A[3] y A[6]. Ahora i=6, que es hoja (n=6): "largest"
+        queda igual a i, la recursión se detiene y el invariante queda
+        restaurado. Estado final: A = [10, 8, 9, 4, 2, 3].
+      highlight: [n3, n6]
+      nodes:
+        - { id: n1, value: 10, parent: null }
+        - { id: n2, value: 8, parent: n1 }
+        - { id: n3, value: 9, parent: n1, state: active }
+        - { id: n4, value: 4, parent: n2 }
+        - { id: n5, value: 2, parent: n2 }
+        - { id: n6, value: 3, parent: n3 }
 ---
 
 <!-- Derivado; no aparece en las diapositivas (sólo Θ(lg n) en la tabla
@@ -52,22 +127,24 @@ de arriba.
 
 ## Complejidad temporal
 
-`Θ(lg n)`, tal como aparece en la tabla comparativa. Se deriva directo de
-Max-Heapify: mover el último elemento a la raíz es O(1), y restaurar el
-invariante con Max-Heapify cuesta O(lg n) por el mismo argumento de altura
+$\Theta(\lg n)$, tal como aparece en la tabla comparativa. Se deriva directo de
+Max-Heapify: mover el último elemento a la raíz es $O(1)$, y restaurar el
+invariante con Max-Heapify cuesta $O(\lg n)$ por el mismo argumento de altura
 (un único camino raíz-hoja).
 
 ## Complejidad espacial
 
-O(1) adicional, más la pila de Max-Heapify si se usa su versión recursiva.
+$O(1)$ adicional, más la pila de Max-Heapify si se usa su versión recursiva.
 
 ## Ejemplo
 
-Derivado: sobre `A = [14, 8, 10, 4, 2, 9, 3]`, `Extract-Min` guarda `14`,
-mueve el último elemento (`3`) a la raíz: `[3, 8, 10, 4, 2, 9]`, y llama
-Max-Heapify(A,1,6): `3` contra hijos `8` y `10`, el mayor es `10`, se
-intercambia; en la posición 3, `3` no tiene hijos (n=6), termina.
-Resultado: `[10, 8, 3, 4, 2, 9]`.
+Ver la visualización de arriba. Derivado: sobre `A = [14, 8, 10, 4, 2, 9, 3]`,
+`Extract-Min` guarda `14`, mueve el último elemento (`3`) a la raíz:
+`[3, 8, 10, 4, 2, 9]`, y llama Max-Heapify(A,1,6): `3` contra hijos `8` y
+`10`, el mayor es `10`, se intercambia (`[10, 8, 3, 4, 2, 9]`); en la
+posición 3 el único hijo válido es la posición 6 (`9`), porque n=6 y la
+posición 7 ya no existe: `3 < 9`, se intercambia una última vez.
+Resultado: `[10, 8, 9, 4, 2, 3]`.
 
 ## Casos límite
 

@@ -33,22 +33,111 @@ visualization:
         - { id: p18, value: 3, parent: n18i }
         - { id: p27, value: 1, parent: n18i }
     - note: >-
-        Cada nodo del primario (incluidas las hojas) tiene además un
-        puntero a un range tree secundario ordenado por Y, construido sobre
-        los mismos puntos de su subárbol. Aquí sólo el del nodo 15 (#47):
-        cuelga de él, por una flecha (no una relación padre-hijo del árbol
-        en X), un segundo árbol sobre sus 4 puntos — (13,0) (15,−2) (18,3)
-        (27,1) — ordenados por Y: −2, 0, 1, 3. Falta un campo para expresar
-        ese puntero cruzado; ver nota al final del bloque de operaciones.
-      highlight: [n15]
+        Empezamos por el nodo MÁS PEQUEÑO para que el patrón se vea sin
+        ruido: nodo 3 (hoja interna de n4), subárbol de sólo 2 puntos —
+        (3,10) y (4,7). Su secundario ordenado por Y es trivial: un único
+        separador (7, el menor) con las dos hojas como hijos. Este mismo
+        procedimiento —tomar los puntos del subárbol, ordenarlos por Y,
+        armar un árbol— se repite en TODOS los nodos del primario, no sólo
+        en éste.
+      highlight: [n3i]
+      panels:
+        - { id: secondary, label: "Secundario nodo 3", anchor: n3i }
       nodes:
-        - { id: y0, value: 0, parent: null }
-        - { id: yneg2i, value: -2, parent: y0 }
-        - { id: pleaf15, value: -2, parent: yneg2i }
-        - { id: pleaf13, value: 0, parent: yneg2i }
-        - { id: y1i, value: 1, parent: y0 }
-        - { id: pleaf27, value: 1, parent: y1i }
-        - { id: pleaf18, value: 3, parent: y1i }
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4, state: marked }
+        - { id: p3, value: 10, parent: n3i }
+        - { id: p4, value: 7, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: p7, value: 11, parent: n7i }
+        - { id: p9, value: 6, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: p13, value: 0, parent: n13i }
+        - { id: p15, value: -2, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: p18, value: 3, parent: n18i }
+        - { id: p27, value: 1, parent: n18i }
+        - { id: ry3sep, value: 7, parent: null, panel: secondary }
+        - { id: ry3leaf4, value: 7, parent: ry3sep, panel: secondary }
+        - { id: ry3leaf3, value: 10, parent: ry3sep, panel: secondary }
+    - note: >-
+        Un nodo intermedio: nodo 15, subárbol de 4 puntos — (13,0) (15,−2)
+        (18,3) (27,1) — ordenados por Y: −2, 0, 1, 3. Mismo procedimiento
+        que el nodo 3, ahora con un nivel más de anidamiento interno (dos
+        separadores en vez de uno) porque hay el doble de puntos. Sigue
+        siendo el MISMO patrón, sólo más grande.
+      highlight: [n15]
+      panels:
+        - { id: secondary, label: "Secundario nodo 15", anchor: n15 }
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: p3, value: 10, parent: n3i }
+        - { id: p4, value: 7, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: p7, value: 11, parent: n7i }
+        - { id: p9, value: 6, parent: n7i }
+        - { id: n15, value: 15, parent: r9, state: marked }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: p13, value: 0, parent: n13i }
+        - { id: p15, value: -2, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: p18, value: 3, parent: n18i }
+        - { id: p27, value: 1, parent: n18i }
+        - { id: y0, value: 0, parent: null, panel: secondary }
+        - { id: yneg2i, value: -2, parent: y0, panel: secondary }
+        - { id: pleaf15, value: -2, parent: yneg2i, panel: secondary }
+        - { id: pleaf13, value: 0, parent: yneg2i, panel: secondary }
+        - { id: y1i, value: 1, parent: y0, panel: secondary }
+        - { id: pleaf27, value: 1, parent: y1i, panel: secondary }
+        - { id: pleaf18, value: 3, parent: y1i, panel: secondary }
+    - note: >-
+        Y la raíz: nodo 9, subárbol de los 8 puntos completos. Su secundario
+        tiene EXACTAMENTE la misma forma recursiva que el árbol primario en
+        X (raíz separadora, dos hijos separadores, cuatro hojas por lado) —
+        sólo que construido sobre los valores de Y en vez de X. Esto escala:
+        cada nodo, sin excepción, trae su propio árbol secundario del mismo
+        tamaño que su propio subárbol.
+      highlight: [r9]
+      panels:
+        - { id: secondary, label: "Secundario de la raíz", anchor: r9 }
+      nodes:
+        - { id: r9, value: 9, parent: null, state: marked }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: p3, value: 10, parent: n3i }
+        - { id: p4, value: 7, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: p7, value: 11, parent: n7i }
+        - { id: p9, value: 6, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: p13, value: 0, parent: n13i }
+        - { id: p15, value: -2, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: p18, value: 3, parent: n18i }
+        - { id: p27, value: 1, parent: n18i }
+        - { id: yroot, value: 3, parent: null, panel: secondary }
+        - { id: ryc, value: 0, parent: yroot, panel: secondary }
+        - { id: rya, value: -2, parent: ryc, panel: secondary }
+        - { id: yleaf15, value: -2, parent: rya, panel: secondary }
+        - { id: yleaf13, value: 0, parent: rya, panel: secondary }
+        - { id: ryb, value: 1, parent: ryc, panel: secondary }
+        - { id: yleaf27, value: 1, parent: ryb, panel: secondary }
+        - { id: yleaf18, value: 3, parent: ryb, panel: secondary }
+        - { id: ryf, value: 7, parent: yroot, panel: secondary }
+        - { id: ryd, value: 6, parent: ryf, panel: secondary }
+        - { id: yleaf9, value: 6, parent: ryd, panel: secondary }
+        - { id: yleaf4, value: 7, parent: ryd, panel: secondary }
+        - { id: rye, value: 10, parent: ryf, panel: secondary }
+        - { id: yleaf3, value: 10, parent: rye, panel: secondary }
+        - { id: yleaf7, value: 11, parent: rye, panel: secondary }
+      caption: >-
+        Nodo 3 (2 pts), nodo 15 (4 pts), raíz (8 pts): el mismo patrón en
+        todos los nodos del primario, escalando con el tamaño del subárbol.
 ---
 
 ## Qué hace
@@ -76,10 +165,10 @@ de los hijos, sin pseudocódigo.)*
 1. Construir el árbol primario en X como en
    [build-1d](/structures/range-tree/operations/build-1d).
 2. Para cada nodo del primario, de las hojas hacia la raíz: el árbol
-   secundario del nodo se arma en O(tamaño del subárbol) **mezclando** (por
+   secundario del nodo se arma en $O(\text{tamaño del subárbol})$ **mezclando** (por
    Y, como en mergesort) los árboles secundarios ya construidos de sus dos
    hijos — "cada range tree correspondiente a subárboles puede ser
-   construido en O(n) usando la información de sus dos hijos" (#54).
+   construido en $O(n)$ usando la información de sus dos hijos" (#54).
 3. La hoja de un solo punto es, trivialmente, su propio árbol secundario de
    tamaño 1.
 
@@ -102,29 +191,33 @@ arriba.
 
 ## Complejidad temporal
 
-O(n log n): construir el primario ya cuesta O(n log n)
+$O(n \log n)$: construir el primario ya cuesta $O(n \log n)$
 ([build-1d](/structures/range-tree/operations/build-1d)); mezclar los
-secundarios nivel por nivel cuesta O(tamaño del subárbol) por nodo, que
-sumado sobre los O(log n) niveles da O(n log n) adicional
+secundarios nivel por nivel cuesta $O(\text{tamaño del subárbol})$ por nodo, que
+sumado sobre los $O(\log n)$ niveles da $O(n \log n)$ adicional
 (Sem4_Orthogonal_Range_Search.pdf#54-55).
 
 ## Complejidad espacial
 
-O(n log n): "cada hoja debería estar incluida en O(log n) subárboles"
+$O(n \log n)$: "cada hoja debería estar incluida en $O(\log n)$ subárboles"
 (#49) — cada punto vive en un árbol secundario por cada ancestro suyo en
-el primario, y hay O(log n) ancestros por punto.
+el primario, y hay $O(\log n)$ ancestros por punto.
 
 ## Ejemplo
 
-Ver la visualización de arriba: el árbol secundario del nodo 15, sobre sus
-4 puntos, con raíz 0 e hijos −2 y 1 — exactamente la diapositiva #47.
+Ver la visualización de arriba, en tres pasos crecientes: el secundario del
+nodo 3 (2 puntos), el del nodo 15 (raíz 0 e hijos −2 y 1, sobre sus 4
+puntos — exactamente la diapositiva #47) y el de la raíz completa (8
+puntos, con la misma forma recursiva que el primario en X). Los tres son el
+mismo procedimiento aplicado a subárboles de distinto tamaño — no hay nada
+especial en el nodo 15, sólo fue el ejemplo que trae el mazo.
 
 ## Casos límite
 
 - **Nodo hoja**: su árbol secundario es un único punto, sin construcción
   real.
 - **Raíz**: su árbol secundario contiene los n puntos ordenados por Y —
-  el más grande y el único que cuesta O(n) mezclar de una sola vez.
+  el más grande y el único que cuesta $O(n)$ mezclar de una sola vez.
 - **Puntos con Y repetida**: el orden por Y necesita un criterio de
   desempate (por ejemplo, por X) para que el árbol secundario quede bien
   definido; el material no lo menciona.

@@ -46,15 +46,15 @@ arriba.
 
 ## Complejidad temporal
 
-Costo real `O(1)`: agregar un nodo a una lista circular doblemente
+Costo real $O(1)$: agregar un nodo a una lista circular doblemente
 enlazada es empalmar cuatro punteros, sin recorrer nada. Con el potencial
-`Φ(H) = t(H) + 2·m(H)` (ver [Análisis de complejidad](/structures/fibonacci-heap#análisis-de-complejidad)
-en la teoría), `t(H)` sube en 1 y `m(H)` no cambia, así que `ΔΦ = 1` y el
-costo amortizado `ĉ = O(1) + 1 = O(1)`.
+$\Phi(H) = t(H) + 2 \cdot m(H)$ (ver [Análisis de complejidad](/structures/fibonacci-heap#análisis-de-complejidad)
+en la teoría), $t(H)$ sube en 1 y $m(H)$ no cambia, así que $\Delta\Phi = 1$ y el
+costo amortizado $\hat{c} = O(1) + 1 = O(1)$.
 
 ## Complejidad espacial
 
-`O(1)` adicional por nodo insertado (el nodo mismo).
+$O(1)$ adicional por nodo insertado (el nodo mismo).
 
 ## Ejemplo
 

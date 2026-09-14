@@ -19,7 +19,7 @@ Log con una sola operación: `[(t=1, +5)]`, contador en 5. Insertar
 
 - `r = 0`: no hay ninguna operación posterior a `t=2` que deshacer.
 - Deshacer: nada. Aplicar: contador `5 + 3 = 8`. Rehacer: nada.
-- Costo: `O(0) × (costo de una operación)` — el caso más barato posible, y
+- Costo: $O(0)$ × (costo de una operación) — el caso más barato posible, y
   el que ilustra por qué "si `t` está muy cerca del presente, el método es
   barato".
 
@@ -38,7 +38,7 @@ como el `t = 2,5` fraccionario que usa el material de retroactividad):
    (queda como estaba justo después de `(t=2, −2)`).
 3. Aplicar el cambio: `3 + 4 = 7`.
 4. Rehacer, en orden: `7 + 10 = 17`, luego `17 + 1 = 18`.
-5. Costo: `O(2) × (costo de una operación)` — se tocaron 2 operaciones de
+5. Costo: $O(2)$ × (costo de una operación) — se tocaron 2 operaciones de
    ida y 2 de vuelta, más la nueva.
 
 ## Límite
@@ -52,7 +52,7 @@ Mismo log de cuatro operaciones, pero ahora `Insert(t=0.5, +100)` —
    log).
 2. Deshacer las cuatro en orden inverso, aplicar el cambio, rehacer las
    cuatro en orden.
-3. Costo: `O(4) × (costo de una operación)` — el caso patológico: "si `t`
+3. Costo: $O(4)$ × (costo de una operación) — el caso patológico: "si `t`
    está muy atrás, `r ≈ m` y es tan caro como rehacerlo todo."
 
 Contrastando este caso con el "Normal" de arriba sobre el mismo log (`r=2`
@@ -62,4 +62,4 @@ análisis de
 Ninguna estructura arregla este caso dentro del propio método de rollback —
 para eso existen las técnicas especializadas, como la de
 [retroactive-priority-queue](/structures/retroactive-priority-queue), que
-rompen la barrera `O(r)` explotando propiedades específicas del problema.
+rompen la barrera $O(r)$ explotando propiedades específicas del problema.

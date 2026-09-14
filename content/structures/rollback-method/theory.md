@@ -46,7 +46,7 @@ posterior una por una (en orden inverso), aplicar ahí el cambio, y luego
   invertibilidad, y paga el precio de no tener conmutatividad rehaciendo
   todo en orden.
 - **El requisito de costo por operación** (página 40): "Que cada operación
-  (y su inversa) sea `O(1)` u `O(lg n)` — cualquier estructura eficiente y
+  (y su inversa) sea $O(1)$ u $O(\lg n)$ — cualquier estructura eficiente y
   reversible sirve." El método no impone una estructura subyacente
   particular: cualquiera que sea reversible y eficiente por operación
   individual funciona.
@@ -65,9 +65,9 @@ posterior una por una (en orden inverso), aplicar ahí el cambio, y luego
 Ver el desglose completo en
 [amortized-cost](/structures/rollback-method/operations/amortized-cost) — el
 análisis ES el contenido de esta técnica, no un apéndice. En resumen: el
-costo de `Insert(t, op)` o `Delete(t)` es `O(r)` veces el costo de una
+costo de `Insert(t, op)` o `Delete(t)` es $O(r)$ veces el costo de una
 operación individual, con `r` = número de operaciones posteriores a `t` en
-el log; y el profesor da además una cota inferior `Ω(r)` que muestra que, en
+el log; y el profesor da además una cota inferior $\Omega(r)$ que muestra que, en
 general, no se puede hacer mejor sin explotar alguna propiedad extra de la
 estructura.
 
@@ -76,7 +76,7 @@ estructura.
 | operación | peor caso | de dónde sale |
 | --- | --- | --- |
 | `Insert(t, op)` / `Delete(t)` | `O(r) × (costo de una operación individual)`, `r` = operaciones después de `t` | conteo directo: deshacer `r`, aplicar 1, rehacer `r` |
-| cota inferior | `Ω(r)` | argumento de adversario informal (ver amortized-cost) |
+| cota inferior | $\Omega(r)$ | argumento de adversario informal (ver amortized-cost) |
 
 El profesor no cuantifica el costo en espacio del log (queda implícito: hay
 que guardarlo completo).
@@ -92,7 +92,7 @@ derivados y marcados como tales.
 | | [retroactividad conmutativa e invertible](/structures/commutative-invertible-retroactivity) | método de rollback |
 | --- | --- | --- |
 | qué exige | conmutatividad **e** invertibilidad | sólo invertibilidad |
-| costo retroactivo | `O(1)` — igual que la operación original | `O(r)` × costo de una operación, con `r` = operaciones después de `t` |
+| costo retroactivo | $O(1)$ — igual que la operación original | `O(r)` × costo de una operación, con `r` = operaciones después de `t` |
 | por qué | la posición temporal es irrelevante por conmutatividad; borrar es aplicar la inversa | no hay atajo: hay que rehacer todo lo posterior en orden |
 | alcance | sólo estructuras cuyas operaciones cumplen ambas propiedades | cualquier estructura con operaciones reversibles y eficientes — el piso genérico |
 

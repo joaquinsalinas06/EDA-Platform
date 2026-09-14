@@ -10,8 +10,8 @@ binario: lo introduce directamente como definición ("un arreglo que
 representa un árbol binario casi completo"). Su utilidad como estructura de
 datos aparece implícita en la tabla comparativa de colas de prioridad
 (insert, find-min, extract-min, union, decrease-key, delete) y se hace
-explícita recién en el resumen: "el montículo binario es simple y Θ(n) para
-construir, pero Θ(n) para Union" — la debilidad que motiva pasar al
+explícita recién en el resumen: "el montículo binario es simple y $\Theta(n)$ para
+construir, pero $\Theta(n)$ para Union" — la debilidad que motiva pasar al
 montículo binomial.
 
 ## Intuición
@@ -28,15 +28,15 @@ elemento más grande, sin tener que buscarlo.
 Arreglo `A[1..n]` (1-indexado, como lo define el profesor con las fórmulas
 de índice). Para una posición `i`:
 
-- padre: `⌊i/2⌋`
-- hijo izquierdo: `2i`
-- hijo derecho: `2i + 1`
+- padre: $\lfloor i/2 \rfloor$
+- hijo izquierdo: $2i$
+- hijo derecho: $2i + 1$
 
-Invariante de montículo máximo: para todo nodo `i` con padre, `A[⌊i/2⌋] ≥ A[i]`.
+Invariante de montículo máximo: para todo nodo `i` con padre, $A[\lfloor i/2 \rfloor] \ge A[i]$.
 Está formulado como comparación local padre-hijo (no un orden total del
 arreglo) porque es lo único que Max-Heapify necesita revisar y restaurar en
-cada paso — de esa localidad sale que la reparación cueste sólo O(altura) y
-no O(n).
+cada paso — de esa localidad sale que la reparación cueste sólo $O(\text{altura})$ y
+no $O(n)$.
 
 ## Operaciones
 
@@ -63,15 +63,18 @@ El profesor usa dos estilos distintos, ambos **recurrence-based por conteo
 de niveles**, nunca amortizado ni potencial (esos aparecen recién con el
 montículo binomial y de Fibonacci):
 
-- **Max-Heapify**: no plantea la recurrencia `T(n) = T(2n/3) + O(1)` con
-  teorema maestro. Razona directo por altura del camino: "O(1) de trabajo
-  por nivel, y a lo más O(lg n) niveles: T(n) = O(lg n)".
+- **Max-Heapify**: no plantea la recurrencia $T(n) = T(2n/3) + O(1)$ con
+  teorema maestro. Razona directo por altura del camino: "$O(1)$ de trabajo
+  por nivel, y a lo más $O(\lg n)$ niveles: $T(n) = O(\lg n)$".
 - **Build-Max-Heap**: suma el costo real nivel por nivel usando el lema de
-  que a lo más `⌈n/2^(h+1)⌉` nodos están a altura `h`:
-  `T(n) ≤ Σ_{h=0}^{⌊lg n⌋} ⌈n/2^(h+1)⌉ · O(h) = O(n · Σ h/2^h)`, y cierra
-  porque esa serie geométrica derivada converge a 2. Es análisis agregado
-  por sumatoria — de ahí sale la cota **ajustada** Θ(n), en vez de la cota
-  ingenua O(n lg n) de llamar Max-Heapify n/2 veces sin este argumento.
+  que a lo más $\lceil n/2^{h+1} \rceil$ nodos están a altura `h`:
+
+  $$T(n) \le \sum_{h=0}^{\lfloor \lg n \rfloor} \lceil n/2^{h+1} \rceil \cdot O(h) = O\left(n \cdot \sum h/2^h\right)$$
+
+  y cierra porque esa serie geométrica derivada converge a 2. Es análisis
+  agregado por sumatoria — de ahí sale la cota **ajustada** $\Theta(n)$, en
+  vez de la cota ingenua $O(n \lg n)$ de llamar Max-Heapify n/2 veces sin
+  este argumento.
 
 > **Nota de apoyo** (no está en las diapositivas): el profesor enseña el
 > montículo binario como **máximo**, pero la tabla comparativa de la
@@ -90,7 +93,7 @@ Insert, find-min, extract-min, union, decrease-key y delete **sólo
 aparecen como filas de esa tabla**: el profesor no da pseudocódigo ni
 análisis propio de ninguna para el binario. Sus páginas de operaciones se
 derivan del mismo argumento de altura (sift-up/sift-down recorren a lo más
-`⌊lg n⌋` niveles) — marcado como derivado en cada operación.
+$\lfloor \lg n \rfloor$ niveles) — marcado como derivado en cada operación.
 
 ## Tabla de complejidad
 
@@ -107,12 +110,12 @@ Ver [Ejemplos](/structures/binary-heap/examples). Sólo el de Max-Heapify
 
 | | Insert | Find-min | Extract-min | Union | Decrease-key | Delete |
 | --- | --- | --- | --- | --- | --- | --- |
-| Montículo binario | Θ(lg n) | Θ(1) | Θ(lg n) | Θ(n) | Θ(lg n) | Θ(lg n) |
+| Montículo binario | $\Theta(\lg n)$ | $\Theta(1)$ | $\Theta(\lg n)$ | $\Theta(n)$ | $\Theta(\lg n)$ | $\Theta(\lg n)$ |
 
 El profesor sólo da esta fila para el binario en la tabla comparativa
 (diapositiva 19); las filas de binomial y Fibonacci se explican en sus
 propias estructuras. La razón declarada para pasar al montículo binomial es
-que este "arregla Union (O(lg n))".
+que este "arregla Union ($O(\lg n)$)".
 
 ## Prueba de dominio
 

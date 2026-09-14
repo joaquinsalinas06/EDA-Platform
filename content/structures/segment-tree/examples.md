@@ -24,10 +24,11 @@ raíz `[1,4]=10`, `[1,2]=3`, `[3,4]=7`, hojas `1,2,3,4`.
 
 ## Límite
 
-`n` no potencia de 2, por ejemplo `A = [7, 2, 9]` (n=3): la partición
+`n` no potencia de 2, por ejemplo `A = [7, 2, 9]` ($n=3$): la partición
 `m=(l+r)/2` da un árbol desbalanceado en forma (`[1,3]` con hijos `[1,2]` y
-`[3,3]`), pero la altura sigue siendo `⌈lg 3⌉ = 2`, y `Update`/`Query` siguen
-costando O(lg n). No hace falta ninguna estructura adicional para arreglar
+`[3,3]`), pero la altura sigue siendo $\lceil \lg 3 \rceil = 2$, y
+`Update`/`Query` siguen costando $O(\lg n)$. No hace falta ninguna estructura
+adicional para arreglar
 esto — a diferencia del montículo binario con Union, el segment tree no tiene
 un caso patológico que motive pasar a otra estructura; su límite real es que
 sólo sirve para funciones asociativas (no, por ejemplo, para "mediana" sin

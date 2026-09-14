@@ -50,7 +50,7 @@ desde `t = 1.5` en adelante para que `Query(ahora)` pase de `118` a `113`.
 
 Éste es el caso patológico que motiva el resto de la semana: borrar (o
 insertar) cerca del principio de una línea de tiempo larga fuerza a
-rehacer casi toda la secuencia, el costo `O(m)` completo. Las estructuras
+rehacer casi toda la secuencia, el costo $O(m)$ completo. Las estructuras
 que arreglan esto — sin cambiar la interfaz Insert/Delete/Query — son
 [retroactividad conmutativa e invertible](/structures/commutative-invertible-retroactivity),
 [problemas de búsqueda descomponibles](/structures/decomposable-search-problem)

@@ -16,11 +16,11 @@ Este tema es esa generalización, pero para un caso más específico que
 "cualquier estructura": los problemas de búsqueda **descomponibles**. Para
 ellos, la retroactividad **completa** (consultar cualquier tiempo del
 pasado, no sólo el presente) se consigue con un overhead multiplicativo de
-sólo `O(lg m)` por operación — sin exigir conmutatividad ni invertibilidad.
+sólo $O(\lg m)$ por operación — sin exigir conmutatividad ni invertibilidad.
 
 ## Intuición
 
-La idea completa cabe en una frase: si la respuesta sobre `A ∪ B` se puede
+La idea completa cabe en una frase: si la respuesta sobre $A \cup B$ se puede
 reconstruir combinando la respuesta sobre `A` y la respuesta sobre `B` (en
 tiempo constante), entonces no hace falta volver a mirar `A` ni `B` para
 responder sobre su unión. Esa es exactamente la propiedad que hace que un
@@ -33,9 +33,9 @@ Cada hoja ya no es una posición `A[i]`; es un instante de la línea de tiempo
 de operaciones que define [retroactividad](/structures/retroactivity). Una
 operación insertada en el tiempo `t` "vive" ahí, y su efecto se propaga hacia
 arriba exactamente igual que cambiar `A[i]` propaga un nuevo valor hacia la
-raíz. Insertar/eliminar en el pasado dejó de costar `O(m)` (rehacer todo) y
+raíz. Insertar/eliminar en el pasado dejó de costar $O(m)$ (rehacer todo) y
 pasó a costar lo mismo que un [Update](/structures/segment-tree/operations/update)
-de segment tree: `O(lg m)`.
+de segment tree: $O(\lg m)$.
 
 ## Estructura interna
 
@@ -43,17 +43,17 @@ Antes de construir nada hace falta la **condición** que hace posible esta
 reducción — no es un algoritmo, es un requisito sobre el problema:
 
 > Un problema de búsqueda sobre un conjunto `S` es **descomponible** si, para
-> cualquier partición `S = A ∪ B`:
+> cualquier partición $S = A \cup B$:
 >
-> ```
-> Query(x, A ∪ B) = f( Query(x, A), Query(x, B) )
-> ```
+> $$
+> Query(x, A \cup B) = f\bigl( Query(x, A), Query(x, B) \bigr)
+> $$
 >
-> para alguna función `f` calculable en `O(1)`.
+> para alguna función `f` calculable en $O(1)$.
 
 Cuatro ejemplos que el profesor da como descomponibles, con su `f`
 (página 32-33): "Mínimo, máximo, suma, existencia de un elemento — todos son
-descomponibles: `f = mín, máx, +, ∨`, respectivamente." Ver la operación
+descomponibles: $f = \min, \max, +, \vee$, respectivamente." Ver la operación
 [Decomposability](/structures/decomposable-search-problem/operations/decomposability)
 para el detalle de esta condición, sus ejemplos y su contraejemplo.
 
@@ -64,8 +64,8 @@ Dado un problema que sí cumple la condición, la construcción es (página
   entre dos operaciones consecutivas de la línea de tiempo (hay `m` de
   ellas, una por operación retroactiva insertada).
 - Cada **nodo interno** resume, con `f`, el efecto acumulado de todo su rango
-  de tiempo — el mismo invariante `valor(nodo) = f(valor(hijo_izq),
-  valor(hijo_der))` de un segment tree cualquiera, sólo que el eje que
+  de tiempo — el mismo invariante $valor(nodo) = f(valor(hijo_{izq}),
+  valor(hijo_{der}))$ de un segment tree cualquiera, sólo que el eje que
   particiona no es un arreglo de datos: es la línea de tiempo.
 
 > **Nota de apoyo** (no está en las diapositivas): el mazo no dice cómo se
@@ -102,10 +102,10 @@ El argumento completo, sin más pasos que estos tres:
 1. Se construye un segment tree sobre el eje del tiempo (`m` hojas).
 2. Insertar/eliminar una operación en el tiempo `t` es un
    [Update](/structures/segment-tree/operations/update) de ese árbol: toca
-   `O(lg m)` nodos — "¡el mismo Update que ya conocemos!" (página 34-35).
-3. Por lo tanto, el overhead retroactivo es `O(lg m)` multiplicativo por
-   operación. Si la estructura original respondía una consulta en `O(q)`, la
-   versión retroactiva completa responde en `O(q · lg m)` (página 36-37).
+   $O(\lg m)$ nodos — "¡el mismo Update que ya conocemos!" (página 34-35).
+3. Por lo tanto, el overhead retroactivo es $O(\lg m)$ multiplicativo por
+   operación. Si la estructura original respondía una consulta en $O(q)$, la
+   versión retroactiva completa responde en $O(q \cdot \lg m)$ (página 36-37).
 
 Nada de esto exige contar pasos ni definir un potencial: el costo del
 Update se hereda sin volver a probarlo, exactamente como cita el profesor.
@@ -127,9 +127,9 @@ Ver [examples.md](/structures/decomposable-search-problem/examples).
 
 | | [conmutativa e invertible](/structures/commutative-invertible-retroactivity) | descomponible (este tema) | [rollback](/structures/rollback-method) |
 | --- | --- | --- | --- |
-| requisito sobre las operaciones | conmutan **y** son invertibles | `Query(A∪B) = f(Query(A), Query(B))`, `f` en O(1) | ninguno especial (cualquier operación reversible en O(1) o O(lg n)) |
+| requisito sobre las operaciones | conmutan **y** son invertibles | $Query(A\cup B) = f(Query(A), Query(B))$, `f` en $O(1)$ | ninguno especial (cualquier operación reversible en $O(1)$ o $O(\lg n)$) |
 | retroactividad que da | parcial | **completa** | completa |
-| overhead | ninguno (cuesta igual que la operación original) | `O(lg m)` multiplicativo | depende de rehacer el log — el peor caso, no acotado por este argumento |
+| overhead | ninguno (cuesta igual que la operación original) | $O(\lg m)$ multiplicativo | depende de rehacer el log — el peor caso, no acotado por este argumento |
 | contraejemplo del mazo | — | `Delete-Min` **no** es descomponible (simple); ver [retroactive-priority-queue](/structures/retroactive-priority-queue) | (es el método que cubre lo que las otras dos no alcanzan) |
 
 El profesor marca el límite de este tema con el mismo ejemplo que motiva el

@@ -16,5 +16,6 @@ complexity: {}
 # generalized-fractional-cascading (#53-54, #59-63).
 
 professorAnalysisStyle: composición estructural
-hasVisualization: false
+hasVisualization: true
+visualizationType: tree
 placeholder: false

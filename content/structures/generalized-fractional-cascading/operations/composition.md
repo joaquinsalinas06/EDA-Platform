@@ -13,7 +13,7 @@ Junta [Applicability](/structures/generalized-fractional-cascading/operations/ap
 y [Bounded-degree-check](/structures/generalized-fractional-cascading/operations/bounded-degree-check)
 en el resultado final: con el grafo de cascading generalizado conectando
 [D₄ sobre D₃ sobre D₂ sobre D₁](/structures/d4-bound-z), una sola búsqueda
-binaria real al entrar por `x` alcanza para navegar **todos** los niveles.
+binaria real al entrar por $x$ alcanza para navegar **todos** los niveles.
 
 ## Intuición
 
@@ -31,14 +31,14 @@ O(1) porque el puente ya deja la posición a ajustar, no a rebuscar.
    ejemplo, entrar por D₄, bajar a D₃, seguir el enlace a la estructura
    invertida si hace falta).
 2. Hacer **una única** búsqueda binaria real en el vértice de entrada:
-   `O(lg n)`.
-3. Para cada paso siguiente del camino (`O(k)` pasos en total), bajar el
-   puente correspondiente y ajustar en `O(1)` — el mismo mecanismo de
+   $O(\lg n)$.
+3. Para cada paso siguiente del camino ($O(k)$ pasos en total), bajar el
+   puente correspondiente y ajustar en $O(1)$ — el mismo mecanismo de
    [fractional cascading#query](/structures/fractional-cascading/operations/query),
    aplicado a la arista concreta que toca en ese paso del grafo.
-4. El costo total es la suma de estos pasos: `O(lg n)` (la búsqueda real) +
-   `O(1) · O(lg n)` (los pasos de descenso) + `O(k)` (reportar) =
-   `O(lg n + k)`.
+4. El costo total es la suma de estos pasos: $O(\lg n)$ (la búsqueda real) +
+   $O(1) \cdot O(\lg n)$ (los pasos de descenso) + $O(k)$ (reportar) =
+   $O(\lg n + k)$.
 
 ## Pseudocódigo
 
@@ -62,20 +62,20 @@ vértice del camino, contando comparaciones de ambas.
 
 ## Complejidad temporal
 
-`O(lg n + k)`, donde `k` es el número de pasos del camino recorrido. Textual
-(#54): `O(lg n) + O(1)·O(lg n) + O(k) = O(lg n + k)`. Es el mismo argumento
+$O(\lg n + k)$, donde $k$ es el número de pasos del camino recorrido. Textual
+(#54): $O(\lg n) + O(1) \cdot O(\lg n) + O(k) = O(\lg n + k)$. Es el mismo argumento
 de conteo directo de
 [fractional cascading#query](/structures/fractional-cascading/operations/query#complejidad-temporal),
 aplicado a un camino de un grafo en vez de a una cadena fija: el grado
-acotado es lo que garantiza que cada paso siga costando `O(1)`, sin importar
+acotado es lo que garantiza que cada paso siga costando $O(1)$, sin importar
 cuál arista se recorra.
 
 ## Complejidad espacial
 
-`O(n lg³ n)` para la consulta 3D completa (#57): "cada punto aparece, en
-promedio, `O(lg³ n)` veces entre las distintas copias de D₁, D₂ y D₃
-anidadas dentro de D₄" — un argumento de multiplicidad, no de conteo de
-pasos, igual que el `O(n lg n)` del range tree 2D de la semana 4.
+$O(n \lg^3 n)$ para la consulta 3D completa (#57): "cada punto aparece, en
+promedio, $O(\lg^3 n)$ veces entre las distintas copias de $D_1$, $D_2$ y $D_3$
+anidadas dentro de $D_4$" — un argumento de multiplicidad, no de conteo de
+pasos, igual que el $O(n \lg n)$ del range tree 2D de la semana 4.
 
 ## Ejemplo
 
@@ -89,17 +89,17 @@ grafo.
 
 ## Casos límite
 
-- **Camino de un solo vértice (`k = 1`)**: la navegación se reduce a la
-  única búsqueda binaria real, sin ningún paso de descenso — `O(lg n)`,
+- **Camino de un solo vértice ($k = 1$)**: la navegación se reduce a la
+  única búsqueda binaria real, sin ningún paso de descenso — $O(\lg n)$,
   coherente con la fórmula general.
 - **El camino repite un vértice** (por ejemplo, entra y vuelve a la raíz
   antes de saltar a la gemela invertida, como en el ejemplo de C++): no
-  rompe nada — cada paso del camino sigue costando `O(1)` porque depende de
+  rompe nada — cada paso del camino sigue costando $O(1)$ porque depende de
   la arista que se recorre, no de si el vértice ya se visitó antes.
-- **d dimensiones (generalización, #64-66)**: para `d ≥ 3`, el cascading
-  completo (Chazelle & Guibas 1986) da `O(lg^(d−2) n + k)` con espacio
-  `O(n lg^(d−1) n)`; la alternativa de cascading sólo en el nivel más
-  interno (Willard 1985; Gabow, Bentley & Tarjan 1984) da `O(lg^(d−1) n + k)`
-  con el mismo espacio. Para `d = 3` (este caso): `lg^(d−2) n = lg n` contra
-  `lg^(d−1) n = lg² n` — la diferencia exacta que separa D₁-D₄ completo de
+- **d dimensiones (generalización, #64-66)**: para $d \ge 3$, el cascading
+  completo (Chazelle & Guibas 1986) da $O(\lg^{d-2} n + k)$ con espacio
+  $O(n \lg^{d-1} n)$; la alternativa de cascading sólo en el nivel más
+  interno (Willard 1985; Gabow, Bentley & Tarjan 1984) da $O(\lg^{d-1} n + k)$
+  con el mismo espacio. Para $d = 3$ (este caso): $\lg^{d-2} n = \lg n$ contra
+  $\lg^{d-1} n = \lg^2 n$ — la diferencia exacta que separa $D_1$-$D_4$ completo de
   la versión más simple.

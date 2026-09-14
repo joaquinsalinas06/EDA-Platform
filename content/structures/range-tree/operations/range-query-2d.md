@@ -60,14 +60,14 @@ de arriba.
 
 ## Complejidad temporal
 
-O(log² n + k): O(log n) subárboles canónicos en X, cada uno con una
-consulta 1D de O(log n) en su secundario de Y —
-"O(log n) en O(log n) árboles" (#50) — más O(k) de salida.
+$O(\log^2 n + k)$: $O(\log n)$ subárboles canónicos en X, cada uno con una
+consulta 1D de $O(\log n)$ en su secundario de Y —
+"$O(\log n)$ en $O(\log n)$ árboles" (#50) — más $O(k)$ de salida.
 
 ## Complejidad espacial
 
-O(log n) adicional para las listas intermedias de subárboles (el espacio
-de la estructura misma, O(n log n), ya se pagó en
+$O(\log n)$ adicional para las listas intermedias de subárboles (el espacio
+de la estructura misma, $O(n \log n)$, ya se pagó en
 [build-2d](/structures/range-tree/operations/build-2d)).
 
 ## Ejemplo
@@ -77,7 +77,7 @@ de la estructura misma, O(n log n), ya se pagó en
 incluye a 13, 15, 18; sobre su secundario en Y, `RangeQuery1D` con
 `[-3,2]` descarta el punto con Y=3 (que sería 18) y devuelve los puntos con
 Y en `{-2,0,1}`, es decir (15,−2), (13,0), (27,1) — pero 27 no cumple
-`x∈[13,20]`, así que en un caso real ese punto vendría de un subárbol
+$x \in [13,20]$, así que en un caso real ese punto vendría de un subárbol
 distinto y se filtraría ahí; este ejemplo ilustra el mecanismo, no un
 recorrido exhaustivo completo.
 

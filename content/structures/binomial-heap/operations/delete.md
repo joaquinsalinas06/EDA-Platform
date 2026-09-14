@@ -49,20 +49,20 @@ extraído.
 
 ## Complejidad temporal
 
-`O(lg n)`. Es la suma de dos operaciones que ya cuestan `O(lg n)` cada una
-(Decrease-Key y Extract-Min): `O(lg n) + O(lg n) = O(lg n)`.
+$O(\lg n)$. Es la suma de dos operaciones que ya cuestan $O(\lg n)$ cada una
+(Decrease-Key y Extract-Min): $O(\lg n) + O(\lg n) = O(\lg n)$.
 
 ## Complejidad espacial
 
-`O(1)` adicional, más allá de lo que ya usan Decrease-Key y Extract-Min.
+$O(1)$ adicional, más allá de lo que ya usan Decrease-Key y Extract-Min.
 
 ## Ejemplo
 
-Sobre el `B1` (raíz 1, hijo 5) que quedó al final del ejemplo de
+Sobre el $B_1$ (raíz 1, hijo 5) que quedó al final del ejemplo de
 [Decrease-Key](/structures/binomial-heap/operations/decrease-key), borrar
 el nodo con llave 5: `Decrease-Key(x, -∞)` lo sube (intercambia con la
 raíz 1, que pasa a tener `-∞`), y ese nodo con `-∞` ahora es el mínimo del
-montículo; `Extract-Min` lo saca, dejando un único `B0` con llave 1.
+montículo; `Extract-Min` lo saca, dejando un único $B_0$ con llave 1.
 (Derivado a mano; el mazo no trae esta traza.)
 
 ## Casos límite

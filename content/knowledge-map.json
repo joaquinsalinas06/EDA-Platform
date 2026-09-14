@@ -106,7 +106,8 @@
       "usedBy": ["binomial-heap"],
       "operations": [],
       "sourceSlides": ["Sem_1_Heaps_I-1.pdf#29-32"],
-      "hasVisualization": false,
+      "hasVisualization": true,
+      "visualizationType": "tree",
       "complexityStyleFromProfessor": "definición recursiva + conteo combinatorio",
       "status": "generated"
     },
@@ -142,7 +143,7 @@
       "usedBy": ["fibonacci-heap", "fat-nodes"],
       "operations": [],
       "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (1)-1.pdf#32-33"],
-      "hasVisualization": false,
+      "hasVisualization": true,
       "complexityStyleFromProfessor": "potential-method",
       "status": "generated"
     },
@@ -192,7 +193,8 @@
       "usedBy": ["fat-nodes", "path-copying"],
       "operations": [],
       "sourceSlides": ["Sem_3_Persistencia-1.pdf#6-12"],
-      "hasVisualization": false,
+      "hasVisualization": true,
+      "visualizationType": "tree",
       "complexityStyleFromProfessor": "definición de modelo de cómputo",
       "status": "generated"
     },
@@ -205,7 +207,7 @@
       "usedBy": ["fat-nodes", "path-copying"],
       "operations": [],
       "sourceSlides": ["Sem_3_Persistencia-1.pdf#13-20"],
-      "hasVisualization": false,
+      "hasVisualization": true,
       "complexityStyleFromProfessor": "taxonomía",
       "status": "generated"
     },
@@ -257,7 +259,8 @@
       ],
       "operations": ["insert-retroactive", "delete-retroactive", "query"],
       "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf#8-20"],
-      "hasVisualization": false,
+      "hasVisualization": true,
+      "visualizationType": "persistent",
       "complexityStyleFromProfessor": "definición de modelo y taxonomía",
       "status": "generated"
     },
@@ -270,7 +273,8 @@
       "usedBy": [],
       "operations": ["insert-retroactive", "delete-retroactive"],
       "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf#21-28"],
-      "hasVisualization": false,
+      "hasVisualization": true,
+      "visualizationType": "persistent",
       "complexityStyleFromProfessor": "argumento algebraico",
       "status": "generated"
     },
@@ -297,7 +301,8 @@
       "usedBy": [],
       "operations": ["rollback-replay", "amortized-cost"],
       "sourceSlides": ["CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (2).pdf#38-44"],
-      "hasVisualization": false,
+      "hasVisualization": true,
+      "visualizationType": "persistent",
       "complexityStyleFromProfessor": "conteo directo del trabajo rehecho",
       "status": "generated"
     },
@@ -339,7 +344,8 @@
       "usedBy": ["segment-intersection-sweep-line"],
       "operations": ["update", "prefix-query"],
       "sourceSlides": [],
-      "hasVisualization": false,
+      "hasVisualization": true,
+      "visualizationType": "range-tree",
       "supportConcept": true,
       "status": "generated"
     },
@@ -352,7 +358,8 @@
       "usedBy": ["range-tree", "layered-range-tree"],
       "operations": ["existence", "count", "enumeration"],
       "sourceSlides": ["Sem4_Orthogonal_Range_Search.pdf#5-42"],
-      "hasVisualization": false,
+      "hasVisualization": true,
+      "visualizationType": "range-tree",
       "complexityStyleFromProfessor": "conteo estructural directo",
       "status": "generated"
     },
@@ -388,7 +395,8 @@
       "usedBy": ["vertical-ray-shooting"],
       "operations": ["locate", "edge-update"],
       "sourceSlides": ["Sem4_Planar_Point_Location.pdf#5-23"],
-      "hasVisualization": false,
+      "hasVisualization": true,
+      "visualizationType": "tree",
       "complexityStyleFromProfessor": "análisis por reducción",
       "status": "generated"
     },
@@ -401,7 +409,8 @@
       "usedBy": ["segment-intersection-sweep-line", "dominance-2d"],
       "operations": ["ray-query"],
       "sourceSlides": ["Sem4_Planar_Point_Location.pdf#18-23"],
-      "hasVisualization": false,
+      "hasVisualization": true,
+      "visualizationType": "range-tree",
       "complexityStyleFromProfessor": "reducción",
       "status": "generated"
     },
@@ -419,7 +428,8 @@
         "persistent-online-query"
       ],
       "sourceSlides": ["Sem4_Planar_Point_Location.pdf#24-51"],
-      "hasVisualization": false,
+      "hasVisualization": true,
+      "visualizationType": "range-tree",
       "complexityStyleFromProfessor": "reducción + herencia de cota",
       "status": "generated"
     },
@@ -487,7 +497,8 @@
       "usedBy": ["d4-bound-z"],
       "operations": ["build", "locate-separation-node", "query"],
       "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#35-43"],
-      "hasVisualization": false,
+      "hasVisualization": true,
+      "visualizationType": "tree",
       "complexityStyleFromProfessor": "composición estructural",
       "status": "generated"
     },
@@ -540,7 +551,7 @@
       "usedBy": ["dynamic-optimality", "splay-tree"],
       "operations": [],
       "sourceSlides": ["Sem5_Dynamic_Optimality_I.pdf#29-50"],
-      "hasVisualization": false,
+      "hasVisualization": true,
       "complexityStyleFromProfessor": "amortized",
       "status": "generated"
     },
@@ -553,7 +564,7 @@
       "usedBy": ["splay-tree"],
       "operations": [],
       "sourceSlides": ["Sem5_Dynamic_Optimality_I.pdf#51-58"],
-      "hasVisualization": false,
+      "hasVisualization": true,
       "complexityStyleFromProfessor": "análisis competitivo",
       "status": "generated"
     },

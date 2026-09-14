@@ -30,10 +30,13 @@ test('el orden horizontal es el inorden', () => {
 });
 
 test('un árbol degenerado se abanica en vez de apilarse en vertical', () => {
+  // Cadena de hijos DERECHOS de un BST. Como cada nodo tiene un solo hijo, el
+  // orden de hermanos no revela el lado: hay que declararlo con `side`.
   const chain: TreeNode[] = [1, 2, 3, 4, 5].map((v, i) => ({
     id: `n${v}`,
     value: v,
     parent: i === 0 ? null : `n${v - 1}`,
+    ...(i === 0 ? {} : { side: 'right' as const }),
   }));
   const nodes = layout(chain);
   const xs = nodes.sort((a, b) => a.y - b.y).map((n) => n.x);
@@ -63,4 +66,56 @@ test('un nodo `collapsed` (subárbol entero) conserva la marca y se posiciona co
   assert.equal(n.get('C')!.collapsed, true);
   assert.equal(n.get('p')!.collapsed, undefined, 'un nodo normal no debería quedar marcado');
   assert.equal(n.get('n')!.collapsed, undefined);
+});
+
+// Regresión: el layout ordenaba los hermanos por valor y repartía izquierda/
+// derecha comparándolos con el padre, que es la regla de un BST. En un
+// montículo los DOS hijos son menores que el padre, así que caían del mismo
+// lado y el árbol salía en diagonal. Ningún test lo cubría.
+test('un montículo máximo se dibuja como árbol, no en diagonal', () => {
+  // A = [14, 8, 10, 4, 2, 9, 3] tras Max-Heapify: los dos hijos < padre.
+  const heap: TreeNode[] = [
+    { id: 'n1', value: 14, parent: null },
+    { id: 'n2', value: 8, parent: 'n1' },
+    { id: 'n3', value: 10, parent: 'n1' },
+    { id: 'n4', value: 4, parent: 'n2' },
+    { id: 'n5', value: 2, parent: 'n2' },
+    { id: 'n6', value: 9, parent: 'n3' },
+    { id: 'n7', value: 3, parent: 'n3' },
+  ];
+  const n = byId(layout(heap));
+  // La raíz va centrada entre sus dos hijos, no a un extremo.
+  assert.equal(n.get('n1')!.x, (n.get('n2')!.x + n.get('n3')!.x) / 2);
+  // El orden horizontal es el de declaración (= orden del arreglo), no el de valor:
+  // 4, 2, 8, 9, 3 ... es decir n4 < n2 < n5 y n6 < n3 < n7.
+  assert.ok(n.get('n4')!.x < n.get('n2')!.x && n.get('n2')!.x < n.get('n5')!.x);
+  assert.ok(n.get('n6')!.x < n.get('n3')!.x && n.get('n3')!.x < n.get('n7')!.x);
+  // Y el subárbol izquierdo entero queda a la izquierda del derecho.
+  assert.ok(n.get('n5')!.x < n.get('n6')!.x);
+});
+
+test('un árbol multivía respeta el orden de los hermanos', () => {
+  // Un B_3 binomial: la raíz tiene tres hijos de grados 2, 1 y 0.
+  const b3: TreeNode[] = [
+    { id: 'r', value: 1, parent: null },
+    { id: 'a', value: 9, parent: 'r' },
+    { id: 'b', value: 5, parent: 'r' },
+    { id: 'c', value: 3, parent: 'r' },
+  ];
+  const n = byId(layout(b3));
+  assert.ok(n.get('a')!.x < n.get('b')!.x && n.get('b')!.x < n.get('c')!.x);
+  assert.equal(n.get('r')!.x, (n.get('a')!.x + n.get('c')!.x) / 2);
+});
+
+test('side decide el lado cuando hay un solo hijo (BST)', () => {
+  const izq = byId(layout([
+    { id: 'p', value: 10, parent: null },
+    { id: 'h', value: 5, parent: 'p', side: 'left' },
+  ]));
+  assert.ok(izq.get('h')!.x < izq.get('p')!.x);
+  const der = byId(layout([
+    { id: 'p', value: 10, parent: null },
+    { id: 'h', value: 20, parent: 'p', side: 'right' },
+  ]));
+  assert.ok(der.get('h')!.x > der.get('p')!.x);
 });

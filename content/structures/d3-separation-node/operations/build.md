@@ -10,15 +10,15 @@ cppSteps:
 
 ## Qué hace
 
-Arma la estructura D₃ completa: un árbol de rango sobre `y` en el que cada
+Arma la estructura $D_3$ completa: un árbol de rango sobre `y` en el que cada
 nodo interno guarda, sobre los puntos de sus dos hijos, dos estructuras
 satélite.
 
 ## Intuición
 
 Construir un BST balanceado ordenado por `y` es la parte fácil (es la misma
-idea que ya usa [range-tree](/structures/range-tree)). Lo que hace a D₃
-distinto es qué se cuelga de cada nodo: no una copia genérica de D₂ para todo
+idea que ya usa [range-tree](/structures/range-tree)). Lo que hace a $D_3$
+distinto es qué se cuelga de cada nodo: no una copia genérica de $D_2$ para todo
 el subárbol, sino **dos** copias específicas, una por cada hijo, elegidas
 para que en el nodo de separación de cualquier consulta futura ya sobre una
 de las dos direcciones ("normal" a la derecha, "invertida" a la izquierda —
@@ -28,17 +28,17 @@ ver [Estructura interna](/structures/d3-separation-node)).
 
 Textual del profesor (#37-39): "Un árbol de rango sobre y (no sobre x). Cada
 nodo v de este árbol guarda dos estructuras satélite, sobre los puntos de sus
-dos hijos: en derecha(v), una estructura D₂ normal (acotada por arriba,
-y ≤ b2); en izquierda(v), una estructura D₂ invertida, D₂′ (acotada por
-abajo, y ≥ a2)."
+dos hijos: en derecha(v), una estructura $D_2$ normal (acotada por arriba,
+$y \le b_2$); en izquierda(v), una estructura $D_2$ invertida, $D_2'$ (acotada por
+abajo, $y \ge a_2$)."
 
-1. Ordenar los puntos por `y` y construir el árbol de rango balanceado
+1. Ordenar los puntos por y y construir el árbol de rango balanceado
    (mediana como raíz, recursión en las dos mitades — igual que
    [range-tree](/structures/range-tree)).
 2. En cada nodo `v` con hijos, construir:
    - una [D₂](/structures/d2-bound-x) normal sobre los puntos del subárbol
      derecho de `v`;
-   - una D₂′ invertida sobre los puntos del subárbol izquierdo de `v`.
+   - una $D_2'$ invertida sobre los puntos del subárbol izquierdo de `v`.
 
 ## Pseudocódigo
 

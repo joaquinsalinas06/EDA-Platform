@@ -103,12 +103,12 @@ en el editor de arriba.
 
 ## Complejidad temporal
 
-O(lg n): un único descenso desde la raíz, de longitud a lo más la altura
-del árbol, que el invariante de balance mantiene en O(lg n).
+$O(\lg n)$: un único descenso desde la raíz, de longitud a lo más la altura
+del árbol, que el invariante de balance mantiene en $O(\lg n)$.
 
 ## Complejidad espacial
 
-O(1) adicional (versión iterativa): sólo se guardan `candidato` y `nodo`.
+$O(1)$ adicional (versión iterativa): sólo se guardan `candidato` y `nodo`.
 
 ## Ejemplo
 

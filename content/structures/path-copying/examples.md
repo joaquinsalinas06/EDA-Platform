@@ -38,11 +38,11 @@ completo en la visualización de
 El caso patológico de path copying es actualizar **la posición más profunda
 posible en la estructura más alta posible**: en un segment tree con `n`
 hojas, cualquier `Update` copia un nodo por nivel, y la altura es siempre
-`O(lg n)` sin importar cuál hoja se actualice — no hay una posición "peor"
+$O(\lg n)$ sin importar cuál hoja se actualice — no hay una posición "peor"
 que otra, a diferencia de un árbol no balanceado. El peor caso real de la
-técnica está en el trie: insertar una cadena de largo `L` copia `O(L)`
-nodos, y si `L` no está acotado por `lg n` (una cadena mucho más larga que
-`lg(cantidad de cadenas)`), ese camino puede ser arbitrariamente más largo
+técnica está en el trie: insertar una cadena de largo `L` copia $O(L)$
+nodos, y si `L` no está acotado por $\lg n$ (una cadena mucho más larga que
+$\lg(\text{cantidad de cadenas})$), ese camino puede ser arbitrariamente más largo
 que el de un segment tree sobre el mismo número de elementos. Lo que "viene
 a arreglar" ese costo no es otra estructura — el material no lo plantea
 así — sino la observación de la tabla comparativa: el costo de path copying

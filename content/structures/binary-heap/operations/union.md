@@ -47,15 +47,15 @@ Ver `step-8-union.cpp` y `full-implementation.cpp` en el editor de arriba.
 
 ## Complejidad temporal
 
-`Θ(n)` (con `n = n1 + n2`), tal como aparece en la tabla comparativa. Se
+$\Theta(n)$ (con `n = n1 + n2`), tal como aparece en la tabla comparativa. Se
 deriva del mismo análisis agregado por niveles de Build-Max-Heap, aplicado
 ahora al arreglo concatenado. Es explícitamente la debilidad del montículo
 binario frente al binomial: el resumen del profesor dice que este último
-"arregla Union (O(lg n))".
+"arregla Union ($O(\lg n)$)".
 
 ## Complejidad espacial
 
-O(n1 + n2) para el arreglo combinado (a menos que se reutilice uno de los
+$O(n1 + n2)$ para el arreglo combinado (a menos que se reutilice uno de los
 dos arreglos originales, como hace la implementación de referencia).
 
 ## Ejemplo
@@ -70,5 +70,5 @@ con Build-Max-Heap, dando un montículo válido de 6 elementos con raíz `9`.
   otro arreglo tal cual (que, si ya era válido, no hace ningún intercambio).
 - **Ambos vacíos**: el resultado es el montículo vacío.
 - **Los dos montículos ya intercalados de forma que no requieren
-  intercambios** tras concatenar: sigue costando Θ(n) porque Build-Max-Heap
-  hace las `⌊n/2⌋` llamadas de todas formas, sólo que cada una termina rápido.
+  intercambios** tras concatenar: sigue costando $\Theta(n)$ porque Build-Max-Heap
+  hace las $\lfloor n/2 \rfloor$ llamadas de todas formas, sólo que cada una termina rápido.

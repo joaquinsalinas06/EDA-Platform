@@ -30,9 +30,9 @@ Lo que sí cita el mazo, sin derivarlo ni usarlo en el curso, son resultados
 de la literatura para mapas generales dinámicos (#60-61):
 
 - Baumgarten, Jung y Mehlhorn (1994): consulta e inserción
-  O(log n · log log n), eliminación O(log² n).
-- Arge, Brodal y Georgiadis (2006): consulta O(log n), inserción
-  O(log^{1+ε} n), eliminación O(log^{2+ε} n).
+  $O(\log n \cdot \log \log n)$, eliminación $O(\log^2 n)$.
+- Arge, Brodal y Georgiadis (2006): consulta $O(\log n)$, inserción
+  $O(\log^{1+\epsilon} n)$, eliminación $O(\log^{2+\epsilon} n)$.
 
 Son citas de cultura del área, no contenido del curso — de ahí que esta
 operación no tenga entrada en la tabla de complejidad de `meta.yaml`.

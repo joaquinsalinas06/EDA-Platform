@@ -14,44 +14,104 @@ visualization:
   type: tree
   steps:
     - note: >-
-        Estado inicial (derivado, no está en las diapositivas): tres
-        raíces sueltas de grado 0 con llaves 7, 3 y 5, resultado de haber
-        subido los hijos de la antigua raíz mínima en Extract-Min. A[d]
-        está vacío para todo d.
-      highlight: ["r7", "r3", "r5"]
+        Estado inicial (derivado, no está en las diapositivas): cuatro
+        raíces sueltas de grado 0 con llaves 8, 4, 6 y 2, en ese orden en
+        la lista circular. A todavía está vacío en todas las casillas —
+        éste es el caso "con acarreo" (como sumar en binario): varias
+        colisiones de grado se van a encadenar.
+      caption: "A = [ _ , _ , _ ]"
+      highlight: ["r8", "r4", "r6", "r2"]
       nodes:
-        - { id: r7, value: 7, parent: null }
-        - { id: r3, value: 3, parent: null }
-        - { id: r5, value: 5, parent: null }
+        - { id: r8, value: 8, parent: null }
+        - { id: r4, value: 4, parent: null }
+        - { id: r6, value: 6, parent: null }
+        - { id: r2, value: 2, parent: null }
     - note: >-
-        Se procesa la raíz 7 (grado 0): A[0] está vacío, así que sólo se
-        guarda A[0] = 7. Nada se enlaza todavía.
-      highlight: ["r7"]
+        Se procesa la raíz 8 (grado 0): A[0] está vacío, así que sólo se
+        guarda A[0] = 8. Nada se enlaza todavía.
+      caption: "A = [ 8 , _ , _ ]"
+      highlight: ["r8"]
       nodes:
-        - { id: r7, value: 7, parent: null }
-        - { id: r3, value: 3, parent: null }
-        - { id: r5, value: 5, parent: null }
+        - { id: r8, value: 8, parent: null }
+        - { id: r4, value: 4, parent: null }
+        - { id: r6, value: 6, parent: null }
+        - { id: r2, value: 2, parent: null }
     - note: >-
-        Se procesa la raíz 3 (grado 0): A[0] ya tiene a 7. Como
-        llave(3) < llave(7), NO se intercambia (3 ya es el menor);
-        Binomial-Link(7, 3) hace de 7 hijo de 3. A[0] se limpia, d pasa a
-        1, y como A[1] está vacío, se guarda A[1] = 3 (ahora de grado 1).
-      highlight: ["r3", "r7"]
+        Se procesa la raíz 4 (grado 0): A[0] ya tiene a 8, mismo grado ⇒
+        hay que enlazar. Se compara llave(4) contra llave(8): como 4 no es
+        mayor, 4 se queda como padre y 8 pasa a ser su hijo —
+        Binomial-Link(8, 4).
+      caption: "A = [ 8 , _ , _ ]  →  comparando 4 vs 8"
+      highlight: ["r4", "r8"]
       nodes:
-        - { id: r3, value: 3, parent: null }
-        - { id: r7, value: 7, parent: r3 }
-        - { id: r5, value: 5, parent: null }
+        - { id: r8, value: 8, parent: null }
+        - { id: r4, value: 4, parent: null }
+        - { id: r6, value: 6, parent: null }
+        - { id: r2, value: 2, parent: null }
     - note: >-
-        Se procesa la raíz 5 (grado 0): A[0] está vacío (se limpió en el
-        paso anterior), así que sólo se guarda A[0] = 5. Fin del
-        recorrido: quedan A[0] = 5 y A[1] = 3(con hijo 7) — todos los
-        grados en la lista de raíces final son distintos, exactamente como
-        en un montículo binomial.
-      highlight: ["r5"]
+        Tras el enlace: 8 cuelga de 4, A[0] se limpia y el grado del árbol
+        resultante sube a 1. Como A[1] está vacío, se guarda A[1] = 4 (con
+        su hijo 8) ahí. Es el mismo "acarreo" de sumar dos unos en binario:
+        la casilla de abajo queda libre y la de arriba recibe el resultado.
+      caption: "A = [ _ , 4(8) , _ ]"
+      highlight: ["r4", "r8"]
       nodes:
-        - { id: r3, value: 3, parent: null }
-        - { id: r7, value: 7, parent: r3 }
-        - { id: r5, value: 5, parent: null }
+        - { id: r8, value: 8, parent: r4 }
+        - { id: r4, value: 4, parent: null }
+        - { id: r6, value: 6, parent: null }
+        - { id: r2, value: 2, parent: null }
+    - note: >-
+        Se procesa la raíz 6 (grado 0): A[0] está vacío (se limpió en el
+        paso anterior), así que sólo se guarda A[0] = 6. Todavía no hay
+        colisión en este grado.
+      caption: "A = [ 6 , 4(8) , _ ]"
+      highlight: ["r6"]
+      nodes:
+        - { id: r8, value: 8, parent: r4 }
+        - { id: r4, value: 4, parent: null }
+        - { id: r6, value: 6, parent: null }
+        - { id: r2, value: 2, parent: null }
+    - note: >-
+        Se procesa la raíz 2 (grado 0): A[0] tiene a 6, mismo grado ⇒
+        enlazar. llave(2) < llave(6), así que 2 se queda como padre y 6
+        pasa a ser su hijo — Binomial-Link(6, 2). El árbol resultante
+        (2 con hijo 6) sube a grado 1 y busca casilla en A[1].
+      caption: "A = [ 6 , 4(8) , _ ]  →  comparando 2 vs 6"
+      highlight: ["r2", "r6"]
+      nodes:
+        - { id: r8, value: 8, parent: r4 }
+        - { id: r4, value: 4, parent: null }
+        - { id: r6, value: 6, parent: null }
+        - { id: r2, value: 2, parent: null }
+    - note: >-
+        Segundo acarreo en la misma raíz: A[1] ya tiene a 4 (con hijo 8).
+        Se compara llave(2) contra llave(4): 2 es menor, así que 2 se
+        queda como padre y todo el árbol de 4 (con su hijo 8) pasa a ser
+        hijo de 2 de un solo golpe — es lo que exige `collapsed` cuando el
+        subárbol es grande, aquí se ve completo porque cabe. A[1] se
+        limpia, el grado sube a 2 y A[2] está vacío, así que se guarda
+        A[2] = 2.
+      caption: "A = [ _ , _ , 2(6, 4(8)) ]"
+      highlight: ["r2", "r4"]
+      nodes:
+        - { id: r8, value: 8, parent: r4 }
+        - { id: r4, value: 4, parent: r2 }
+        - { id: r6, value: 6, parent: r2 }
+        - { id: r2, value: 2, parent: null }
+    - note: >-
+        Fin del recorrido: la lista de raíces se reconstruye a partir de
+        A y queda una única raíz, 2, de grado 2, con hijos 6 (hoja) y 4
+        (que a su vez tiene a 8 como hijo) — todos los grados de la lista
+        de raíces final son distintos (aquí sólo queda uno), exactamente
+        como fusionar cuatro árboles binomiales de grado 0 en una cadena de
+        acarreos hasta un único árbol de grado 2.
+      caption: "A = [ _ , _ , 2(6, 4(8)) ]  — final"
+      highlight: ["r2"]
+      nodes:
+        - { id: r8, value: 8, parent: r4 }
+        - { id: r4, value: 4, parent: r2 }
+        - { id: r6, value: 6, parent: r2 }
+        - { id: r2, value: 2, parent: null }
 ---
 
 ## Qué hace
@@ -114,26 +174,28 @@ redefinirla, asumiendo el montículo binomial de la semana 1).
 
 ## Complejidad temporal
 
-Costo real, **no amortizado**: `O(D(n) + t(H))`, con `t(H)` el número de
-raíces originales (recorrerlas todas) y `D(n) = O(lg n)` el tamaño del
+Costo real, **no amortizado**: $O(D(n) + t(H))$, con $t(H)$ el número de
+raíces originales (recorrerlas todas) y $D(n) = O(\lg n)$ el tamaño del
 arreglo `A` (la cota de grado máximo, probada en
 [Análisis de complejidad](/structures/fibonacci-heap#análisis-de-complejidad)
 vía la recurrencia de Fibonacci). Es la pieza real que
 [Extract-Min](/structures/fibonacci-heap/operations/extract-min) paga
-completa; su efecto — dejar a lo más `D(n) + 1` árboles, sin importar
+completa; su efecto — dejar a lo más $D(n) + 1$ árboles, sin importar
 cuántos había antes — es lo que hace que el costo *amortizado* de
-Extract-Min salga `O(D(n))` y no `O(t(H))`.
+Extract-Min salga $O(D(n))$ y no $O(t(H))$.
 
 ## Complejidad espacial
 
-`O(D(n))` para el arreglo `A`.
+$O(D(n))$ para el arreglo `A`.
 
 ## Ejemplo
 
-Ver la visualización paso a paso arriba: tres raíces sueltas de grado 0
-(llaves 7, 3, 5) se reducen a dos raíces de grados distintos (5 de grado 0,
-y 3 de grado 1 con 7 como hijo) — el mismo comportamiento que fusionar
-árboles binomiales de igual grado.
+Ver la visualización paso a paso arriba: cuatro raíces sueltas de grado 0
+(llaves 8, 4, 6, 2) se reducen, con dos acarreos encadenados, a una sola
+raíz de grado 2 (llave 2, con hijos 6 y 4, y 4 a su vez con hijo 8) — el
+mismo comportamiento que sumar en binario cuando varias posiciones
+generan acarreo, o que fusionar cuatro árboles binomiales de grado 0 en
+una sola pasada.
 
 ## Casos límite
 
@@ -143,8 +205,8 @@ y 3 de grado 1 con 7 como hijo) — el mismo comportamiento que fusionar
   sin ningún enlace — `Consolidate` no cambia nada.
 - **Todas las raíces ya tienen grados distintos**: cada una encuentra su
   casilla `A[d]` vacía en el primer intento; no ocurre ningún
-  `Binomial-Link`, pero igual se paga el recorrido `O(t(H))` completo.
+  `Binomial-Link`, pero igual se paga el recorrido $O(t(H))$ completo.
 - **Muchas raíces del mismo grado (el caso que sí hace trabajo real)**:
   cada fusión sube el grado en 1 y puede volver a colisionar con `A[d+1]`,
   encadenando varios enlaces para una sola raíz original — acotado por
-  `D(n)` porque el grado no puede subir más que eso.
+  $D(n)$ porque el grado no puede subir más que eso.

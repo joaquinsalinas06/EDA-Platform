@@ -35,7 +35,10 @@ export type NodeShape = 'box' | 'cell' | 'record' | 'port' | 'subtree';
 
 /**
  * Vocabulario cerrado de estados — ninguna familia inventa uno nuevo.
- * `active` es el ÚNICO que usa el azul; el resto se distingue por relleno,
+ * `active` es el ÚNICO que usa el azul (`--accent`). `marked` (ámbar,
+ * delimitador) y `answer` (carmesí, respuesta canónica) son los otros dos
+ * estados con color — cada uno con su propia variable, nunca `--accent`.
+ * `shared`/`copied`/`muted` siguen sin color: se distinguen por relleno,
  * contorno, opacidad y trazo. Ver AGENTS.md § Diseño.
  */
 export const NODE_STATES = [
@@ -191,15 +194,15 @@ export function nodeStyle(state: NodeState): NodeVisual {
       };
     case 'marked':
       return {
-        fill: 'var(--paper)',
-        stroke: 'var(--ink)',
+        fill: 'var(--marked)',
+        stroke: 'var(--marked-ink)',
         strokeWidth: 2,
         opacity: 1,
-        text: 'var(--ink)',
+        text: 'var(--marked-ink)',
         double: true,
       };
     case 'answer':
-      return { fill: 'var(--slab)', stroke: 'var(--slab)', strokeWidth: 1.5, opacity: 1, text: 'var(--slab-ink)' };
+      return { fill: 'var(--answer)', stroke: 'var(--answer)', strokeWidth: 1.5, opacity: 1, text: 'var(--answer-ink)' };
     case 'shared':
       return {
         fill: 'var(--sunken)',

@@ -1,6 +1,63 @@
 ---
 kind: theory
 title: "Optimalidad dinámica"
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Árbol estático de partida sobre las llaves {1,2,3,4}, fijo antes de
+        ver la secuencia S = (1,1,1,1,4,4,4,4) *(derivado; ver
+        examples.md)*. Un algoritmo que no se reestructura paga esta forma
+        para toda la secuencia.
+      nodes:
+        - { id: n2, value: 2 }
+        - { id: n1, value: 1, parent: n2, side: left }
+        - { id: n3, value: 3, parent: n2, side: right }
+        - { id: n4, value: 4, parent: n3, side: right }
+    - note: >-
+        Bloque de accesos a 1: con este árbol fijo, cada acceso baja
+        raíz→1, profundidad 2. Costo real por acceso — el que paga
+        cualquier estrategia que no anticipe el bloque.
+      highlight: ["n1"]
+      nodes:
+        - { id: n2, value: 2, state: idle }
+        - { id: n1, value: 1, parent: n2, side: left, state: active }
+        - { id: n3, value: 3, parent: n2, side: right }
+        - { id: n4, value: 4, parent: n3, side: right }
+    - note: >-
+        OPT(S) ve la secuencia completa de antemano y ya eligió 1 como raíz
+        desde el inicio: profundidad 1 en todo el primer bloque. Marcado
+        `answer` porque es la respuesta canónica del óptimo offline, no algo
+        que un algoritmo online pueda saber sin ver el futuro.
+      highlight: ["n1"]
+      nodes:
+        - { id: n1, value: 1, state: answer }
+        - { id: n2, value: 2, parent: n1, side: right }
+        - { id: n3, value: 3, parent: n2, side: right }
+        - { id: n4, value: 4, parent: n3, side: right }
+    - note: >-
+        En la frontera entre bloques, OPT rota una vez para subir 4 —
+        anticipando el segundo bloque. Un algoritmo online real sólo podría
+        notar el cambio de patrón *después* de verlo, no en la frontera
+        exacta: esa es la brecha que "O(1)-competitivo" preguntaría si se
+        puede cerrar.
+      highlight: ["n4"]
+      nodes:
+        - { id: n4, value: 4, state: answer }
+        - { id: n1, value: 1, parent: n4, side: left }
+        - { id: n2, value: 2, parent: n1, side: right }
+        - { id: n3, value: 3, parent: n2, side: right }
+    - note: >-
+        Bloque de accesos a 4: profundidad 1 por acceso, igual de barato que
+        el primer bloque. El costo total de OPT sobre S queda muy por debajo
+        del estático — la pregunta abierta es si algún algoritmo *online*
+        logra acercarse a este total sin ver S por adelantado.
+      highlight: ["n4"]
+      nodes:
+        - { id: n4, value: 4, state: active }
+        - { id: n1, value: 1, parent: n4, side: left }
+        - { id: n2, value: 2, parent: n1, side: right }
+        - { id: n3, value: 3, parent: n2, side: right }
 ---
 
 ## ¿Qué problema resuelve?
@@ -23,17 +80,17 @@ no una solución.
 
 ## Intuición
 
-Pensar en un adversario que ve la secuencia completa de búsquedas `S` antes
+Pensar en un adversario que ve la secuencia completa de búsquedas $S$ antes
 de construir el árbol y elegir todas las rotaciones que quiera en cada paso:
-ese adversario logra el costo mínimo posible, `OPT(S)`, porque no tiene que
+ese adversario logra el costo mínimo posible, $OPT(S)$, porque no tiene que
 decidir nada a ciegas. Un algoritmo real (un BST autoajustable) sólo ve las
 búsquedas una por una, en orden, y decide sus rotaciones sin saber qué viene
 después.
 
 La pregunta de fondo es si esa desventaja de información —no conocer el
 futuro— cuesta *mucho* o cuesta *poco*: si existe un algoritmo online cuyo
-costo total sobre cualquier `S` esté siempre a lo más una constante veces
-`OPT(S)`, la desventaja de no ver el futuro no importa asintóticamente.
+costo total sobre cualquier $S$ esté siempre a lo más una constante veces
+$OPT(S)$, la desventaja de no ver el futuro no importa asintóticamente.
 
 ## Estructura interna
 
@@ -53,35 +110,33 @@ Estilo del profesor: **análisis competitivo** — el costo de un algoritmo
 online se mide como razón contra el costo del óptimo offline para la misma
 entrada, no en términos absolutos ni por recurrencia.
 
-Sea `S` una secuencia de búsquedas y `OPT(S)` el costo mínimo posible para
+Sea $S$ una secuencia de búsquedas y $OPT(S)$ el costo mínimo posible para
 atenderla con *algún* BST sobre el modelo computacional BST — incluyendo
-todas las rotaciones que se quieran, elegidas viendo `S` por completo de
+todas las rotaciones que se quieran, elegidas viendo $S$ por completo de
 antemano. El profesor define (#53):
 
-```
-Complejidad total(S) = O(OPT(S))
-```
+$$\text{Complejidad total}(S) = O(OPT(S))$$
 
 Un algoritmo online (que sólo ve las búsquedas en orden, una por una) es
-**O(1)-competitivo** si existe una constante `k` tal que, para *toda*
-secuencia `S`, su costo total al atender `S` es a lo más `k · OPT(S)`. Es la
+**$O(1)$-competitivo** si existe una constante $k$ tal que, para *toda*
+secuencia $S$, su costo total al atender $S$ es a lo más $k \cdot OPT(S)$. Es la
 pregunta que el profesor formula literalmente como "¿es posible tener un
 algoritmo de BST dinámico que pueda igualar al rendimiento óptimo si se
 supiera el futuro?" (#54).
 
 Lo que se sabe (#56-58):
 
-- **¿Existe un BST O(1)-competitivo?** Abierto. "Por el momento es un
+- **¿Existe un BST $O(1)$-competitivo?** Abierto. "Por el momento es un
   problema abierto para BST" (#56).
-- **¿Existe un algoritmo O(1)-competitivo sobre máquina de punteros** (sin
+- **¿Existe un algoritmo $O(1)$-competitivo sobre máquina de punteros** (sin
   la restricción de ser un BST)**?** También abierto — y es una pregunta
   *distinta* de la anterior, porque máquina de punteros es un modelo más
   permisivo (#57).
 - **¿Se sabe algo parcial?** Sí: "es posible obtener un algoritmo
-  O(log log n)-competitivo para BST" (#58). El profesor no nombra qué
+  $O(\log \log n)$-competitivo para BST" (#58). El profesor no nombra qué
   estructura logra esa cota — no inventar cuál es.
 
-> **Nota de apoyo** (no está en las diapositivas): `OPT(S)` tampoco se define
+> **Nota de apoyo** (no está en las diapositivas): $OPT(S)$ tampoco se define
 > operacionalmente en el mazo — no se dice cómo calcularlo ni si es
 > computable en tiempo razonable. El material lo usa como una cantidad de
 > referencia, no como algo que un algoritmo pueda obtener en la práctica.
@@ -90,7 +145,7 @@ Lo que se sabe (#56-58):
 > calcular eficientemente.
 
 Por qué esto es una pregunta abierta y no un resultado sin probar todavía:
-nadie ha exhibido un algoritmo O(1)-competitivo para BST, pero tampoco se ha
+nadie ha exhibido un algoritmo $O(1)$-competitivo para BST, pero tampoco se ha
 probado que sea imposible. Ambas direcciones siguen sin resolverse.
 
 ## Tabla de complejidad
@@ -104,7 +159,7 @@ de una operación sino el estado de una conjetura.
 
 Ver [examples.md](/structures/dynamic-optimality#ejemplos): no hay ejemplos
 numéricos en el mazo (el profesor no instancia secuencias concretas para
-este tema), así que se ilustra la definición de `OPT(S)` con secuencias
+este tema), así que se ilustra la definición de $OPT(S)$ con secuencias
 pequeñas derivadas a mano.
 
 ## Comparación con estructuras relacionadas

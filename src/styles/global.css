@@ -30,6 +30,13 @@
   --accent: #1a56db;
   --accent-ink: #ffffff;
   --accent-wash: #eaf0fe;
+  /* `marked` (delimitador, el amarillo del profesor) y `answer` (raíz de
+     subárbol canónico, su rojo) — los dos únicos estados además de `active`
+     que llevan color. Contraste AA verificado contra su propio `-ink`. */
+  --marked: #f5c518;
+  --marked-ink: #1f1300;
+  --answer: #b91c1c;
+  --answer-ink: #ffffff;
   /* El código es siempre una losa oscura, en los dos temas. */
   --slab: #14171c;
   --slab-ink: #dfe3e8;
@@ -48,6 +55,10 @@
     --accent: #6f9bff;
     --accent-ink: #0a0b0d;
     --accent-wash: #16203a;
+    --marked: #d9a812;
+    --marked-ink: #1f1300;
+    --answer: #ef8a80;
+    --answer-ink: #2a0a0a;
     --slab: #0f1115;
     --slab-ink: #dfe3e8;
   }
@@ -64,6 +75,10 @@
   --accent: #6f9bff;
   --accent-ink: #0a0b0d;
   --accent-wash: #16203a;
+  --marked: #d9a812;
+  --marked-ink: #1f1300;
+  --answer: #ef8a80;
+  --answer-ink: #2a0a0a;
   --slab: #0f1115;
   --slab-ink: #dfe3e8;
 }

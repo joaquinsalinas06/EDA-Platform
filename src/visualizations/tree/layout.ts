@@ -2,6 +2,11 @@ export type TreeNode = {
   id: string;
   value: string | number;
   parent: string | null;
+  /** Sólo para árboles BINARIOS con UN solo hijo, donde el orden de
+   * declaración no basta para saber de qué lado cuelga. En heaps y en
+   * árboles multivía (binomial, Fibonacci) no se usa: ahí la posición la
+   * fija el orden de los hermanos. */
+  side?: 'left' | 'right';
   /** Este nodo representa un subárbol entero (p.ej. "A"/"B"/"C" en una
    * rotación), no una clave suelta — se dibuja como un triángulo, la
    * convención de los libros, no como una caja normal. */
@@ -15,10 +20,18 @@ const ROW = 56;
 /**
  * Convierte {id, value, parent} en coordenadas.
  *
- * Las hojas ocupan columnas consecutivas en inorden; cada padre se centra
- * sobre sus hijos, y un padre con un solo hijo se desplaza media columna para
- * que se vea de qué lado cuelga (sin eso, una cadena degenerada se dibuja como
- * una línea vertical ilegible).
+ * Los hermanos se colocan en el ORDEN EN QUE SE DECLARAN, nunca ordenados por
+ * valor. Es lo único correcto para las tres formas que usa el curso:
+ *   - montículo: el hijo izquierdo es A[2i] y el derecho A[2i+1]; la posición
+ *     la fija el índice del arreglo, y AMBOS hijos son menores que el padre,
+ *     así que compararlos con el padre no distingue lados;
+ *   - binomial / Fibonacci: árboles multivía, donde "izquierda" y "derecha"
+ *     ni siquiera existen — sólo el orden de los hermanos;
+ *   - BST: los agentes declaran izquierdo y luego derecho.
+ *
+ * Cada padre se centra sobre sus hijos. Un padre con UN solo hijo se desplaza
+ * media columna sólo si el nodo declara `side`, que es el único caso donde el
+ * lado importa y el orden no lo revela (un BST con un hijo).
  */
 export function layout(nodes: TreeNode[]): LaidOut[] {
   const children = new Map<string | null, TreeNode[]>();
@@ -27,24 +40,22 @@ export function layout(nodes: TreeNode[]): LaidOut[] {
     list.push(n);
     children.set(n.parent, list);
   }
-  for (const list of children.values()) list.sort((a, b) => (a.value < b.value ? -1 : 1));
-
   const out: LaidOut[] = [];
   let column = 0;
 
   const visit = (node: TreeNode, depth: number): number => {
     const kids = children.get(node.id) ?? [];
-    const left = kids.filter((k) => k.value < node.value);
-    const right = kids.filter((k) => k.value >= node.value);
-
-    const lx = left.map((k) => visit(k, depth + 1));
-    const rx = right.map((k) => visit(k, depth + 1));
+    const xs = kids.map((k) => visit(k, depth + 1));
 
     let cx: number;
-    if (lx.length && rx.length) cx = (Math.max(...lx) + Math.min(...rx)) / 2;
-    else if (lx.length) cx = Math.max(...lx) + 0.5;
-    else if (rx.length) cx = Math.min(...rx) - 0.5;
-    else cx = column++;
+    if (xs.length === 0) {
+      cx = column++;
+    } else if (xs.length === 1 && kids[0].side) {
+      // Único caso donde el orden no dice el lado: un BST con un solo hijo.
+      cx = kids[0].side === 'left' ? xs[0] + 0.5 : xs[0] - 0.5;
+    } else {
+      cx = (Math.min(...xs) + Math.max(...xs)) / 2;
+    }
 
     out.push({ id: node.id, label: String(node.value), x: cx, y: depth, collapsed: node.collapsed });
     return cx;

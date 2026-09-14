@@ -46,13 +46,13 @@ pointer-moves, que es lo que el C++ de `search` reporta al final.
 
 ## Complejidad temporal
 
-O(1). El profesor lo postula como costo unitario del modelo (#19), no lo
+$O(1)$. El profesor lo postula como costo unitario del modelo (#19), no lo
 deriva: seguir un puntero es un paso constante sin importar cuántos nodos
 haya en el árbol.
 
 ## Complejidad espacial
 
-O(1) adicional: sólo se actualiza el puntero a la posición actual.
+$O(1)$ adicional: sólo se actualiza el puntero a la posición actual.
 
 ## Ejemplo
 

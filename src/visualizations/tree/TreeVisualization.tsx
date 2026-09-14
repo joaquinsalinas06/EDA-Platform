@@ -2,7 +2,15 @@ import VisualizationCanvas, { type CanvasStep } from '../../components/Visualiza
 import { boxWidth } from '../canvas-types';
 import { layout, W, type TreeNode } from './layout';
 
-export type TreeStep = { note: string; nodes: TreeNode[]; highlight: string[] };
+export type TreeLink = { from: string; to: string; kind?: 'tree' | 'shared' | 'pointer'; label?: string };
+export type TreeStep = {
+  note: string;
+  nodes: TreeNode[];
+  highlight: string[];
+  /** Aristas extra además de las derivadas de `parent` (p.ej. un puntero de
+   * acceso directo indexado). Se agregan, no reemplazan las de `parent`. */
+  links?: TreeLink[];
+};
 
 /**
  * Familia "árbol". Único trabajo: posicionar los nodos (ver ./layout.ts).
@@ -18,7 +26,10 @@ export default function TreeVisualization({ steps }: { steps: TreeStep[] }) {
     nodes: layout(s.nodes).map((n) =>
       n.collapsed ? { ...n, shape: 'subtree' as const, w: boxWidth(n.label, 14, 44), h: 40 } : n,
     ),
-    edges: s.nodes.filter((n) => n.parent).map((n) => ({ from: n.parent!, to: n.id })),
+    edges: [
+      ...s.nodes.filter((n) => n.parent).map((n) => ({ from: n.parent!, to: n.id })),
+      ...(s.links ?? []).map((l) => ({ from: l.from, to: l.to, kind: l.kind, label: l.label })),
+    ],
   }));
 
   // El lienzo crece con el árbol más profundo de la secuencia: un árbol

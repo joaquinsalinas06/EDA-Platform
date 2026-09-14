@@ -7,7 +7,7 @@ title: "Retroactividad conmutativa e invertible"
 
 El modelo de [retroactividad](/structures/retroactivity) plantea `Insert(t,
 op)` y `Delete(t)` sobre una línea de tiempo, y advierte que la solución
-ingenua —rehacer todo desde `t` hasta el presente— cuesta `O(m)` si han
+ingenua —rehacer todo desde `t` hasta el presente— cuesta $O(m)$ si han
 pasado `m` operaciones desde entonces. Esta técnica es la respuesta al "¿se
 puede hacer mejor?" en el caso más favorable: cuando las operaciones que se
 insertan o borran conmutan entre sí y son invertibles, la retroactividad
@@ -26,7 +26,7 @@ en el presente, que cuesta lo que cuesta la operación en sí, sin overhead.
 
 Falta borrar. Para eso entra la segunda propiedad: si toda operación tiene
 una inversa que deshace exactamente su efecto, borrar `op` de la línea de
-tiempo es lo mismo que aplicar `op⁻¹` ahora — su efecto se cancela sin tener
+tiempo es lo mismo que aplicar $op^{-1}$ ahora — su efecto se cancela sin tener
 que localizar ni deshacer nada en la posición original.
 
 Ninguna de las dos propiedades sola alcanza: conmutatividad mueve `op` en el
@@ -42,9 +42,9 @@ propio sobre nodos ni celdas. Es una condición sobre **las operaciones** de
 la estructura subyacente —definida en la sección anterior del mazo
 (páginas 22-24, diapositiva 9)—:
 
-- **Conmutativas**: `opₓ` seguida de `opᵧ` tiene el mismo efecto que `opᵧ`
-  seguida de `opₓ` — el orden no importa.
-- **Invertibles**: existe `opₓ⁻¹` tal que aplicar `opₓ` y luego `opₓ⁻¹` deja
+- **Conmutativas**: $op_x$ seguida de $op_y$ tiene el mismo efecto que $op_y$
+  seguida de $op_x$ — el orden no importa.
+- **Invertibles**: existe $op_x^{-1}$ tal que aplicar $op_x$ y luego $op_x^{-1}$ deja
   la estructura exactamente como estaba.
 
 Cuando *ambas* se cumplen para toda operación de la estructura, se puede
@@ -82,13 +82,13 @@ diapositiva 11), ambos con retroactividad parcial:
 
 | ejemplo | operación retroactiva | costo |
 | --- | --- | --- |
-| Tabla hash con inserciones | Insert / Delete retroactivos | `O(1)` amortizado — igual que la operación original |
-| Arreglo con `A[i] += Δ` | Insert / Delete retroactivos | `O(1)` — igual que la operación original |
+| Tabla hash con inserciones | Insert / Delete retroactivos | $O(1)$ amortizado — igual que la operación original |
+| Arreglo con `A[i] += Δ` | Insert / Delete retroactivos | $O(1)$ — igual que la operación original |
 
 ## Tabla de complejidad
 
 Ver `meta.yaml`. Ambas operaciones heredan el costo de la operación de base
-que reducen (`O(1)` amortizado en los dos ejemplos del profesor); no hay una
+que reducen ($O(1)$ amortizado en los dos ejemplos del profesor); no hay una
 cota genérica más allá de "el costo de la operación original", porque el
 argumento es válido para cualquier operación que cumpla las dos propiedades.
 
@@ -104,7 +104,7 @@ contraejemplo de una operación que no conmuta.
 | --- | --- | --- |
 | condición sobre las operaciones | deben conmutar **y** ser invertibles | ninguna |
 | qué se guarda | sólo la estructura presente | depende de la técnica (Segment Tree, rollback…) |
-| overhead retroactivo | ninguno — cuesta lo mismo que la operación original | `O(lg m)` (problemas descomponibles) o el costo del rollback, según la técnica |
+| overhead retroactivo | ninguno — cuesta lo mismo que la operación original | $O(lg m)$ (problemas descomponibles) o el costo del rollback, según la técnica |
 | alcance | el "caso fácil": el profesor lo marca como el piso de la semana — la mayoría de estructuras interesantes (pilas, colas, BSTs, priority queues) tienen operaciones que sí dependen del orden y necesitan una técnica más general | cubre esas estructuras cuyas operaciones dependen del orden |
 
 ## Prueba de dominio

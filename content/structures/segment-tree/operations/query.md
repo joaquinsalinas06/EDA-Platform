@@ -8,6 +8,70 @@ cppSteps:
   - step-3-update.cpp
   - step-4-query.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Query(raíz, 1, 4, 2, 4): la raíz [1,4] se traslapa parcialmente con
+        [2,4], así que hay que bajar por los dos hijos.
+      highlight: ["n14"]
+      nodes:
+        - { id: n14, value: "10", parent: null, state: active }
+        - { id: n12, value: "3", parent: n14 }
+        - { id: n34, value: "7", parent: n14 }
+        - { id: n11, value: "1", parent: n12 }
+        - { id: n22, value: "2", parent: n12 }
+        - { id: n33, value: "3", parent: n34 }
+        - { id: n44, value: "4", parent: n34 }
+    - note: >-
+        n12 = [1,2] también se traslapa parcial (sólo la posición 2 está en
+        [2,4]): sigue bajando a sus dos hojas.
+      highlight: ["n12"]
+      nodes:
+        - { id: n14, value: "10", parent: null }
+        - { id: n12, value: "3", parent: n14, state: active }
+        - { id: n34, value: "7", parent: n14 }
+        - { id: n11, value: "1", parent: n12 }
+        - { id: n22, value: "2", parent: n12 }
+        - { id: n33, value: "3", parent: n34 }
+        - { id: n44, value: "4", parent: n34 }
+    - note: >-
+        n11 = [1,1] cae fuera de [2,4]: no aporta. n22 = [2,2] cae dentro:
+        aporta su valor 2 directo, sin bajar más.
+      highlight: ["n11", "n22"]
+      nodes:
+        - { id: n14, value: "10", parent: null }
+        - { id: n12, value: "3", parent: n14 }
+        - { id: n34, value: "7", parent: n14 }
+        - { id: n11, value: "1", parent: n12, state: muted }
+        - { id: n22, value: "2", parent: n12, state: answer }
+        - { id: n33, value: "3", parent: n34 }
+        - { id: n44, value: "4", parent: n34 }
+    - note: >-
+        n34 = [3,4] está completamente dentro de [2,4]: se usa su valor ya
+        combinado (7) sin bajar a sus hijos.
+      highlight: ["n34"]
+      nodes:
+        - { id: n14, value: "10", parent: null }
+        - { id: n12, value: "3", parent: n14 }
+        - { id: n34, value: "7", parent: n14, state: answer }
+        - { id: n11, value: "1", parent: n12, state: muted }
+        - { id: n22, value: "2", parent: n12, state: answer }
+        - { id: n33, value: "3", parent: n34 }
+        - { id: n44, value: "4", parent: n34 }
+    - note: >-
+        Total: combinar(2, 7) = 9 — dos llamadas "parciales" por nivel como
+        máximo, el resto se resuelve en O(1). O(lg n) en total.
+      caption: "Query(1,4,2,4) = 9"
+      highlight: ["n22", "n34"]
+      nodes:
+        - { id: n14, value: "10", parent: null }
+        - { id: n12, value: "3", parent: n14 }
+        - { id: n34, value: "7", parent: n14, state: answer }
+        - { id: n11, value: "1", parent: n12, state: muted }
+        - { id: n22, value: "2", parent: n12, state: answer }
+        - { id: n33, value: "3", parent: n34 }
+        - { id: n44, value: "4", parent: n34 }
 ---
 
 <!-- Concepto de apoyo: no hay diapositiva que citar. Esta es la operación
@@ -53,15 +117,15 @@ Ver `step-4-query.cpp` y `full-implementation.cpp` en el editor de arriba.
 
 ## Complejidad temporal
 
-O(lg n): en cada nivel de la recursión, a lo más dos llamadas son "parciales"
+$O(\lg n)$: en cada nivel de la recursión, a lo más dos llamadas son "parciales"
 (las que contienen a `ql` o a `qr` en su rango pero no están completamente
-dentro); el resto de las llamadas en ese nivel terminan en O(1) por el caso 1
-o el caso 2. Con altura ⌈lg n⌉ y O(1) de llamadas parciales por nivel, el
-total es O(lg n).
+dentro); el resto de las llamadas en ese nivel terminan en $O(1)$ por el caso 1
+o el caso 2. Con altura $\lceil \lg n \rceil$ y $O(1)$ de llamadas parciales por
+nivel, el total es $O(\lg n)$.
 
 ## Complejidad espacial
 
-O(lg n) de la pila de recursión.
+$O(\lg n)$ de la pila de recursión.
 
 ## Ejemplo
 

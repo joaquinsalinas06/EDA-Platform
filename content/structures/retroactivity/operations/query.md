@@ -8,6 +8,47 @@ cppSteps:
   - step-3-delete-retroactive.cpp
   - step-4-query.cpp
   - full-implementation.cpp
+visualization:
+  type: persistent
+  steps:
+    - note: >-
+        Línea de tiempo completa (ejemplo de examples.md, ya con add(100)
+        insertado en t = 1.5). Cuatro entradas disponibles para consultar.
+      nodes:
+        - { id: t1, value: "add(5)", parent: null }
+        - { id: t15, value: "add(100)", parent: t1 }
+        - { id: t2, value: "add(3)", parent: t15 }
+        - { id: t3, value: "add(10)", parent: t2 }
+    - note: >-
+        Query(ahora) recorre toda la línea de tiempo — es el único t válido
+        bajo retroactividad parcial.
+      caption: "Query(ahora) = 118"
+      highlight: ["t1", "t15", "t2", "t3"]
+      nodes:
+        - { id: t1, value: "add(5)", parent: null, state: active }
+        - { id: t15, value: "add(100)", parent: t1, state: active }
+        - { id: t2, value: "add(3)", parent: t15, state: active }
+        - { id: t3, value: "add(10)", parent: t2, state: active }
+    - note: >-
+        Query(t=1) sólo cuenta lo que ocurrió hasta t = 1 inclusive: nada
+        más. Este t intermedio sólo es válido bajo retroactividad completa.
+      caption: "Query(t=1) = 5"
+      highlight: ["t1"]
+      nodes:
+        - { id: t1, value: "add(5)", parent: null, state: active }
+        - { id: t15, value: "add(100)", parent: t1, state: muted }
+        - { id: t2, value: "add(3)", parent: t15, state: muted }
+        - { id: t3, value: "add(10)", parent: t2, state: muted }
+    - note: >-
+        Query(t=2) suma un poco más de historia (t1, t15, t2) pero todavía
+        no incluye t3 — cada t intermedio da una respuesta distinta.
+      caption: "Query(t=2) = 108"
+      highlight: ["t1", "t15", "t2"]
+      nodes:
+        - { id: t1, value: "add(5)", parent: null, state: active }
+        - { id: t15, value: "add(100)", parent: t1, state: active }
+        - { id: t2, value: "add(3)", parent: t15, state: active }
+        - { id: t3, value: "add(10)", parent: t2, state: muted }
 ---
 
 ## Qué hace
@@ -52,7 +93,7 @@ Ver `step-4-query.cpp` y `full-implementation.cpp` en el editor de arriba.
 
 ## Complejidad temporal
 
-`O(m)` en la versión ingenua: recorrer la línea de tiempo completa hasta
+$O(m)$ en la versión ingenua: recorrer la línea de tiempo completa hasta
 `t`. Es el mismo punto de referencia que Insert-retroactive y
 Delete-retroactive — no es casualidad: en la versión ingenua, las tres
 operaciones son variantes del mismo trabajo ("rehacer la línea de tiempo
@@ -60,7 +101,7 @@ hasta un punto").
 
 ## Complejidad espacial
 
-`O(1)` adicional sobre la línea de tiempo (sólo se acumula el estado
+$O(1)$ adicional sobre la línea de tiempo (sólo se acumula el estado
 mientras se recorre).
 
 ## Ejemplo

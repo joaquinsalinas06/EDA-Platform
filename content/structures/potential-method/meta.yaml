@@ -14,5 +14,5 @@ usedBy: ["fibonacci-heap", "fat-nodes"]
 complexity: {}
 
 professorAnalysisStyle: "potential-method"
-hasVisualization: false
+hasVisualization: true
 placeholder: false

@@ -5,6 +5,38 @@ order: 1
 cppSteps:
   - step-1-arrays.cpp
   - full-implementation.cpp
+visualization:
+  type: range-tree
+  mode: layers
+  steps:
+    - note: >-
+        Postorden, de abajo hacia arriba: cada hoja del árbol primario en X
+        (A,B,C,D, con Y = 4,9,1,7) guarda un arreglo de un solo elemento —
+        su propia Y. Nada que mezclar todavía.
+      mode: layers
+      arrays:
+        - { id: A, label: "A [4]", row: 2, cells: [4] }
+        - { id: B, label: "B [9]", row: 2, cells: [9] }
+        - { id: C, label: "C [1]", row: 2, cells: [1] }
+        - { id: D, label: "D [7]", row: 2, cells: [7] }
+    - note: >-
+        Cada nodo interno mezcla los arreglos ya listos de sus dos hijos,
+        como el merge de Merge Sort: (A,B) = merge([4],[9]) = [4,9];
+        (C,D) = merge([1],[7]) = [1,7]. Ningún BST secundario de por
+        medio, sólo un arreglo ordenado por nodo.
+      mode: layers
+      arrays:
+        - { id: nAB, label: "(A,B) [4,9]", row: 1, slot: left, cells: [4, 9] }
+        - { id: nCD, label: "(C,D) [1,7]", row: 1, slot: right, cells: [1, 7] }
+    - note: >-
+        En la raíz se mezclan (A,B) y (C,D) una última vez:
+        merge([4,9],[1,7]) = [1,4,7,9]. Este arreglo final es el que
+        bridge-build usa para tender los puentes hacia cada hijo.
+      mode: layers
+      arrays:
+        - { id: nAB, label: "(A,B) [4,9]", row: 1, slot: left, cells: [4, 9] }
+        - { id: nCD, label: "(C,D) [1,7]", row: 1, slot: right, cells: [1, 7] }
+        - { id: root, label: "raíz [1,4,7,9]", row: 0, cells: [1, 4, 7, 9] }
 ---
 
 ## Qué hace
@@ -54,14 +86,14 @@ construido con `std::merge`) y `full-implementation.cpp`.
 
 ## Complejidad temporal
 
-Ver `sorted-array-replacement` en la tabla de complejidad: `O(n lg n)`,
+Ver `sorted-array-replacement` en la tabla de complejidad: $O(n \lg n)$,
 mismo argumento de multiplicidad que `build-2d` de range-tree — cada punto
-vive en `O(lg n)` niveles y cada nivel se llena con un merge de costo
-`O(tamaño del nivel)`.
+vive en $O(\lg n)$ niveles y cada nivel se llena con un merge de costo
+$O(\text{tamaño del nivel})$.
 
 ## Complejidad espacial
 
-`O(n lg n)`: el profesor lo afirma igual al del range tree 2D ingenuo
+$O(n \lg n)$: el profesor lo afirma igual al del range tree 2D ingenuo
 (#37-40) — sustituir el árbol por un arreglo no cambia cuántas veces vive
 cada punto, sólo la estructura que lo guarda en cada nivel.
 

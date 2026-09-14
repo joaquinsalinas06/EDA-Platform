@@ -15,5 +15,5 @@ usedBy: ["fat-nodes", "path-copying"]
 complexity: {}
 
 professorAnalysisStyle: "taxonomía / definición por niveles"
-hasVisualization: false
+hasVisualization: true
 placeholder: false

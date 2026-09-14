@@ -21,7 +21,7 @@ correspondiente.
 > **Ausencia del material**: el mazo **no desarrolla** esta operación. La
 > menciona una sola vez, en el enunciado del resultado final (páginas
 > 63-64, diapositiva 30): "Insert y Delete retroactivos parciales sobre
-> una priority queue cuestan O(lg n) amortizado" — Delete aparece ahí y en
+> una priority queue cuestan $O(\lg n)$ amortizado" — Delete aparece ahí y en
 > ningún otro lado. No hay fórmula de efecto neto propia para Delete, no
 > hay pseudocódigo, y no hay ejemplo numérico. De las cuatro operaciones
 > del tema, es la única sin ningún desarrollo del profesor.
@@ -68,9 +68,9 @@ e [Insert-retroactive](/structures/retroactive-priority-queue/operations/insert-
 
 ## Complejidad temporal
 
-`O(lg n)` amortizado — la misma cota citada que Insert-retroactivo, de la
+$O(\lg n)$ amortizado — la misma cota citada que Insert-retroactivo, de la
 misma línea del profesor (páginas 63-64): "Insert y Delete retroactivos
-parciales... cuestan O(lg n) amortizado". Es una cita, no una derivación;
+parciales... cuestan $O(\lg n)$ amortizado". Es una cita, no una derivación;
 y a diferencia de Insert, aquí el mazo ni siquiera da el argumento
 estructural (el "efecto neto es un único intercambio") que sostiene la
 cota de Insert — sólo el número final.
@@ -83,14 +83,14 @@ No la da el profesor.
 
 **No hay ejemplo del profesor**, y tampoco hay base para derivar uno con
 confianza: la fórmula que se derivaría un ejemplo (el equivalente a
-`M = máx({k} ∪ {...})` de Insert) no existe para Delete. Inventar un
+$M = \max(\{k\} \cup \{...\})$ de Insert) no existe para Delete. Inventar un
 número aquí sería inventar el algoritmo, no sólo el ejemplo.
 
 ## Casos límite
 
 **No aplica** en ausencia de un algoritmo: no hay casos límite propios de
 Delete-retroactivo que discutir sin antes tener el algoritmo mismo. Los
-casos límite reales de este tema —`M = k` vs `M ≠ k`, ausencia de puente
+casos límite reales de este tema — $M = k$ vs $M \ne k$, ausencia de puente
 interior— están documentados en
 [Insert-retroactive](/structures/retroactive-priority-queue/operations/insert-retroactive)
 y [Bridge](/structures/retroactive-priority-queue/operations/bridge).

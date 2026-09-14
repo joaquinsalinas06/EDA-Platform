@@ -46,12 +46,12 @@ de arriba.
 
 ## Complejidad temporal
 
-`Θ(1)`, tal como aparece en la tabla comparativa: leer una posición fija
+$\Theta(1)$, tal como aparece en la tabla comparativa: leer una posición fija
 del arreglo no depende de `n`.
 
 ## Complejidad espacial
 
-O(1).
+$O(1)$.
 
 ## Ejemplo
 
@@ -62,4 +62,4 @@ Max-Heapify), `Find-Min` devuelve `14`.
 
 - **Montículo vacío**: no hay `A[1]` que leer; la implementación de
   referencia lanza una excepción en vez de leer memoria inválida.
-- **Un solo elemento**: `A[1]` es ese elemento, sigue siendo O(1).
+- **Un solo elemento**: `A[1]` es ese elemento, sigue siendo $O(1)$.

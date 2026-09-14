@@ -8,6 +8,55 @@ cppSteps:
   - step-3-update.cpp
   - step-4-query.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Las hojas ya tienen su valor directo de A = [1,2,3,4]. Los nodos
+        internos todavía no se han calculado.
+      nodes:
+        - { id: n14, value: "?", parent: null, state: muted }
+        - { id: n12, value: "?", parent: n14, state: muted }
+        - { id: n34, value: "?", parent: n14, state: muted }
+        - { id: n11, value: "1", parent: n12 }
+        - { id: n22, value: "2", parent: n12 }
+        - { id: n33, value: "3", parent: n34 }
+        - { id: n44, value: "4", parent: n34 }
+    - note: >-
+        Al volver de n11 y n22, se combina: valor(n12) = 1 + 2 = 3.
+      highlight: ["n12"]
+      nodes:
+        - { id: n14, value: "?", parent: null, state: muted }
+        - { id: n12, value: "3", parent: n14, state: active }
+        - { id: n34, value: "?", parent: n14, state: muted }
+        - { id: n11, value: "1", parent: n12 }
+        - { id: n22, value: "2", parent: n12 }
+        - { id: n33, value: "3", parent: n34 }
+        - { id: n44, value: "4", parent: n34 }
+    - note: >-
+        Igual para el otro lado: valor(n34) = 3 + 4 = 7.
+      highlight: ["n34"]
+      nodes:
+        - { id: n14, value: "?", parent: null, state: muted }
+        - { id: n12, value: "3", parent: n14 }
+        - { id: n34, value: "7", parent: n14, state: active }
+        - { id: n11, value: "1", parent: n12 }
+        - { id: n22, value: "2", parent: n12 }
+        - { id: n33, value: "3", parent: n34 }
+        - { id: n44, value: "4", parent: n34 }
+    - note: >-
+        Por último la raíz combina sus dos hijos ya construidos:
+        valor(n14) = 3 + 7 = 10. Cada nodo se construyó una sola vez, O(n)
+        en total.
+      highlight: ["n14"]
+      nodes:
+        - { id: n14, value: "10", parent: null, state: active }
+        - { id: n12, value: "3", parent: n14 }
+        - { id: n34, value: "7", parent: n14 }
+        - { id: n11, value: "1", parent: n12 }
+        - { id: n22, value: "2", parent: n12 }
+        - { id: n33, value: "3", parent: n34 }
+        - { id: n44, value: "4", parent: n34 }
 ---
 
 <!-- Concepto de apoyo: no hay diapositiva que citar (sourceSlides vacío en
@@ -49,12 +98,12 @@ Ver `step-2-build.cpp` y `full-implementation.cpp` en el editor de arriba.
 
 ## Complejidad temporal
 
-O(n): el árbol tiene 2n-1 nodos en total y la recursión construye cada uno
-exactamente una vez, con O(1) de trabajo (una combinación) por nodo interno.
+$O(n)$: el árbol tiene $2n-1$ nodos en total y la recursión construye cada uno
+exactamente una vez, con $O(1)$ de trabajo (una combinación) por nodo interno.
 
 ## Complejidad espacial
 
-O(n): 2n-1 nodos, cada uno O(1).
+$O(n)$: $2n-1$ nodos, cada uno $O(1)$.
 
 ## Ejemplo
 
@@ -65,8 +114,8 @@ con valor `7`, y las cuatro hojas `[1,1]=1`, `[2,2]=2`, `[3,3]=3`, `[4,4]=4`.
 
 ## Casos límite
 
-- **Un solo elemento (n = 1)**: el árbol es una única hoja, `Build` no hace
+- **Un solo elemento ($n = 1$)**: el árbol es una única hoja, `Build` no hace
   ninguna llamada recursiva.
-- **n no es potencia de 2**: la partición `m = (l+r)/2` sigue funcionando,
+- **`n` no es potencia de 2**: la partición `m = (l+r)/2` sigue funcionando,
   sólo que el árbol queda desbalanceado en forma (no en altura: sigue siendo
-  ⌈lg n⌉).
+  $\lceil \lg n \rceil$).

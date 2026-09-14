@@ -32,5 +32,6 @@ complexity:
     source: "Sem4_Planar_Point_Location.pdf#47-55"
 
 professorAnalysisStyle: "análisis por reducción"
-hasVisualization: false
+hasVisualization: true
+visualizationType: tree
 placeholder: false

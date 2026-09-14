@@ -4,6 +4,7 @@ import {
   NODE_H,
   CELL_W,
   CELL_H,
+  boxWidth,
   PORT_R,
   LINE_H,
   STATE_LABEL,
@@ -226,21 +227,30 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
             const visual = nodeStyle(state);
             const shape = n.shape ?? 'box';
             const [defaultW, defaultH] = shape === 'cell' ? [CELL_W, CELL_H] : [NODE_W, NODE_H];
-            const w = n.w ?? defaultW;
+            // La caja crece con su texto. Sin esto, una etiqueta larga
+            // ("ins(3) <- se inserta aqui") se desborda de un recuadro de 38px.
+            const w = n.w ?? boxWidth(String(n.label ?? ''), shape === 'cell' ? 11 : 13, defaultW);
             const h = n.h ?? defaultH;
 
             return (
               <g
                 key={n.id}
+                // El nombre accesible va en aria-label, NO en un <title>: React
+                // 19 trata cualquier <title> como metadato de documento y lo iza
+                // al <head> (está pensado para el título de la página, no para
+                // el de un elemento SVG). El servidor lo vaciaba de su <g> y el
+                // cliente no, lo que provocaba el "Minified React error #418" —
+                // un desajuste de hidratación — en TODAS las páginas con
+                // visualización. El escape hatch `itemProp` no lo evitaba dentro
+                // del namespace SVG. aria-label da el mismo nombre accesible sin
+                // crear ningún nodo que React pueda izar.
+                role="img"
+                aria-label={`${n.label} — ${STATE_LABEL[state]}`}
                 style={{
                   transform: `translate(${n.x}px, ${n.y}px)`,
                   transition: 'transform 450ms cubic-bezier(.2,.7,.3,1)',
                 }}
               >
-                <title>
-                  {n.label} — {STATE_LABEL[state]}
-                </title>
-
                 {shape === 'subtree' ? (
                   // Convención de los libros para "esto es un subárbol
                   // entero, no un nodo suelto": triángulo, vértice hacia el
@@ -272,14 +282,32 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
                     </text>
                   </>
                 ) : shape === 'port' ? (
-                  <circle
-                    r={PORT_R}
-                    fill={visual.fill}
-                    stroke={visual.stroke}
-                    strokeWidth={visual.strokeWidth}
-                    opacity={visual.opacity}
-                    style={{ transition: 'fill 300ms, stroke 300ms, opacity 300ms' }}
-                  />
+                  <>
+                    <circle
+                      r={PORT_R}
+                      fill={visual.fill}
+                      stroke={visual.stroke}
+                      strokeWidth={visual.strokeWidth}
+                      opacity={visual.opacity}
+                      style={{ transition: 'fill 300ms, stroke 300ms, opacity 300ms' }}
+                    />
+                    {n.label && (
+                      <text
+                        x={0}
+                        y={-PORT_R - 6}
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        fontSize={12}
+                        fontWeight={500}
+                        fontFamily="var(--font-mono)"
+                        fill={visual.text}
+                        opacity={visual.opacity}
+                        style={{ transition: 'fill 300ms' }}
+                      >
+                        {n.label}
+                      </text>
+                    )}
+                  </>
                 ) : shape === 'record' ? (
                   <>
                     <rect

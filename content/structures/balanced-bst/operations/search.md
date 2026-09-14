@@ -54,13 +54,13 @@ en el editor de arriba.
 
 ## Complejidad temporal
 
-O(lg n): el invariante de balance garantiza que la altura del árbol es
-O(lg n), y `Search` sigue un único camino raíz-hoja, con O(1) de trabajo
+$O(\lg n)$: el invariante de balance garantiza que la altura del árbol es
+$O(\lg n)$, y `Search` sigue un único camino raíz-hoja, con $O(1)$ de trabajo
 (una comparación) por nivel.
 
 ## Complejidad espacial
 
-O(lg n) de la pila de recursión (o O(1) adicional en la versión iterativa,
+$O(\lg n)$ de la pila de recursión (o $O(1)$ adicional en la versión iterativa,
 que basta para `Search`: no necesita volver a tocar nodos al subir).
 
 ## Ejemplo
@@ -76,6 +76,6 @@ está).
 - **Árbol vacío**: devuelve nulo de inmediato.
 - **`x` es la raíz**: un solo paso.
 - **`x` no está en el árbol**: el camino termina en un puntero nulo, en a lo
-  más O(lg n) pasos por el invariante de balance — nunca degrada a O(n)
+  más $O(\lg n)$ pasos por el invariante de balance — nunca degrada a $O(n)$
   como sí puede pasar en un BST sin balancear con llaves insertadas en
   orden.

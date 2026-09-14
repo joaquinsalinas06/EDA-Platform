@@ -5,31 +5,31 @@ title: Fractional cascading
 
 ## ¿Qué problema resuelve?
 
-Dadas `k` listas ordenadas `L1, ..., Lk` (cada una de tamaño ≤ n), buscar el
-mismo valor `x` en todas. Esto es justo lo que necesita el
+Dadas $k$ listas ordenadas $L_1, \ldots, L_k$ (cada una de tamaño $\le n$), buscar el
+mismo valor $x$ en todas. Esto es justo lo que necesita el
 [range tree](/structures/range-tree) al descender por sus nodos: cada nodo
 del árbol guarda una lista ordenada asociada, y responder una consulta exige
 localizar la misma clave en la lista de varios nodos del camino.
 
-Lo obvio es repetir una búsqueda binaria independiente por lista: `O(k lg n)`.
-Fractional cascading lo baja a **O(k + lg n)**: una sola búsqueda binaria cara,
-y O(1) por cada lista adicional.
+Lo obvio es repetir una búsqueda binaria independiente por lista: $O(k \lg n)$.
+Fractional cascading lo baja a **$O(k + \lg n)$**: una sola búsqueda binaria cara,
+y $O(1)$ por cada lista adicional.
 
 ## Intuición
 
 Si cada lista guardara una copia completa de la lista anterior, la posición
-de `x` en una se traduciría directo a la posición en la otra — pero copiar
-todo hace que el tamaño total se dispare a `Θ(kn)`, de vuelta al costo
+de $x$ en una se traduciría directo a la posición en la otra — pero copiar
+todo hace que el tamaño total se dispare a $\Theta(kn)$, de vuelta al costo
 original (sólo que ahora en espacio). La idea es que **no hace falta la
 lista entera para heredar la posición: basta una fracción de ella**. Copiando
 sólo la mitad de cada lista hacia la anterior, un puntero ("puente") desde
-cada elemento copiado a su posición real basta para que, tras localizar `x`
-una sola vez, bajar de lista en lista cueste O(1) por paso en vez de otra
+cada elemento copiado a su posición real basta para que, tras localizar $x$
+una sola vez, bajar de lista en lista cueste $O(1)$ por paso en vez de otra
 búsqueda binaria completa.
 
 ## Estructura interna
 
-Se construye una nueva familia de listas `L'1, ..., L'k` de abajo hacia
+Se construye una nueva familia de listas $L'_1, \ldots, L'_k$ de abajo hacia
 arriba:
 
 ```
@@ -37,46 +37,52 @@ Sea L'k = Lk. Para i de k−1 a 1:
     L'i = Li ∪ {cada elemento par de L'i+1}.
 ```
 
-Cada elemento promovido (tomado de `L'i+1`) guarda un **puente**: un puntero
-a su posición exacta en `L'i+1`. `L'k` no cambia — es la última lista, no
+Cada elemento promovido (tomado de $L'_{i+1}$) guarda un **puente**: un puntero
+a su posición exacta en $L'_{i+1}$. $L'_k$ no cambia — es la última lista, no
 tiene de dónde promover.
 
-El invariante de tamaño es lo que hace que valga la pena: `|L'i| ≤ |Li| +
-½|L'i+1|`. Promover **todos** los elementos (no sólo la mitad) rompería esto:
-`|L'i| = |Li| + |L'i+1|` se dispara a `Θ(kn)`. Promover la mitad es lo que
+El invariante de tamaño es lo que hace que valga la pena:
+
+$$|L'_i| \le |L_i| + \tfrac{1}{2}|L'_{i+1}|$$
+
+Promover **todos** los elementos (no sólo la mitad) rompería esto:
+$|L'_i| = |L_i| + |L'_{i+1}|$ se dispara a $\Theta(kn)$. Promover la mitad es lo que
 convierte esa recurrencia en una serie geométrica que converge (ver
 [Análisis de complejidad](#analisis-de-complejidad)).
 
 ## Operaciones
 
 - [`build`](/structures/fractional-cascading/operations/build): construir
-  las listas aumentadas `L'1, ..., L'k` y sus puentes, de abajo hacia arriba.
+  las listas aumentadas $L'_1, \ldots, L'_k$ y sus puentes, de abajo hacia arriba.
 - [`query`](/structures/fractional-cascading/operations/query): buscar el
-  mismo valor `x` en todas las listas, bajando puentes desde una única
-  búsqueda binaria en `L'1`.
+  mismo valor $x$ en todas las listas, bajando puentes desde una única
+  búsqueda binaria en $L'_1$.
 
 ## Análisis de complejidad
 
 El profesor usa dos argumentos distintos, uno por costo:
 
 **Tiempo de `query`** — conteo directo de pasos: una única búsqueda binaria
-real en `L'1` cuesta `O(lg n)`. Desde esa posición, seguir el puente más
-cercano hacia `L'2` cae a lo más ±1 posición de donde `x` realmente iría —
-ajustar con O(1) comparaciones. Repetir para bajar a `L'3, ..., Lk`: O(1)
-cada uno. Total: `O(lg n) + O(k) = O(k + lg n)`.
+real en $L'_1$ cuesta $O(\lg n)$. Desde esa posición, seguir el puente más
+cercano hacia $L'_2$ cae a lo más $\pm 1$ posición de donde $x$ realmente iría —
+ajustar con $O(1)$ comparaciones. Repetir para bajar a $L'_3, \ldots, L_k$: $O(1)$
+cada uno. Total: $O(\lg n) + O(k) = O(k + \lg n)$.
 
-**Tamaño de `build`** — serie geométrica: `|L'i| ≤ |Li| + ½|L'i+1|`. Al
-desenrollar la recurrencia, el factor ½ en cada nivel hace que la suma total
-sobre las k listas converja — no crezca linealmente con k — y quede en
-`|L'1| = O(n)`, sin importar cuántas listas haya. Es el argumento que
+**Tamaño de `build`** — serie geométrica:
+
+$$|L'_i| \le |L_i| + \tfrac{1}{2}|L'_{i+1}|$$
+
+Al desenrollar la recurrencia, el factor $\tfrac{1}{2}$ en cada nivel hace que la suma total
+sobre las $k$ listas converja — no crezca linealmente con $k$ — y quede en
+$|L'_1| = O(n)$, sin importar cuántas listas haya. Es el argumento que
 justifica por qué basta una fracción y no la lista completa: copiar toda la
-lista pierde esa convergencia geométrica y el tamaño vuelve a depender de k.
+lista pierde esa convergencia geométrica y el tamaño vuelve a depender de $k$.
 
-> **Nota de apoyo** (no está en las diapositivas): en este mazo **`k` es el
-> número de listas** (`O(k + lg n)`). En el resto del curso — y en la
+> **Nota de apoyo** (no está en las diapositivas): en este mazo **$k$ es el
+> número de listas** ($O(k + \lg n)$). En el resto del curso — y en la
 > notación estándar de "búsqueda + reporte" que usan
 > [`range-tree`](/structures/range-tree) y otras estructuras de esta semana —
-> **`k` es el tamaño de la respuesta** (`O(lg n + k)`). Las dos cotas se ven
+> **$k$ es el tamaño de la respuesta** ($O(\lg n + k)$). Las dos cotas se ven
 > idénticas y significan cosas distintas. El profesor no lo advierte en
 > ningún punto del material; es la confusión más probable de examen sobre
 > este tema.
@@ -96,9 +102,9 @@ Ver [examples.md](/structures/fractional-cascading#ejemplos).
 
 | | búsqueda ingenua en k listas | fractional cascading |
 | --- | --- | --- |
-| costo | O(k lg n): una búsqueda binaria completa por lista | O(k + lg n): una búsqueda binaria + O(1) por lista |
+| costo | $O(k \lg n)$: una búsqueda binaria completa por lista | $O(k + \lg n)$: una búsqueda binaria + $O(1)$ por lista |
 | qué evita repetir | nada — cada lista se busca desde cero | la búsqueda binaria, vía los puentes |
-| espacio extra | ninguno | O(n) en total (promoviendo la mitad); Θ(kn) si se promoviera todo |
+| espacio extra | ninguno | $O(n)$ en total (promoviendo la mitad); $\Theta(kn)$ si se promoviera todo |
 
 Se usa dentro de [`layered-range-tree`](/structures/layered-range-tree),
 aplicándola a las listas asociadas a cada nodo del

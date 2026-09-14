@@ -116,16 +116,16 @@ pseudocódigo) y `full-implementation.cpp` en el editor de arriba.
 
 ## Complejidad temporal
 
-`O(lg n)` en el peor caso. El profesor no plantea la recurrencia con teorema
-maestro; razona por conteo de niveles: "O(1) de trabajo por nivel, y a lo
-más O(lg n) niveles" — Max-Heapify recorre un único camino desde `i` hasta
-una hoja, y ese camino tiene a lo más `⌊lg n⌋` aristas porque la altura del
-árbol casi completo es `⌊lg n⌋`.
+$O(\lg n)$ en el peor caso. El profesor no plantea la recurrencia con teorema
+maestro; razona por conteo de niveles: "$O(1)$ de trabajo por nivel, y a lo
+más $O(\lg n)$ niveles" — Max-Heapify recorre un único camino desde `i` hasta
+una hoja, y ese camino tiene a lo más $\lfloor \lg n \rfloor$ aristas porque la altura del
+árbol casi completo es $\lfloor \lg n \rfloor$.
 
 ## Complejidad espacial
 
-El profesor no la da. La versión recursiva usaría O(lg n) de pila (una
-llamada por nivel); la versión iterativa de arriba usa O(1) adicional.
+El profesor no la da. La versión recursiva usaría $O(\lg n)$ de pila (una
+llamada por nivel); la versión iterativa de arriba usa $O(1)$ adicional.
 
 ## Ejemplo
 
@@ -135,7 +135,7 @@ Este es el único ejemplo que trae el mazo del profesor (páginas 11-15).
 
 ## Casos límite
 
-- **`i` es hoja** (`i > ⌊n/2⌋`): ni `l` ni `r` son `≤ n`, así que `m` se
+- **`i` es hoja** ($i > \lfloor n/2 \rfloor$): ni `l` ni `r` son `≤ n`, así que `m` se
   queda en `i` y la función termina de inmediato sin comparar nada — el
   profesor lo señala explícitamente como "ya es trivialmente un montículo
   máximo de un solo nodo".

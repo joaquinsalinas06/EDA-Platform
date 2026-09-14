@@ -25,6 +25,9 @@ export type PersistentNode = {
   state?: PersistentNodeState;
   /** Nodo gordo: registro de modificaciones, en orden. */
   fields?: PersistentField[];
+  /** Representa un subárbol completo (compartido o no): se dibuja como
+   * triángulo (`shape: 'subtree'`), igual que en la familia `tree`. */
+  collapsed?: boolean;
 };
 
 export type PersistentLink = { from: string; to: string; kind?: 'tree' | 'shared' | 'pointer'; label?: string };
@@ -87,8 +90,14 @@ function layoutPathCopying(step: PersistentStep): Frame {
 
     panelBox.set(v.id, { x0, width: panelWidth });
     const placed = scale(unscaled, { x0: x0 + 16, width: panelWidth - 32, y0: TOP, rowGap: ROW_GAP });
+    const collapsedById = new Map(nodesInVersion.map((n) => [n.id, n.collapsed]));
     for (const p of placed) {
-      outNodes.push({ id: p.id, label: p.label, x: p.x, y: p.y, w: boxWidth(p.label) });
+      const collapsed = collapsedById.get(p.id);
+      outNodes.push(
+        collapsed
+          ? { id: p.id, label: p.label, x: p.x, y: p.y, shape: 'subtree', w: boxWidth(p.label, 14, 44), h: 40 }
+          : { id: p.id, label: p.label, x: p.x, y: p.y, w: boxWidth(p.label) },
+      );
       maxY = Math.max(maxY, p.y);
     }
     x0 += panelWidth + PANEL_GAP;
@@ -160,16 +169,20 @@ export function layoutFatNodes(step: PersistentStep): Frame {
     const lines = n.fields
       ? [String(n.value), ...n.fields.map((f) => `${f.name}=${f.value}${f.time !== undefined ? ` @${f.time}` : ''}`)]
       : undefined;
-    const w = lines ? Math.max(...lines.map((l) => boxWidth(l, 12, 0))) + 2 * PAD_X : boxWidth(String(n.value));
-    const h = lines ? LINE_H * lines.length + 12 : undefined;
+    const w = n.collapsed
+      ? boxWidth(String(n.value), 14, 44)
+      : lines
+        ? Math.max(...lines.map((l) => boxWidth(l, 12, 0))) + 2 * PAD_X
+        : boxWidth(String(n.value));
+    const h = n.collapsed ? 40 : lines ? LINE_H * lines.length + 12 : undefined;
     outNodes.push({
       id: n.id,
       label: String(n.value),
       x,
       y,
-      shape: lines ? 'record' : 'box',
-      lines,
-      divider: lines ? 0 : undefined,
+      shape: n.collapsed ? 'subtree' : lines ? 'record' : 'box',
+      lines: n.collapsed ? undefined : lines,
+      divider: !n.collapsed && lines ? 0 : undefined,
       w,
       h,
       state: n.state,

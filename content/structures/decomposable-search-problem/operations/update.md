@@ -58,17 +58,17 @@ Ver `step-4-update.cpp` y `full-implementation.cpp` en el editor de arriba.
 
 ## Complejidad temporal
 
-`O(lg m)`. Textual (página 34-35): "Insertar/eliminar una operación en el
+$O(\lg m)$. Textual (página 34-35): "Insertar/eliminar una operación en el
 tiempo t actualiza `O(lg m)` nodos del Segment Tree (donde m es el número de
 operaciones)". El argumento se hereda sin repetirse: el camino raíz-hoja de
-un segment tree de `m` hojas tiene altura `⌈lg m⌉`, y cada nodo del camino
-se recalcula en `O(1)`.
+un segment tree de `m` hojas tiene altura $\lceil \lg m \rceil$, y cada nodo del camino
+se recalcula en $O(1)$.
 
 ## Complejidad espacial
 
 No la da el profesor. Heredada del
 [Update de segment tree](/structures/segment-tree/operations/update):
-`O(lg m)` de pila de recursión (o `O(1)` adicional en la variante iterativa).
+$O(\lg m)$ de pila de recursión (o $O(1)$ adicional en la variante iterativa).
 
 ## Ejemplo
 
@@ -86,4 +86,4 @@ Ver la visualización de
 - **`Delete(t)` sobre un tiempo `t` vacío**: no cambia nada — escribir el
   neutro donde ya había el neutro es un Update válido, sólo redundante.
 - **`m = 1`**: `Insert`/`Delete` escriben directamente en la única hoja, sin
-  ningún nodo intermedio que recalcular (`⌈lg 1⌉ = 0`).
+  ningún nodo intermedio que recalcular ($\lceil \lg 1 \rceil = 0$).

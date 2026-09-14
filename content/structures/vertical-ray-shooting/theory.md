@@ -31,19 +31,10 @@ cara siempre dan con el mismo primer segmento al disparar el rayo, y puntos
 en caras distintas dan con segmentos distintos (o el mismo segmento visto
 desde lados opuestos, lo cual también identifica la cara sin ambigüedad).
 
-```
-                y
-                |
-   segmento A __|________________   ← primer segmento que toca el rayo de P
-                |
-                |      P
-                |      .
-                |      ↑  rayo vertical hacia arriba desde P
-                |      |
-   segmento B __|______|__________
-                |
-                +---------------------- x
-```
+Ver el diagrama paso a paso en
+[ray-query](/structures/vertical-ray-shooting/operations/ray-query): el rayo
+descarta los segmentos que cruzan por debajo de $y_i$ y se queda con el
+sucesor — el primer segmento a su paso.
 
 La pregunta "¿qué cara?" se volvió la pregunta "¿qué segmento cruza primero
 la vertical de mi punto, por encima de él?" — la misma información, pero
@@ -68,20 +59,20 @@ que es quien aporta la maquinaria real (segment tree, BBST, persistencia).
 El estilo del profesor aquí es **reducción**, no cómputo directo: el valor
 del tema no es una cota propia, sino la equivalencia que permite atacar el
 problema. El profesor da la forma concreta de resolver la consulta: "si
-consideramos las rectas verticales x = x_i para los puntos de consulta, la
-respuesta se reducirá al menor y ≥ y_i de los segmentos que se intersectan
+consideramos las rectas verticales $x = x_i$ para los puntos de consulta, la
+respuesta se reducirá al menor $y \ge y_i$ de los segmentos que se intersectan
 con la recta" (#22). Es decir, ray-query se convierte en: de todos los
-segmentos que cruzan la vertical x = x_i, tomar el de menor `y` que aún esté
-por encima de `y_i` (o el de mayor `y` por debajo, si el rayo va hacia
+segmentos que cruzan la vertical $x = x_i$, tomar el de menor `y` que aún esté
+por encima de $y_i$ (o el de mayor `y` por debajo, si el rayo va hacia
 abajo).
 
-Esa reformulación ("menor y ≥ y_i entre los segmentos que cruzan x = x_i") es
+Esa reformulación ("menor $y \ge y_i$ entre los segmentos que cruzan $x = x_i$") es
 justo la forma de una consulta de sucesor sobre un conjunto de valores que
 cambia mientras la recta vertical barre de izquierda a derecha — que es
 exactamente el problema que resuelve
 [segment-intersection-sweep-line](/structures/segment-intersection-sweep-line)
 (#24 en adelante). Vertical ray shooting no tiene, por tanto, un análisis de
-costo propio: hereda el de esa reducción, O(log n) por consulta con
+costo propio: hereda el de esa reducción, $O(\log n)$ por consulta con
 persistencia sobre un BBST (#51).
 
 ## Tabla de complejidad
@@ -90,7 +81,8 @@ La única entrada de la tabla (`ray-query`) es heredada, no calculada aquí —
 ver [meta.yaml](/structures/vertical-ray-shooting) y el razonamiento arriba.
 El profesor sí menciona, como resultado citado y sin construirlo en el
 curso, que el ray shooting estático general tiene una solución de
-Agarwal (1992) en O((n/√s) polylog n) con espacio O(s^(1+ε)), s ∈ [1,n]
+Agarwal (1992) en $O((n/\sqrt{s}) \cdot \text{polylog } n)$ con espacio
+$O(s^{1+\varepsilon})$, $s \in [1,n]$
 (#63) — un resultado de referencia, no la técnica que el curso construye.
 
 ## Ejemplos

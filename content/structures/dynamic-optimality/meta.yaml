@@ -15,5 +15,5 @@ usedBy: ["splay-tree"]
 complexity: {}
 
 professorAnalysisStyle: "análisis competitivo"
-hasVisualization: false
+hasVisualization: true
 placeholder: false

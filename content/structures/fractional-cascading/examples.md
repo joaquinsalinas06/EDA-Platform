@@ -5,12 +5,12 @@ title: Ejemplos
 
 ## Mínimo
 
-`k = 2` listas: `L2 = [3, 5, 12]` (no cambia, es la última), `L1 = [2, 8,
+$k = 2$ listas: `L2 = [3, 5, 12]` (no cambia, es la última), `L1 = [2, 8,
 15]`. Promoviendo la mitad de `L2` (por ejemplo `3` y `12`) hacia `L1`:
 `L'1 = [2, 3*, 8, 12*, 15]`. Buscar `x = 12`: búsqueda binaria en `L'1` lo
 encuentra directo (posición 4, marcado); el puente de `12*` apunta a su
 posición exacta en `L2`. Con sólo dos listas el ahorro frente a la búsqueda
-ingenua (`O(2 lg n)` vs `O(1 + lg n)`) ya es visible, aunque pequeño.
+ingenua ($O(2 \lg n)$ vs $O(1 + \lg n)$) ya es visible, aunque pequeño.
 
 *(derivado del pseudocódigo; no aparece en las diapositivas: el mazo no trae
 un ejemplo propio de dos listas)*.
@@ -34,9 +34,9 @@ búsqueda binaria completa salvo el primero.
 ## Límite
 
 Promover **todos** los elementos de cada lista en vez de la mitad (#25-26):
-`L'i = Li ∪ L'i+1` completo. Con las mismas tres listas, `L'1` terminaría
-conteniendo prácticamente `L1 ∪ L2 ∪ L3` — el tamaño se dispara a `Θ(kn)` en
-vez de `O(n)`. La consulta seguiría siendo O(1) por puente, pero la
+$L'_i = L_i \cup L'_{i+1}$ completo. Con las mismas tres listas, `L'1` terminaría
+conteniendo prácticamente `L1 ∪ L2 ∪ L3` — el tamaño se dispara a $\Theta(kn)$ en
+vez de $O(n)$. La consulta seguiría siendo $O(1)$ por puente, pero la
 estructura ya no cabe en espacio lineal: es el caso patológico que la regla
 "promover la mitad" existe para evitar. La estructura que "viene a
 arreglarlo" es la propia regla de la mitad — no hay una estructura distinta

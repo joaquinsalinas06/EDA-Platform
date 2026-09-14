@@ -11,6 +11,84 @@ cppSteps:
   - step-6-consolidate.cpp
   - step-7-extract-min.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Estado inicial *(derivado del pseudocódigo; no aparece así en las
+        diapositivas)*: `min(H) = z(3)`, de grado 2, con hijos `9` y `15`;
+        además hay dos raíces sueltas más, `7` y `20`. `z` es lo único
+        que se va a quitar.
+      highlight: ["z"]
+      nodes:
+        - { id: z, value: 3, parent: null, state: active }
+        - { id: n9, value: 9, parent: z }
+        - { id: n15, value: 15, parent: z }
+        - { id: r7, value: 7, parent: null }
+        - { id: r20, value: 20, parent: null }
+    - note: >-
+        Paso 1.1: cada hijo de `z` pasa a la lista de raíces de `H`,
+        perdiendo su padre — y, como las raíces nunca están marcadas, se
+        desmarcan si lo estaban. Aquí `9` y `15` se vuelven raíces
+        sueltas, sin tocar a `7` ni a `20`.
+      highlight: ["n9", "n15"]
+      nodes:
+        - { id: z, value: 3, parent: null, state: active }
+        - { id: n9, value: 9, parent: null }
+        - { id: n15, value: 15, parent: null }
+        - { id: r7, value: 7, parent: null }
+        - { id: r20, value: 20, parent: null }
+    - note: >-
+        Paso 1.2: se quita `z` de la lista de raíces. Como no era la
+        única raíz, `min(H)` se fija *temporalmente* a cualquier raíz
+        restante (aquí, `9`) — todavía no es necesariamente el mínimo
+        real; sólo un punto de partida para que `Consolidate` recorra
+        desde ahí.
+      highlight: ["n9"]
+      nodes:
+        - { id: n9, value: 9, parent: null, state: active }
+        - { id: n15, value: 15, parent: null }
+        - { id: r7, value: 7, parent: null }
+        - { id: r20, value: 20, parent: null }
+    - note: >-
+        Paso 2: se llama a
+        [Consolidate](/structures/fibonacci-heap/operations/consolidate)(H)
+        sobre las cuatro raíces `{9, 15, 7, 20}`, todas de grado 0. Ese
+        proceso completo — el arreglo `A` por grado, las comparaciones y
+        los enlaces — ya se traza paso a paso en el diagrama de
+        Consolidate; aquí sólo se muestra el resultado.
+      caption: "Consolidate({9, 15, 7, 20}) — ver el diagrama de Consolidate"
+      highlight: ["n9", "n15", "r7", "r20"]
+      nodes:
+        - { id: n9, value: 9, parent: null }
+        - { id: n15, value: 15, parent: null }
+        - { id: r7, value: 7, parent: null }
+        - { id: r20, value: 20, parent: null }
+    - note: >-
+        Resultado de consolidar (análogo al ejemplo de Consolidate:
+        varias raíces de grado 0 se funden por pares, con acarreo si hace
+        falta): supongamos que quedan dos raíces de grados distintos, `7`
+        de grado 0 y `9` de grado 1 con `20` e `15` colgando de él —
+        `collapsed` no hace falta aquí porque los subárboles caben
+        completos en el diagrama.
+      highlight: ["r7", "n9"]
+      nodes:
+        - { id: r7, value: 7, parent: null }
+        - { id: n9, value: 9, parent: null }
+        - { id: n15, value: 15, parent: n9 }
+        - { id: r20, value: 20, parent: n9 }
+    - note: >-
+        Paso final: `min(H)` se actualiza al verdadero mínimo entre las
+        raíces que dejó Consolidate — aquí `7`, no el `9` que se había
+        fijado sólo como punto de partida. El montículo queda con dos
+        raíces (grados 0 y 1) y `z(3)` es lo único que se devuelve como
+        resultado de la operación.
+      highlight: ["r7"]
+      nodes:
+        - { id: r7, value: 7, parent: null, state: answer }
+        - { id: n9, value: 9, parent: null }
+        - { id: n15, value: 15, parent: n9 }
+        - { id: r20, value: 20, parent: n9 }
 ---
 
 ## Qué hace
@@ -77,23 +155,23 @@ arriba.
 
 ## Complejidad temporal
 
-Costo real `O(D(n) + t(H))`: subir los hijos de `z` a la lista de raíces
-es `O(grado(z))`, acotado por `O(D(n))` (la cota de grado máximo); y
+Costo real $O(D(n) + t(H))$: subir los hijos de `z` a la lista de raíces
+es $O(\text{grado}(z))$, acotado por $O(D(n))$ (la cota de grado máximo); y
 [Consolidate](/structures/fibonacci-heap/operations/consolidate) recorre
-las `t(H)` raíces resultantes. Con el potencial
-`Φ(H) = t(H) + 2·m(H)`: después de consolidar quedan a lo más `D(n) + 1`
+las $t(H)$ raíces resultantes. Con el potencial
+$\Phi(H) = t(H) + 2 \cdot m(H)$: después de consolidar quedan a lo más $D(n) + 1$
 raíces (por cómo funciona el arreglo `A[0..D(n)]` de Consolidate), y
-`m(H)` no aumenta (subir hijos a la raíz sólo los desmarca), así que
-`ΔΦ ≤ (D(n) + 1) − t(H)`. El costo amortizado resulta
-`ĉ = O(D(n) + t(H)) + (D(n) + 1) − t(H) = O(D(n)) = O(lg n)`, porque
-`D(n) = O(lg n)` por la cota de grado probada vía la recurrencia de
+$m(H)$ no aumenta (subir hijos a la raíz sólo los desmarca), así que
+$\Delta\Phi \le (D(n) + 1) - t(H)$. El costo amortizado resulta
+$\hat{c} = O(D(n) + t(H)) + (D(n) + 1) - t(H) = O(D(n)) = O(\lg n)$, porque
+$D(n) = O(\lg n)$ por la cota de grado probada vía la recurrencia de
 Fibonacci (ver
 [Análisis de complejidad](/structures/fibonacci-heap#análisis-de-complejidad)
 en la teoría).
 
 ## Complejidad espacial
 
-`O(D(n))` adicional dentro de Consolidate (el arreglo `A`); `O(1)` para el
+$O(D(n))$ adicional dentro de Consolidate (el arreglo `A`); $O(1)$ para el
 resto de Extract-Min.
 
 ## Ejemplo
@@ -121,5 +199,5 @@ dejar el verdadero mínimo (`7`) como `min(H)`.
 - **`z` es una hoja (grado 0) y hay más raíces**: el paso de subir hijos
   no hace nada; sólo se quita `z` de la lista y se consolida el resto.
 - **Todas las raíces terminan con grados distintos sin que Consolidate
-  tenga que enlazar nada**: sigue costando `O(t(H))` recorrerlas, aunque
+  tenga que enlazar nada**: sigue costando $O(t(H))$ recorrerlas, aunque
   no haya ningún `Binomial-Link`.

@@ -13,5 +13,6 @@ usedBy: ["binomial-heap"]
 complexity: {}
 
 professorAnalysisStyle: "definición recursiva + conteo combinatorio"
-hasVisualization: false
+hasVisualization: true
+visualizationType: tree
 placeholder: false

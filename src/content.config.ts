@@ -5,6 +5,7 @@ import { visualizationSchema } from './lib/schemas';
 const theory = z.object({
   kind: z.literal('theory'),
   title: z.string(),
+  visualization: visualizationSchema.optional(),
 });
 
 const operation = z.object({
@@ -49,10 +50,12 @@ export const collections = {
   // El id de la entrada empieza siempre por el id de la estructura.
   docs: defineCollection({
     loader: glob({
-      pattern: '**/*.md',
+      pattern: '**/*.{md,mdx}',
       base: './content/structures',
       // id = ruta sin extensión: "demo-bst/theory", "demo-bst/operations/insert".
-      generateId: ({ entry }) => entry.replace(/\.md$/, ''),
+      // .mdx es para el tema puntual que necesita diagramas intercalados a
+      // mitad de la explicación (ver AGENTS.md § MDX); el resto sigue en .md.
+      generateId: ({ entry }) => entry.replace(/\.mdx?$/, ''),
     }),
     schema: z.discriminatedUnion('kind', [theory, operation, examples, exercises, mastery]),
   }),

@@ -7,11 +7,62 @@ cppSteps:
   - step-2-point-in-polygon.cpp
   - step-3-locate-brute-force.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  mode: tree
+  steps:
+    - note: >-
+        `locate` no tiene estructura propia ni algoritmo directo del
+        profesor: es un problema que se resuelve encadenando reducciones.
+        Este diagrama no dibuja el mapa planar (ninguna familia de
+        visualización sabe hacerlo con esta subdivisión arbitraria) — sólo
+        la cadena de "esto se reduce a esto otro" que arma theory.md.
+      caption: "paso 1 de 3: PPL (localizar un punto en el mapa)"
+      nodes:
+        - id: ppl
+          value: "PPL: locate(x,y)"
+          parent: null
+          state: active
+    - note: >-
+        El profesor reduce PPL a lanzar un rayo vertical hacia arriba desde
+        el punto: el primer segmento que golpea acota la cara (#18-23). Esa
+        reformulación es exactamente
+        [vertical-ray-shooting](/structures/vertical-ray-shooting).
+      caption: "paso 2 de 3: se reduce a vertical-ray-shooting"
+      nodes:
+        - id: ppl
+          value: "PPL: locate(x,y)"
+          parent: null
+          state: muted
+        - id: vrs
+          value: "vertical-ray-shooting"
+          parent: ppl
+          state: active
+    - note: >-
+        El rayo vertical se ve, a su vez, como el caso especial de
+        intersección de segmentos con barrido (#24-38): activar/desactivar
+        segmentos horizontales y consultar sobre un BBST persistente —
+        `Query(t_{x_i}, Successor(y_i))` (#50) — deja la consulta en
+        O(log n).
+      caption: "paso 3 de 3: se reduce a BBST persistente (barrido)"
+      nodes:
+        - id: ppl
+          value: "PPL: locate(x,y)"
+          parent: null
+          state: muted
+        - id: vrs
+          value: "vertical-ray-shooting"
+          parent: ppl
+          state: muted
+        - id: bbst
+          value: "BBST persistente"
+          parent: vrs
+          state: answer
 ---
 
 ## Qué hace
 
-Dado un punto (x_i, y_i) y un mapa planar (una subdivisión del plano en
+Dado un punto $(x_i, y_i)$ y un mapa planar (una subdivisión del plano en
 caras), devuelve la cara donde cae ese punto — incluyendo la posibilidad de
 que caiga en la **cara infinita**, el complemento de todas las caras
 descritas (#7, #9, #64).
@@ -44,7 +95,7 @@ Query(t_{x_i}, Successor(y_i))
 
 (#50). Es la única expresión que da el mazo para esta operación — una
 fórmula, no un algoritmo desarrollado: no dice qué devuelve `Query`, sobre
-qué estructura corre `Successor`, ni cómo se indexa `t_{x_i}` cuando x_i no
+qué estructura corre `Successor`, ni cómo se indexa $t_{x_i}$ cuando x_i no
 coincide con ningún evento del barrido. Queda como hueco del material (ver
 theory.md).
 
@@ -61,13 +112,13 @@ vertical, barrido, BBST persistente). Ver `step-1-point-and-face.cpp` …
 
 ## Complejidad temporal
 
-La fuerza bruta de este tema (`cpp/`) es O(F · V) — F caras, V vértices por
+La fuerza bruta de este tema (`cpp/`) es $O(F \cdot V)$ — F caras, V vértices por
 cara en el peor caso — porque prueba cada cara con un test de punto en
 polígono que recorre todas sus aristas; **no es la cota del profesor**, es
 la línea base que la reducción viene a mejorar.
 
-La cota que sí da el profesor es la que llega **después** de reducir: O(log
-n) vía persistencia sobre el BBST del barrido (#51); ver el desglose
+La cota que sí da el profesor es la que llega **después** de reducir: $O(\log
+n)$ vía persistencia sobre el BBST del barrido (#51); ver el desglose
 completo, con las variantes offline y de mapas ortogonales, en
 [Análisis de complejidad](/structures/planar-point-location#análisis-de-complejidad)
 de theory.md y en `meta.yaml`.
@@ -76,7 +127,7 @@ de theory.md y en `meta.yaml`.
 
 No la da el profesor para esta operación en sí (sólo se menciona espacio
 para los resultados de literatura de `edge-update`, #63). La fuerza bruta de
-este tema usa O(F · V) para guardar el mapa (F caras, V vértices por cara).
+este tema usa $O(F \cdot V)$ para guardar el mapa (F caras, V vértices por cara).
 
 ## Ejemplo
 

@@ -40,7 +40,7 @@ Los tres puntos de consulta que usa el profesor sobre el mapa de #8: `(4,12)`,
   por ese segmento, sin necesidad de saber el nombre o la forma de la cara.
 - Desde `(8,4)` y `(19,4)`: ambos rayos suben por columnas distintas
   (`x = 8` y `x = 19`); cada uno toca el segmento que resulta ser el "menor
-  y ≥ y_i" de los segmentos que cruzan esa vertical (#22). Aunque las dos
+  $y \ge y_i$" de los segmentos que cruzan esa vertical (#22). Aunque las dos
   columnas son distintas, si el primer segmento que tocan resulta ser el
   mismo, ambos puntos quedan caracterizados como parte de la misma cara —
   así es como la reducción responde PPL sin razonar sobre regiones.

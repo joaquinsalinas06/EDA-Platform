@@ -45,15 +45,15 @@ que empalmar un solo nodo.
 
 ## Complejidad temporal
 
-Costo real `O(1)`: concatenar dos listas circulares es reconectar cuatro
+Costo real $O(1)$: concatenar dos listas circulares es reconectar cuatro
 punteros, sin importar cuántas raíces tenga cada una. Con
-`Φ(H) = t(H) + 2·m(H)`: `t(H)` y `m(H)` del resultado son exactamente la
+$\Phi(H) = t(H) + 2 \cdot m(H)$: $t(H)$ y $m(H)$ del resultado son exactamente la
 suma de los de `H1` y `H2` (nada se crea ni se destruye al concatenar), así
-que `ΔΦ = 0` y el costo amortizado `ĉ = O(1) + 0 = O(1)`.
+que $\Delta\Phi = 0$ y el costo amortizado $\hat{c} = O(1) + 0 = O(1)$.
 
 ## Complejidad espacial
 
-`O(1)` adicional.
+$O(1)$ adicional.
 
 ## Ejemplo
 

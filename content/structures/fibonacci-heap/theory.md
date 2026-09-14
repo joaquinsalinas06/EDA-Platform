@@ -7,11 +7,11 @@ title: "Montículo de Fibonacci"
 
 El profesor lo formula como propiedad, no como problema externo: "¿Por qué
 es tan rápido insert, union y decrease-key? Porque no reorganizan nada de
-inmediato: solo agregan el nuevo nodo/árbol a la lista de raíces en O(1), o
-cortan un nodo y lo agregan como raíz en O(1). Todo el 'desorden' se limpia
+inmediato: solo agregan el nuevo nodo/árbol a la lista de raíces en $O(1)$, o
+cortan un nodo y lo agregan como raíz en $O(1)$. Todo el 'desorden' se limpia
 recién en Extract-Min". En el resumen del mazo: "el montículo de Fibonacci
 es **perezoso**". Es la cola de prioridad que logra `Insert`, `Union` y
-`Decrease-Key` en O(1) amortizado, pagando ese trabajo pospuesto de golpe
+`Decrease-Key` en $O(1)$ amortizado, pagando ese trabajo pospuesto de golpe
 en `Extract-Min`. La [tabla comparativa de la semana 1](/structures/binary-heap#comparación-con-estructuras-relacionadas)
 ya anunciaba esta mejora frente al [montículo binario](/structures/binary-heap)
 y el [montículo binomial](/structures/binomial-heap).
@@ -59,7 +59,7 @@ Invariantes:
 
 Esta regla está formulada como "a lo más un hijo perdido sin corte" — y no,
 por ejemplo, "nunca perder un hijo" — porque es exactamente lo que la
-demostración de la cota de grado `D(n) = O(lg n)` necesita: acota cuánto
+demostración de la cota de grado $D(n) = O(\lg n)$ necesita: acota cuánto
 puede haber decrecido el grado de un hijo desde que se enlazó, sin prohibir
 que decrezca del todo (eso volvería la estructura demasiado rígida para que
 `Decrease-Key` siga siendo O(1) amortizado).
@@ -86,7 +86,7 @@ que decrezca del todo (eso volvería la estructura demasiado rígida para que
   `Consolidate`.
 
 `Find-Min` y `Delete` **no tienen pseudocódigo ni análisis en este mazo**:
-sólo aparecen con su complejidad (`Θ(1)` y `O(lg n)` respectivamente) en la
+sólo aparecen con su complejidad ($\Theta(1)$ y $O(\lg n)$ respectivamente) en la
 tabla comparativa de la semana 1. `Find-Min` existe implícitamente como
 leer el puntero `min(H)` que `Insert` y `Union` mantienen; no se documenta
 como operación separada aquí.
@@ -95,8 +95,8 @@ como operación separada aquí.
 
 El profesor introduce aquí, por primera vez en el curso, el
 **[método del potencial](/structures/potential-method)**: define el costo
-amortizado de la operación `i` como `ĉᵢ = cᵢ + Φ(Dᵢ) − Φ(Dᵢ₋₁)`, con la
-condición de que si `Φ` nunca cae por debajo de su valor inicial, la suma
+amortizado de la operación `i` como $\hat{c}_i = c_i + \Phi(D_i) - \Phi(D_{i-1})$, con la
+condición de que si $\Phi$ nunca cae por debajo de su valor inicial, la suma
 de costos amortizados acota por arriba la suma de costos reales. El
 potencial concreto que fija para este montículo es:
 
@@ -104,51 +104,51 @@ potencial concreto que fija para este montículo es:
 Φ(H) = t(H) + 2·m(H)
 ```
 
-donde `t(H)` es el número de árboles en la lista de raíces y `m(H)` el
+donde $t(H)$ es el número de árboles en la lista de raíces y $m(H)$ el
 número de nodos marcados. Aplicado operación por operación:
 
-- **Insert**: agrega un árbol, `t(H)` sube en 1, `m(H)` no cambia →
-  `ΔΦ = 1`. Costo amortizado `ĉ = O(1) + 1 = O(1)`.
-- **Union**: concatenar no cambia ni `t(H)` ni `m(H)` (la suma de ambos se
-  conserva) → `ΔΦ = 0`. Costo amortizado `ĉ = O(1)`.
-- **Decrease-Key**: con `c` cortes reales en cascada, cada corte agrega un
-  árbol (+1 a `t(H)`) y desmarca un nodo (−2 al potencial por ese nodo),
+- **Insert**: agrega un árbol, $t(H)$ sube en 1, $m(H)$ no cambia →
+  $\Delta\Phi = 1$. Costo amortizado $\hat{c} = O(1) + 1 = O(1)$.
+- **Union**: concatenar no cambia ni $t(H)$ ni $m(H)$ (la suma de ambos se
+  conserva) → $\Delta\Phi = 0$. Costo amortizado $\hat{c} = O(1)$.
+- **Decrease-Key**: con $c$ cortes reales en cascada, cada corte agrega un
+  árbol (+1 a $t(H)$) y desmarca un nodo (−2 al potencial por ese nodo),
   salvo el último de la cadena, que sólo se marca (+2). El profesor acota
-  `ΔΦ ≤ 4 − c`, y el costo amortizado
-  `ĉᵢ = O(c) + (4 − c) = O(1)`: cuantos más cortes reales hace la
+  $\Delta\Phi \le 4 - c$, y el costo amortizado
+  $\hat{c}_i = O(c) + (4 - c) = O(1)$: cuantos más cortes reales hace la
   operación, más cae el potencial, y esa caída paga exactamente el trabajo
   extra.
 - **Extract-Min**: tras mover los hijos de la raíz mínima y consolidar,
-  quedan a lo más `D(n) + 1` árboles (contra los `t(H)` de antes), así que
-  `ΔΦ ≤ (D(n) + 1) − t(H)`. El costo amortizado resulta
-  `ĉ = O(D(n) + t(H)) + (D(n) + 1) − t(H) = O(D(n))`.
+  quedan a lo más $D(n) + 1$ árboles (contra los $t(H)$ de antes), así que
+  $\Delta\Phi \le (D(n) + 1) - t(H)$. El costo amortizado resulta
+  $\hat{c} = O(D(n) + t(H)) + (D(n) + 1) - t(H) = O(D(n))$.
 
-Todo esto depende de la cota estructural `D(n) = O(lg n)` (el grado máximo
+Todo esto depende de la cota estructural $D(n) = O(\lg n)$ (el grado máximo
 posible de cualquier nodo), que el profesor prueba con un argumento
 **combinatorio/inductivo** separado (páginas 24-31), subordinado al
 potencial:
 
-Sea `x` un nodo de grado `k`, con hijos `y₁, …, y_k` en el orden en que se
-enlazaron. Cuando `yᵢ` se convirtió en el i-ésimo hijo de `x`, `x` ya tenía
-al menos `i − 1` hijos previos (`y₁, …, y_{i−1}`) — y por cómo enlaza
+Sea $x$ un nodo de grado $k$, con hijos $y_1, \dots, y_k$ en el orden en que se
+enlazaron. Cuando $y_i$ se convirtió en el i-ésimo hijo de $x$, $x$ ya tenía
+al menos $i - 1$ hijos previos ($y_1, \dots, y_{i-1}$) — y por cómo enlaza
 `Consolidate` (dos árboles se enlazan sólo si tienen el mismo grado),
-`yᵢ` tenía en ese momento grado al menos `i − 1` también. Por la regla de
-las marcas, desde entonces `yᵢ` puede haber perdido a lo mucho un hijo sin
-haber sido cortado de `x`; su grado actual es, entonces, al menos `i − 2`.
-Sea `s_k` el número mínimo de nodos que puede tener un árbol cuya raíz
-tiene grado `k`. Contando la raíz, más al menos 1 nodo del hijo `y₁`
-(grado 0 en el peor caso), más al menos `s_{i−2}` nodos por cada hijo
-`yᵢ` con `i ≥ 2`:
+$y_i$ tenía en ese momento grado al menos $i - 1$ también. Por la regla de
+las marcas, desde entonces $y_i$ puede haber perdido a lo mucho un hijo sin
+haber sido cortado de $x$; su grado actual es, entonces, al menos $i - 2$.
+Sea $s_k$ el número mínimo de nodos que puede tener un árbol cuya raíz
+tiene grado $k$. Contando la raíz, más al menos 1 nodo del hijo $y_1$
+(grado 0 en el peor caso), más al menos $s_{i-2}$ nodos por cada hijo
+$y_i$ con $i \ge 2$:
 
-```
-s_k ≥ 2 + Σ_{i=0}^{k−2} s_i
-```
+$$
+s_k \ge 2 + \sum_{i=0}^{k-2} s_i
+$$
 
 Esta es exactamente la recurrencia de los números de Fibonacci
-(`s_k ≥ F_{k+2}`, demostrable por inducción), y el **Teorema** que cierra
+($s_k \ge F_{k+2}$, demostrable por inducción), y el **Teorema** que cierra
 el argumento dice: "el número mínimo de nodos en un árbol cuya raíz tiene
-grado k es `F_{k+2}}`", con `F_{k+2} = Θ(φ^k)` y `φ = (1+√5)/2` la razón
-áurea. Como `n ≥ s_k = Θ(φ^k)`, despejar `k` da `D(n) = O(lg n)` — de ahí
+grado k es $F_{k+2}$", con $F_{k+2} = \Theta(\varphi^k)$ y $\varphi = (1+\sqrt{5})/2$ la razón
+áurea. Como $n \ge s_k = \Theta(\varphi^k)$, despejar $k$ da $D(n) = O(\lg n)$ — de ahí
 el nombre de la estructura: la cota de grado crece tan lento como
 Fibonacci crece rápido.
 
@@ -169,14 +169,14 @@ Ver [Ejemplos](/structures/fibonacci-heap/examples).
 
 | | Insert | Union | Decrease-Key | Extract-Min |
 | --- | --- | --- | --- | --- |
-| [Montículo binario](/structures/binary-heap) | Θ(lg n) | Θ(n) | Θ(lg n) | Θ(lg n) |
-| [Montículo binomial](/structures/binomial-heap) | O(lg n) | O(lg n) | O(lg n) | O(lg n) |
-| Montículo de Fibonacci | O(1) amortizado | O(1) amortizado | O(1) amortizado | O(lg n) amortizado |
+| [Montículo binario](/structures/binary-heap) | $\Theta(\lg n)$ | $\Theta(n)$ | $\Theta(\lg n)$ | $\Theta(\lg n)$ |
+| [Montículo binomial](/structures/binomial-heap) | $O(\lg n)$ | $O(\lg n)$ | $O(\lg n)$ | $O(\lg n)$ |
+| Montículo de Fibonacci | $O(1)$ amortizado | $O(1)$ amortizado | $O(1)$ amortizado | $O(\lg n)$ amortizado |
 
 El mazo de semana 2 no reproduce esta tabla comparativa (viene de la
 semana 1); se arma aquí a partir de las tres estructuras ya documentadas.
 La ganancia declarada de Fibonacci sobre binomial es exactamente pasar
-Insert, Union y Decrease-Key de O(lg n) a O(1) amortizado, siendo perezoso.
+Insert, Union y Decrease-Key de $O(\lg n)$ a $O(1)$ amortizado, siendo perezoso.
 
 ## Prueba de dominio
 

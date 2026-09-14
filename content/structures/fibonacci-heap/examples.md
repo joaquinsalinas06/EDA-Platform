@@ -43,17 +43,17 @@ las tres quedan como raíces sueltas de grado 0, y `min(H) = 3`. Se llama
 ## Límite
 
 El peor caso real de una sola llamada a `Extract-Min` ocurre cuando la
-raíz mínima tiene grado `D(n) = O(lg n)` (el máximo posible) y además hay
-muchas raíces sueltas adicionales que consolidar: se suben hasta `D(n)`
-hijos a la lista de raíces y luego se recorren y enlazan `t(H)` raíces en
-total, dando el costo real `O(D(n) + t(H))` de la tabla de complejidad.
+raíz mínima tiene grado $D(n) = O(\lg n)$ (el máximo posible) y además hay
+muchas raíces sueltas adicionales que consolidar: se suben hasta $D(n)$
+hijos a la lista de raíces y luego se recorren y enlazan $t(H)$ raíces en
+total, dando el costo real $O(D(n) + t(H))$ de la tabla de complejidad.
 
 Sin embargo, ese peor caso real **no** es el peor caso amortizado: el
-análisis con `Φ(H) = t(H) + 2·m(H)` muestra que, sin importar cuántas
-raíces `t(H)` haya antes de consolidar, siempre quedan a lo más `D(n) + 1`
+análisis con $\Phi(H) = t(H) + 2 \cdot m(H)$ muestra que, sin importar cuántas
+raíces $t(H)$ haya antes de consolidar, siempre quedan a lo más $D(n) + 1$
 después — esa caída de potencial paga exactamente el trabajo extra de
-recorrer muchas raíces, dejando el costo amortizado en `O(D(n)) = O(lg n)`.
-Es la estructura que "arregla" la debilidad de Union en `Θ(n)` del
+recorrer muchas raíces, dejando el costo amortizado en $O(D(n)) = O(\lg n)$.
+Es la estructura que "arregla" la debilidad de Union en $\Theta(n)$ del
 [montículo binario](/structures/binary-heap) y la logra sin sacrificar la
 velocidad de Extract-Min del [montículo binomial](/structures/binomial-heap):
 la pereza de Insert/Union/Decrease-Key nunca hace que Extract-Min cueste

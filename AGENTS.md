@@ -111,36 +111,84 @@ donde vas, el nivel de un ejercicio. Nunca decorativo, nunca gradientes.
   (`.stagger`), interpolación de nodos en las visualizaciones, y la visualización
   **se reproduce sola** la primera vez que entra en pantalla.
 
-### Estados en las visualizaciones — un solo azul
+### Estados en las visualizaciones — tres colores, cada uno un estado
 
 `--accent` marca **únicamente lo ACTIVO**: el nodo que la operación toca en el
-paso actual. Nunca hay un segundo color de señal. El profesor usa amarillo y
-rojo en sus diapositivas (delimitador / respuesta); nosotros traducimos esos
-estados a **relleno, contorno, opacidad y trazo**, nunca a tono. El vocabulario
-es cerrado — siete estados, definidos en `src/visualizations/canvas-types.ts`
+paso actual. El profesor usa amarillo y rojo en sus diapositivas (delimitador
+/ respuesta) — nosotros traducimos esos dos con sus propios colores
+(`--marked` / `--answer`), nunca con `--accent`, y ninguno de los dos compite
+con el azul por esa lectura. El resto de estados sigue distinguiéndose sólo
+por **relleno, contorno, opacidad y trazo**, sin tono. El vocabulario es
+cerrado — siete estados, definidos en `src/visualizations/canvas-types.ts`
 y verificados por `canvas-types.test.ts`:
 
 | estado | relleno | contorno | opacidad | significa |
 | --- | --- | --- | --- | --- |
 | `idle` | `--paper` | `--rule` fino | 1 | estructura en reposo |
 | `active` | `--accent` | `--accent` | 1 | **lo que se toca en este paso — único uso del azul** |
-| `marked` | `--paper` | `--ink` + doble contorno | 1 | delimitador / frontera (el amarillo del profesor) |
-| `answer` | `--slab` (losa llena) | `--slab` | 1 | respuesta canónica (el rojo del profesor) |
+| `marked` | `--marked` (ámbar) | `--marked-ink` + doble contorno | 1 | delimitador / frontera (el amarillo del profesor) |
+| `answer` | `--answer` (carmesí) | `--answer` | 1 | respuesta canónica (el rojo del profesor) |
 | `shared` | `--sunken` | `--rule` discontinuo | 0.75 | compartido con la versión anterior, no se tocó |
 | `copied` | `--paper` | `--ink` grueso | 1 | nodo nuevo de esta versión |
 | `muted` | `--fill` | `--rule` discontinuo | 0.45 | descartado / podado |
+
+`--marked`/`--marked-ink` y `--answer`/`--answer-ink` están definidos en
+`src/styles/global.css` para claro y oscuro, verificados AA contra su propio
+`-ink` (no contra `--ink`: son colores de acento, su texto es siempre oscuro
+o siempre claro, no el texto normal del tema).
 
 Aristas: `tree` sólida; `shared` discontinua y curvada (cruza entre versiones);
 `pointer` sólida con punta de flecha. Una arista sólo se pinta de azul cuando
 une algo activo.
 
-**Doble contorno = frontera. Losa llena = respuesta. Discontinuo = no es tuyo
-o ya no cuenta. Opacidad baja = descartado. Azul = ahora.**
+**Ámbar = delimitador. Carmesí = respuesta. Discontinuo = no es tuyo o ya no
+cuenta. Opacidad baja = descartado. Azul = ahora — y nada más compite con él.**
 
 Es fiel al material, no una concesión: el profesor ya dibuja los puentes del
 fractional cascading con línea punteada, no con color. Como el estado se
 codifica en el trazo, cada nodo lleva un `<title>` con su estado en palabras
 ("hoja 4 — delimitador") para quien usa lector de pantalla.
+
+## MDX — diagramas a mitad de la explicación
+
+`content/structures/<id>/**/*.md` y `**/*.mdx` conviven en la misma colección
+`docs`; el `id` se calcula igual (sin extensión), así que nada del resto del
+pipeline distingue entre uno y otro.
+
+- Un tema (teoría u operación) que no necesita diagramas intercalados sigue
+  en `.md` — es el caso normal, no cambies nada.
+- Un tema que sí necesita que un diagrama aparezca a mitad del texto (no sólo
+  arriba de todo) se escribe en `.mdx`. En la cabecera del archivo, después
+  del frontmatter, importa el componente y úsalo donde corresponda:
+
+  ```mdx
+  ---
+  kind: theory
+  title: "..."
+  ---
+  import Visualization from '../../../src/components/Visualization.astro';
+
+  ## Intuición
+  ... prosa ...
+
+  <Visualization viz={{ type: 'tree', steps: [...] }} />
+
+  ## Por qué funciona
+  ... más prosa, después del diagrama ...
+  ```
+
+  El objeto `viz` que le pasas a `<Visualization/>` es exactamente el mismo
+  shape de `visualizationSchema` (`src/lib/schemas.ts`) que ya usas en el
+  frontmatter — sólo que aquí es una prop de React/Astro, no YAML, así que
+  usa comillas dobles y comas de JS, no YAML.
+- El frontmatter `visualization` (YAML, como siempre) sigue existiendo y
+  sigue funcionando igual en `.md` y `.mdx` — la página lo sigue pintando
+  arriba del contenido. Úsalo cuando un solo diagrama al principio basta.
+  Sólo pasa a `.mdx` con imports inline cuando de verdad necesitas más de un
+  diagrama, o uno a mitad de la explicación.
+- `theory` ahora también acepta `visualization` en el frontmatter (antes sólo
+  `operation` lo tenía) — los 19 temas con `operations: []` en el knowledge
+  map ya pueden tener diagrama.
 
 ## Pendiente
 

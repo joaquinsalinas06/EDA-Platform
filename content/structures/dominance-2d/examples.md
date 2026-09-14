@@ -37,10 +37,10 @@ la que corta el recorrido, no el valor de `z`.
 
 *(derivado del pseudocódigo)*: los mismos cuatro puntos, pero con la
 consulta `(b2,b3) = (0,0)` — ningún punto tiene `y_i ≤ 0` ni `z_i ≤ 0`. La
-búsqueda binaria inicial sigue costando `O(lg n)`, pero la caminata se
+búsqueda binaria inicial sigue costando $O(\lg n)$, pero la caminata se
 detiene de inmediato porque ya la primera columna (`y=1`) no es `< b2=0`:
-`k=0`, y el costo es puro `O(lg n)` sin ningún paso de caminata. Es el caso
-patológico opuesto al de "todos dominados": aquí el término `O(k)` se anula
+`k=0`, y el costo es puro $O(\lg n)$ sin ningún paso de caminata. Es el caso
+patológico opuesto al de "todos dominados": aquí el término $O(k)$ se anula
 por completo y sólo queda la búsqueda binaria, que es justamente la cota que
 [d2-bound-x](/structures/d2-bound-x) necesita heredar al acotar `y` con una
 estructura externa antes de llegar aquí.

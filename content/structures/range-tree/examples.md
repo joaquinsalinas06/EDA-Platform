@@ -34,9 +34,9 @@ importar el orden de inserción. El caso que sí produce el costo máximo es
 estructural: una consulta `[l1, r1]` que cubra **todo** el rango de
 llaves. Ahí `Predecessor(l1)` y `Successor(r1)` no existen, `P` es la raíz,
 y el único subárbol canónico es la raíz misma — el conteo sigue siendo
-O(log n) (o O(1), leyendo el contador de la raíz), pero
+$O(\log n)$ (o $O(1)$, leyendo el contador de la raíz), pero
 [enumeration](/structures/range-tree/operations/enumeration) cuesta
-O(n), el máximo de su fórmula O(log n + k) con `k = n`. Lo que "arregla"
+$O(n)$, el máximo de su fórmula $O(\log n + k)$ con `k = n`. Lo que "arregla"
 este límite no es otra estructura (el profesor no propone una): es que
 `existence-count` nunca paga ese costo, sólo `enumeration` cuando de verdad
 se piden los n puntos. *(Derivado; el mazo no da un ejemplo numérico para

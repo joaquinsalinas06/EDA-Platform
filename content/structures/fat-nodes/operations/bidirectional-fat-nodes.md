@@ -37,7 +37,7 @@ La solución: cada nodo lleva **dos** registros — uno hacia adelante (igual
 que antes) y uno hacia atrás — y decidir en cuál cae cada modificación
 según la posición relativa, en el árbol de versiones, entre el nodo y la
 versión que escribe. Eso exige poder **comparar posiciones en el árbol de
-versiones** en `O(1)`, que es exactamente lo que resuelve la
+versiones** en $O(1)$, que es exactamente lo que resuelve la
 [linearización del árbol de versiones](/structures/fat-nodes/operations/version-tree-linearization).
 
 ## Algoritmo
@@ -47,10 +47,10 @@ split bidireccional ("un split más delicado", sin desarrollarlo). Lo que
 sí se puede fijar con precisión, derivado de la descripción:
 
 1. Cada nodo tiene `logAdelante` y `logAtrás`, cada uno de tamaño acotado.
-2. Leer un campo en la versión `t` requiere decidir primero si `t` queda
+2. Leer un campo en la versión $t$ requiere decidir primero si $t$ queda
    "adelante" o "atrás" respecto a la versión de creación del nodo (usando
    la [linearización](/structures/fat-nodes/operations/version-tree-linearization)
-   para comparar en `O(1)`), y buscar en el registro correspondiente.
+   para comparar en $O(1)$), y buscar en el registro correspondiente.
 3. Escribir en una versión arbitraria agrega la entrada al registro que
    corresponda según esa misma comparación; si ese registro se llena,
    dispara un split — cuya mecánica exacta de "hacia dónde reparte" cada
@@ -81,8 +81,8 @@ su mecánica interna (ver "Casos límite").
 
 ## Complejidad temporal
 
-El profesor da únicamente la cota agregada: "`O(1)` amortizado por
-operación" (páginas 44-45), sin reproducir el cálculo de `ΔΦ` para este
+El profesor da únicamente la cota agregada: "$O(1)$ amortizado por
+operación" (páginas 44-45), sin reproducir el cálculo de $\Delta\Phi$ para este
 caso extendido. Se puede afirmar con confianza que el estilo sigue siendo
 [potential-method](/structures/potential-method) — hereda la misma
 "receta" de semana 2 aplicada a una estructura con dos registros en vez de
@@ -92,7 +92,7 @@ bidireccional.
 ## Complejidad espacial
 
 No lo da el mazo para este caso extendido (a diferencia del caso
-unidireccional, donde sí se especifica `+1` entrada por escritura).
+unidireccional, donde sí se especifica $+1$ entrada por escritura).
 
 ## Ejemplo
 
@@ -119,7 +119,7 @@ que el registro unidireccional no puede representar, y que el registro
   confianza falsa.
 - **Comparar tiempos requiere la estructura de mantenimiento de orden**:
   el profesor la nombra y da su interfaz ("soporta comparar dos tiempos e
-  insertar un tiempo nuevo entre otros dos, ambos en O(1)", página 41)
+  insertar un tiempo nuevo entre otros dos, ambos en $O(1)$", página 41)
   pero no la implementa — es un prerrequisito asumido, no explicado, y
   esta operación depende de ella para decidir "adelante" o "atrás" en
-  O(1).
+  $O(1)$.

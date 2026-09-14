@@ -15,8 +15,8 @@ cppSteps:
 
 ## Qué hace
 
-`Predecessor(x)` devuelve la hoja con la mayor llave `≤ x`; `Successor(x)`
-devuelve la hoja con la menor llave `≥ x`. Son el primer paso de
+`Predecessor(x)` devuelve la hoja con la mayor llave $\le x$; `Successor(x)`
+devuelve la hoja con la menor llave $\ge x$. Son el primer paso de
 [range-query-1d](/structures/range-tree/operations/range-query-1d): acotan
 el rango `[l1, r1]` a las dos hojas frontera de la consulta.
 
@@ -69,22 +69,22 @@ editor de arriba.
 
 ## Complejidad temporal
 
-O(log n): un único descenso desde la raíz hasta una hoja, acotado por la
+$O(\log n)$: un único descenso desde la raíz hasta una hoja, acotado por la
 altura del árbol balanceado (Sem4_Orthogonal_Range_Search.pdf#31), más un
-paso O(1) al vecino in-order.
+paso $O(1)$ al vecino in-order.
 
 ## Complejidad espacial
 
-O(1) adicional: sólo se guarda el nodo actual del descenso.
+$O(1)$ adicional: sólo se guarda el nodo actual del descenso.
 
 ## Ejemplo
 
 *(Derivado; ilustra el algoritmo sobre el árbol de
 [build-1d](/structures/range-tree/operations/build-1d).)* Sobre las hojas
-`{3, 4, 7, 9, 13, 15, 18, 27}`, buscar `x=5`: en la raíz (9), `5 ≤ 9` → va
-a la izquierda (nodo 4); en el nodo 4, `5 ≤ 4` es falso → va a la derecha
-(nodo 7); en el nodo 7, `5 ≤ 7` → va a la izquierda y llega a la hoja `7`.
-Como `7 > 5`, esa hoja es el Successor(5); el Predecessor(5) es la hoja
+`{3, 4, 7, 9, 13, 15, 18, 27}`, buscar `x=5`: en la raíz (9), $5 \le 9$ → va
+a la izquierda (nodo 4); en el nodo 4, $5 \le 4$ es falso → va a la derecha
+(nodo 7); en el nodo 7, $5 \le 7$ → va a la izquierda y llega a la hoja `7`.
+Como $7 > 5$, esa hoja es el Successor(5); el Predecessor(5) es la hoja
 anterior en el recorrido in-order, `4`. Este mismo par (`4`, `7`) es el que
 usa [range-query-1d](/structures/range-tree/operations/range-query-1d) como
 frontera izquierda de la consulta `[5,16]`.

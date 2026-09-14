@@ -26,7 +26,7 @@ vez de un solo valor, el nodo acumula un historial acotado de valores.
 
 1. Si `|registro(nodo)| < 2p`: agregar la tupla
    `(campo, valorNuevo, tiempoActual)` al final del registro.
-2. Si el registro ya tiene `2p` entradas, esta operación **no aplica** —
+2. Si el registro ya tiene $2p$ entradas, esta operación **no aplica** —
    ver [node-split](/structures/fat-nodes/operations/node-split).
 
 ## Pseudocódigo
@@ -52,16 +52,16 @@ y `full-implementation.cpp` (el `writeField` completo, que delega en
 
 ## Complejidad temporal
 
-Costo real `cᵢ = O(1)`: agregar una tupla al final de una lista. Con el
-potencial `Φ = Σ_v (entradas usadas en el registro de v)`, esta operación
-sube `Φ` en exactamente 1 (`ΔΦ = +1`), así que el costo amortizado es
-`ĉᵢ = O(1) + 1 = O(1)` (páginas 29-30). El profesor no distingue
+Costo real $c_i = O(1)$: agregar una tupla al final de una lista. Con el
+potencial $\Phi = \sum_v (\text{entradas usadas en el registro de } v)$, esta operación
+sube $\Phi$ en exactamente 1 ($\Delta\Phi = +1$), así que el costo amortizado es
+$\hat{c}_i = O(1) + 1 = O(1)$ (páginas 29-30). El profesor no distingue
 mejor/promedio/peor: da directamente el costo real y el amortizado, y
 ambos coinciden en este caso.
 
 ## Complejidad espacial
 
-`+1` entrada en el registro del nodo — el espacio extra "por cada cambio"
+$+1$ entrada en el registro del nodo — el espacio extra "por cada cambio"
 que promete el teorema DSST.
 
 ## Ejemplo
@@ -77,12 +77,12 @@ estas dos escrituras dispara un split.
 
 - **Nodo recién creado (registro vacío)**: la primera escritura siempre
   cabe; nunca dispara split por sí sola.
-- **Escribir dos veces el mismo campo en el mismo tiempo `t`**: el mazo no
+- **Escribir dos veces el mismo campo en el mismo tiempo $t$**: el mazo no
   lo discute; esta implementación agrega ambas entradas (la lectura
-  siempre toma la última agregada con `tiempo ≤ t`, así que la segunda
+  siempre toma la última agregada con $\text{tiempo} \le t$, así que la segunda
   escritura "gana").
-- **El registro llega exactamente a `2p − 1` entradas**: la próxima
-  escritura todavía cabe (llega a `2p`, el máximo); es la escritura
+- **El registro llega exactamente a $2p - 1$ entradas**: la próxima
+  escritura todavía cabe (llega a $2p$, el máximo); es la escritura
   *siguiente a esa* la que ya no cabe y dispara
   [node-split](/structures/fat-nodes/operations/node-split) — el caso
   límite central de todo el análisis (páginas 25-26).

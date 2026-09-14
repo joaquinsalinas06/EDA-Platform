@@ -33,8 +33,8 @@ pseudocódigo.)*
 
 1. `subarboles ← RangeQuery1D(raiz, l1, r1)` (ver
    [range-query-1d](/structures/range-tree/operations/range-query-1d)).
-2. **Existencia**: devolver `subarboles ≠ ∅`.
-3. **Conteo**: devolver `Σ contador(s)` para cada `s` en `subarboles`.
+2. **Existencia**: devolver $\text{subarboles} \ne \emptyset$.
+3. **Conteo**: devolver $\sum \text{contador}(s)$ para cada `s` en `subarboles`.
 
 ## Pseudocódigo
 
@@ -56,14 +56,14 @@ de arriba.
 
 ## Complejidad temporal
 
-O(log n): la lista de subárboles canónicos ya cuesta O(log n)
+$O(\log n)$: la lista de subárboles canónicos ya cuesta $O(\log n)$
 ([range-query-1d](/structures/range-tree/operations/range-query-1d)), y
-sumar o comparar sus O(log n) contadores es O(1) por subárbol
+sumar o comparar sus $O(\log n)$ contadores es $O(1)$ por subárbol
 (Sem4_Orthogonal_Range_Search.pdf#37) — nunca se toca una hoja.
 
 ## Complejidad espacial
 
-O(1) adicional más allá de la lista de subárboles de la consulta.
+$O(1)$ adicional más allá de la lista de subárboles de la consulta.
 
 ## Ejemplo
 

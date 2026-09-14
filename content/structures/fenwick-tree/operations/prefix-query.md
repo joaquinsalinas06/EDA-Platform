@@ -48,12 +48,12 @@ arriba.
 
 ## Complejidad temporal
 
-O(lg n): cada paso apaga un bit de `i`; con `⌈lg n⌉` bits en total, el ciclo
+$O(\lg n)$: cada paso apaga un bit de `i`; con $\lceil \lg n \rceil$ bits en total, el ciclo
 termina en a lo más esa cantidad de iteraciones (ver theory.md).
 
 ## Complejidad espacial
 
-O(1) adicional: no hay recursión, sólo un ciclo.
+$O(1)$ adicional: no hay recursión, sólo un ciclo.
 
 ## Ejemplo
 
@@ -65,7 +65,7 @@ Para `n = 8` con los rangos de theory.md, `PrefixQuery(i=6)` suma `tree[6]`
 
 - **i = 0**: el ciclo no entra ninguna vez; devuelve `0` (suma vacía).
 - **i = n**: recorre el camino más largo posible dentro de `[1,n]`, pero
-  sigue siendo O(lg n).
+  sigue siendo $O(\lg n)$.
 - **Rango completo vía resta**: `suma(l, r) = PrefixQuery(r) -
   PrefixQuery(l-1)` — no es una operación nueva, es esta misma combinada
   dos veces; por eso Fenwick sólo sirve para operaciones invertibles (ver

@@ -40,7 +40,7 @@ Rotate(6) [6 es hijo derecho de 4 → left rotation]:
  1   3
 ```
 
-Una sola rotación, costo real O(1). Es el caso más simple de Splay: x ya
+Una sola rotación, costo real $O(1)$. Es el caso más simple de Splay: x ya
 estaba a un nivel de la raíz.
 
 ## Normal
@@ -85,7 +85,7 @@ Paso 2 — Zig(1): rotación simple, 1 sobre 6.
 ```
 
 Tres rotaciones en total (2 de zig-zig + 1 de zig) para subir un nodo de
-profundidad 3. Costo real de esta llamada a Splay: O(1) por rotación × 3 —
+profundidad 3. Costo real de esta llamada a Splay: $O(1)$ por rotación × 3 —
 consistente con "profundidad inicial de x" del análisis, no con la cota
 amortizada (que sólo aplica promediada sobre una secuencia).
 
@@ -118,9 +118,9 @@ consecutivo del camino (7,6,5), (5... etc.) está alineado del mismo lado
 (derecho-derecho) → **puros pasos zig-zig** hasta que 7 llega a la raíz:
 tres iteraciones de zig-zig (6 rotaciones) más ninguna de zig (la
 profundidad es par respecto del último par). Costo real de esta única
-llamada: O(n) — exactamente el caso que el análisis de
+llamada: $O(n)$ — exactamente el caso que el análisis de
 [`splay.md`](/structures/splay-tree/operations/splay) señala como el peor
-caso real de una operación aislada, distinto de la cota amortizada O(log n).
+caso real de una operación aislada, distinto de la cota amortizada $O(\log n)$.
 Después de este único Splay, sin embargo, el árbol queda considerablemente
 más plano que la cadena original — es la propiedad (no demostrada aquí) que
-hace que la *siguiente* búsqueda en esa zona ya no cueste O(n).
+hace que la *siguiente* búsqueda en esa zona ya no cueste $O(n)$.

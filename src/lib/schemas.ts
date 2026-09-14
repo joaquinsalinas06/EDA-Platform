@@ -20,6 +20,9 @@ const vizNode = z.object({
   value: z.union([z.string(), z.number()]),
   parent: z.string().nullable().default(null),
   state: z.enum(NODE_STATES).optional(),
+  /** Sólo para un BST binario con UN hijo, donde el orden de hermanos no
+   * revela el lado. En heaps y árboles multivía no se usa. */
+  side: z.enum(['left', 'right']).optional(),
   /** Panel/versión al que pertenece (path copying: v0/v1; range-tree 2D: primary/secondary). */
   version: z.string().optional(),
   panel: z.string().optional(),

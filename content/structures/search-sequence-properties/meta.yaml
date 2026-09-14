@@ -50,5 +50,5 @@ complexity:
     source: "Sem5_Dynamic_Optimality_I.pdf#45"
 
 professorAnalysisStyle: "amortized"
-hasVisualization: false
+hasVisualization: true
 placeholder: false

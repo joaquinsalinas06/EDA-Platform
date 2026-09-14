@@ -24,5 +24,6 @@ complexity:
       cantidad de veces antes de llegar a 0.
 
 professorAnalysisStyle: derivación estándar (no atribuible al profesor; ver nota en theory.md)
-hasVisualization: false
+hasVisualization: true
+visualizationType: range-tree
 placeholder: false

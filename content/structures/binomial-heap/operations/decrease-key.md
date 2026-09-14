@@ -52,23 +52,23 @@ asigna la nueva llave y sube por los punteros `parent` intercambiando con
 
 ## Complejidad temporal
 
-`O(lg n)`. Un nodo dentro de un árbol `B_k` está a profundidad a lo mucho
-`k = O(lg n)` de su raíz (la altura de `B_k` es `k`), así que el ciclo de
+$O(\lg n)$. Un nodo dentro de un árbol $B_k$ está a profundidad a lo mucho
+$k = O(\lg n)$ de su raíz (la altura de $B_k$ es $k$), así que el ciclo de
 intercambios sube, en el peor caso, un nivel por vez hasta la raíz:
-`O(lg n)` intercambios.
+$O(\lg n)$ intercambios.
 
 ## Complejidad espacial
 
-`O(1)`: sólo se intercambian llaves entre nodos ya existentes, sin
+$O(1)$: sólo se intercambian llaves entre nodos ya existentes, sin
 estructuras auxiliares.
 
 ## Ejemplo
 
-Sobre el `B1` (raíz 5, hijo 9) del ejemplo de
+Sobre el $B_1$ (raíz 5, hijo 9) del ejemplo de
 [Extract-Min](/structures/binomial-heap/operations/extract-min),
 `Decrease-Key(x=9, k=1)` deja a 9 con llave 1; como `1 < 5` (la llave de su
 padre), se intercambian: el nodo que era la raíz ahora tiene llave 1 y el
-que era el hijo tiene llave 5. El árbol sigue siendo el mismo `B1`
+que era el hijo tiene llave 5. El árbol sigue siendo el mismo $B_1$
 físicamente, sólo cambiaron las llaves que guarda cada posición.
 (Derivado a mano; el mazo no trae esta traza.)
 

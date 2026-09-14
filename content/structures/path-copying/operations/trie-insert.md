@@ -22,7 +22,7 @@ largo de la cadena: cada carácter de `s` es un nivel de descenso, y path
 copying copia exactamente un nodo por carácter — el resto del trie (todas
 las demás ramas, de todas las demás cadenas ya insertadas) se comparte sin
 tocarse. Por eso el espacio total tras insertar varias cadenas es
-`O(Σ Lᵢ)`, el mismo orden que un trie efímero normal: cada carácter
+$O(\sum L_i)$, el mismo orden que un trie efímero normal: cada carácter
 insertado crea a lo más un nodo nuevo, sin importar cuántas versiones
 acumules.
 
@@ -60,15 +60,15 @@ arriba.
 
 ## Complejidad temporal
 
-`O(L)` con `L = |s|`, por conteo directo: Insert copia exactamente un nodo
+$O(L)$ con $L = |s|$, por conteo directo: Insert copia exactamente un nodo
 por carácter de `s`, uno por cada nivel del camino desde la raíz hasta el
 nodo final. No se toca ninguna otra rama del trie.
 
 ## Complejidad espacial
 
-`O(L)` de espacio nuevo por inserción — los mismos nodos copiados en
-tiempo. Tras `n` inserciones de cadenas con largos `L₁, ..., Lₙ`, el
-espacio total es `O(Σ Lᵢ)`: el mismo orden que un trie efímero normal,
+$O(L)$ de espacio nuevo por inserción — los mismos nodos copiados en
+tiempo. Tras `n` inserciones de cadenas con largos $L_1, \dots, L_n$, el
+espacio total es $O(\sum L_i)$: el mismo orden que un trie efímero normal,
 porque cada carácter insertado crea a lo más un nodo nuevo sin importar
 cuántas versiones se acumulen.
 

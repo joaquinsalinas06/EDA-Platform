@@ -43,13 +43,13 @@ Ver `step-2-update.cpp` y `full-implementation.cpp` en el editor de arriba.
 
 ## Complejidad temporal
 
-O(lg n): cada paso apaga y sube al menos un bit de `i`; con `⌈lg n⌉` bits en
+$O(\lg n)$: cada paso apaga y sube al menos un bit de `i`; con $\lceil \lg n \rceil$ bits en
 total, el ciclo termina en a lo más esa cantidad de iteraciones (ver
 theory.md).
 
 ## Complejidad espacial
 
-O(1) adicional: no hay recursión, sólo un ciclo.
+$O(1)$ adicional: no hay recursión, sólo un ciclo.
 
 ## Ejemplo
 

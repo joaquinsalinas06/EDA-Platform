@@ -14,5 +14,6 @@ usedBy: ["fat-nodes", "path-copying"]
 complexity: {}
 
 professorAnalysisStyle: "definición de modelo de cómputo"
-hasVisualization: false
+hasVisualization: true
+visualizationType: tree
 placeholder: false

@@ -60,12 +60,12 @@ Ver `step-2-rotate.cpp` y `full-implementation.cpp` en el editor de arriba:
 
 ## Complejidad temporal
 
-O(1), costo real (no amortizado): una sola rotación, y `rotate` es O(1) en
+$O(1)$, costo real (no amortizado): una sola rotación, y `rotate` es $O(1)$ en
 el modelo BST sin importar el tamaño de A, B o C (#64).
 
 ## Complejidad espacial
 
-O(1) adicional.
+$O(1)$ adicional.
 
 ## Ejemplo
 
@@ -75,7 +75,7 @@ Ver [examples.md](/structures/splay-tree/examples).
 
 - **`x` ya es la raíz**: Zig no aplica; [`splay`](/structures/splay-tree/operations/splay)
   termina antes de llegar aquí.
-- **Subárboles A, B o C vacíos**: la rotación sigue siendo O(1), sólo que
+- **Subárboles A, B o C vacíos**: la rotación sigue siendo $O(1)$, sólo que
   alguno de los punteros queda en `null`.
 - **`p` era la raíz del árbol completo**: tras Zig, `x` es la nueva raíz —
   quien mantenga un puntero a la raíz del árbol debe actualizarlo.

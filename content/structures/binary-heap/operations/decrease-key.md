@@ -53,13 +53,13 @@ arriba.
 
 ## Complejidad temporal
 
-`Θ(lg n)`, tal como aparece en la tabla comparativa. Se deriva del mismo
+$\Theta(\lg n)$, tal como aparece en la tabla comparativa. Se deriva del mismo
 argumento de altura que Insert y Max-Heapify: subir o bajar recorre a lo
-más un camino raíz-hoja de `⌊lg n⌋` aristas.
+más un camino raíz-hoja de $\lfloor \lg n \rfloor$ aristas.
 
 ## Complejidad espacial
 
-O(1) adicional (versión iterativa).
+$O(1)$ adicional (versión iterativa).
 
 ## Ejemplo
 

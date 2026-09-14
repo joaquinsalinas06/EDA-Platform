@@ -28,9 +28,9 @@ con hijo izq `27` y der `40`):
 Insertar `10`, `20`, `30`, `40` **en ese orden** en un árbol inicialmente
 vacío: sin balanceo, esta secuencia produce una lista enlazada pura
 (cada nodo cuelga como hijo derecho del anterior), degradando `Search` a
-O(n). Con el invariante de balance, la tercera inserción (`30`) ya rompe
+$O(n)$. Con el invariante de balance, la tercera inserción (`30`) ya rompe
 el invariante en la raíz (`10`) y una rotación izquierda lo restaura antes
 de seguir; la estructura nunca llega a ser una lista. Es exactamente el
 caso adversario que motiva balancear un BST — el mismo que se verifica de
 forma automatizada en `full-implementation.cpp` (insertar 1..n en orden y
-comprobar que la altura resultante se queda cerca de log2(n), no de n).
+comprobar que la altura resultante se queda cerca de $\log_2(n)$, no de n).

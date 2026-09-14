@@ -6,15 +6,15 @@ title: "Cola de prioridad retroactiva"
 ## ¿Qué problema resuelve?
 
 Una [priority queue / montículo](/structures/binary-heap) soporta `Insert(k)`
-y `Delete-Min`, cada una en `O(lg n)`. El profesor plantea volverla
+y `Delete-Min`, cada una en $O(\lg n)$. El profesor plantea volverla
 **retroactiva parcial** (ver [Retroactividad](/structures/retroactivity)):
 poder insertar o eliminar operaciones en el pasado de su línea de tiempo, y
 consultar el estado actual — sin pagar el costo genérico de los métodos ya
 vistos. El [método de rollback](/structures/rollback-method) resolvería
-esto en `O(r)` (`r` = operaciones después del cambio), y el enfoque de
+esto en $O(r)$ (`r` = operaciones después del cambio), y el enfoque de
 [problemas de búsqueda descomponibles](/structures/decomposable-search-problem)
-daría `O(lg n · lg m)` — y ni siquiera aplica limpio, porque `Delete-Min` no
-es un problema descomponible simple. La meta explícita es `O(lg n)`
+daría $O(\lg n \cdot \lg m)$ — y ni siquiera aplica limpio, porque `Delete-Min` no
+es un problema descomponible simple. La meta explícita es $O(\lg n)$
 amortizado por operación retroactiva: el mismo orden que las operaciones
 originales de la cola.
 
@@ -56,7 +56,7 @@ Se mantiene la línea de tiempo retroactiva (ver
   limpio, y por qué eso acota el trabajo de todo lo demás.
 - [Compute-M](/structures/retroactive-priority-queue/operations/compute-m) —
   calcula el efecto neto de una inserción retroactiva usando el puente más
-  cercano, en vez del recorrido ingenuo `O(r)`.
+  cercano, en vez del recorrido ingenuo $O(r)$.
 - [Insert-retroactive](/structures/retroactive-priority-queue/operations/insert-retroactive) —
   la única operación con desarrollo propio del profesor: fórmula del efecto
   neto, ejemplo trabajado incluido.
@@ -87,20 +87,20 @@ de elementos eliminados) a exactamente un elemento — ¡nunca más que eso!"
 A partir de ahí, el costo de una inserción retroactiva se reduce al costo
 de calcular ese elemento (`M`), y `M` se acota usando el puente más cercano
 más un BST balanceado con información agregada. Pero la cota final —
-`O(lg n)` amortizado — **no se demuestra en el mazo**: se cita como
+$O(\lg n)$ amortizado — **no se demuestra en el mazo**: se cita como
 resultado externo. Textual (páginas 63-64): "El resultado (Demaine, Iacono,
 Langerman, 2007): con la estructura de puentes mantenida sobre un árbol
 balanceado, Insert y Delete retroactivos parciales sobre una priority queue
-cuestan `O(lg n)` amortizado — el mismo orden que las operaciones
+cuestan $O(\lg n)$ amortizado — el mismo orden que las operaciones
 originales." El cierre pedagógico (página 64) confirma el estilo: es un
 ejemplo de cómo entender la estructura del problema (que el efecto de una
 inserción retroactiva se reduce a un único intercambio) permite superar por
-mucho la cota genérica `O(r)` del rollback.
+mucho la cota genérica $O(r)$ del rollback.
 
 > **Nota de apoyo** (no está en las diapositivas): el mazo no dice cómo se
 > mantienen los puentes bajo inserciones y eliminaciones sucesivas — sólo
 > que "se mantienen" sobre el árbol balanceado. El razonamiento amortizado
-> detrás del `O(lg n)` (por qué en promedio no hay que recalcular todos los
+> detrás del $O(\lg n)$ (por qué en promedio no hay que recalcular todos los
 > puentes en cada operación) no aparece en el material; es exactamente el
 > hueco que el paper citado (Demaine–Iacono–Langerman 2007) llena y el
 > profesor no.
@@ -109,8 +109,8 @@ mucho la cota genérica `O(r)` del rollback.
 
 La tabla se genera desde `meta.yaml`. El profesor casi nunca distingue
 mejor/promedio/peor ni menciona espacio en este curso; aquí tampoco. La
-única cota derivada explícitamente en el mazo mismo es el `O(r)` del
-cálculo ingenuo de `M` (dado como lo que el puente evita); el `O(lg n)`
+única cota derivada explícitamente en el mazo mismo es el $O(r)$ del
+cálculo ingenuo de `M` (dado como lo que el puente evita); el $O(\lg n)$
 amortizado de Insert y Delete retroactivos es una cita, no una derivación
 propia.
 
@@ -124,9 +124,9 @@ mejor ejemplo concreto de las tres semanas" — y va sin marca de derivado.
 
 | | Costo de Insert / Delete retroactivos |
 | --- | --- |
-| [Método de rollback](/structures/rollback-method) | `O(r)` |
-| [Segment Tree genérico](/structures/decomposable-search-problem) | `O(lg n · lg m)` (y no aplica limpio: Delete-Min no es descomponible simple) |
-| Priority queue retroactiva (puentes + BST balanceado) | `O(lg n)` amortizado |
+| [Método de rollback](/structures/rollback-method) | $O(r)$ |
+| [Segment Tree genérico](/structures/decomposable-search-problem) | $O(\lg n \cdot \lg m)$ (y no aplica limpio: Delete-Min no es descomponible simple) |
+| Priority queue retroactiva (puentes + BST balanceado) | $O(\lg n)$ amortizado |
 
 ## Prueba de dominio
 

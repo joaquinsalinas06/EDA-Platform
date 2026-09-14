@@ -22,7 +22,7 @@ que este tema dé retroactividad **completa** y no sólo parcial.
 
 Preguntar "¿cuál es el resultado como si estuviéramos en el tiempo `t`?" es
 preguntar por el efecto acumulado de todas las operaciones activas desde el
-inicio de la línea de tiempo hasta `t` — es decir, el rango `[1, t]` del
+inicio de la línea de tiempo hasta `t` — es decir, el rango $[1, t]$ del
 segment tree de tiempo. Eso es exactamente un
 [Query de rango de segment tree](/structures/segment-tree/operations/query):
 se descompone `[1, t]` en `O(lg m)` nodos canónicos y se combinan con `f`,
@@ -31,11 +31,11 @@ sin recorrer las `t` hojas una por una.
 ## Algoritmo
 
 Reduce directamente al [Query de segment tree](/structures/segment-tree/operations/query),
-con el rango fijo en `[1, t]`:
+con el rango fijo en $[1, t]$:
 
 1. Llamar `Query(raíz, 1, m, 1, t)` sobre el segment tree de tiempo.
 2. Ese Query se descompone, como cualquier Query de rango, en a lo más
-   `O(lg m)` nodos completamente cubiertos por `[1, t]`, combinados con `f`.
+   $O(\lg m)$ nodos completamente cubiertos por $[1, t]$, combinados con `f`.
 3. El resultado es la respuesta de la estructura de búsqueda original **como
    si `t` fuera el presente**.
 
@@ -60,19 +60,19 @@ Ver `step-5-query.cpp` y `full-implementation.cpp` en el editor de arriba.
 
 ## Complejidad temporal
 
-`O(q · lg m)`, donde `q` es el costo de la estructura original y `m` el
+$O(q \cdot \lg m)$, donde `q` es el costo de la estructura original y `m` el
 número de operaciones. Textual (página 36-37): "Si la estructura original
 respondía en `O(q)`, la versión retroactiva responde en `O(q · lg m)`". El
-Query de rango visita `O(lg m)` nodos canónicos (el argumento heredado de
+Query de rango visita $O(\lg m)$ nodos canónicos (el argumento heredado de
 [Query de segment tree](/structures/segment-tree/operations/query)); en cada
-uno se paga el costo `O(q)` de la estructura original para reconstruir o
+uno se paga el costo $O(q)$ de la estructura original para reconstruir o
 combinar su resultado local, de ahí el factor multiplicativo.
 
 ## Complejidad espacial
 
 No la da el profesor. Heredada del
 [Query de segment tree](/structures/segment-tree/operations/query):
-`O(lg m)` de pila de recursión.
+$O(\lg m)$ de pila de recursión.
 
 ## Ejemplo
 
@@ -86,9 +86,9 @@ operación sí queda dentro de su intervalo de vida para esta consulta).
 ## Casos límite
 
 - **`t` = el instante más reciente**: equivale a `Query(raíz)` completo, sin
-  descomposición — coincide con el rango total `[1, m]`, que es la raíz.
-- **`t` menor que el primer instante insertado**: el rango `[1, t]` cae
-  fuera de toda operación insertada; devuelve el neutro de `f` en `O(1)`.
+  descomposición — coincide con el rango total $[1, m]$, que es la raíz.
+- **`t` menor que el primer instante insertado**: el rango $[1, t]$ cae
+  fuera de toda operación insertada; devuelve el neutro de `f` en $O(1)$.
 - **`t = m` (la posición más reciente) tras un `Delete` reciente**: refleja
   el estado sin la operación borrada de inmediato — no hace falta rehacer
   nada más, porque `Delete` (ver [Update](/structures/decomposable-search-problem/operations/update))

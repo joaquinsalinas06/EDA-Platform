@@ -1,6 +1,70 @@
 ---
 kind: theory
 title: "Montículo de Fibonacci"
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Estado tras varios `Insert` previos *(derivado; ver
+        [Insert](/structures/fibonacci-heap/operations/insert) para el
+        detalle paso a paso)*: dos árboles sueltos en la lista de raíces,
+        `min(H)` apunta a `a(3)`. Insertar y unir sólo empalman esta
+        lista — nada se reorganiza todavía.
+      highlight: ["a"]
+      nodes:
+        - { id: a, value: 3, parent: null, state: active }
+        - { id: b, value: 8, parent: null }
+        - { id: c, value: 12, parent: b }
+        - { id: d, value: 20, parent: c }
+    - note: >-
+        `Decrease-Key(H, d, 5)`: `llave(d) ← 5` rompe el invariante con su
+        padre `c(12)` (`5 < 12`). A diferencia de un montículo binario, NO
+        se burbujea intercambiando con el padre — eso obligaría a
+        recorrer el árbol. En su lugar, se corta.
+      highlight: ["d", "c"]
+      nodes:
+        - { id: a, value: 3, parent: null }
+        - { id: b, value: 8, parent: null }
+        - { id: c, value: 12, parent: b }
+        - { id: d, value: 5, parent: c, state: active }
+    - note: >-
+        [Cut](/structures/fibonacci-heap/operations/cut)`(H, d, c)`: `d`
+        se separa de `c` y se agrega como raíz nueva, sin marca — empalme
+        de punteros en O(1), sin importar cuán abajo estuviera `d`. Como
+        `llave(d)=5 > llave(min(H))=3`, `min(H)` no cambia esta vez.
+      highlight: ["d"]
+      nodes:
+        - { id: a, value: 3, parent: null }
+        - { id: b, value: 8, parent: null }
+        - { id: c, value: 12, parent: b, state: marked }
+        - { id: d, value: 5, parent: null, state: active }
+    - note: >-
+        La **regla de las marcas**: `c` acaba de perder a `d`, su primer
+        hijo perdido desde que se enlazó bajo `b` — se marca
+        (`marca(c) ← verdadero`), pero no se corta. Si perdiera un
+        *segundo* hijo, ahí sí dispararía su propio corte en cascada.
+      highlight: ["c"]
+      nodes:
+        - { id: a, value: 3, parent: null }
+        - { id: b, value: 8, parent: null }
+        - { id: c, value: 12, parent: b, state: marked }
+        - { id: d, value: 5, parent: null }
+    - note: >-
+        Estado final, todavía "desordenado" a propósito: tres árboles
+        sueltos en la lista de raíces (`a`, `b` con hijo `c` marcado,
+        `d`), `min(H)` sigue en `a(3)`. El costo de acomodar todo esto —
+        fusionar árboles de igual grado — se pospone entero a
+        [Consolidate](/structures/fibonacci-heap/operations/consolidate),
+        que sólo corre dentro de
+        [Extract-Min](/structures/fibonacci-heap/operations/extract-min).
+        Es exactamente la pereza que hace O(1) amortizado a Insert, Union
+        y Decrease-Key.
+      highlight: []
+      nodes:
+        - { id: a, value: 3, parent: null }
+        - { id: b, value: 8, parent: null }
+        - { id: c, value: 12, parent: b, state: marked }
+        - { id: d, value: 5, parent: null }
 ---
 
 ## ¿Qué problema resuelve?

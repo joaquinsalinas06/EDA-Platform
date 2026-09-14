@@ -7,6 +7,85 @@ cppSteps:
   - step-2-structure.cpp
   - step-3-insert-union.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Los dos montículos de entrada, uno al lado del otro — todavía
+        completamente separados. `H1` = {`a(5)` como `min(H1)`, `b(9)`
+        con hijo `c(14)`}. `H2` = {`d(12)` como `min(H2)`, `e(20)`}. A
+        diferencia de [Union en montículo binomial](/structures/binomial-heap/operations/union),
+        aquí no hay grados que alinear ni enlazar: sólo empalmar listas.
+      highlight: []
+      panels:
+        - { id: h1, label: "H1" }
+        - { id: h2, label: "H2" }
+      nodes:
+        - { id: a, value: 5, parent: null, panel: h1, state: active }
+        - { id: b, value: 9, parent: null, panel: h1 }
+        - { id: c, value: 14, parent: b, panel: h1 }
+        - { id: d, value: 12, parent: null, panel: h2, state: active }
+        - { id: e, value: 20, parent: null, panel: h2 }
+    - note: >-
+        Paso 1a: se conecta la cola de la lista circular de `H1` con la
+        cabeza de la de `H2` — un solo empalme de punteros, sin tocar
+        ningún nodo interno de ninguno de los dos árboles.
+      highlight: ["b", "d"]
+      links:
+        - { from: b, to: d, kind: pointer }
+      nodes:
+        - { id: a, value: 5, parent: null, panel: h1 }
+        - { id: b, value: 9, parent: null, panel: h1, state: active }
+        - { id: c, value: 14, parent: b, panel: h1 }
+        - { id: d, value: 12, parent: null, panel: h2, state: active }
+        - { id: e, value: 20, parent: null, panel: h2 }
+    - note: >-
+        Paso 1b: se conecta la cola de `H2` de vuelta a la cabeza de `H1`,
+        cerrando una única lista circular. Los paneles desaparecen: ya no
+        hay "H1" y "H2", hay un solo bosque de cuatro árboles sueltos.
+      highlight: ["e", "a"]
+      links:
+        - { from: e, to: a, kind: pointer }
+      nodes:
+        - { id: a, value: 5, parent: null, state: active }
+        - { id: b, value: 9, parent: null }
+        - { id: c, value: 14, parent: b }
+        - { id: d, value: 12, parent: null }
+        - { id: e, value: 20, parent: null, state: active }
+    - note: >-
+        Paso 2 (comparación): se comparan `min(H1)=5` y `min(H2)=12` para
+        decidir cuál sobrevive como `min(H)` del montículo unido.
+      highlight: ["a", "d"]
+      nodes:
+        - { id: a, value: 5, parent: null, state: active }
+        - { id: b, value: 9, parent: null }
+        - { id: c, value: 14, parent: b }
+        - { id: d, value: 12, parent: null, state: active }
+        - { id: e, value: 20, parent: null }
+    - note: >-
+        `min(H) ← mín(5, 12) = 5`. `a` queda como el mínimo global; `d`
+        sigue siendo una raíz suelta más, sin ningún rol especial.
+      highlight: ["a"]
+      nodes:
+        - { id: a, value: 5, parent: null, state: active }
+        - { id: b, value: 9, parent: null }
+        - { id: c, value: 14, parent: b }
+        - { id: d, value: 12, parent: null }
+        - { id: e, value: 20, parent: null }
+    - note: >-
+        Estado final: una sola lista de raíces con los cuatro árboles de
+        `H1` y `H2` sin fusionar entre sí — `b(9)` y `d(12)` mismo grado
+        (0 y 0 en realidad, pero incluso si compartieran grado, Fibonacci
+        no los enlazaría aquí). El "desorden" de grados repetidos se paga
+        recién en un futuro
+        [Extract-Min](/structures/fibonacci-heap/operations/extract-min).
+      highlight: []
+      nodes:
+        - { id: a, value: 5, parent: null }
+        - { id: b, value: 9, parent: null }
+        - { id: c, value: 14, parent: b }
+        - { id: d, value: 12, parent: null }
+        - { id: e, value: 20, parent: null }
 ---
 
 ## Qué hace

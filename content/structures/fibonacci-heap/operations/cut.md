@@ -8,6 +8,80 @@ cppSteps:
   - step-3-insert-union.cpp
   - step-4-cut-cascading.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Estado inicial *(derivado del pseudocódigo)*: `r(1)` es raíz y
+        `min(H)`, `p(8)` es su hijo, y `p` tiene tres hijos —
+        `x(15)`, ya marcado por haber perdido un hijo antes, `y(20)` y
+        `z(25)`. `grado(p) = 3`. Se va a llamar `Cut(H, x, p)`.
+      highlight: ["x"]
+      nodes:
+        - { id: r, value: 1, parent: null }
+        - { id: p, value: 8, parent: r }
+        - { id: x, value: 15, parent: p, state: marked }
+        - { id: y, value: 20, parent: p }
+        - { id: z, value: 25, parent: p }
+    - note: >-
+        Paso 1a: se quita `x` de la lista de hijos de `p`. `x` se separa
+        del enlace padre-hijo; a `p` sólo le quedan `y` y `z`.
+      highlight: ["x", "p"]
+      nodes:
+        - { id: r, value: 1, parent: null }
+        - { id: p, value: 8, parent: r, state: active }
+        - { id: x, value: 15, parent: null, state: active }
+        - { id: y, value: 20, parent: p }
+        - { id: z, value: 25, parent: p }
+    - note: >-
+        Paso 1b: `grado(p) ← grado(p) − 1`, de 3 a 2. Es una actualización
+        de contador, separada de desenlazar a `x` — ninguna otra
+        estructura se toca.
+      highlight: ["p"]
+      nodes:
+        - { id: r, value: 1, parent: null }
+        - { id: p, value: 8, parent: r, state: active }
+        - { id: x, value: 15, parent: null }
+        - { id: y, value: 20, parent: p }
+        - { id: z, value: 25, parent: p }
+    - note: >-
+        Paso 2a: se agrega `x` a la lista de raíces de `H` — empalme de
+        punteros en O(1), igual que en
+        [Insert](/structures/fibonacci-heap/operations/insert). `x`
+        todavía conserva su marca vieja en este instante.
+      highlight: ["x"]
+      nodes:
+        - { id: r, value: 1, parent: null }
+        - { id: p, value: 8, parent: r }
+        - { id: x, value: 15, parent: null, state: marked }
+        - { id: y, value: 20, parent: p }
+        - { id: z, value: 25, parent: p }
+    - note: >-
+        Paso 2b: `padre(x) ← nulo` (ya lo estaba desde el paso 1a) y
+        `marca(x) ← falso`. Como raíz, `x` no puede seguir marcado — la
+        marca sólo tiene sentido en un nodo con padre.
+      highlight: ["x"]
+      nodes:
+        - { id: r, value: 1, parent: null }
+        - { id: p, value: 8, parent: r }
+        - { id: x, value: 15, parent: null, state: active }
+        - { id: y, value: 20, parent: p }
+        - { id: z, value: 25, parent: p }
+    - note: >-
+        Estado final: `x(15)` es raíz independiente y sin marca,
+        `p(8)` quedó con `grado = 2` y sus hijos restantes `y`, `z`. Aquí
+        `p` no estaba marcado, así que el corte termina sin propagarse. Si
+        `p` ya hubiera estado marcado (por haber perdido un hijo antes),
+        este mismo `Cut` sería el disparador de
+        [Cascading-Cut](/structures/fibonacci-heap/operations/cascading-cut)
+        sobre `p` — esa continuación no se repite aquí.
+      highlight: []
+      nodes:
+        - { id: r, value: 1, parent: null }
+        - { id: p, value: 8, parent: r }
+        - { id: x, value: 15, parent: null }
+        - { id: y, value: 20, parent: p }
+        - { id: z, value: 25, parent: p }
 ---
 
 ## Qué hace

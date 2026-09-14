@@ -1,6 +1,42 @@
 ---
 kind: theory
 title: "Nodos gordos"
+visualization:
+  type: persistent
+  mode: fat-node
+  steps:
+    - note: >-
+        Un nodo gordo v guarda sus campos originales — el valor y los
+        punteros que tendría en la máquina de punteros ordinaria — y un
+        registro de modificaciones, vacío al nacer.
+      nodes:
+        - { id: orig, value: "v: [dato, siguiente] (original)" }
+        - { id: reg, value: "registro: []" }
+    - note: >-
+        Primera escritura: se agrega la tupla (campo, valor, t=3) al
+        registro, todavía sin confirmar.
+      highlight: ["reg"]
+      nodes:
+        - { id: orig, value: "v: [dato, siguiente] (original)" }
+        - { id: reg, value: "registro: [ ] + (campo, valor, t=3)", state: copied }
+    - note: >-
+        Con p=1 (un solo puntero entrante), el límite es 2p=2 entradas.
+        Llega una segunda escritura, (campo, valor, t=7): el registro
+        llega a su tamaño máximo.
+      highlight: ["reg"]
+      nodes:
+        - { id: orig, value: "v: [dato, siguiente] (original)" }
+        - { id: reg, value: "registro: [(campo,valor,t=3)] + (campo,valor,t=7)", state: copied }
+    - note: >-
+        Registro en su límite (2/2 = 2p): el invariante central es que
+        nunca crece más allá de esto. La próxima escritura ya no cabe —
+        dispara node-split, que crea un nodo nuevo y redirige los
+        punteros entrantes (no se reimplica aquí).
+      nodes:
+        - { id: orig, value: "v: [dato, siguiente] (original)" }
+        - id: reg
+          value: "registro: [(campo,valor,t=3), (campo,valor,t=7)]"
+          state: marked
 ---
 
 ## ¿Qué problema resuelve?

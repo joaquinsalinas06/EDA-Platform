@@ -1,6 +1,90 @@
 ---
 kind: theory
 title: "Cola de prioridad retroactiva"
+visualization:
+  type: persistent
+  steps:
+    - note: >-
+        Historial real (páginas 60-62): ins(5) t=1, ins(2) t=2, del-min t=3
+        (quita 2), ins(8) t=4, del-min t=5 (quita 5). Este es el estado
+        actual de la cola, resultado de aplicar las operaciones en orden.
+      caption: "Q_ahora = {8}"
+      highlight: []
+      nodes:
+        - { id: t1, value: "ins(5)", parent: null }
+        - { id: t2, value: "ins(2)", parent: t1 }
+        - { id: t3, value: "del-min -> quita 2", parent: t2 }
+        - { id: t4, value: "ins(8)", parent: t3 }
+        - { id: t5, value: "del-min -> quita 5", parent: t4 }
+    - note: >-
+        Se pide una operación retroactiva: insertar 3 en el pasado, en
+        t=2,5 (entre t=2 y t=3) — no al final de la línea de tiempo, sino
+        en medio de historia que ya pasó.
+      caption: "Insertar(t=2,5, insert(3))"
+      highlight: ["t2.5"]
+      nodes:
+        - { id: t1, value: "ins(5)", parent: null }
+        - { id: t2, value: "ins(2)", parent: t1 }
+        - { id: "t2.5", value: "insertar 3 (pedido)", parent: t2, state: active }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5" }
+        - { id: t4, value: "ins(8)", parent: t3 }
+        - { id: t5, value: "del-min -> quita 5", parent: t4 }
+    - note: >-
+        Lectura ingenua: insertar 3 en el pasado podría desplazar en cadena
+        cada del-min posterior — habría que revisar t3, t4 y t5 uno por uno
+        para ver si alguno cambia de víctima. Eso es exactamente el O(r)
+        del método de rollback genérico que este tema busca evitar.
+      caption: "lectura ingenua: revisar t3, t4, t5 en cadena -> O(r)"
+      highlight: ["t3", "t4", "t5"]
+      nodes:
+        - { id: t1, value: "ins(5)", parent: null }
+        - { id: t2, value: "ins(2)", parent: t1 }
+        - { id: "t2.5", value: "insertar 3 (pedido)", parent: t2 }
+        - { id: t3, value: "del-min -> quita 2 ¿?", parent: "t2.5", state: marked }
+        - { id: t4, value: "ins(8) ¿?", parent: t3, state: marked }
+        - { id: t5, value: "del-min -> quita 5 ¿?", parent: t4, state: marked }
+    - note: >-
+        Lo que muestra el profesor: el efecto real en el presente nunca
+        exige recorrer esa cadena. Basta el puente más cercano antes de
+        t=2,5 — aquí, el inicio mismo de la línea de tiempo — para acotar
+        de una vez el único elemento que puede cambiar (ver Bridge y
+        Compute-M).
+      caption: "el puente acota el trabajo: no hace falta tocar t3, t4, t5"
+      highlight: ["t1"]
+      nodes:
+        - { id: t1, value: "ins(5) -> M = 5", parent: null, state: answer }
+        - { id: t2, value: "ins(2)", parent: t1 }
+        - { id: "t2.5", value: "insertar 3 (pedido)", parent: t2, state: muted }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5", state: shared }
+        - { id: t4, value: "ins(8)", parent: t3, state: shared }
+        - { id: t5, value: "del-min -> quita 5", parent: t4, state: shared }
+    - note: >-
+        El efecto neto completo es un único intercambio: 5 entra a
+        Q_ahora, 3 toma su lugar entre los eliminados. Nunca más que eso —
+        es el teorema central del tema (ver Insert-retroactive).
+      caption: "efecto neto: 5 entra a Q_ahora; 3 pasa a los eliminados"
+      highlight: ["t1", "t2.5"]
+      nodes:
+        - { id: t1, value: "ins(5) -> 5 sobrevive", parent: null, state: answer }
+        - { id: t2, value: "ins(2)", parent: t1 }
+        - { id: "t2.5", value: "insertar 3 (pedido) -> eliminado", parent: t2, state: muted }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5", state: shared }
+        - { id: t4, value: "ins(8)", parent: t3, state: shared }
+        - { id: t5, value: "del-min -> quita 3 (en vez de 5)", parent: t4, state: shared }
+    - note: >-
+        Q_ahora queda en {8, 5} — el mismo resultado que daría rehacer todo
+        el historial en cadena, pero calculado sin recorrer t3, t4 ni t5:
+        el costo real es sólo el de encontrar el puente y el máximo, no el
+        de recorrer r operaciones.
+      caption: "Q_ahora = {8, 5}"
+      highlight: []
+      nodes:
+        - { id: t1, value: "ins(5)", parent: null, state: shared }
+        - { id: t2, value: "ins(2)", parent: t1, state: shared }
+        - { id: "t2.5", value: "insertar 3", parent: t2, state: muted }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5", state: shared }
+        - { id: t4, value: "ins(8)", parent: t3, state: shared }
+        - { id: t5, value: "del-min -> quita 3", parent: t4, state: shared }
 ---
 
 ## ¿Qué problema resuelve?

@@ -7,6 +7,71 @@ cppSteps:
   - step-2-structure.cpp
   - step-3-write-field.cpp
   - full-implementation.cpp
+visualization:
+  type: persistent
+  mode: fat-node
+  steps:
+    - note: >-
+        Nodo v: p=2, así que 2p=4 entradas de registro como máximo. Ahora
+        mismo lleva dos escritas — (valor,200,t=1) y (valor,201,t=2) —,
+        registro 2/4: todavía queda espacio.
+      nodes:
+        - { id: orig, value: "v: 10 (original, t=0)" }
+        - { id: e1, value: "t=1: valor=200" }
+        - { id: e2, value: "t=2: valor=201" }
+    - note: >-
+        Llega escribirCampo(v, valor, 202, t=3). Como |registro|=2 < 2p=4,
+        cabe: se agrega la tupla nueva al final del registro, todavía sin
+        confirmar.
+      highlight: ["e3"]
+      nodes:
+        - { id: orig, value: "v: 10 (original, t=0)" }
+        - { id: e1, value: "t=1: valor=200" }
+        - { id: e2, value: "t=2: valor=201" }
+        - { id: e3, value: "t=3: valor=202", state: copied }
+    - note: >-
+        Entrada confirmada: el registro pasa a 3/4 entradas usadas. Todavía
+        queda un espacio antes de tocar el límite 2p.
+      nodes:
+        - { id: orig, value: "v: 10 (original, t=0)" }
+        - { id: e1, value: "t=1: valor=200" }
+        - { id: e2, value: "t=2: valor=201" }
+        - { id: e3, value: "t=3: valor=202" }
+    - note: >-
+        Llega escribirCampo(v, valor, 203, t=4). |registro|=3 < 2p=4:
+        todavía cabe — es exactamente el caso límite "2p-1 entradas, la
+        próxima escritura aún entra".
+      highlight: ["e4"]
+      nodes:
+        - { id: orig, value: "v: 10 (original, t=0)" }
+        - { id: e1, value: "t=1: valor=200" }
+        - { id: e2, value: "t=2: valor=201" }
+        - { id: e3, value: "t=3: valor=202" }
+        - { id: e4, value: "t=4: valor=203", state: copied }
+    - note: >-
+        Entrada confirmada: el registro llega a 4/4 = 2p, su tamaño
+        máximo. Las cuatro entradas quedan marcadas como el límite: la
+        próxima escritura ya no va a cumplir |registro| < 2p.
+      nodes:
+        - { id: orig, value: "v: 10 (original, t=0)" }
+        - { id: e1, value: "t=1: valor=200", state: marked }
+        - { id: e2, value: "t=2: valor=201", state: marked }
+        - { id: e3, value: "t=3: valor=202", state: marked }
+        - { id: e4, value: "t=4: valor=203", state: marked }
+    - note: >-
+        Llega escribirCampo(v, valor, 204, t=5): |registro|=4 = 2p, ya no
+        aplica el caso "con espacio" — esta operación no procesa esta
+        escritura. Control pasa a
+        node-split(v, valor, 204, 5), que crea un nodo nuevo y redirige los
+        punteros entrantes (ver esa página; no se reimplica aquí).
+      highlight: ["attempt"]
+      nodes:
+        - { id: orig, value: "v: 10 (original, t=0)" }
+        - { id: e1, value: "t=1: valor=200", state: marked }
+        - { id: e2, value: "t=2: valor=201", state: marked }
+        - { id: e3, value: "t=3: valor=202", state: marked }
+        - { id: e4, value: "t=4: valor=203", state: marked }
+        - { id: attempt, value: "intento t=5: valor=204 -> node-split", state: active }
 ---
 
 ## Qué hace

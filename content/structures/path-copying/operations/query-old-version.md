@@ -8,6 +8,179 @@ cppSteps:
   - step-3-segment-tree-update.cpp
   - step-4-trie-insert.cpp
   - full-implementation.cpp
+visualization:
+  type: persistent
+  steps:
+    - note: >-
+        Continuando el ejemplo de Update: tras `Update(v1, pos=4)` existen
+        dos raíces guardadas — v1 (antes del update) y v2 (después). Se va
+        a consultar la posición 4 en la versión **v1**, la vieja, no v2.
+      versions:
+        - { id: v1, label: v1 }
+        - { id: v2, label: v2 }
+      nodes:
+        - { id: v1-root, value: "[1,4]", parent: null, version: v1 }
+        - { id: v1-12, value: "[1,2]", parent: v1-root, version: v1 }
+        - { id: v1-34, value: "[3,4]", parent: v1-root, version: v1 }
+        - { id: v1-11, value: "[1,1]", parent: v1-12, version: v1 }
+        - { id: v1-22, value: "[2,2]", parent: v1-12, version: v1 }
+        - { id: v1-33, value: "[3,3]", parent: v1-34, version: v1 }
+        - { id: v1-44, value: "[4,4]", parent: v1-34, version: v1 }
+        - { id: v2-root, value: "[1,4]'", parent: null, version: v2, state: muted }
+        - { id: v2-34, value: "[3,4]'", parent: v2-root, version: v2, state: muted }
+        - { id: v2-44, value: "[4,4]'", parent: v2-34, version: v2, state: muted }
+      links:
+        - { from: v1-root, to: v1-12, kind: tree }
+        - { from: v1-root, to: v1-34, kind: tree }
+        - { from: v1-12, to: v1-11, kind: tree }
+        - { from: v1-12, to: v1-22, kind: tree }
+        - { from: v1-34, to: v1-33, kind: tree }
+        - { from: v1-34, to: v1-44, kind: tree }
+        - { from: v2-root, to: v2-34, kind: tree }
+        - { from: v2-34, to: v2-44, kind: tree }
+    - note: >-
+        La consulta arranca desde el puntero guardado de v1-root — no
+        desde v2-root. v2 (marcado como no usado en este recorrido) no
+        interviene en absoluto: esta consulta ni lo toca ni lo necesita.
+      highlight: ["v1-root"]
+      versions:
+        - { id: v1, label: v1 }
+        - { id: v2, label: v2 }
+      nodes:
+        - { id: v1-root, value: "[1,4]", parent: null, version: v1, state: active }
+        - { id: v1-12, value: "[1,2]", parent: v1-root, version: v1 }
+        - { id: v1-34, value: "[3,4]", parent: v1-root, version: v1 }
+        - { id: v1-11, value: "[1,1]", parent: v1-12, version: v1 }
+        - { id: v1-22, value: "[2,2]", parent: v1-12, version: v1 }
+        - { id: v1-33, value: "[3,3]", parent: v1-34, version: v1 }
+        - { id: v1-44, value: "[4,4]", parent: v1-34, version: v1 }
+        - { id: v2-root, value: "[1,4]'", parent: null, version: v2, state: muted }
+        - { id: v2-34, value: "[3,4]'", parent: v2-root, version: v2, state: muted }
+        - { id: v2-44, value: "[4,4]'", parent: v2-34, version: v2, state: muted }
+      links:
+        - { from: v1-root, to: v1-12, kind: tree }
+        - { from: v1-root, to: v1-34, kind: tree }
+        - { from: v1-12, to: v1-11, kind: tree }
+        - { from: v1-12, to: v1-22, kind: tree }
+        - { from: v1-34, to: v1-33, kind: tree }
+        - { from: v1-34, to: v1-44, kind: tree }
+        - { from: v2-root, to: v2-34, kind: tree }
+        - { from: v2-34, to: v2-44, kind: tree }
+    - note: >-
+        En v1-root, m=2 y pos=4 > m: se desciende por el hijo derecho,
+        v1-34. v1-root queda visitado — `shared`, no se tocó, sigue siendo
+        exactamente el nodo de v1 — y el subárbol v1-12 nunca se visita
+        para esta consulta.
+      highlight: ["v1-34"]
+      versions:
+        - { id: v1, label: v1 }
+        - { id: v2, label: v2 }
+      nodes:
+        - { id: v1-root, value: "[1,4]", parent: null, version: v1, state: shared }
+        - { id: v1-12, value: "[1,2]", parent: v1-root, version: v1 }
+        - { id: v1-34, value: "[3,4]", parent: v1-root, version: v1, state: active }
+        - { id: v1-11, value: "[1,1]", parent: v1-12, version: v1 }
+        - { id: v1-22, value: "[2,2]", parent: v1-12, version: v1 }
+        - { id: v1-33, value: "[3,3]", parent: v1-34, version: v1 }
+        - { id: v1-44, value: "[4,4]", parent: v1-34, version: v1 }
+        - { id: v2-root, value: "[1,4]'", parent: null, version: v2, state: muted }
+        - { id: v2-34, value: "[3,4]'", parent: v2-root, version: v2, state: muted }
+        - { id: v2-44, value: "[4,4]'", parent: v2-34, version: v2, state: muted }
+      links:
+        - { from: v1-root, to: v1-12, kind: tree }
+        - { from: v1-root, to: v1-34, kind: tree }
+        - { from: v1-12, to: v1-11, kind: tree }
+        - { from: v1-12, to: v1-22, kind: tree }
+        - { from: v1-34, to: v1-33, kind: tree }
+        - { from: v1-34, to: v1-44, kind: tree }
+        - { from: v2-root, to: v2-34, kind: tree }
+        - { from: v2-34, to: v2-44, kind: tree }
+    - note: >-
+        En v1-34, m=3 y pos=4 > m: se desciende por el hijo derecho,
+        v1-44. v1-34 queda visitado — `shared`, sin tocarse — y v1-33
+        nunca se visita para esta consulta.
+      highlight: ["v1-44"]
+      versions:
+        - { id: v1, label: v1 }
+        - { id: v2, label: v2 }
+      nodes:
+        - { id: v1-root, value: "[1,4]", parent: null, version: v1, state: shared }
+        - { id: v1-12, value: "[1,2]", parent: v1-root, version: v1 }
+        - { id: v1-34, value: "[3,4]", parent: v1-root, version: v1, state: shared }
+        - { id: v1-11, value: "[1,1]", parent: v1-12, version: v1 }
+        - { id: v1-22, value: "[2,2]", parent: v1-12, version: v1 }
+        - { id: v1-33, value: "[3,3]", parent: v1-34, version: v1 }
+        - { id: v1-44, value: "[4,4]", parent: v1-34, version: v1, state: active }
+        - { id: v2-root, value: "[1,4]'", parent: null, version: v2, state: muted }
+        - { id: v2-34, value: "[3,4]'", parent: v2-root, version: v2, state: muted }
+        - { id: v2-44, value: "[4,4]'", parent: v2-34, version: v2, state: muted }
+      links:
+        - { from: v1-root, to: v1-12, kind: tree }
+        - { from: v1-root, to: v1-34, kind: tree }
+        - { from: v1-12, to: v1-11, kind: tree }
+        - { from: v1-12, to: v1-22, kind: tree }
+        - { from: v1-34, to: v1-33, kind: tree }
+        - { from: v1-34, to: v1-44, kind: tree }
+        - { from: v2-root, to: v2-34, kind: tree }
+        - { from: v2-34, to: v2-44, kind: tree }
+    - note: >-
+        Caso base: l=r=4, se llegó a la hoja v1-44 de **v1**. Su valor es
+        el valor *original* de la posición 4 — el que tenía antes del
+        Update — porque v1-44 nunca fue tocado por `Update(v1, pos=4)`.
+        Se marca `answer`: es la respuesta de esta consulta.
+      highlight: ["v1-44"]
+      versions:
+        - { id: v1, label: v1 }
+        - { id: v2, label: v2 }
+      nodes:
+        - { id: v1-root, value: "[1,4]", parent: null, version: v1, state: shared }
+        - { id: v1-12, value: "[1,2]", parent: v1-root, version: v1 }
+        - { id: v1-34, value: "[3,4]", parent: v1-root, version: v1, state: shared }
+        - { id: v1-11, value: "[1,1]", parent: v1-12, version: v1 }
+        - { id: v1-22, value: "[2,2]", parent: v1-12, version: v1 }
+        - { id: v1-33, value: "[3,3]", parent: v1-34, version: v1 }
+        - { id: v1-44, value: "[4,4]", parent: v1-34, version: v1, state: answer }
+        - { id: v2-root, value: "[1,4]'", parent: null, version: v2, state: muted }
+        - { id: v2-34, value: "[3,4]'", parent: v2-root, version: v2, state: muted }
+        - { id: v2-44, value: "[4,4]'", parent: v2-34, version: v2, state: muted }
+      links:
+        - { from: v1-root, to: v1-12, kind: tree }
+        - { from: v1-root, to: v1-34, kind: tree }
+        - { from: v1-12, to: v1-11, kind: tree }
+        - { from: v1-12, to: v1-22, kind: tree }
+        - { from: v1-34, to: v1-33, kind: tree }
+        - { from: v1-34, to: v1-44, kind: tree }
+        - { from: v2-root, to: v2-34, kind: tree }
+        - { from: v2-34, to: v2-44, kind: tree }
+    - note: >-
+        El camino completo recorrido — v1-root, v1-34, v1-44, todos
+        `shared` o `answer` — pertenece por entero a v1: ninguno de estos
+        tres nodos es el que Update copió para crear v2. Consultar el
+        pasado no toca ni un solo nodo de la versión nueva.
+      highlight: ["v1-root", "v1-34", "v1-44"]
+      versions:
+        - { id: v1, label: v1 }
+        - { id: v2, label: v2 }
+      nodes:
+        - { id: v1-root, value: "[1,4]", parent: null, version: v1, state: shared }
+        - { id: v1-12, value: "[1,2]", parent: v1-root, version: v1 }
+        - { id: v1-34, value: "[3,4]", parent: v1-root, version: v1, state: shared }
+        - { id: v1-11, value: "[1,1]", parent: v1-12, version: v1 }
+        - { id: v1-22, value: "[2,2]", parent: v1-12, version: v1 }
+        - { id: v1-33, value: "[3,3]", parent: v1-34, version: v1 }
+        - { id: v1-44, value: "[4,4]", parent: v1-34, version: v1, state: answer }
+        - { id: v2-root, value: "[1,4]'", parent: null, version: v2, state: muted }
+        - { id: v2-34, value: "[3,4]'", parent: v2-root, version: v2, state: muted }
+        - { id: v2-44, value: "[4,4]'", parent: v2-34, version: v2, state: muted }
+      links:
+        - { from: v1-root, to: v1-12, kind: tree }
+        - { from: v1-root, to: v1-34, kind: tree }
+        - { from: v1-12, to: v1-11, kind: tree }
+        - { from: v1-12, to: v1-22, kind: tree }
+        - { from: v1-34, to: v1-33, kind: tree }
+        - { from: v1-34, to: v1-44, kind: tree }
+        - { from: v2-root, to: v2-34, kind: tree }
+        - { from: v2-34, to: v2-44, kind: tree }
 ---
 
 ## Qué hace

@@ -9,6 +9,57 @@ cppSteps:
   - step-4-node-split.cpp
   - step-5-bidirectional.cpp
   - full-implementation.cpp
+visualization:
+  type: persistent
+  mode: fat-node
+  steps:
+    - note: >-
+        Nodo n, creado junto con la versión 2. En persistencia total ya no
+        alcanza un solo registro: n lleva dos, logAdelante y logAtrás,
+        ambos vacíos por ahora.
+      nodes:
+        - { id: node, value: "n (creado en v2)" }
+        - { id: logF, value: "logAdelante: []" }
+        - { id: logB, value: "logAtrás: []" }
+    - note: >-
+        Se escribe sobre la versión 4 — hija de 2 en el árbol de versiones
+        (ver linearización), por lo tanto "adelante" de 2. Esa escritura
+        cae en logAdelante como entrada nueva, aún sin confirmar.
+      highlight: ["logF"]
+      nodes:
+        - { id: node, value: "n (creado en v2)" }
+        - { id: logF, value: "logAdelante: [ ] + (v4, ...)", state: copied }
+        - { id: logB, value: "logAtrás: []" }
+    - note: >-
+        Entrada confirmada: logAdelante ahora contiene la modificación de
+        v4. logAtrás sigue vacío — nada se ha escrito todavía "hacia atrás".
+      nodes:
+        - { id: node, value: "n (creado en v2)" }
+        - { id: logF, value: "logAdelante: [(v4, ...)]" }
+        - { id: logB, value: "logAtrás: []" }
+    - note: >-
+        Ahora se actualiza la versión 2 misma, después de haber creado ya
+        4 y 5. Desde la perspectiva de 4 y 5 (ya existentes en el árbol de
+        versiones), esta modificación queda "detrás": cae en logAtrás, no
+        en logAdelante.
+      highlight: ["logB"]
+      nodes:
+        - { id: node, value: "n (creado en v2)" }
+        - { id: logF, value: "logAdelante: [(v4, ...)]" }
+        - { id: logB, value: "logAtrás: [ ] + (v2, ...)", state: copied }
+    - note: >-
+        Entrada confirmada en logAtrás. El nodo queda con sus dos
+        registros separados por dirección: para leer, primero hay que
+        decidir "adelante" o "atrás" comparando la posición de la versión
+        consultada contra la de creación de n (usando la linearización del
+        árbol de versiones, O(1)) y sólo entonces buscar en el registro que
+        corresponda. El split que reparte predecesores entre logAdelante y
+        logAtrás cuando alguno se llena es "más delicado" y el mazo no da
+        su mecánica — no se reimplica aquí (ver Casos límite).
+      nodes:
+        - { id: node, value: "n (creado en v2)", state: answer }
+        - { id: logF, value: "logAdelante: [(v4, ...)]" }
+        - { id: logB, value: "logAtrás: [(v2, ...)]" }
 ---
 
 ## Qué hace

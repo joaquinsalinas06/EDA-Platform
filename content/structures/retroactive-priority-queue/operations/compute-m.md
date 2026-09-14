@@ -7,6 +7,123 @@ cppSteps:
   - step-2-bridge.cpp
   - step-3-compute-m.cpp
   - full-implementation.cpp
+visualization:
+  type: persistent
+  steps:
+    - note: >-
+        Mismo ejemplo del profesor (páginas 60-62): ins(5) en t=1, ins(2) en
+        t=2, del-min en t=3 (quita 2), ins(8) en t=4, del-min en t=5 (quita
+        5). Q_ahora = {8}. Se pide Compute-M para insertar 3 en t=2,5, entre
+        t=2 y t=3.
+      caption: "Q_ahora = {8}; calcular M para insertar 3 en t=2,5"
+      highlight: ["t2.5"]
+      nodes:
+        - { id: tprime, value: "t' = 0 (inicio)", parent: null }
+        - { id: t1, value: "ins(5)", parent: tprime }
+        - { id: t2, value: "ins(2)", parent: t1 }
+        - { id: "t2.5", value: "insertar 3 (pedido)", parent: t2, state: active }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5" }
+        - { id: t4, value: "ins(8)", parent: t3 }
+        - { id: t5, value: "del-min -> quita 5", parent: t4 }
+    - note: >-
+        Compute-M no recorre "todo lo eliminado desde t" (eso mira hacia
+        adelante y es caro de mantener). En vez de eso arranca del puente
+        más cercano ANTES de t=2,5 — en este ejemplo, el único puente es el
+        inicio de la línea de tiempo (ver Bridge) — y desde ahí escanea
+        hacia adelante sólo las inserciones, acumulando un candidato a la
+        vez.
+      caption: "puente más cercano antes de t=2,5: t' = 0 (inicio)"
+      highlight: ["tprime"]
+      nodes:
+        - { id: tprime, value: "t' = 0 (inicio)", parent: null, state: marked }
+        - { id: t1, value: "ins(5)", parent: tprime }
+        - { id: t2, value: "ins(2)", parent: t1 }
+        - { id: "t2.5", value: "insertar 3 (pedido)", parent: t2 }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5" }
+        - { id: t4, value: "ins(8)", parent: t3 }
+        - { id: t5, value: "del-min -> quita 5", parent: t4 }
+    - note: >-
+        Posición t=1: ins(5). ¿5 está en Q_ahora = {8}? No — 5 fue eliminado
+        en algún momento desde t', así que es candidato. Candidatos = {5}.
+      caption: "t=1: ins(5), 5 ∉ Q_ahora -> candidato; candidatos = {5}"
+      highlight: ["t1"]
+      nodes:
+        - { id: tprime, value: "t' = 0 (inicio)", parent: null, state: marked }
+        - { id: t1, value: "ins(5)", parent: tprime, state: active }
+        - { id: t2, value: "ins(2)", parent: t1 }
+        - { id: "t2.5", value: "insertar 3 (pedido)", parent: t2 }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5" }
+        - { id: t4, value: "ins(8)", parent: t3 }
+        - { id: t5, value: "del-min -> quita 5", parent: t4 }
+    - note: >-
+        Posición t=2: ins(2). ¿2 está en Q_ahora = {8}? No — también
+        candidato. Candidatos = {5, 2}.
+      caption: "t=2: ins(2), 2 ∉ Q_ahora -> candidato; candidatos = {5, 2}"
+      highlight: ["t2"]
+      nodes:
+        - { id: tprime, value: "t' = 0 (inicio)", parent: null, state: marked }
+        - { id: t1, value: "ins(5)", parent: tprime, state: shared }
+        - { id: t2, value: "ins(2)", parent: t1, state: active }
+        - { id: "t2.5", value: "insertar 3 (pedido)", parent: t2 }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5" }
+        - { id: t4, value: "ins(8)", parent: t3 }
+        - { id: t5, value: "del-min -> quita 5", parent: t4 }
+    - note: >-
+        Posición t=3: del-min. No es una inserción, así que no aporta
+        ningún candidato nuevo — la fórmula sólo mira lo INSERTADO desde
+        t'. Candidatos siguen en {5, 2}.
+      caption: "t=3: del-min, no aporta candidato; candidatos = {5, 2}"
+      highlight: ["t3"]
+      nodes:
+        - { id: tprime, value: "t' = 0 (inicio)", parent: null, state: marked }
+        - { id: t1, value: "ins(5)", parent: tprime, state: shared }
+        - { id: t2, value: "ins(2)", parent: t1, state: shared }
+        - { id: "t2.5", value: "insertar 3 (pedido)", parent: t2 }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5", state: active }
+        - { id: t4, value: "ins(8)", parent: t3 }
+        - { id: t5, value: "del-min -> quita 5", parent: t4 }
+    - note: >-
+        Posición t=4: ins(8). ¿8 está en Q_ahora = {8}? Sí — 8 sigue vivo
+        en el presente, así que NO es candidato (no fue "eliminado desde
+        t'"). Candidatos se quedan en {5, 2}.
+      caption: "t=4: ins(8), 8 ∈ Q_ahora -> no es candidato; candidatos = {5, 2}"
+      highlight: ["t4"]
+      nodes:
+        - { id: tprime, value: "t' = 0 (inicio)", parent: null, state: marked }
+        - { id: t1, value: "ins(5)", parent: tprime, state: shared }
+        - { id: t2, value: "ins(2)", parent: t1, state: shared }
+        - { id: "t2.5", value: "insertar 3 (pedido)", parent: t2 }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5", state: shared }
+        - { id: t4, value: "ins(8)", parent: t3, state: active }
+        - { id: t5, value: "del-min -> quita 5", parent: t4 }
+    - note: >-
+        Posición t=5: del-min. Igual que t=3, no aporta candidato. Se llegó
+        al final de la línea de tiempo: candidatos finales = {5, 2}.
+      caption: "t=5: del-min, no aporta candidato; candidatos finales = {5, 2}"
+      highlight: ["t5"]
+      nodes:
+        - { id: tprime, value: "t' = 0 (inicio)", parent: null, state: marked }
+        - { id: t1, value: "ins(5)", parent: tprime, state: shared }
+        - { id: t2, value: "ins(2)", parent: t1, state: shared }
+        - { id: "t2.5", value: "insertar 3 (pedido)", parent: t2 }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5", state: shared }
+        - { id: t4, value: "ins(8)", parent: t3, state: shared }
+        - { id: t5, value: "del-min -> quita 5", parent: t4, state: active }
+    - note: >-
+        M = máx({k} ∪ candidatos) = máx({3} ∪ {5, 2}) = 5. El 5 gana: es
+        el elemento que decide el efecto neto de esta inserción retroactiva
+        (ver Insert-retroactive). El 3 (k) no era el máximo, así que no
+        entra directo a Q_ahora.
+      caption: "M = máx({3} ∪ {5, 2}) = 5"
+      highlight: ["t1", "t2.5"]
+      nodes:
+        - { id: tprime, value: "t' = 0 (inicio)", parent: null, state: marked }
+        - { id: t1, value: "ins(5) -> M = 5", parent: tprime, state: answer }
+        - { id: t2, value: "ins(2)", parent: t1, state: shared }
+        - { id: "t2.5", value: "insertar 3 (pedido)", parent: t2, state: muted }
+        - { id: t3, value: "del-min -> quita 2", parent: "t2.5", state: shared }
+        - { id: t4, value: "ins(8)", parent: t3, state: shared }
+        - { id: t5, value: "del-min -> quita 5", parent: t4, state: shared }
 ---
 
 ## Qué hace

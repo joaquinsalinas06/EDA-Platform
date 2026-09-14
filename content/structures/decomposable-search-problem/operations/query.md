@@ -5,6 +5,73 @@ order: 4
 cppSteps:
   - step-5-query.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Query(t=3) pide el rango [1,3] sobre el árbol de tiempo ya construido
+        (mismo estado final de Time-segment-tree-build: n22=5 por
+        Insert(t=2), n44=8 por Insert(t=4)). La raíz n14=[1,4] se traslapa
+        parcialmente con [1,3]: hay que bajar por sus dos hijos.
+      highlight: ["n14"]
+      nodes:
+        - { id: n14, value: 13, parent: null, state: active }
+        - { id: n12, value: 5, parent: n14, state: idle }
+        - { id: n34, value: 8, parent: n14, state: idle }
+        - { id: n11, value: 0, parent: n12, state: idle }
+        - { id: n22, value: 5, parent: n12, state: idle }
+        - { id: n33, value: 0, parent: n34, state: idle }
+        - { id: n44, value: 8, parent: n34, state: idle }
+    - note: >-
+        n12 = [1,2] cae completamente dentro de [1,3]: es un nodo canónico —
+        se usa su valor ya combinado (5) directo, sin bajar a n11 ni n22.
+      highlight: ["n12"]
+      nodes:
+        - { id: n14, value: 13, parent: null, state: idle }
+        - { id: n12, value: 5, parent: n14, state: answer }
+        - { id: n34, value: 8, parent: n14, state: idle }
+        - { id: n11, value: 0, parent: n12, state: idle }
+        - { id: n22, value: 5, parent: n12, state: idle }
+        - { id: n33, value: 0, parent: n34, state: idle }
+        - { id: n44, value: 8, parent: n34, state: idle }
+    - note: >-
+        n34 = [3,4] se traslapa parcialmente con [1,3] (sólo la posición 3
+        cae dentro del rango pedido): hay que bajar por sus dos hijos.
+      highlight: ["n34"]
+      nodes:
+        - { id: n14, value: 13, parent: null, state: idle }
+        - { id: n12, value: 5, parent: n14, state: answer }
+        - { id: n34, value: 8, parent: n14, state: active }
+        - { id: n11, value: 0, parent: n12, state: idle }
+        - { id: n22, value: 5, parent: n12, state: idle }
+        - { id: n33, value: 0, parent: n34, state: idle }
+        - { id: n44, value: 8, parent: n34, state: idle }
+    - note: >-
+        n33 = [3,3] cae dentro de [1,3]: canónico, aporta su valor (0)
+        directo. n44 = [4,4] cae fuera de [1,3]: no aporta nada.
+      highlight: ["n33", "n44"]
+      nodes:
+        - { id: n14, value: 13, parent: null, state: idle }
+        - { id: n12, value: 5, parent: n14, state: answer }
+        - { id: n34, value: 8, parent: n14, state: idle }
+        - { id: n11, value: 0, parent: n12, state: idle }
+        - { id: n22, value: 5, parent: n12, state: idle }
+        - { id: n33, value: 0, parent: n34, state: answer }
+        - { id: n44, value: 8, parent: n34, state: muted }
+    - note: >-
+        Total: combinar(5, 0) = 5. Sólo dos nodos canónicos (n12, n33) —
+        O(lg m) = 2 niveles con nodo parcial, ninguna hoja recorrida
+        directamente salvo las de esos dos canónicos.
+      highlight: ["n12", "n33"]
+      caption: "Query(1,3) = 5"
+      nodes:
+        - { id: n14, value: 13, parent: null, state: idle }
+        - { id: n12, value: 5, parent: n14, state: answer }
+        - { id: n34, value: 8, parent: n14, state: idle }
+        - { id: n11, value: 0, parent: n12, state: idle }
+        - { id: n22, value: 5, parent: n12, state: idle }
+        - { id: n33, value: 0, parent: n34, state: answer }
+        - { id: n44, value: 8, parent: n34, state: muted }
 ---
 
 <!-- Es el resultado final del tema: retroactividad COMPLETA, vía el mismo

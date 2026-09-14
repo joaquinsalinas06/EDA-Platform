@@ -1,6 +1,77 @@
 ---
 kind: theory
 title: "Retroactividad conmutativa e invertible"
+visualization:
+  type: persistent
+  steps:
+    - note: >-
+        Línea de tiempo real de una estructura genérica: op_a se aplicó en
+        t1, op_b en t2. El presente es el resultado de aplicar ambas en
+        orden.
+      caption: "presente = op_b(op_a(base))"
+      nodes:
+        - { id: t1, value: "op_a", parent: null }
+        - { id: t2, value: "op_b", parent: t1 }
+    - note: >-
+        Se pide Insert(t=0, op_x): insertar op_x ANTES de op_a. En el
+        modelo genérico de retroactividad, esto obligaría a rehacer op_a y
+        op_b después de op_x.
+      caption: "posición pedida: t = 0, antes de op_a"
+      highlight: ["t0"]
+      nodes:
+        - { id: t1, value: "op_a", parent: null }
+        - { id: t2, value: "op_b", parent: t1 }
+        - { id: t0, value: "op_x", parent: null, state: marked }
+    - note: >-
+        Como op_x conmuta con op_a y con op_b, da exactamente lo mismo
+        aplicarla en t=0 (y dejarla "viajar" conmutando hasta ahora) que
+        aplicarla directamente sobre el presente: no hace falta rehacer
+        op_a ni op_b.
+      caption: "Insert(t=0, op_x) ≡ Insert(ahora, op_x)  —  por conmutatividad"
+      highlight: ["tx"]
+      nodes:
+        - { id: t1, value: "op_a", parent: null }
+        - { id: t2, value: "op_b", parent: t1 }
+        - { id: tx, value: "op_x", parent: t2, state: active }
+    - note: >-
+        Costo: el mismo que aplicar op_x una vez sobre la estructura de
+        base, sin overhead retroactivo. op_a y op_b no se tocaron.
+      caption: "O(1) amortizado — igual que la operación original"
+      highlight: ["tx"]
+      nodes:
+        - { id: t1, value: "op_a", parent: null }
+        - { id: t2, value: "op_b", parent: t1 }
+        - { id: tx, value: "op_x", parent: t2, state: active }
+    - note: >-
+        Ahora se pide deshacer esa inserción retroactiva: Delete(t=0) sobre
+        la operación que quedó registrada en t=0, es decir op_x.
+      highlight: ["tx"]
+      nodes:
+        - { id: t1, value: "op_a", parent: null }
+        - { id: t2, value: "op_b", parent: t1 }
+        - { id: tx, value: "op_x", parent: t2, state: marked }
+    - note: >-
+        Conmutatividad sola no alcanza para borrar: mueve op_x en el
+        tiempo, pero no dice cómo deshacer su efecto. Ahí entra
+        invertibilidad — existe op_x⁻¹, y aplicarla ahora cancela
+        exactamente lo que op_x aportó, sin localizar t=0 en ninguna
+        representación de la línea de tiempo.
+      caption: "Delete(t=0) ≡ Insert(ahora, op_x⁻¹)  —  por invertibilidad"
+      highlight: ["tinv"]
+      nodes:
+        - { id: t1, value: "op_a", parent: null }
+        - { id: t2, value: "op_b", parent: t1 }
+        - { id: tx, value: "op_x", parent: t2, state: muted }
+        - { id: tinv, value: "op_x⁻¹", parent: t2, state: active }
+    - note: >-
+        El efecto de op_x quedó cancelado: la estructura vuelve al mismo
+        estado que en el primer paso, sin haber tocado op_a ni op_b en
+        ningún momento. Ninguna propiedad sola bastaba — conmutatividad
+        movió op_x en el tiempo, invertibilidad deshizo su efecto.
+      caption: "presente = op_b(op_a(base))  —  igual que antes de insertar op_x"
+      nodes:
+        - { id: t1, value: "op_a", parent: null }
+        - { id: t2, value: "op_b", parent: t1 }
 ---
 
 ## ¿Qué problema resuelve?

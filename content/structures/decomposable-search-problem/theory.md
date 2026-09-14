@@ -1,6 +1,68 @@
 ---
 kind: theory
 title: "Problemas de búsqueda descomponibles"
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        S = {5,1,3} se parte en A y B — es el requisito de la definición:
+        "para cualquier partición S = A ∪ B". La partición es arbitraria,
+        elegida aquí para ilustrar; la condición exige que funcione para
+        cualquiera.
+      highlight: ["a", "b"]
+      nodes:
+        - { id: s, value: "S", parent: null, state: idle }
+        - { id: a, value: "A", parent: s, state: marked }
+        - { id: b, value: "B", parent: s, state: marked }
+        - { id: e5, value: 5, parent: a, state: idle }
+        - { id: e1, value: 1, parent: a, state: idle }
+        - { id: e3, value: 3, parent: b, state: idle }
+    - note: >-
+        Query(x, A) se resuelve mirando sólo los elementos de A, sin tocar B:
+        mín(5,1) = 1.
+      highlight: ["a", "e5", "e1"]
+      nodes:
+        - { id: s, value: "S", parent: null, state: idle }
+        - { id: a, value: "A → mín=1", parent: s, state: active }
+        - { id: b, value: "B", parent: s, state: idle }
+        - { id: e5, value: 5, parent: a, state: active }
+        - { id: e1, value: 1, parent: a, state: active }
+        - { id: e3, value: 3, parent: b, state: idle }
+    - note: >-
+        Query(x, B) se resuelve mirando sólo los elementos de B: mín(3) = 3.
+        A ya respondió y no se vuelve a mirar.
+      highlight: ["b", "e3"]
+      nodes:
+        - { id: s, value: "S", parent: null, state: idle }
+        - { id: a, value: "A → mín=1", parent: s, state: shared }
+        - { id: b, value: "B → mín=3", parent: s, state: active }
+        - { id: e5, value: 5, parent: a, state: muted }
+        - { id: e1, value: 1, parent: a, state: muted }
+        - { id: e3, value: 3, parent: b, state: active }
+    - note: >-
+        f = mín combina los dos resúmenes en O(1) — sin volver a mirar
+        ningún elemento original de A ni de B.
+      highlight: ["s"]
+      nodes:
+        - { id: s, value: "f(mín(A), mín(B))", parent: null, state: active }
+        - { id: a, value: "A → mín=1", parent: s, state: shared }
+        - { id: b, value: "B → mín=3", parent: s, state: shared }
+        - { id: e5, value: 5, parent: a, state: muted }
+        - { id: e1, value: 1, parent: a, state: muted }
+        - { id: e3, value: 3, parent: b, state: muted }
+    - note: >-
+        mín(S) = f(1, 3) = 1: la respuesta sobre S ∪ está lista sin haber
+        recorrido S elemento por elemento — sólo dos consultas de O(1) sobre
+        A y B.
+      highlight: ["s"]
+      caption: "mín(S) = 1"
+      nodes:
+        - { id: s, value: "mín(S)=1", parent: null, state: answer }
+        - { id: a, value: "A → mín=1", parent: s, state: shared }
+        - { id: b, value: "B → mín=3", parent: s, state: shared }
+        - { id: e5, value: 5, parent: a, state: muted }
+        - { id: e1, value: 1, parent: a, state: muted }
+        - { id: e3, value: 3, parent: b, state: muted }
 ---
 
 ## ¿Qué problema resuelve?

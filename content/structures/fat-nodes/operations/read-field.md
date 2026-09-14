@@ -6,6 +6,61 @@ cppSteps:
   - step-1-node.cpp
   - step-2-structure.cpp
   - full-implementation.cpp
+visualization:
+  type: persistent
+  mode: fat-node
+  steps:
+    - note: >-
+        Nodo v: nace en t=0 con valor original 20. Su registro ya tiene dos
+        modificaciones escritas, en orden de inserción: (valor, 200, t=1) y
+        (valor, 201, t=2). La consulta es leerCampo(v, valor, t=1.5) — el
+        marcador "t = 1.5" es el delimitador de la búsqueda.
+      nodes:
+        - { id: orig, value: "v: 20 (original)" }
+        - { id: e1, value: "t=1: valor=200" }
+        - { id: e2, value: "t=2: valor=201" }
+        - { id: t_query, value: "t = 1.5", state: marked }
+    - note: >-
+        La búsqueda recorre el registro de más reciente a más antigua:
+        primero se compara la entrada más nueva, t=2 (valor=201). ¿2 <= 1.5?
+        No — se descarta.
+      highlight: ["e2"]
+      nodes:
+        - { id: orig, value: "v: 20 (original)" }
+        - { id: e1, value: "t=1: valor=200" }
+        - { id: e2, value: "t=2: valor=201", state: muted }
+        - { id: t_query, value: "t = 1.5", state: marked }
+    - note: >-
+        Se compara la siguiente entrada hacia atrás, t=1 (valor=200). ¿1 <=
+        1.5? Sí — es candidata.
+      highlight: ["e1"]
+      nodes:
+        - { id: orig, value: "v: 20 (original)" }
+        - { id: e1, value: "t=1: valor=200", state: active }
+        - { id: e2, value: "t=2: valor=201", state: muted }
+        - { id: t_query, value: "t = 1.5", state: marked }
+    - note: >-
+        Es la primera entrada, recorriendo de más reciente a más antigua,
+        con tiempo <= 1.5: la búsqueda se detiene aquí. Nunca se llega a
+        revisar el valor original — eso sólo ocurre cuando ninguna entrada
+        del registro aplica.
+      highlight: ["e1"]
+      nodes:
+        - { id: orig, value: "v: 20 (original)" }
+        - { id: e1, value: "t=1: valor=200", state: answer }
+        - { id: e2, value: "t=2: valor=201", state: muted }
+        - { id: t_query, value: "t = 1.5", state: marked }
+    - note: >-
+        leerCampo(v, valor, 1.5) = 200. Esa misma entrada sigue siendo la
+        respuesta correcta para cualquier t en [1, 2) — aunque el nodo ya
+        tenga escrito valor=201 con t=2, esa entrada es "del futuro" para
+        una consulta en t=1.5.
+      highlight: ["e1"]
+      nodes:
+        - { id: orig, value: "v: 20 (original)" }
+        - { id: e1, value: "t=1: valor=200 -> respuesta", state: answer }
+        - { id: e2, value: "t=2: valor=201", state: muted }
+        - { id: t_query, value: "t = 1.5", state: marked }
 ---
 
 ## Qué hace

@@ -5,6 +5,113 @@ order: 3
 cppSteps:
   - step-4-update.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Insert(t=2, op) con efecto +5, sobre el árbol de tiempo vacío
+        (m=4, todas las hojas en 0). Arranca en la raíz n14=[1,4]: t=2 cae en
+        la mitad izquierda [1,2], así que el camino baja hacia n12. n34 y su
+        subárbol no se tocan en ningún momento de este Insert.
+      highlight: ["n14"]
+      nodes:
+        - { id: n14, value: 0, parent: null, state: active }
+        - { id: n12, value: 0, parent: n14, state: idle }
+        - { id: n34, value: 0, parent: n14, state: shared }
+        - { id: n11, value: 0, parent: n12, state: idle }
+        - { id: n22, value: 0, parent: n12, state: idle }
+        - { id: n33, value: 0, parent: n34, state: shared }
+        - { id: n44, value: 0, parent: n34, state: shared }
+    - note: >-
+        En n12=[1,2]: t=2 es la posición derecha de este rango, sigue
+        bajando hacia la hoja n22=[2,2].
+      highlight: ["n12"]
+      nodes:
+        - { id: n14, value: 0, parent: null, state: idle }
+        - { id: n12, value: 0, parent: n14, state: active }
+        - { id: n34, value: 0, parent: n14, state: shared }
+        - { id: n11, value: 0, parent: n12, state: idle }
+        - { id: n22, value: 0, parent: n12, state: idle }
+        - { id: n33, value: 0, parent: n34, state: shared }
+        - { id: n44, value: 0, parent: n34, state: shared }
+    - note: >-
+        Llega a la hoja n22=[2,2]: se escribe el nuevo valor, 0+5=5 — el
+        efecto de la operación insertada en t=2.
+      highlight: ["n22"]
+      nodes:
+        - { id: n14, value: 0, parent: null, state: idle }
+        - { id: n12, value: 0, parent: n14, state: idle }
+        - { id: n34, value: 0, parent: n14, state: shared }
+        - { id: n11, value: 0, parent: n12, state: idle }
+        - { id: n22, value: 5, parent: n12, state: active }
+        - { id: n33, value: 0, parent: n34, state: shared }
+        - { id: n44, value: 0, parent: n34, state: shared }
+    - note: >-
+        De vuelta hacia la raíz: n12 recalcula combinando sus hijos ya
+        actualizados: valor(n12) = combinar(n11=0, n22=5) = 5.
+      highlight: ["n12"]
+      nodes:
+        - { id: n14, value: 0, parent: null, state: idle }
+        - { id: n12, value: 5, parent: n14, state: active }
+        - { id: n34, value: 0, parent: n14, state: shared }
+        - { id: n11, value: 0, parent: n12, state: idle }
+        - { id: n22, value: 5, parent: n12, state: idle }
+        - { id: n33, value: 0, parent: n34, state: shared }
+        - { id: n44, value: 0, parent: n34, state: shared }
+    - note: >-
+        La raíz recalcula: valor(n14) = combinar(n12=5, n34=0) = 5.
+        Insert(t=2,+5) completo: sólo 3 nodos tocados (n14, n12, n22) — O(lg
+        m) = 2, ni uno más.
+      highlight: ["n14"]
+      caption: "Insert(t=2, +5) completo"
+      nodes:
+        - { id: n14, value: 5, parent: null, state: active }
+        - { id: n12, value: 5, parent: n14, state: idle }
+        - { id: n34, value: 0, parent: n14, state: shared }
+        - { id: n11, value: 0, parent: n12, state: idle }
+        - { id: n22, value: 5, parent: n12, state: idle }
+        - { id: n33, value: 0, parent: n34, state: shared }
+        - { id: n44, value: 0, parent: n34, state: shared }
+    - note: >-
+        Delete(t=2): mismo camino raíz→hoja (n14 → n12 → n22) que el Insert
+        de arriba, pero ahora se escribe el neutro (0) en la hoja n22 en vez
+        de +5.
+      highlight: ["n22"]
+      nodes:
+        - { id: n14, value: 5, parent: null, state: idle }
+        - { id: n12, value: 5, parent: n14, state: idle }
+        - { id: n34, value: 0, parent: n14, state: shared }
+        - { id: n11, value: 0, parent: n12, state: idle }
+        - { id: n22, value: 0, parent: n12, state: active }
+        - { id: n33, value: 0, parent: n34, state: shared }
+        - { id: n44, value: 0, parent: n34, state: shared }
+    - note: >-
+        n12 recalcula de nuevo: valor(n12) = combinar(n11=0, n22=0) = 0 — el
+        efecto de t=2 desaparece de este resumen.
+      highlight: ["n12"]
+      nodes:
+        - { id: n14, value: 5, parent: null, state: idle }
+        - { id: n12, value: 0, parent: n14, state: active }
+        - { id: n34, value: 0, parent: n14, state: shared }
+        - { id: n11, value: 0, parent: n12, state: idle }
+        - { id: n22, value: 0, parent: n12, state: idle }
+        - { id: n33, value: 0, parent: n34, state: shared }
+        - { id: n44, value: 0, parent: n34, state: shared }
+    - note: >-
+        La raíz recalcula por última vez: valor(n14) = combinar(n12=0,
+        n34=0) = 0. Delete(t=2) completo: el árbol queda como si Insert
+        nunca hubiera pasado, sin haber tocado n34 ni sus hijos en ningún
+        momento de las dos operaciones.
+      highlight: ["n14"]
+      caption: "Delete(t=2) completo — árbol de vuelta a 0"
+      nodes:
+        - { id: n14, value: 0, parent: null, state: active }
+        - { id: n12, value: 0, parent: n14, state: idle }
+        - { id: n34, value: 0, parent: n14, state: shared }
+        - { id: n11, value: 0, parent: n12, state: idle }
+        - { id: n22, value: 0, parent: n12, state: idle }
+        - { id: n33, value: 0, parent: n34, state: shared }
+        - { id: n44, value: 0, parent: n34, state: shared }
 ---
 
 <!-- El profesor es explícito en que esta operación NO es nueva: "¡el mismo

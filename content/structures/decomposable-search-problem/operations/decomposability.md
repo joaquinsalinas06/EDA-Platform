@@ -5,6 +5,71 @@ order: 1
 cppSteps:
   - step-1-decomposability-check.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Partición S = {2,3,1,4} = A ∪ B, con A = {2,3} y B = {1,4}: la
+        condición exige que esto funcione para cualquier partición así.
+      highlight: ["a", "b"]
+      nodes:
+        - { id: s, value: "S", parent: null, state: idle }
+        - { id: a, value: "A", parent: s, state: marked }
+        - { id: b, value: "B", parent: s, state: marked }
+        - { id: e2, value: 2, parent: a, state: idle }
+        - { id: e3v, value: 3, parent: a, state: idle }
+        - { id: e1, value: 1, parent: b, state: idle }
+        - { id: e4, value: 4, parent: b, state: idle }
+    - note: >-
+        Query(x, A) = suma(A) = 2 + 3 = 5, calculado mirando sólo los
+        elementos de A.
+      highlight: ["a", "e2", "e3v"]
+      nodes:
+        - { id: s, value: "S", parent: null, state: idle }
+        - { id: a, value: "A → suma=5", parent: s, state: active }
+        - { id: b, value: "B", parent: s, state: idle }
+        - { id: e2, value: 2, parent: a, state: active }
+        - { id: e3v, value: 3, parent: a, state: active }
+        - { id: e1, value: 1, parent: b, state: idle }
+        - { id: e4, value: 4, parent: b, state: idle }
+    - note: >-
+        Query(x, B) = suma(B) = 1 + 4 = 5, calculado mirando sólo los
+        elementos de B. A ya respondió y no se vuelve a mirar.
+      highlight: ["b", "e1", "e4"]
+      nodes:
+        - { id: s, value: "S", parent: null, state: idle }
+        - { id: a, value: "A → suma=5", parent: s, state: shared }
+        - { id: b, value: "B → suma=5", parent: s, state: active }
+        - { id: e2, value: 2, parent: a, state: muted }
+        - { id: e3v, value: 3, parent: a, state: muted }
+        - { id: e1, value: 1, parent: b, state: active }
+        - { id: e4, value: 4, parent: b, state: active }
+    - note: >-
+        f = + combina los dos resúmenes en O(1): f(5,5) = 10 — sin volver a
+        mirar ningún elemento original de A ni de B.
+      highlight: ["s"]
+      nodes:
+        - { id: s, value: "f(suma(A), suma(B))", parent: null, state: active }
+        - { id: a, value: "A → suma=5", parent: s, state: shared }
+        - { id: b, value: "B → suma=5", parent: s, state: shared }
+        - { id: e2, value: 2, parent: a, state: muted }
+        - { id: e3v, value: 3, parent: a, state: muted }
+        - { id: e1, value: 1, parent: b, state: muted }
+        - { id: e4, value: 4, parent: b, state: muted }
+    - note: >-
+        Verificación: suma(S) = 2+3+1+4 = 10, igual al resultado combinado —
+        la condición se cumple para esta partición (y para cualquiera, con
+        f = +).
+      highlight: ["s"]
+      caption: "suma(S) = 10 = f(suma(A), suma(B))"
+      nodes:
+        - { id: s, value: "suma(S)=10", parent: null, state: answer }
+        - { id: a, value: "A → suma=5", parent: s, state: shared }
+        - { id: b, value: "B → suma=5", parent: s, state: shared }
+        - { id: e2, value: 2, parent: a, state: muted }
+        - { id: e3v, value: 3, parent: a, state: muted }
+        - { id: e1, value: 1, parent: b, state: muted }
+        - { id: e4, value: 4, parent: b, state: muted }
 ---
 
 <!-- Es una CONDICIÓN, no un algoritmo — el profesor la define así (página

@@ -3,6 +3,8 @@ kind: theory
 title: "Retroactividad"
 ---
 
+import Visualization from '../../../src/components/Visualization.astro';
+
 ## ¿Qué problema resuelve?
 
 Ejecutaste una secuencia larga de operaciones sobre una estructura de datos.
@@ -71,6 +73,80 @@ La observación del profesor sobre esta tabla: "igual que con persistencia,
 El punto de referencia contra el que se mide todo el resto de la semana es
 la solución ingenua: $O(m)$, donde `m` es el número de operaciones en la
 línea de tiempo — rehacer todo desde el tiempo editado hasta el presente.
+
+La diferencia entre los dos niveles no está en qué se puede insertar o
+borrar — eso es idéntico en ambos — sino en **qué Query es válido**. Sobre
+la misma línea de tiempo usada en las operaciones de esta estructura
+(`add(5)@1`, `add(100)@1.5`, `add(3)@2`, `add(10)@3`):
+
+<Visualization viz={{
+  type: 'persistent',
+  steps: [
+    {
+      note: 'Línea de tiempo con las cuatro entradas ya insertadas (la misma de insert-retroactive.md/query.md). Antes de decidir qué Query es válido, hace falta fijar en qué punto se pregunta.',
+      caption: 'línea de tiempo con 4 entradas',
+      nodes: [
+        { id: 't1', value: 'add(5)', parent: null },
+        { id: 't15', value: 'add(100)', parent: 't1' },
+        { id: 't2', value: 'add(3)', parent: 't15' },
+        { id: 't3', value: 'add(10)', parent: 't2' },
+      ],
+    },
+    {
+      note: 'Query(ahora) recorre las cuatro entradas — es el único punto que retroactividad PARCIAL permite consultar, y también es válido bajo completa.',
+      caption: 'Query(ahora) = 118 — válido bajo parcial y bajo completa',
+      highlight: ['t1', 't15', 't2', 't3'],
+      nodes: [
+        { id: 't1', value: 'add(5)', parent: null, state: 'active' },
+        { id: 't15', value: 'add(100)', parent: 't1', state: 'active' },
+        { id: 't2', value: 'add(3)', parent: 't15', state: 'active' },
+        { id: 't3', value: 'add(10)', parent: 't2', state: 'active' },
+      ],
+    },
+    {
+      note: 'Se pide Query(t=1): consultar el estado como si sólo hubiera ocurrido la primera operación. t1 se marca como el punto pedido — todavía no se decide si el pedido es válido.',
+      caption: 'Query(t=1) solicitado',
+      highlight: ['t1'],
+      nodes: [
+        { id: 't1', value: 'add(5)', parent: null, state: 'marked' },
+        { id: 't15', value: 'add(100)', parent: 't1' },
+        { id: 't2', value: 'add(3)', parent: 't15' },
+        { id: 't3', value: 'add(10)', parent: 't2' },
+      ],
+    },
+    {
+      note: 'Bajo retroactividad PARCIAL este pedido no es válido: parcial sólo permite consultar el presente, nunca un tiempo intermedio del pasado. La línea de tiempo no cambia — la consulta simplemente se rechaza.',
+      caption: 'PARCIAL: inválido — Query sólo en el presente',
+      nodes: [
+        { id: 't1', value: 'add(5)', parent: null, state: 'muted' },
+        { id: 't15', value: 'add(100)', parent: 't1', state: 'muted' },
+        { id: 't2', value: 'add(3)', parent: 't15', state: 'muted' },
+        { id: 't3', value: 'add(10)', parent: 't2', state: 'muted' },
+      ],
+    },
+    {
+      note: 'Bajo retroactividad COMPLETA el mismo pedido sí es válido: se recorre la línea de tiempo sólo hasta t=1 inclusive. t15, t2 y t3 quedan fuera porque ocurren después de t=1, no porque se hayan borrado.',
+      caption: 'COMPLETA: válido → Query(t=1) = 5',
+      highlight: ['t1'],
+      nodes: [
+        { id: 't1', value: 'add(5)', parent: null, state: 'answer' },
+        { id: 't15', value: 'add(100)', parent: 't1', state: 'muted' },
+        { id: 't2', value: 'add(3)', parent: 't15', state: 'muted' },
+        { id: 't3', value: 'add(10)', parent: 't2', state: 'muted' },
+      ],
+    },
+    {
+      note: 'Esta es exactamente la fila de la tabla de arriba: parcial abarata el modelo restringiendo las consultas a un único punto (el presente); completa paga el precio de permitir cualquier punto del pasado a cambio de esa flexibilidad.',
+      caption: 'parcial: 1 punto consultable · completa: m puntos consultables',
+      nodes: [
+        { id: 't1', value: 'add(5)', parent: null, state: 'answer' },
+        { id: 't15', value: 'add(100)', parent: 't1', state: 'muted' },
+        { id: 't2', value: 'add(3)', parent: 't15', state: 'muted' },
+        { id: 't3', value: 'add(10)', parent: 't2', state: 'muted' },
+      ],
+    },
+  ],
+}} />
 
 ## Operaciones
 

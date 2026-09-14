@@ -8,6 +8,87 @@ cppSteps:
   - step-3-segment-tree-update.cpp
   - step-4-trie-insert.cpp
   - full-implementation.cpp
+visualization:
+  type: persistent
+  steps:
+    - note: >-
+        Versión v0 de la pila persistente: cima 7 → 2 → 7 (del tope al
+        fondo). Se va a ejecutar Push(v0, 42).
+      nodes:
+        - { id: v0-a, value: 7, parent: null }
+        - { id: v0-b, value: 2, parent: v0-a }
+        - { id: v0-c, value: 7, parent: v0-b }
+    - note: >-
+        Push no recorre nada de v0: sólo necesita el puntero a la cima
+        actual (v0-a) para enganchar ahí el nodo nuevo. Todo v0 — sus tres
+        nodos — permanece intacto y será compartido tal cual.
+      highlight: ["v0-a"]
+      nodes:
+        - { id: v0-a, value: 7, parent: null, state: marked }
+        - { id: v0-b, value: 2, parent: v0-a }
+        - { id: v0-c, value: 7, parent: v0-b }
+    - note: >-
+        Se crea el nodo nuevo con valor 42. Todavía no está enlazado a
+        nada: es el único nodo que esta operación construye.
+      highlight: ["v1-42"]
+      versions:
+        - { id: v0, label: v0 }
+        - { id: v1, label: v1 }
+      nodes:
+        - { id: v0-a, value: 7, parent: null, version: v0 }
+        - { id: v0-b, value: 2, parent: v0-a, version: v0 }
+        - { id: v0-c, value: 7, parent: v0-b, version: v0 }
+        - { id: v1-42, value: 42, parent: null, version: v1, state: copied }
+    - note: >-
+        El nodo 42 enlaza su `siguiente` a la cima vieja (v0-a) — un
+        puntero compartido, no una copia: v0-a y todo lo que cuelga de él
+        (2, 7) se reutilizan sin duplicarse.
+      highlight: ["v1-42"]
+      versions:
+        - { id: v0, label: v0 }
+        - { id: v1, label: v1 }
+      nodes:
+        - { id: v0-a, value: 7, parent: null, version: v0, state: shared }
+        - { id: v0-b, value: 2, parent: v0-a, version: v0 }
+        - { id: v0-c, value: 7, parent: v0-b, version: v0 }
+        - { id: v1-42, value: 42, parent: null, version: v1, state: copied }
+      links:
+        - { from: v0-a, to: v0-b, kind: tree }
+        - { from: v0-b, to: v0-c, kind: tree }
+        - { from: v1-42, to: v0-a, kind: shared }
+    - note: >-
+        v0 sigue siendo un puntero válido a "7 → 2 → 7": nadie lo tocó.
+        Quien todavía tenga ese puntero sigue viendo la pila exactamente
+        como estaba antes del Push.
+      versions:
+        - { id: v0, label: v0 }
+        - { id: v1, label: v1 }
+      nodes:
+        - { id: v0-a, value: 7, parent: null, version: v0, state: shared }
+        - { id: v0-b, value: 2, parent: v0-a, version: v0, state: shared }
+        - { id: v0-c, value: 7, parent: v0-b, version: v0, state: shared }
+        - { id: v1-42, value: 42, parent: null, version: v1, state: copied }
+      links:
+        - { from: v0-a, to: v0-b, kind: tree }
+        - { from: v0-b, to: v0-c, kind: tree }
+        - { from: v1-42, to: v0-a, kind: shared }
+    - note: >-
+        Estado final: `Push(v0, 42)` devuelve v1-42 como la nueva cima —
+        marcado `answer`, el único nodo nuevo de esta operación. v0 (7 → 2
+        → 7) sigue completo y consultable por su propia raíz.
+      highlight: ["v1-42"]
+      versions:
+        - { id: v0, label: v0 }
+        - { id: v1, label: v1 }
+      nodes:
+        - { id: v0-a, value: 7, parent: null, version: v0, state: shared }
+        - { id: v0-b, value: 2, parent: v0-a, version: v0, state: shared }
+        - { id: v0-c, value: 7, parent: v0-b, version: v0, state: shared }
+        - { id: v1-42, value: 42, parent: null, version: v1, state: answer }
+      links:
+        - { from: v0-a, to: v0-b, kind: tree }
+        - { from: v0-b, to: v0-c, kind: tree }
+        - { from: v1-42, to: v0-a, kind: shared }
 ---
 
 ## Qué hace

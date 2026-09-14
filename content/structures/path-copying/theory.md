@@ -1,6 +1,123 @@
 ---
 kind: theory
 title: Path Copying
+visualization:
+  type: persistent
+  steps:
+    - note: >-
+        v0: un árbol binario cualquiera, raíz 50 con hijos 30 y 70; 30
+        tiene hijos 20 y 40; 70 tiene hijos 60 y 80. Se va a modificar el
+        valor del nodo 60.
+      nodes:
+        - { id: v0-50, value: 50, parent: null }
+        - { id: v0-30, value: 30, parent: v0-50 }
+        - { id: v0-70, value: 70, parent: v0-50 }
+        - { id: v0-20, value: 20, parent: v0-30 }
+        - { id: v0-40, value: 40, parent: v0-30 }
+        - { id: v0-60, value: 60, parent: v0-70 }
+        - { id: v0-80, value: 80, parent: v0-70 }
+    - note: >-
+        En la raíz 50: el camino hacia 60 baja por la derecha (70). El
+        subárbol izquierdo completo — 30, 20 y 40, tres nodos — queda
+        fuera del camino desde ahora: nunca se visita, y por eso se podrá
+        compartir entero.
+      highlight: ["v0-50", "v0-70"]
+      nodes:
+        - { id: v0-50, value: 50, parent: null }
+        - { id: v0-30, value: 30, parent: v0-50, state: muted }
+        - { id: v0-70, value: 70, parent: v0-50 }
+        - { id: v0-20, value: 20, parent: v0-30, state: muted }
+        - { id: v0-40, value: 40, parent: v0-30, state: muted }
+        - { id: v0-60, value: 60, parent: v0-70 }
+        - { id: v0-80, value: 80, parent: v0-70 }
+    - note: >-
+        En 70: el camino baja por la izquierda (60). El hijo derecho 80 —
+        un solo nodo — queda descartado del camino igual que el subárbol
+        de la izquierda, pero de un solo nodo.
+      highlight: ["v0-70", "v0-60"]
+      nodes:
+        - { id: v0-50, value: 50, parent: null }
+        - { id: v0-30, value: 30, parent: v0-50, state: muted }
+        - { id: v0-70, value: 70, parent: v0-50 }
+        - { id: v0-20, value: 20, parent: v0-30, state: muted }
+        - { id: v0-40, value: 40, parent: v0-30, state: muted }
+        - { id: v0-60, value: 60, parent: v0-70 }
+        - { id: v0-80, value: 80, parent: v0-70, state: muted }
+    - note: >-
+        Caso base en 60: aquí es donde cambia el valor. El camino
+        recorrido al bajar fue 50 → 70 → 60: tres nodos, uno por nivel —
+        eso es todo lo que esta operación va a copiar.
+      highlight: ["v0-60"]
+      nodes:
+        - { id: v0-50, value: 50, parent: null }
+        - { id: v0-30, value: 30, parent: v0-50, state: muted }
+        - { id: v0-70, value: 70, parent: v0-50 }
+        - { id: v0-20, value: 20, parent: v0-30, state: muted }
+        - { id: v0-40, value: 40, parent: v0-30, state: muted }
+        - { id: v0-60, value: 60, parent: v0-70, state: active }
+        - { id: v0-80, value: 80, parent: v0-70, state: muted }
+    - note: >-
+        Se crean, de abajo hacia arriba, los nodos nuevos del camino: 60'
+        (valor actualizado), 70' (su izquierdo apunta a 60' nuevo, su
+        derecho comparte 80 de v0 sin copiarlo) y 50' (su derecho apunta
+        a 70', su izquierdo comparte el subárbol completo 30/20/40 de v0).
+      highlight: ["v1-50", "v1-70", "v1-60"]
+      versions:
+        - { id: v0, label: v0 }
+        - { id: v1, label: v1 }
+      nodes:
+        - { id: v0-50, value: 50, parent: null, version: v0 }
+        - { id: v0-30, value: 30, parent: v0-50, version: v0, state: shared }
+        - { id: v0-70, value: 70, parent: v0-50, version: v0 }
+        - { id: v0-20, value: 20, parent: v0-30, version: v0, state: shared }
+        - { id: v0-40, value: 40, parent: v0-30, version: v0, state: shared }
+        - { id: v0-60, value: 60, parent: v0-70, version: v0 }
+        - { id: v0-80, value: 80, parent: v0-70, version: v0, state: shared }
+        - { id: v1-50, value: "50'", parent: null, version: v1, state: copied }
+        - { id: v1-70, value: "70'", parent: v1-50, version: v1, state: copied }
+        - { id: v1-60, value: "60' (nuevo valor)", parent: v1-70, version: v1, state: copied }
+      links:
+        - { from: v0-50, to: v0-30, kind: tree }
+        - { from: v0-50, to: v0-70, kind: tree }
+        - { from: v0-30, to: v0-20, kind: tree }
+        - { from: v0-30, to: v0-40, kind: tree }
+        - { from: v0-70, to: v0-60, kind: tree }
+        - { from: v0-70, to: v0-80, kind: tree }
+        - { from: v1-50, to: v1-70, kind: tree }
+        - { from: v1-70, to: v1-60, kind: tree }
+        - { from: v1-50, to: v0-30, kind: shared }
+        - { from: v1-70, to: v0-80, kind: shared }
+    - note: >-
+        Estado final: sólo tres nodos son nuevos (50', 70', 60'), marcados
+        `answer` — el camino que realmente se copió. Todo lo demás — el
+        subárbol 30/20/40 completo y el nodo 80 — se comparte con v0 sin
+        duplicarse, y v0 sigue intacta y consultable por su propia raíz.
+      highlight: ["v1-50", "v1-70", "v1-60"]
+      versions:
+        - { id: v0, label: v0 }
+        - { id: v1, label: v1 }
+      nodes:
+        - { id: v0-50, value: 50, parent: null, version: v0 }
+        - { id: v0-30, value: 30, parent: v0-50, version: v0, state: shared }
+        - { id: v0-70, value: 70, parent: v0-50, version: v0 }
+        - { id: v0-20, value: 20, parent: v0-30, version: v0, state: shared }
+        - { id: v0-40, value: 40, parent: v0-30, version: v0, state: shared }
+        - { id: v0-60, value: 60, parent: v0-70, version: v0 }
+        - { id: v0-80, value: 80, parent: v0-70, version: v0, state: shared }
+        - { id: v1-50, value: "50'", parent: null, version: v1, state: answer }
+        - { id: v1-70, value: "70'", parent: v1-50, version: v1, state: answer }
+        - { id: v1-60, value: "60' (nuevo valor)", parent: v1-70, version: v1, state: answer }
+      links:
+        - { from: v0-50, to: v0-30, kind: tree }
+        - { from: v0-50, to: v0-70, kind: tree }
+        - { from: v0-30, to: v0-20, kind: tree }
+        - { from: v0-30, to: v0-40, kind: tree }
+        - { from: v0-70, to: v0-60, kind: tree }
+        - { from: v0-70, to: v0-80, kind: tree }
+        - { from: v1-50, to: v1-70, kind: tree }
+        - { from: v1-70, to: v1-60, kind: tree }
+        - { from: v1-50, to: v0-30, kind: shared }
+        - { from: v1-70, to: v0-80, kind: shared }
 ---
 
 ## ¿Qué problema resuelve?

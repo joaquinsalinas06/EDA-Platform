@@ -1,6 +1,82 @@
 ---
 kind: theory
 title: "Método de rollback"
+visualization:
+  type: persistent
+  steps:
+    - note: >-
+        El log completo: m = 5 operaciones op₁..op₅ aplicadas en orden. Se
+        quiere insertar un cambio en el tiempo t, que cae entre op₂ y op₃ —
+        hay r = 3 operaciones posteriores a t (op₃, op₄, op₅).
+      caption: "log completo, m=5, insertar en t"
+      nodes:
+        - { id: op1, value: "op₁", parent: null }
+        - { id: op2, value: "op₂", parent: op1 }
+        - { id: op3, value: "op₃", parent: op2 }
+        - { id: op4, value: "op₄", parent: op3 }
+        - { id: op5, value: "op₅", parent: op4 }
+    - note: >-
+        Se delimita la frontera en t: las r = 3 operaciones posteriores
+        (op₃, op₄, op₅) quedan marcadas — son las únicas que hace falta
+        tocar, nada antes de t se ve afectado.
+      caption: "frontera en t — marcar r=3 operaciones"
+      highlight: ["op3", "op4", "op5"]
+      nodes:
+        - { id: op1, value: "op₁", parent: null }
+        - { id: op2, value: "op₂", parent: op1 }
+        - { id: op3, value: "op₃", parent: op2, state: marked }
+        - { id: op4, value: "op₄", parent: op3, state: marked }
+        - { id: op5, value: "op₅", parent: op4, state: marked }
+    - note: >-
+        Deshacer (rollback): se recorren en orden inverso — primero op₅,
+        luego op₄, luego op₃ — y se retiran de la estructura. Sin este paso
+        no hay forma de aplicar un cambio en un punto intermedio del log.
+      caption: "deshacer op₅, op₄, op₃ (orden inverso)"
+      highlight: ["op3", "op4", "op5"]
+      nodes:
+        - { id: op1, value: "op₁", parent: null }
+        - { id: op2, value: "op₂", parent: op1 }
+        - { id: op3, value: "op₃", parent: op2, state: muted }
+        - { id: op4, value: "op₄", parent: op3, state: muted }
+        - { id: op5, value: "op₅", parent: op4, state: muted }
+    - note: >-
+        Con la estructura rebobinada hasta justo antes de t, se aplica el
+        cambio pedido: una nueva operación opₜ. op₃, op₄ y op₅ siguen
+        pendientes de rehacerse, ahora colgando después de opₜ.
+      caption: "aplicar opₜ"
+      highlight: ["opt"]
+      nodes:
+        - { id: op1, value: "op₁", parent: null }
+        - { id: op2, value: "op₂", parent: op1 }
+        - { id: opt, value: "opₜ", parent: op2, state: active }
+        - { id: op3, value: "op₃", parent: opt, state: muted }
+        - { id: op4, value: "op₄", parent: op3, state: muted }
+        - { id: op5, value: "op₅", parent: op4, state: muted }
+    - note: >-
+        Rehacer (replay): se reaplican op₃, op₄ y op₅ en el mismo orden
+        original. Ninguna cambia de efecto porque el orden entre ellas es
+        el mismo — sólo cambió qué operación las precede.
+      caption: "rehacer op₃, op₄, op₅ (mismo orden)"
+      highlight: ["op3", "op4", "op5"]
+      nodes:
+        - { id: op1, value: "op₁", parent: null }
+        - { id: op2, value: "op₂", parent: op1 }
+        - { id: opt, value: "opₜ", parent: op2, state: active }
+        - { id: op3, value: "op₃", parent: opt, state: copied }
+        - { id: op4, value: "op₄", parent: op3, state: copied }
+        - { id: op5, value: "op₅", parent: op4, state: copied }
+    - note: >-
+        Log final, con opₜ ya insertado en su lugar. Costo total: r
+        deshechas + 1 aplicada + r rehechas = O(r) — el precio de no exigir
+        conmutatividad: hay que rehacer en orden todo lo posterior a t.
+      caption: "log final: O(r) operaciones tocadas, r=3"
+      nodes:
+        - { id: op1, value: "op₁", parent: null }
+        - { id: op2, value: "op₂", parent: op1 }
+        - { id: opt, value: "opₜ", parent: op2 }
+        - { id: op3, value: "op₃", parent: opt }
+        - { id: op4, value: "op₄", parent: op3 }
+        - { id: op5, value: "op₅", parent: op4 }
 ---
 
 ## ¿Qué problema resuelve?

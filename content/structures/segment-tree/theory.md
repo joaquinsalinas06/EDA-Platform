@@ -1,6 +1,74 @@
 ---
 kind: theory
 title: Segment tree
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        La raíz representa el rango completo [1,4] del arreglo — todavía no
+        se ha partido en nada.
+      highlight: ["n14"]
+      nodes:
+        - { id: n14, value: "[1,4]", parent: null, state: active }
+    - note: >-
+        Cada nodo se parte en dos mitades del mismo tamaño: m = (1+4)/2 = 2
+        da los hijos [1,2] y [3,4]. Partir siempre a la mitad — nunca en
+        cualquier punto — es lo que garantiza altura ⌈lg n⌉.
+      highlight: ["n12", "n34"]
+      nodes:
+        - { id: n14, value: "[1,4]", parent: null }
+        - { id: n12, value: "[1,2]", parent: n14, state: active }
+        - { id: n34, value: "[3,4]", parent: n14, state: active }
+    - note: >-
+        [1,2] se parte igual: m = 1, da las hojas [1,1] y [2,2]. Un rango de
+        un solo elemento ya no se parte más — es una hoja.
+      highlight: ["n11", "n22"]
+      nodes:
+        - { id: n14, value: "[1,4]", parent: null }
+        - { id: n12, value: "[1,2]", parent: n14, state: active }
+        - { id: n34, value: "[3,4]", parent: n14 }
+        - { id: n11, value: "[1,1]", parent: n12, state: active }
+        - { id: n22, value: "[2,2]", parent: n12, state: active }
+    - note: >-
+        Lo mismo para [3,4]: m = 3, hojas [3,3] y [4,4]. Con las cuatro hojas
+        completas, la forma queda fija: 2n-1 = 7 nodos (4 hojas + 3 internos)
+        y altura ⌈lg 4⌉ = 2, sin importar los valores que guarde cada uno.
+      highlight: ["n33", "n44"]
+      nodes:
+        - { id: n14, value: "[1,4]", parent: null }
+        - { id: n12, value: "[1,2]", parent: n14 }
+        - { id: n34, value: "[3,4]", parent: n14, state: active }
+        - { id: n11, value: "[1,1]", parent: n12 }
+        - { id: n22, value: "[2,2]", parent: n12 }
+        - { id: n33, value: "[3,3]", parent: n34, state: active }
+        - { id: n44, value: "[4,4]", parent: n34, state: active }
+    - note: >-
+        Cada hoja guarda directo el valor de su posición — valor(hoja_i) =
+        A[i] — con A = [1,2,3,4]. Los nodos internos [1,2], [3,4] y [1,4]
+        todavía no tienen valor: dependen de sus hijos.
+      highlight: ["n11", "n22", "n33", "n44"]
+      nodes:
+        - { id: n14, value: "?", parent: null, state: muted }
+        - { id: n12, value: "?", parent: n14, state: muted }
+        - { id: n34, value: "?", parent: n14, state: muted }
+        - { id: n11, value: "1", parent: n12 }
+        - { id: n22, value: "2", parent: n12 }
+        - { id: n33, value: "3", parent: n34 }
+        - { id: n44, value: "4", parent: n34 }
+    - note: >-
+        El invariante combina de abajo hacia arriba — valor(nodo) =
+        combinar(valor(hijo_izq), valor(hijo_der)) — con combinar = suma:
+        valor([1,2]) = 1+2 = 3, valor([3,4]) = 3+4 = 7, valor([1,4]) = 3+7 =
+        10. La raíz ya tiene la respuesta de todo el arreglo sin recorrerlo.
+      highlight: ["n14", "n12", "n34"]
+      nodes:
+        - { id: n14, value: "10", parent: null, state: active }
+        - { id: n12, value: "3", parent: n14 }
+        - { id: n34, value: "7", parent: n14 }
+        - { id: n11, value: "1", parent: n12 }
+        - { id: n22, value: "2", parent: n12 }
+        - { id: n33, value: "3", parent: n34 }
+        - { id: n44, value: "4", parent: n34 }
 ---
 
 > **Concepto de apoyo, no material del curso.** El profesor nunca explica el

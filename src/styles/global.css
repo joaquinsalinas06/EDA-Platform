@@ -361,7 +361,15 @@ a:hover {
   color: var(--ink);
 }
 
+/* `display: block` + `overflow-x: auto` en la tabla misma (no en un div
+   envolvente aparte, que el markdown no genera): si una tabla de la prosa
+   es más ancha que la columna, esto la vuelve su propio contenedor de
+   scroll horizontal. Sin esto, la tabla desborda toda la página — el
+   scroll se lleva con ella la nav y el riel en vez de quedarse quietos. */
 .prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
   width: 100%;
   border-collapse: collapse;
   margin: 2rem 0;

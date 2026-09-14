@@ -68,7 +68,19 @@ const searchIndex = await buildSearchIndex();
       </div>
     </header>
 
+    <!--
+      transition:animate="none": esta rejilla cambia de 2 a 3 columnas según
+      `rail` (una operación con headings tiene riel derecho, "ejemplos" no).
+      El crossfade nativo de View Transitions superpone la foto vieja
+      (ancho de 2 columnas) sobre la nueva (3 columnas) durante la
+      transición — con anchos distintos, el contenido de una se ve encima
+      del de la otra a mitad de la animación (texto del riel nuevo cortado
+      sobre la tabla vieja). El corte instantáneo se ve peor que nada, pero
+      un crossfade roto se ve peor todavía; la nav (persistida aparte) y el
+      header no pierden su continuidad por esto.
+    -->
     <div
+      transition:animate="none"
       class:list={[
         'mx-auto grid max-w-[1680px] gap-x-10 gap-y-12 px-5 pt-10 pb-24 lg:px-8',
         rail
@@ -77,8 +89,19 @@ const searchIndex = await buildSearchIndex();
       ]}
     >
       <KnowledgeMapNav />
-      <main class="min-w-0"><slot /></main>
-      {rail && <aside class="hidden min-w-0 xl:block"><slot name="rail" /></aside>}
+      <main class="min-w-0" transition:animate="none"><slot /></main>
+      <!--
+        Siempre en el DOM, nunca condicional en `rail`: si una página con
+        riel navega a una sin riel, un <aside> que EXISTE en la vieja y NO
+        EXISTE en la nueva no tiene con qué emparejarse en la transición —
+        queda un "huérfano" visible encima del contenido nuevo hasta que
+        termina. Con el nodo siempre presente (oculto por CSS cuando no
+        aplica, nunca removido), la transición es un swap de contenido, no
+        una aparición/desaparición de elemento.
+      -->
+      <aside class:list={['min-w-0', rail ? 'hidden xl:block' : 'hidden']} transition:animate="none">
+        <slot name="rail" />
+      </aside>
     </div>
 
     <footer class="border-t border-[var(--rule)]">

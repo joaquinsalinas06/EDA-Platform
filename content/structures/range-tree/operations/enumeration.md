@@ -9,6 +9,133 @@ cppSteps:
   - step-4-range-query-1d.cpp
   - step-6-enumeration.cpp
   - full-implementation.cpp
+visualization:
+  type: range-tree
+  steps:
+    - note: >-
+        Partimos, igual que existence-count, del resultado de
+        range-query-1d para [5,16]: subárboles canónicos {7, 13}. Ninguna
+        hoja se ha recorrido todavía.
+      highlight: [n7i, n13i]
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4, state: answer }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15, state: answer }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i, state: marked }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
+        Entramos al primer subárbol canónico, 7, para recorrer sus hojas.
+      highlight: [n7i]
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4, state: active }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15, state: answer }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i, state: marked }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
+        Se agregan sus hojas a la salida, en cualquier orden de recorrido:
+        7 y 9. Salida parcial: {7, 9}.
+      highlight: [l7, l9]
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4, state: answer }
+        - { id: l7, value: 7, parent: n7i, state: answer }
+        - { id: l9, value: 9, parent: n7i, state: answer }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15, state: answer }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i, state: marked }
+        - { id: l27, value: 27, parent: n18i }
+      caption: "salida parcial: {7, 9}"
+    - note: >-
+        Entramos al segundo subárbol canónico, 13.
+      highlight: [n13i]
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4, state: answer }
+        - { id: l7, value: 7, parent: n7i, state: answer }
+        - { id: l9, value: 9, parent: n7i, state: answer }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15, state: active }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i, state: marked }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
+        Se agregan 13 y 15. Salida parcial: {7, 9, 13, 15}.
+      highlight: [l13, l15]
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4, state: answer }
+        - { id: l7, value: 7, parent: n7i, state: answer }
+        - { id: l9, value: 9, parent: n7i, state: answer }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15, state: answer }
+        - { id: l13, value: 13, parent: n13i, state: answer }
+        - { id: l15, value: 15, parent: n13i, state: answer }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i, state: marked }
+        - { id: l27, value: 27, parent: n18i }
+      caption: "salida parcial: {7, 9, 13, 15}"
+    - note: >-
+        Salida final: {7, 9, 13, 15} — exactamente las hojas de los
+        subárboles canónicos, sin visitar ninguna otra hoja del árbol. Si
+        sólo se pidieran k=1 resultados, la enumeración se detendría apenas
+        se agregara la hoja 7, sin recorrer el resto del subárbol 7 ni
+        tocar el subárbol 13.
+      highlight: [l7, l9, l13, l15]
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4, state: answer }
+        - { id: l7, value: 7, parent: n7i, state: answer }
+        - { id: l9, value: 9, parent: n7i, state: answer }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15, state: answer }
+        - { id: l13, value: 13, parent: n13i, state: answer }
+        - { id: l15, value: 15, parent: n13i, state: answer }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i, state: marked }
+        - { id: l27, value: 27, parent: n18i }
+      caption: "salida final: {7, 9, 13, 15}"
 ---
 
 ## Qué hace

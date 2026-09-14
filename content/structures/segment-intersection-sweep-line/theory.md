@@ -1,6 +1,54 @@
 ---
 kind: theory
 title: "Intersección de segmentos con barrido"
+visualization:
+  type: tree
+  mode: tree
+  steps:
+    - note: >-
+        x=0: arranca el barrido del caso general y se activa S1 (y=0 en
+        x=0) — primer nodo de la BBST de cruces (mismo par S1/S2 de
+        `examples.md`, caso "Límite": S1 va de (0,0) a (4,4), S2 de (0,4)
+        a (4,0)).
+      caption: "x=0: activa S1"
+      nodes:
+        - { id: s1, value: "S1 (y=0)", parent: null, state: copied }
+    - note: >-
+        x=0: se activa S2 (y=4 en x=0). Como 4>0 en la x actual, se
+        inserta como hijo derecho de S1: el orden vigente de cruces
+        arranca en [S1, S2].
+      caption: "x=0: orden [S1, S2]"
+      nodes:
+        - { id: s1, value: "S1 (y=0)", parent: null, state: idle }
+        - { id: s2, value: "S2 (y=4)", parent: s1, side: right, state: copied }
+    - note: >-
+        x=2: ambos segmentos valen y=2 — es el punto donde se cruzan. El
+        comparador de la BBST depende de x (#43), no es un valor fijo: en
+        este instante exacto S1 y S2 son indistinguibles y el orden está a
+        punto de invertirse.
+      caption: "x=2: cruce — orden a punto de invertirse"
+      nodes:
+        - { id: s1, value: "S1 (y=2)", parent: null, state: marked }
+        - { id: s2, value: "S2 (y=2)", parent: s1, side: right, state: marked }
+    - note: >-
+        x=4: pasado el cruce, S2 ya vale menos que S1 (0 contra 4). La
+        BBST reevalúa la comparación con la x actual y el orden vigente
+        pasa a [S2, S1] — exactamente el reordenamiento que
+        `crossing-order` desarrolla en detalle.
+      caption: "x=4: orden [S2, S1]"
+      nodes:
+        - { id: s2, value: "S2 (y=0)", parent: null, state: active }
+        - { id: s1, value: "S1 (y=4)", parent: s2, side: right, state: idle }
+    - note: >-
+        Si cada uno de estos eventos (activar S1, activar S2, el
+        reordenamiento en x=4) se guarda como versión persistente vía
+        path-copying, una consulta futura sobre un x ya pasado no necesita
+        rehacer el barrido — sólo camina esa versión. Ver el ejemplo
+        completo, con `Successor`, en `persistent-online-query`.
+      caption: "cada evento ⇒ una versión persistente (ver persistent-online-query)"
+      nodes:
+        - { id: s2, value: "S2 (y=0)", parent: null, state: active }
+        - { id: s1, value: "S1 (y=4)", parent: s2, side: right, state: idle }
 ---
 
 ## ¿Qué problema resuelve?

@@ -1,6 +1,78 @@
 ---
 kind: theory
 title: "Búsqueda ortogonal por rangos"
+visualization:
+  type: range-tree
+  mode: layers
+  steps:
+    - note: >-
+        Puntos ordenados {3,4,7,9,13,15,18,27}, caja de consulta [5,16]. Las
+        tres preguntas — existencia, conteo, enumeración — parten de esta
+        misma caja sobre el mismo arreglo.
+      caption: "caja [5, 16]"
+      mode: layers
+      arrays:
+        - id: pts
+          row: 0
+          cells: [3, 4, 7, 9, 13, 15, 18, 27]
+    - note: >-
+        Búsqueda binaria del sucesor de 5 (primer valor ≥ 5): cae en el
+        índice 2, valor 7. Es la frontera izquierda de la caja.
+      caption: "sucesor(5) = 7"
+      mode: layers
+      arrays:
+        - id: pts
+          row: 0
+          cells: [3, 4, 7, 9, 13, 15, 18, 27]
+          states: [idle, idle, marked, idle, idle, idle, idle, idle]
+    - note: >-
+        Búsqueda binaria del predecesor de 16 (último valor ≤ 16): cae en
+        el índice 5, valor 15. Es la frontera derecha. Ubicar ambas
+        fronteras cuesta O(log n) y es lo único que existencia, conteo y
+        enumeración necesitan resolver por separado — de aquí en más leen
+        la misma información de formas distintas.
+      caption: "fronteras: índices 2 y 5"
+      mode: layers
+      arrays:
+        - id: pts
+          row: 0
+          cells: [3, 4, 7, 9, 13, 15, 18, 27]
+          states: [idle, idle, marked, idle, idle, marked, idle, idle]
+    - note: >-
+        Existencia sólo mira la frontera izquierda: 7 ≤ 16, así que hay al
+        menos un punto adentro. No necesita la frontera derecha ni tocar
+        nada más — es la pregunta que pide menos información.
+      caption: "existencia: 7 ≤ 16 → verdadero"
+      mode: layers
+      arrays:
+        - id: pts
+          row: 0
+          cells: [3, 4, 7, 9, 13, 15, 18, 27]
+          states: [idle, idle, answer, idle, idle, marked, idle, idle]
+    - note: >-
+        Conteo usa las dos fronteras pero sólo como aritmética de índices,
+        5 - 2 + 1 = 4: nunca visita los puntos que quedan entre ellas, sólo
+        sus posiciones.
+      caption: "conteo: 5 - 2 + 1 = 4"
+      mode: layers
+      arrays:
+        - id: pts
+          row: 0
+          cells: [3, 4, 7, 9, 13, 15, 18, 27]
+          states: [idle, idle, answer, answer, answer, answer, idle, idle]
+    - note: >-
+        Enumeración parte de las mismas fronteras, pero además tiene que
+        recorrer y reportar cada uno de los k puntos entre ellas — {7, 9,
+        13, 15} — porque no hay forma de listarlos sin tocarlos uno por
+        uno. Ese recorrido es exactamente el término +k que las otras dos
+        preguntas no pagan.
+      caption: "enumeración: {7, 9, 13, 15}"
+      mode: layers
+      arrays:
+        - id: pts
+          row: 0
+          cells: [3, 4, 7, 9, 13, 15, 18, 27]
+          states: [idle, idle, answer, answer, answer, answer, idle, idle]
 ---
 
 ## ¿Qué problema resuelve?

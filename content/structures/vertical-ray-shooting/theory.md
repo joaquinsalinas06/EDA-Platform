@@ -1,6 +1,145 @@
 ---
 kind: theory
 title: "Vertical ray shooting"
+visualization:
+  type: range-tree
+  mode: layers
+  steps:
+    - note: >-
+        El mapa de #8 (el mismo de examples.md, #23): un único segmento
+        techo `R` cruza las tres columnas verticales de consulta —
+        x=4, x=8 y x=19 — siempre a la misma altura, y=8. Las tres consultas
+        son (4,12), (8,4) y (19,4): cada una dispara su rayo hacia arriba
+        por su columna.
+      caption: "R cruza x=4, x=8 y x=19 en y=8"
+      mode: layers
+      arrays:
+        - id: col-x4
+          label: "x=4 (y_i=12)"
+          row: 0
+          cells: [8]
+          states: [idle]
+        - id: col-x8
+          label: "x=8 (y_i=4)"
+          row: 1
+          cells: [8]
+          states: [idle]
+        - id: col-x19
+          label: "x=19 (y_i=4)"
+          row: 2
+          cells: [8]
+          states: [idle]
+    - note: >-
+        Columna x=8: R cruza en y=8, que sí cumple y ≥ y_i=4 — es candidato
+        a ser el primer segmento que toca el rayo desde (8,4).
+      caption: "x=8: 8 ≥ 4 — candidato"
+      mode: layers
+      arrays:
+        - id: col-x4
+          label: "x=4 (y_i=12)"
+          row: 0
+          cells: [8]
+          states: [idle]
+        - id: col-x8
+          label: "x=8 (y_i=4)"
+          row: 1
+          cells: [8]
+          states: [marked]
+        - id: col-x19
+          label: "x=19 (y_i=4)"
+          row: 2
+          cells: [8]
+          states: [idle]
+    - note: >-
+        Columna x=19: el mismo R cruza también en y=8, que igualmente
+        cumple y ≥ y_i=4 — también es candidato desde (19,4), aunque la
+        columna es otra.
+      caption: "x=19: 8 ≥ 4 — también candidato"
+      mode: layers
+      arrays:
+        - id: col-x4
+          label: "x=4 (y_i=12)"
+          row: 0
+          cells: [8]
+          states: [idle]
+        - id: col-x8
+          label: "x=8 (y_i=4)"
+          row: 1
+          cells: [8]
+          states: [marked]
+        - id: col-x19
+          label: "x=19 (y_i=4)"
+          row: 2
+          cells: [8]
+          states: [marked]
+    - note: >-
+        (8,4) y (19,4) tocan el mismo segmento R como primera respuesta,
+        aunque disparan el rayo por columnas distintas: por eso caen en la
+        misma cara, sin que haga falta razonar sobre la forma de esa cara.
+      caption: "mismo segmento en columnas distintas ⇒ misma cara"
+      mode: layers
+      arrays:
+        - id: col-x4
+          label: "x=4 (y_i=12)"
+          row: 0
+          cells: [8]
+          states: [idle]
+        - id: col-x8
+          label: "x=8 (y_i=4)"
+          row: 1
+          cells: [8]
+          states: [answer]
+        - id: col-x19
+          label: "x=19 (y_i=4)"
+          row: 2
+          cells: [8]
+          states: [answer]
+    - note: >-
+        Columna x=4: el mismo R cruza en y=8, pero aquí y_i=12 > 8 — el
+        rayo hacia arriba desde (4,12) deja a R por debajo suyo, así que R
+        no cumple y ≥ y_i y se descarta como respuesta para este punto.
+      caption: "x=4: 8 < 12 — R queda debajo, se descarta"
+      mode: layers
+      arrays:
+        - id: col-x4
+          label: "x=4 (y_i=12)"
+          row: 0
+          cells: [8]
+          states: [muted]
+        - id: col-x8
+          label: "x=8 (y_i=4)"
+          row: 1
+          cells: [8]
+          states: [answer]
+        - id: col-x19
+          label: "x=19 (y_i=4)"
+          row: 2
+          cells: [8]
+          states: [answer]
+    - note: >-
+        La respuesta de (4,12) es entonces otro segmento — el que
+        delimita la cara de arriba en esa columna, fuera de este
+        fragmento del mapa — necesariamente distinto de R. Mismo
+        segmento respuesta ⇒ misma cara; segmento distinto ⇒ cara
+        distinta: exactamente la reformulación de PPL que abre este tema.
+      caption: "distinto segmento respuesta ⇒ distinta cara"
+      mode: layers
+      arrays:
+        - id: col-x4
+          label: "x=4 (y_i=12)"
+          row: 0
+          cells: [8]
+          states: [muted]
+        - id: col-x8
+          label: "x=8 (y_i=4)"
+          row: 1
+          cells: [8]
+          states: [answer]
+        - id: col-x19
+          label: "x=19 (y_i=4)"
+          row: 2
+          cells: [8]
+          states: [answer]
 ---
 
 ## ¿Qué problema resuelve?

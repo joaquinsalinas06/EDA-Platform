@@ -1,6 +1,155 @@
 ---
 kind: theory
 title: Range tree
+visualization:
+  type: range-tree
+  steps:
+    - note: >-
+        Árbol de build-1d sobre las hojas {3, 4, 7, 9, 13, 15, 18, 27}
+        (diapositiva #29). Las dos ideas de esta página se apoyan en este
+        mismo árbol: primero la descomposición canónica, luego el
+        anidamiento.
+      highlight: []
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
+        Primera idea — descomposición canónica: para un rango como [5,16],
+        Predecessor(5)=4 y Successor(16)=18 delimitan la búsqueda (ver
+        predecessor-successor). Ambos quedan fuera del rango.
+      highlight: [l4, l18]
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i, state: marked }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
+        El camino se separa en la raíz (LCA de las dos hojas
+        delimitadoras): desde aquí se recorren dos caminos, uno hacia cada
+        delimitador (ver range-query-1d).
+      highlight: [r9]
+      nodes:
+        - { id: r9, value: 9, parent: null, state: active }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i, state: marked }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
+        En O(log n) pasos aparecen los subárboles canónicos completos
+        {7, 13} (hojas 7, 9, 13, 15): la respuesta se arma sin visitar cada
+        hoja — la ventaja frente a recorrer el arreglo entero punto por
+        punto.
+      highlight: [n7i, n13i]
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4, state: answer }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15, state: answer }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i, state: marked }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
+        Segunda idea — anidamiento: como el subárbol 7 ya delimita un
+        subconjunto contiguo de puntos (7 y 9), sobre ÉL se puede construir
+        un segundo range tree completo (aquí esquemático, ordenado por otra
+        componente). Un arreglo ordenado no ofrece este subárbol ya
+        delimitado — por eso el profesor cambia el arreglo por un árbol
+        (ver build-2d).
+      highlight: [n7i]
+      panels:
+        - { id: secondary, label: "Segunda dimensión (esquemático)", anchor: n7i }
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4, state: answer }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15, state: answer }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i, state: marked }
+        - { id: l27, value: 27, parent: n18i }
+        - { id: sec7_root, value: 6, parent: null, panel: secondary }
+        - { id: sec7_leaf9, value: 6, parent: sec7_root, panel: secondary }
+        - { id: sec7_leaf7, value: 11, parent: sec7_root, panel: secondary }
+    - note: >-
+        No es un privilegio del nodo 7: el otro subárbol canónico, 13,
+        cuelga el suyo propio de la misma forma. Las dos ideas juntas son
+        el range tree: descomposición canónica (O(log n) subárboles sin
+        tocar cada hoja) + anidamiento (cada subárbol cuelga otro range
+        tree) — el desarrollo completo está en build-2d y range-query-2d.
+      highlight: [n13i]
+      panels:
+        - { id: secondary2, label: "Segunda dimensión (esquemático)", anchor: n13i }
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: marked }
+        - { id: n7i, value: 7, parent: n4, state: answer }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15, state: answer }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i, state: marked }
+        - { id: l27, value: 27, parent: n18i }
+        - { id: sec13_root, value: -2, parent: null, panel: secondary2 }
+        - { id: sec13_leaf15, value: -2, parent: sec13_root, panel: secondary2 }
+        - { id: sec13_leaf13, value: 0, parent: sec13_root, panel: secondary2 }
+      caption: >-
+        Descomposición canónica + anidamiento — con esas dos ideas se
+        construyen todas las operaciones de esta estructura.
 ---
 
 ## ¿Qué problema resuelve?

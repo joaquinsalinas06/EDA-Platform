@@ -7,6 +7,131 @@ cppSteps:
   - step-2-build-1d.cpp
   - step-3-predecessor-successor.cpp
   - full-implementation.cpp
+visualization:
+  type: range-tree
+  steps:
+    - note: >-
+        Buscamos x=5 sobre el árbol de build-1d — ninguna comparación hecha
+        todavía.
+      highlight: []
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
+        En la raíz (valor 9): 5 ≤ 9 es verdadero → bajamos por la
+        izquierda.
+      highlight: [r9]
+      nodes:
+        - { id: r9, value: 9, parent: null, state: active }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
+        En el nodo 4: 5 ≤ 4 es falso → bajamos por la derecha.
+      highlight: [n4]
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9, state: active }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
+        En el nodo 7: 5 ≤ 7 es verdadero → bajamos por la izquierda, hacia
+        la hoja 7.
+      highlight: [n7i]
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4, state: active }
+        - { id: l7, value: 7, parent: n7i }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
+        Llegamos a la hoja 7. Como 7 > 5, esta hoja no es ≤ x: no puede ser
+        el Predecessor, así que el descenso termina en el Successor(5).
+      highlight: [l7]
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i, state: active }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+    - note: >-
+        Successor(5) = hoja 7 (la hoja donde termina el descenso, que queda
+        ≥ x). Predecessor(5) = la hoja anterior en el recorrido in-order de
+        7, que es la hoja 4. Este mismo par (4, 7) es el que
+        range-query-1d usa como frontera izquierda de la consulta [5,16].
+      highlight: [l4, l7]
+      nodes:
+        - { id: r9, value: 9, parent: null }
+        - { id: n4, value: 4, parent: r9 }
+        - { id: n3i, value: 3, parent: n4 }
+        - { id: l3, value: 3, parent: n3i }
+        - { id: l4, value: 4, parent: n3i, state: answer }
+        - { id: n7i, value: 7, parent: n4 }
+        - { id: l7, value: 7, parent: n7i, state: answer }
+        - { id: l9, value: 9, parent: n7i }
+        - { id: n15, value: 15, parent: r9 }
+        - { id: n13i, value: 13, parent: n15 }
+        - { id: l13, value: 13, parent: n13i }
+        - { id: l15, value: 15, parent: n13i }
+        - { id: n18i, value: 18, parent: n15 }
+        - { id: l18, value: 18, parent: n18i }
+        - { id: l27, value: 27, parent: n18i }
+      caption: "Predecessor(5) = 4, Successor(5) = 7"
 ---
 
 <!-- El profesor sólo nombra Predecessor(l1) y Successor(r1) como sub-paso

@@ -1,6 +1,184 @@
 ---
 kind: theory
 title: "Localización de puntos en el plano"
+visualization:
+  type: tree
+  mode: tree
+  steps:
+    - note: >-
+        PPL no tiene un algoritmo directo: no hay ningún orden total obvio
+        sobre el plano que permita búsqueda binaria directa como en una
+        dimensión. Todo el mazo es la cadena de reducciones que sí lo
+        resuelve — este diagrama traza esa cadena completa, de principio a
+        fin, en el orden en que el profesor la arma (#18-55).
+      caption: "paso 1 de 7: PPL, sin orden total sobre el plano"
+      nodes:
+        - id: ppl
+          value: "PPL: locate(x,y)"
+          parent: null
+          state: active
+    - note: >-
+        Lanzar un rayo vertical hacia arriba desde el punto de consulta
+        hasta el primer segmento que golpea identifica la arista justo por
+        encima del punto (#18-23). Esa reformulación concreta es
+        [vertical-ray-shooting](/structures/vertical-ray-shooting).
+      caption: "paso 2 de 7: se reduce a vertical ray shooting (#18-23)"
+      nodes:
+        - id: ppl
+          value: "PPL: locate(x,y)"
+          parent: null
+          state: muted
+        - id: vrs
+          value: "vertical ray shooting"
+          parent: ppl
+          state: active
+    - note: >-
+        El rayo vertical se ve, a su vez, como un caso especial de
+        detectar/ordenar cruces con una recta de barrido — **sweep line**
+        (#24-27). El mazo nunca cierra explícitamente el paso "segmento
+        hallado → etiqueta de la cara"; queda como hueco del material.
+      caption: "paso 3 de 7: se reduce a intersección de segmentos (sweep line, #24-27)"
+      nodes:
+        - id: ppl
+          value: "PPL: locate(x,y)"
+          parent: null
+          state: muted
+        - id: vrs
+          value: "vertical ray shooting"
+          parent: ppl
+          state: muted
+        - id: sweep
+          value: "barrido de segmentos (sweep line)"
+          parent: vrs
+          state: active
+    - note: >-
+        Cuando el mapa es **ortogonal** (todas las aristas horizontales o
+        verticales), el barrido se reduce al caso especial de Range Sum
+        Query: "usando un segment tree o un Fenwick tree se puede resolver
+        este caso especial en $O(n \log n)$" (#32, #38). El profesor nombra
+        ambas estructuras — [segment tree](/structures/segment-tree) y
+        [Fenwick tree](/structures/fenwick-tree) — como andamiaje, sin
+        desarrollarlas aquí.
+      caption: "paso 4 de 7: caso ortogonal → RSQ, O(n log n) (#32, #38)"
+      nodes:
+        - id: ppl
+          value: "PPL: locate(x,y)"
+          parent: null
+          state: muted
+        - id: vrs
+          value: "vertical ray shooting"
+          parent: ppl
+          state: muted
+        - id: sweep
+          value: "barrido de segmentos (sweep line)"
+          parent: vrs
+          state: muted
+        - id: ortho
+          value: "caso ortogonal → RSQ, O(n log n)"
+          parent: sweep
+          state: answer
+    - note: >-
+        Para el mapa **general** (sin restricción de ortogonalidad), el
+        barrido se modela con un [BBST](/structures/balanced-bst) que
+        ordena los cruces activos contra la recta de barrido (#43). Es la
+        otra rama del mismo paso 3 — el caso ortogonal no la descarta,
+        sólo la resuelve por un camino más simple.
+      caption: "paso 5 de 7: caso general → BBST del barrido (#43)"
+      nodes:
+        - id: ppl
+          value: "PPL: locate(x,y)"
+          parent: null
+          state: muted
+        - id: vrs
+          value: "vertical ray shooting"
+          parent: ppl
+          state: muted
+        - id: sweep
+          value: "barrido de segmentos (sweep line)"
+          parent: vrs
+          state: muted
+        - id: ortho
+          value: "caso ortogonal → RSQ, O(n log n)"
+          parent: sweep
+          state: muted
+        - id: bbst
+          value: "BBST del barrido (caso general)"
+          parent: sweep
+          state: active
+    - note: >-
+        Para responder consultas *online* sin rehacer el barrido, el BBST
+        se hace persistente (ver
+        [persistencia sobre una estructura](/structures/persistence-levels)):
+        $t_{x_i}$ es la versión del BBST asociada al punto x_i, y la
+        respuesta es `Query(t_{x_i}, Successor(y_i))` (#50) — la cota final
+        es $O(\log n)$ (#51). Esa fórmula queda sin definir del todo en el
+        mazo: no dice qué devuelve `Query` ni cómo se indexa $t_{x_i}$
+        cuando x_i no coincide con ningún evento del barrido.
+      caption: "paso 6 de 7: + persistencia → O(log n) (#49-51)"
+      nodes:
+        - id: ppl
+          value: "PPL: locate(x,y)"
+          parent: null
+          state: muted
+        - id: vrs
+          value: "vertical ray shooting"
+          parent: ppl
+          state: muted
+        - id: sweep
+          value: "barrido de segmentos (sweep line)"
+          parent: vrs
+          state: muted
+        - id: ortho
+          value: "caso ortogonal → RSQ, O(n log n)"
+          parent: sweep
+          state: muted
+        - id: bbst
+          value: "BBST del barrido (caso general)"
+          parent: sweep
+          state: muted
+        - id: persist
+          value: "Query(t_x, Successor(y)): O(log n)"
+          parent: bbst
+          state: answer
+    - note: >-
+        El escenario **dinámico** (insertar/eliminar aristas, #17) es un
+        eje aparte de esta cadena estática: sólo para mapas ortogonales,
+        con [retroactividad](/structures/retroactivity) parcial sobre la
+        estructura de `locate`, la consulta se mantiene en $O(\log n)$
+        (#53-55) — desarrollado en
+        [edge-update](/structures/planar-point-location/operations/edge-update).
+        Para el mapa general dinámico el mazo sólo cita literatura (#60-61),
+        sin resolverlo en el curso.
+      caption: "paso 7 de 7: escenario dinámico → retroactividad parcial (#53-55)"
+      nodes:
+        - id: ppl
+          value: "PPL: locate(x,y)"
+          parent: null
+          state: muted
+        - id: vrs
+          value: "vertical ray shooting"
+          parent: ppl
+          state: muted
+        - id: sweep
+          value: "barrido de segmentos (sweep line)"
+          parent: vrs
+          state: muted
+        - id: ortho
+          value: "caso ortogonal → RSQ, O(n log n)"
+          parent: sweep
+          state: muted
+        - id: bbst
+          value: "BBST del barrido (caso general)"
+          parent: sweep
+          state: muted
+        - id: persist
+          value: "Query(t_x, Successor(y)): O(log n)"
+          parent: bbst
+          state: muted
+        - id: dynamic
+          value: "dinámico (ortogonal): retroactividad parcial, O(log n)"
+          parent: ppl
+          state: answer
 ---
 
 ## ¿Qué problema resuelve?

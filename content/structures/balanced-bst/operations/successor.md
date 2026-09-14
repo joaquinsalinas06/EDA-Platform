@@ -8,6 +8,69 @@ cppSteps:
   - step-3-insert.cpp
   - step-4-search-predecessor-successor.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Buscamos Successor(25) sobre el árbol de theory.md (raíz 20, hijo
+        izq 10, hijo der 30 con hijo izq 27 y der 40). Empezamos en la
+        raíz: comparamos 25 contra 20.
+      highlight: ["n20"]
+      nodes:
+        - { id: n20, value: 20, parent: null }
+        - { id: n10, value: 10, parent: n20 }
+        - { id: n30, value: 30, parent: n20 }
+        - { id: n27, value: 27, parent: n30 }
+        - { id: n40, value: 40, parent: n30 }
+    - note: >-
+        20 no es mayor que 25 (25 > 20), así que 20 no puede ser el
+        sucesor: el candidato no se actualiza. Avanzamos al hijo derecho,
+        30.
+      nodes:
+        - { id: n20, value: 20, parent: null }
+        - { id: n10, value: 10, parent: n20 }
+        - { id: n30, value: 30, parent: n20 }
+        - { id: n27, value: 27, parent: n30 }
+        - { id: n40, value: 40, parent: n30 }
+    - note: >-
+        En 30: comparamos 25 contra 30.
+      highlight: ["n30"]
+      nodes:
+        - { id: n20, value: 20, parent: null }
+        - { id: n10, value: 10, parent: n20 }
+        - { id: n30, value: 30, parent: n20 }
+        - { id: n27, value: 27, parent: n30 }
+        - { id: n40, value: 40, parent: n30 }
+    - note: >-
+        30 > 25, así que 30 sí es un candidato válido a sucesor (es mayor
+        que 25): candidato ← 30. Avanzamos al hijo izquierdo, buscando uno
+        menor que 30 que siga siendo mayor que 25.
+      nodes:
+        - { id: n20, value: 20, parent: null }
+        - { id: n10, value: 10, parent: n20 }
+        - { id: n30, value: 30, parent: n20, state: marked }
+        - { id: n27, value: 27, parent: n30 }
+        - { id: n40, value: 40, parent: n30 }
+    - note: >-
+        En 27: comparamos 25 contra 27. 27 > 25, así que 27 también es
+        candidato — reemplaza a 30 (27 es menor que 30 y sigue siendo
+        mayor que 25): candidato ← 27. Avanzamos al hijo izquierdo de 27.
+      highlight: ["n27"]
+      nodes:
+        - { id: n20, value: 20, parent: null }
+        - { id: n10, value: 10, parent: n20 }
+        - { id: n30, value: 30, parent: n20, state: muted }
+        - { id: n27, value: 27, parent: n30 }
+        - { id: n40, value: 40, parent: n30 }
+    - note: >-
+        El hijo izquierdo de 27 es nulo: la búsqueda termina aquí. El
+        candidato sigue siendo 27 — es el sucesor de 25.
+      nodes:
+        - { id: n20, value: 20, parent: null }
+        - { id: n10, value: 10, parent: n20 }
+        - { id: n30, value: 30, parent: n20, state: muted }
+        - { id: n27, value: 27, parent: n30, state: answer }
+        - { id: n40, value: 40, parent: n30 }
 ---
 
 <!-- Concepto de apoyo: no hay diapositiva que citar. Successor es la

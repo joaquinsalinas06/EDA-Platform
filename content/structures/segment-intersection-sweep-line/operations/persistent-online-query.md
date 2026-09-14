@@ -9,6 +9,145 @@ cppSteps:
   - step-4-crossing-order.cpp
   - step-5-persistent-query.cpp
   - full-implementation.cpp
+visualization:
+  type: persistent
+  mode: path-copying
+  steps:
+    - note: >-
+        Evento en x=1: se activa A (y=5). No hay versión previa —
+        insertarlo en una BBST de cruces vacía crea la primera versión,
+        t1, con un único nodo.
+      caption: "x=1: activa A → versión t1"
+      versions:
+        - { id: t1, label: "t1 (x=1)" }
+      nodes:
+        - { id: t1-a, value: "A (y=5)", parent: null, version: t1, state: copied }
+      highlight: ["t1-a"]
+    - note: >-
+        Evento en x=2: se activa B (y=3). A la x actual, B queda por
+        debajo de A (3<5): el camino de inserción es sólo la raíz, así que
+        path-copying copia A en A' y cuelga a B como su nuevo hijo
+        izquierdo. La versión t1 no se toca — sigue siendo consultable por
+        su propia raíz.
+      caption: "x=2: activa B → versión t2 = {A, B}"
+      versions:
+        - { id: t1, label: "t1 (x=1)" }
+        - { id: t2, label: "t2 (x=2)" }
+      nodes:
+        - { id: t1-a, value: "A (y=5)", parent: null, version: t1, state: idle }
+        - { id: t2-a, value: "A (y=5)'", parent: null, version: t2, state: copied }
+        - { id: t2-b, value: "B (y=3)", parent: t2-a, side: left, version: t2, state: copied }
+      links:
+        - { from: t2-a, to: t2-b, kind: tree }
+      highlight: ["t2-a", "t2-b"]
+    - note: >-
+        Evento en x=4: se activa C (y=7). C queda por encima de A (7>5):
+        se inserta como hijo derecho. El camino copiado es sólo la raíz
+        otra vez — A'' —; B, sin cambios, se comparte con t2 en vez de
+        duplicarse: t2 sigue siendo la raíz t2-a con su propio hijo B, y
+        t3 apunta a ese mismo B por un enlace `shared`.
+      caption: "x=4: activa C → versión t3 = {A, B, C}, comparte B con t2"
+      versions:
+        - { id: t1, label: "t1 (x=1)" }
+        - { id: t2, label: "t2 (x=2)" }
+        - { id: t3, label: "t3 (x=4)" }
+      nodes:
+        - { id: t1-a, value: "A (y=5)", parent: null, version: t1, state: idle }
+        - { id: t2-a, value: "A (y=5)'", parent: null, version: t2, state: idle }
+        - { id: t2-b, value: "B (y=3)", parent: t2-a, side: left, version: t2, state: shared }
+        - { id: t3-a, value: "A (y=5)''", parent: null, version: t3, state: copied }
+        - { id: t3-c, value: "C (y=7)", parent: t3-a, side: right, version: t3, state: copied }
+      links:
+        - { from: t2-a, to: t2-b, kind: tree }
+        - { from: t3-a, to: t2-b, kind: shared }
+        - { from: t3-a, to: t3-c, kind: tree }
+      highlight: ["t3-a", "t3-c"]
+    - note: >-
+        El barrido real ya está en x=4 (versión t3), pero la consulta
+        online pide el estado en xi=2: caminar la versión t2 responde sin
+        rehacer nada del barrido. Se busca `Successor(4)`: el segmento
+        inmediatamente por encima de y=4 en ese instante pasado.
+      caption: "xi=2 → caminar t2 (barrido real ya en t3)"
+      versions:
+        - { id: t1, label: "t1 (x=1)" }
+        - { id: t2, label: "t2 (x=2)" }
+        - { id: t3, label: "t3 (x=4)" }
+      nodes:
+        - { id: t1-a, value: "A (y=5)", parent: null, version: t1, state: idle }
+        - { id: t2-a, value: "A (y=5)'", parent: null, version: t2, state: idle }
+        - { id: t2-b, value: "B (y=3)", parent: t2-a, side: left, version: t2, state: shared }
+        - { id: t3-a, value: "A (y=5)''", parent: null, version: t3, state: idle }
+        - { id: t3-c, value: "C (y=7)", parent: t3-a, side: right, version: t3, state: idle }
+        - { id: q, value: "Successor(4)", parent: null, version: t2, state: marked }
+      links:
+        - { from: t2-a, to: t2-b, kind: tree }
+        - { from: t3-a, to: t2-b, kind: shared }
+        - { from: t3-a, to: t3-c, kind: tree }
+      highlight: ["t2-a", "t2-b", "q"]
+    - note: >-
+        En A (y=5), raíz de t2: 4<5, así que A queda como candidato a
+        sucesor y la búsqueda desciende por la izquierda, hacia B.
+      caption: "en A (y=5): 4<5 → candidato=A"
+      versions:
+        - { id: t1, label: "t1 (x=1)" }
+        - { id: t2, label: "t2 (x=2)" }
+        - { id: t3, label: "t3 (x=4)" }
+      nodes:
+        - { id: t1-a, value: "A (y=5)", parent: null, version: t1, state: idle }
+        - { id: t2-a, value: "A (y=5)'", parent: null, version: t2, state: active }
+        - { id: t2-b, value: "B (y=3)", parent: t2-a, side: left, version: t2, state: idle }
+        - { id: t3-a, value: "A (y=5)''", parent: null, version: t3, state: idle }
+        - { id: t3-c, value: "C (y=7)", parent: t3-a, side: right, version: t3, state: idle }
+        - { id: q, value: "Successor(4)", parent: null, version: t2, state: marked }
+      links:
+        - { from: t2-a, to: t2-b, kind: tree }
+        - { from: t3-a, to: t2-b, kind: shared }
+        - { from: t3-a, to: t3-c, kind: tree }
+      highlight: ["t2-a", "q"]
+    - note: >-
+        En B (y=3): 4>3 y B no tiene hijo derecho — no hay dónde seguir
+        bajando. El candidato sigue siendo A, el último nodo donde la
+        búsqueda dobló a la izquierda.
+      caption: "en B (y=3): 4>3, sin hijo derecho"
+      versions:
+        - { id: t1, label: "t1 (x=1)" }
+        - { id: t2, label: "t2 (x=2)" }
+        - { id: t3, label: "t3 (x=4)" }
+      nodes:
+        - { id: t1-a, value: "A (y=5)", parent: null, version: t1, state: idle }
+        - { id: t2-a, value: "A (y=5)'", parent: null, version: t2, state: marked }
+        - { id: t2-b, value: "B (y=3)", parent: t2-a, side: left, version: t2, state: active }
+        - { id: t3-a, value: "A (y=5)''", parent: null, version: t3, state: idle }
+        - { id: t3-c, value: "C (y=7)", parent: t3-a, side: right, version: t3, state: idle }
+        - { id: q, value: "Successor(4)", parent: null, version: t2, state: marked }
+      links:
+        - { from: t2-a, to: t2-b, kind: tree }
+        - { from: t3-a, to: t2-b, kind: shared }
+        - { from: t3-a, to: t3-c, kind: tree }
+      highlight: ["t2-b", "q"]
+    - note: >-
+        `Successor(4)` en la versión t2 (xi=2) es A (y=5): el segmento
+        inmediatamente superior en ese instante pasado. La versión t3 —el
+        barrido real, ya en x=4— no se tocó en ningún momento de esta
+        consulta: t2 y t3 conviven, cada una consultable por su propia
+        raíz.
+      caption: "Successor(4) en t2 = A (y=5)"
+      versions:
+        - { id: t1, label: "t1 (x=1)" }
+        - { id: t2, label: "t2 (x=2)" }
+        - { id: t3, label: "t3 (x=4)" }
+      nodes:
+        - { id: t1-a, value: "A (y=5)", parent: null, version: t1, state: idle }
+        - { id: t2-a, value: "A (y=5)'", parent: null, version: t2, state: answer }
+        - { id: t2-b, value: "B (y=3)", parent: t2-a, side: left, version: t2, state: muted }
+        - { id: t3-a, value: "A (y=5)''", parent: null, version: t3, state: idle }
+        - { id: t3-c, value: "C (y=7)", parent: t3-a, side: right, version: t3, state: idle }
+        - { id: q, value: "Successor(4)", parent: null, version: t2, state: answer }
+      links:
+        - { from: t2-a, to: t2-b, kind: tree }
+        - { from: t3-a, to: t2-b, kind: shared }
+        - { from: t3-a, to: t3-c, kind: tree }
+      highlight: ["t2-a", "q"]
 ---
 
 ## Qué hace

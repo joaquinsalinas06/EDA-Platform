@@ -3,6 +3,143 @@ kind: operation
 title: Actualización de aristas
 order: 2
 cppSteps: []
+visualization:
+  type: tree
+  mode: tree
+  steps:
+    - note: >-
+        `edge-update` no tiene intuición ni algoritmo propio en el mazo —
+        el profesor sólo la enuncia como parte de la clasificación
+        estático/dinámico del problema: "se permite insertar y eliminar
+        aristas" (#17). Este diagrama traza qué caso sí desarrolla el
+        material y cuál queda como cita de literatura.
+      caption: "paso 1 de 6: la operación, enunciada sin algoritmo (#17)"
+      nodes:
+        - id: eu
+          value: "edge-update: insertar/eliminar arista"
+          parent: null
+          state: active
+    - note: >-
+        Para el mapa planar general, el mazo no deriva nada propio — sólo
+        cita dos resultados de la literatura, sin desarrollarlos ni
+        usarlos en el curso: Baumgarten, Jung y Mehlhorn (1994) dan
+        consulta e inserción $O(\log n \cdot \log \log n)$ y eliminación
+        $O(\log^2 n)$ (#60); Arge, Brodal y Georgiadis (2006) dan consulta
+        $O(\log n)$, inserción $O(\log^{1+\epsilon} n)$ y eliminación
+        $O(\log^{2+\epsilon} n)$ (#61).
+      caption: "paso 2 de 6: mapa general — sólo citas de literatura (#60-61)"
+      nodes:
+        - id: eu
+          value: "edge-update: insertar/eliminar arista"
+          parent: null
+          state: muted
+        - id: general
+          value: "mapa general (cita de literatura, #60-61)"
+          parent: eu
+          state: active
+    - note: >-
+        El único caso donde el profesor sí desarrolla algo más allá del
+        enunciado es el restringido a **mapas ortogonales** — mapas cuyas
+        aristas son todas horizontales o verticales (#53). El mapa general
+        queda fuera del curso, sin ser descartado como incorrecto: sólo sin
+        desarrollar aquí.
+      caption: "paso 3 de 6: el curso sólo desarrolla el caso ortogonal (#53)"
+      nodes:
+        - id: eu
+          value: "edge-update: insertar/eliminar arista"
+          parent: null
+          state: muted
+        - id: general
+          value: "mapa general (cita de literatura, #60-61)"
+          parent: eu
+          state: muted
+        - id: ortho
+          value: "mapa ortogonal (restringido)"
+          parent: eu
+          state: active
+    - note: >-
+        Ese caso restringido se resuelve manteniendo **retroactividad
+        parcial** (#54) sobre la estructura que responde `locate` — ver
+        [retroactivity](/structures/retroactivity). El mazo no describe el
+        mecanismo de inserción/eliminación en sí, sólo que esta técnica es
+        la que se aplica.
+      caption: "paso 4 de 6: se reduce a retroactividad parcial (#54)"
+      nodes:
+        - id: eu
+          value: "edge-update: insertar/eliminar arista"
+          parent: null
+          state: muted
+        - id: general
+          value: "mapa general (cita de literatura, #60-61)"
+          parent: eu
+          state: muted
+        - id: ortho
+          value: "mapa ortogonal (restringido)"
+          parent: eu
+          state: muted
+        - id: retro
+          value: "retroactividad parcial"
+          parent: ortho
+          state: active
+    - note: >-
+        La retroactividad parcial "sólo funciona para segmentos
+        completamente horizontales" (#53) — el mazo no explica qué pasa si
+        hace falta insertar o eliminar una arista **no horizontal** dentro
+        de este esquema; queda fuera de alcance del material, marcado aquí
+        como el límite explícito de la técnica.
+      caption: "paso 5 de 6: el límite del esquema — sólo horizontal (#53)"
+      nodes:
+        - id: eu
+          value: "edge-update: insertar/eliminar arista"
+          parent: null
+          state: muted
+        - id: general
+          value: "mapa general (cita de literatura, #60-61)"
+          parent: eu
+          state: muted
+        - id: ortho
+          value: "mapa ortogonal (restringido)"
+          parent: eu
+          state: muted
+        - id: retro
+          value: "retroactividad parcial"
+          parent: ortho
+          state: muted
+        - id: limite
+          value: "límite: sólo aristas horizontales"
+          parent: retro
+          state: marked
+    - note: >-
+        Con esa restricción, la consulta (`locate`) se mantiene en
+        $O(\log n)$ tras la actualización (#55) — la única cota que el
+        profesor fija para el escenario dinámico, y sólo para este caso
+        restringido a mapas ortogonales.
+      caption: "paso 6 de 6: la única cota que el curso fija — restringida (#55)"
+      nodes:
+        - id: eu
+          value: "edge-update: insertar/eliminar arista"
+          parent: null
+          state: muted
+        - id: general
+          value: "mapa general (cita de literatura, #60-61)"
+          parent: eu
+          state: muted
+        - id: ortho
+          value: "mapa ortogonal (restringido)"
+          parent: eu
+          state: muted
+        - id: retro
+          value: "retroactividad parcial"
+          parent: ortho
+          state: muted
+        - id: limite
+          value: "límite: sólo aristas horizontales"
+          parent: retro
+          state: muted
+        - id: cota
+          value: "locate tras update: O(log n)"
+          parent: limite
+          state: answer
 ---
 
 ## Qué hace

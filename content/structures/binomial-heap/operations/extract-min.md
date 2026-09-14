@@ -38,22 +38,25 @@ visualization:
     - note: >-
         Binomial-Link siempre engancha el hijo nuevo al frente: por eso la
         lista de hijos de x quedó en orden de grado DESCENDENTE — primero
-        8 (grado 1, con su propio hijo 15), después 20 (grado 0).
+        8 (grado 1, con su propio hijo 15), después 20 (grado 0). 50 sigue
+        ahí, aparte, sin tocar — no participa de este reordenamiento.
       highlight: ["c1", "c0"]
       nodes:
         - { id: c1, value: 8, parent: null }
         - { id: d1, value: 15, parent: c1 }
         - { id: c0, value: 20, parent: null }
+        - { id: r50, value: 50, parent: null, state: muted }
     - note: >-
         Se invierte esa lista antes de tratarla como raíces de H': ahora
         queda en orden ASCENDENTE — primero 20 (grado 0), después 8 (grado
         1). Ningún puntero padre-hijo cambia, sólo el orden de la lista de
-        raíces con la que se va a construir H'.
+        raíces con la que se va a construir H'. 50 sigue sin tocar.
       highlight: ["c0", "c1"]
       nodes:
         - { id: c0, value: 20, parent: null }
         - { id: c1, value: 8, parent: null }
         - { id: d1, value: 15, parent: c1 }
+        - { id: r50, value: 50, parent: null, state: muted }
     - note: >-
         H' = {20 (B0), 8-con-hijo-15 (B1)}, ya en orden ascendente. Lo que
         queda de H es sólo {50 (B0)}. A partir de aquí, Extract-Min hace

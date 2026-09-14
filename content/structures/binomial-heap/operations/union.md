@@ -13,29 +13,29 @@ visualization:
   type: tree
   steps:
     - note: >-
-        Las dos listas de raíces, todavía separadas. H1 = {10 (grado 0), 4
-        con hijo 9 (grado 1)}. Cada raíz es un bit de la representación
-        binaria de n: H1 tiene 3 nodos = 11 en binario, dos bits prendidos
-        (grado 0 y grado 1).
+        Los dos montículos de entrada, uno al lado del otro — todavía
+        completamente separados, nada se ha tocado. H1 = {10 (grado 0), 4
+        con hijo 9 (grado 1)}: 3 nodos = 11 en binario, dos bits
+        prendidos. H2 = {6 (grado 0), 2 con hijo 7 (grado 1)}: también 3
+        nodos, también 11 en binario. Union va a sumar estos dos "11" bit
+        a bit, con acarreo, igual que 3 + 3.
       highlight: []
+      panels:
+        - { id: h1, label: "H1" }
+        - { id: h2, label: "H2" }
       nodes:
-        - { id: n10, value: 10, parent: null }
-        - { id: n4, value: 4, parent: null }
-        - { id: n9, value: 9, parent: n4 }
+        - { id: n10, value: 10, parent: null, panel: h1 }
+        - { id: n4, value: 4, parent: null, panel: h1 }
+        - { id: n9, value: 9, parent: n4, panel: h1 }
+        - { id: n6, value: 6, parent: null, panel: h2 }
+        - { id: n2, value: 2, parent: null, panel: h2 }
+        - { id: n7, value: 7, parent: n2, panel: h2 }
     - note: >-
-        H2, también separada. H2 = {6 (grado 0), 2 con hijo 7 (grado 1)}:
-        otros 3 nodos, también 11 en binario. Union va a sumar estos dos
-        "11" bit a bit, con acarreo, igual que 3 + 3.
-      highlight: []
-      nodes:
-        - { id: n6, value: 6, parent: null }
-        - { id: n2, value: 2, parent: null }
-        - { id: n7, value: 7, parent: n2 }
-    - note: >-
-        Mezcla: las dos listas se intercalan ordenadas por grado, sin
-        enlazar nada todavía — es sólo "alinear los bits" antes de sumar.
-        Quedan, en orden de grado: 10, 6 (ambas grado 0), luego 4-con-9,
-        2-con-7 (ambas grado 1).
+        Mezcla: las dos listas de raíces se intercalan ordenadas por
+        grado, sin enlazar nada todavía — es sólo "alinear los bits" antes
+        de sumar. Los dos montículos dejan de ser paneles separados y
+        pasan a ser un solo bosque, en orden de grado: 10, 6 (ambas grado
+        0), luego 4-con-9, 2-con-7 (ambas grado 1).
       highlight: []
       nodes:
         - { id: n10, value: 10, parent: null }
@@ -70,12 +70,14 @@ visualization:
         - { id: n7, value: 7, parent: n2 }
     - note: >-
         Grado 1: ahora hay TRES árboles de grado 1 — el acarreo recién
-        nacido (6, colapsado aquí porque no es el foco de este paso), y los
-        dos B1 originales (4-con-9 y 2-con-7). Regla de la tercera raíz —
-        no se enlaza todavía: se avanza para no perder ninguno de los tres.
+        nacido (6, con su hijo 10; se queda quieto, no es el foco de este
+        paso), y los dos B1 originales (4-con-9 y 2-con-7). Regla de la
+        tercera raíz — no se enlaza todavía: se avanza para no perder
+        ninguno de los tres.
       highlight: ["n6", "n4", "n2"]
       nodes:
-        - { id: n6, value: 6, parent: null, collapsed: true }
+        - { id: n6, value: 6, parent: null }
+        - { id: n10, value: 10, parent: n6 }
         - { id: n4, value: 4, parent: null }
         - { id: n9, value: 9, parent: n4 }
         - { id: n2, value: 2, parent: null }
@@ -83,10 +85,12 @@ visualization:
     - note: >-
         Se avanza x al siguiente par: ahora comparamos 4 y 2, y ya no hay
         una tercera raíz de grado 1 después de ellos — así que esta vez sí
-        se enlazan. El acarreo (6) queda aparte, sin tocar, como raíz final.
+        se enlazan. El acarreo (6, con su hijo 10) queda aparte, sin tocar,
+        como raíz final.
       highlight: ["n4", "n2"]
       nodes:
-        - { id: n6, value: 6, parent: null, collapsed: true }
+        - { id: n6, value: 6, parent: null, state: muted }
+        - { id: n10, value: 10, parent: n6, state: muted }
         - { id: n4, value: 4, parent: null }
         - { id: n9, value: 9, parent: n4 }
         - { id: n2, value: 2, parent: null }
@@ -95,20 +99,24 @@ visualization:
         Binomial-Link(4, 2): 4 >= 2, así que 2 gana y 4 se vuelve su hijo
         (4 conserva a 9 como su propio hijo). Nace un B2 con raíz 2 — no
         hay acarreo esta vez porque ya no queda ningún otro árbol de
-        grado 1 ni de grado 2 con quien enlazarlo.
+        grado 1 ni de grado 2 con quien enlazarlo. El B1 (6 con hijo 10)
+        sigue ahí, intacto, esperando el final.
       highlight: ["n2", "n4"]
       nodes:
-        - { id: n6, value: 6, parent: null, collapsed: true }
+        - { id: n6, value: 6, parent: null, state: muted }
+        - { id: n10, value: 10, parent: n6, state: muted }
         - { id: n2, value: 2, parent: null, state: active }
         - { id: n4, value: 4, parent: n2, state: active }
         - { id: n9, value: 9, parent: n4 }
         - { id: n7, value: 7, parent: n2 }
     - note: >-
         Grado 2: sólo 1 árbol (el B2 recién formado con raíz 2) — nada que
-        enlazar, se acarrea tal cual hasta el final de la lista.
+        enlazar, se acarrea tal cual hasta el final de la lista. El otro
+        acarreo (6 con hijo 10) tampoco se toca: ya es una raíz final.
       highlight: ["n2"]
       nodes:
-        - { id: n6, value: 6, parent: null, collapsed: true }
+        - { id: n6, value: 6, parent: null, state: muted }
+        - { id: n10, value: 10, parent: n6, state: muted }
         - { id: n2, value: 2, parent: null }
         - { id: n4, value: 4, parent: n2 }
         - { id: n9, value: 9, parent: n4 }

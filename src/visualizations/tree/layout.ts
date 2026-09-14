@@ -1,7 +1,13 @@
+import type { NodeState } from '../canvas-types.ts';
+
 export type TreeNode = {
   id: string;
   value: string | number;
   parent: string | null;
+  /** Si falta, el canvas lo deriva de `highlight` (activo/en reposo) — pero
+   * un estado explícito (marked/answer/shared/copied/muted) SIEMPRE tiene
+   * que sobrevivir hasta el canvas. */
+  state?: NodeState;
   /** Sólo para árboles BINARIOS con UN solo hijo, donde el orden de
    * declaración no basta para saber de qué lado cuelga. En heaps y en
    * árboles multivía (binomial, Fibonacci) no se usa: ahí la posición la
@@ -11,8 +17,11 @@ export type TreeNode = {
    * rotación), no una clave suelta — se dibuja como un triángulo, la
    * convención de los libros, no como una caja normal. */
   collapsed?: boolean;
+  /** Panel al que pertenece (p.ej. "H1"/"H2" en Union): cada panel es su
+   * propio bosque, posicionado aparte. Ver TreeStep.panels. */
+  panel?: string;
 };
-export type LaidOut = { id: string; label: string; x: number; y: number; collapsed?: boolean };
+export type LaidOut = { id: string; label: string; x: number; y: number; collapsed?: boolean; state?: NodeState };
 
 export const W = 640;
 const ROW = 56;
@@ -57,7 +66,7 @@ export function layout(nodes: TreeNode[]): LaidOut[] {
       cx = (Math.min(...xs) + Math.max(...xs)) / 2;
     }
 
-    out.push({ id: node.id, label: String(node.value), x: cx, y: depth, collapsed: node.collapsed });
+    out.push({ id: node.id, label: String(node.value), x: cx, y: depth, collapsed: node.collapsed, state: node.state });
     return cx;
   };
 

@@ -119,3 +119,22 @@ test('side decide el lado cuando hay un solo hijo (BST)', () => {
   ]));
   assert.ok(der.get('h')!.x > der.get('p')!.x);
 });
+
+test('un `state` explícito sobrevive al layout — no sólo el derivado de highlight', () => {
+  // Bug real: layout() armaba LaidOut con {id,label,x,y,collapsed} y
+  // descartaba `state` en el camino, así que marked/answer/shared/copied/
+  // muted nunca llegaban al canvas — sólo "active" (vía highlight) se veía.
+  const n = byId(
+    layout([
+      { id: 'a', value: 1, parent: null, state: 'muted' },
+      { id: 'b', value: 2, parent: 'a', state: 'answer' },
+    ]),
+  );
+  assert.equal(n.get('a')!.state, 'muted');
+  assert.equal(n.get('b')!.state, 'answer');
+});
+
+test('sin `state`, el nodo no lo trae (queda para que highlight decida)', () => {
+  const n = byId(layout([{ id: 'a', value: 1, parent: null }]));
+  assert.equal(n.get('a')!.state, undefined);
+});

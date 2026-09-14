@@ -90,67 +90,12 @@ visualization:
         - { id: n18i, value: 18, parent: n15 }
         - { id: l18, value: 18, parent: n18i, state: marked }
         - { id: l27, value: 27, parent: n18i }
-    - note: >-
-        Segunda idea — anidamiento: como el subárbol 7 ya delimita un
-        subconjunto contiguo de puntos (7 y 9), sobre ÉL se puede construir
-        un segundo range tree completo (aquí esquemático, ordenado por otra
-        componente). Un arreglo ordenado no ofrece este subárbol ya
-        delimitado — por eso el profesor cambia el arreglo por un árbol
-        (ver build-2d).
-      highlight: [n7i]
-      panels:
-        - { id: secondary, label: "Segunda dimensión (esquemático)", anchor: n7i }
-      nodes:
-        - { id: r9, value: 9, parent: null }
-        - { id: n4, value: 4, parent: r9 }
-        - { id: n3i, value: 3, parent: n4 }
-        - { id: l3, value: 3, parent: n3i }
-        - { id: l4, value: 4, parent: n3i, state: marked }
-        - { id: n7i, value: 7, parent: n4, state: answer }
-        - { id: l7, value: 7, parent: n7i }
-        - { id: l9, value: 9, parent: n7i }
-        - { id: n15, value: 15, parent: r9 }
-        - { id: n13i, value: 13, parent: n15, state: answer }
-        - { id: l13, value: 13, parent: n13i }
-        - { id: l15, value: 15, parent: n13i }
-        - { id: n18i, value: 18, parent: n15 }
-        - { id: l18, value: 18, parent: n18i, state: marked }
-        - { id: l27, value: 27, parent: n18i }
-        - { id: sec7_root, value: 6, parent: null, panel: secondary }
-        - { id: sec7_leaf9, value: 6, parent: sec7_root, panel: secondary }
-        - { id: sec7_leaf7, value: 11, parent: sec7_root, panel: secondary }
-    - note: >-
-        No es un privilegio del nodo 7: el otro subárbol canónico, 13,
-        cuelga el suyo propio de la misma forma. Las dos ideas juntas son
-        el range tree: descomposición canónica (O(log n) subárboles sin
-        tocar cada hoja) + anidamiento (cada subárbol cuelga otro range
-        tree) — el desarrollo completo está en build-2d y range-query-2d.
-      highlight: [n13i]
-      panels:
-        - { id: secondary2, label: "Segunda dimensión (esquemático)", anchor: n13i }
-      nodes:
-        - { id: r9, value: 9, parent: null }
-        - { id: n4, value: 4, parent: r9 }
-        - { id: n3i, value: 3, parent: n4 }
-        - { id: l3, value: 3, parent: n3i }
-        - { id: l4, value: 4, parent: n3i, state: marked }
-        - { id: n7i, value: 7, parent: n4, state: answer }
-        - { id: l7, value: 7, parent: n7i }
-        - { id: l9, value: 9, parent: n7i }
-        - { id: n15, value: 15, parent: r9 }
-        - { id: n13i, value: 13, parent: n15, state: answer }
-        - { id: l13, value: 13, parent: n13i }
-        - { id: l15, value: 15, parent: n13i }
-        - { id: n18i, value: 18, parent: n15 }
-        - { id: l18, value: 18, parent: n18i, state: marked }
-        - { id: l27, value: 27, parent: n18i }
-        - { id: sec13_root, value: -2, parent: null, panel: secondary2 }
-        - { id: sec13_leaf15, value: -2, parent: sec13_root, panel: secondary2 }
-        - { id: sec13_leaf13, value: 0, parent: sec13_root, panel: secondary2 }
       caption: >-
-        Descomposición canónica + anidamiento — con esas dos ideas se
-        construyen todas las operaciones de esta estructura.
+        Descomposición canónica en 1D — la primera de las dos ideas. La
+        segunda, el anidamiento, se ilustra más abajo, donde se introduce.
 ---
+
+import Visualization from '../../../src/components/Visualization.astro';
 
 ## ¿Qué problema resuelve?
 
@@ -175,6 +120,115 @@ no vacío, o enumerar sus hojas son operaciones que se construyen encima sin
 volver a tocar el resto del árbol. Subir de dimensión es entonces "colgar
 otro range tree de cada nodo": cada subárbol canónico en X trae consigo un
 subárbol canónico en Y ya armado.
+
+**Generalización a 2D**: el subárbol canónico 7 del árbol de arriba (hojas 7
+y 9) ya viene delimitado por la descomposición canónica en X. Como esas dos
+hojas son ahora puntos completos — (7,11) y (9,6) — nada impide reordenarlos
+por Y y construir, sobre ese mismo subconjunto, un segundo range tree
+completo: eso es "colgar otro range tree de cada nodo".
+
+<Visualization viz={{
+  type: 'range-tree',
+  steps: [
+    {
+      note: "El subárbol canónico 7 (hojas 7 y 9, valores X) ya está delimitado por la descomposición canónica de la página anterior. Sus dos puntos completos son (7,11) y (9,6) — la Y es la componente que todavía no se usó.",
+      highlight: ["n7i"],
+      nodes: [
+        { id: "r9", value: 9, parent: null },
+        { id: "n4", value: 4, parent: "r9" },
+        { id: "n3i", value: 3, parent: "n4" },
+        { id: "l3", value: 3, parent: "n3i" },
+        { id: "l4", value: 4, parent: "n3i" },
+        { id: "n7i", value: 7, parent: "n4", state: "active" },
+        { id: "l7", value: 7, parent: "n7i" },
+        { id: "l9", value: 9, parent: "n7i" },
+        { id: "n15", value: 15, parent: "r9" },
+        { id: "n13i", value: 13, parent: "n15" },
+        { id: "l13", value: 13, parent: "n13i" },
+        { id: "l15", value: 15, parent: "n13i" },
+        { id: "n18i", value: 18, parent: "n15" },
+        { id: "l18", value: 18, parent: "n18i" },
+        { id: "l27", value: 27, parent: "n18i" },
+      ],
+    },
+    {
+      note: "Los dos puntos se reordenan por Y: (9,6) con Y=6 a la izquierda, (7,11) con Y=11 a la derecha. El separador de este árbol secundario todavía no se calcula — las hojas están sueltas, sin raíz.",
+      highlight: ["n7i"],
+      panels: [{ id: "sec2", label: "Secundario de 7 (por Y)", anchor: "n7i" }],
+      nodes: [
+        { id: "r9", value: 9, parent: null },
+        { id: "n4", value: 4, parent: "r9" },
+        { id: "n3i", value: 3, parent: "n4" },
+        { id: "l3", value: 3, parent: "n3i" },
+        { id: "l4", value: 4, parent: "n3i" },
+        { id: "n7i", value: 7, parent: "n4", state: "marked" },
+        { id: "l7", value: 7, parent: "n7i" },
+        { id: "l9", value: 9, parent: "n7i" },
+        { id: "n15", value: 15, parent: "r9" },
+        { id: "n13i", value: 13, parent: "n15" },
+        { id: "l13", value: 13, parent: "n13i" },
+        { id: "l15", value: 15, parent: "n13i" },
+        { id: "n18i", value: 18, parent: "n15" },
+        { id: "l18", value: 18, parent: "n18i" },
+        { id: "l27", value: 27, parent: "n18i" },
+        { id: "sec2_root", value: "?", parent: null, panel: "sec2", state: "idle" },
+        { id: "sec2_l6", value: 6, parent: "sec2_root", panel: "sec2", state: "idle" },
+        { id: "sec2_l11", value: 11, parent: "sec2_root", panel: "sec2", state: "idle" },
+      ],
+    },
+    {
+      note: "El separador se computa igual que en build-1d: el máximo del subárbol izquierdo, 6. Ya hay un árbol, no sólo dos hojas sueltas.",
+      highlight: ["sec2_root"],
+      panels: [{ id: "sec2", label: "Secundario de 7 (por Y)", anchor: "n7i" }],
+      nodes: [
+        { id: "r9", value: 9, parent: null },
+        { id: "n4", value: 4, parent: "r9" },
+        { id: "n3i", value: 3, parent: "n4" },
+        { id: "l3", value: 3, parent: "n3i" },
+        { id: "l4", value: 4, parent: "n3i" },
+        { id: "n7i", value: 7, parent: "n4", state: "marked" },
+        { id: "l7", value: 7, parent: "n7i" },
+        { id: "l9", value: 9, parent: "n7i" },
+        { id: "n15", value: 15, parent: "r9" },
+        { id: "n13i", value: 13, parent: "n15" },
+        { id: "l13", value: 13, parent: "n13i" },
+        { id: "l15", value: 15, parent: "n13i" },
+        { id: "n18i", value: 18, parent: "n15" },
+        { id: "l18", value: 18, parent: "n18i" },
+        { id: "l27", value: 27, parent: "n18i" },
+        { id: "sec2_root", value: 6, parent: null, panel: "sec2", state: "marked" },
+        { id: "sec2_l6", value: 6, parent: "sec2_root", panel: "sec2", state: "idle" },
+        { id: "sec2_l11", value: 11, parent: "sec2_root", panel: "sec2", state: "idle" },
+      ],
+    },
+    {
+      note: "Con el separador armado, el árbol secundario de 7 queda completo — el puntero (línea curva) es la relación primario→secundario que build-2d formaliza. Y no es un privilegio del nodo 7: TODOS los nodos del primario (13, 15, la raíz completa) reciben su propio secundario de este modo, de abajo hacia arriba.",
+      highlight: ["sec2_root"],
+      panels: [{ id: "sec2", label: "Secundario de 7 (por Y)", anchor: "n7i" }],
+      nodes: [
+        { id: "r9", value: 9, parent: null },
+        { id: "n4", value: 4, parent: "r9" },
+        { id: "n3i", value: 3, parent: "n4" },
+        { id: "l3", value: 3, parent: "n3i" },
+        { id: "l4", value: 4, parent: "n3i" },
+        { id: "n7i", value: 7, parent: "n4", state: "answer" },
+        { id: "l7", value: 7, parent: "n7i" },
+        { id: "l9", value: 9, parent: "n7i" },
+        { id: "n15", value: 15, parent: "r9" },
+        { id: "n13i", value: 13, parent: "n15" },
+        { id: "l13", value: 13, parent: "n13i" },
+        { id: "l15", value: 15, parent: "n13i" },
+        { id: "n18i", value: 18, parent: "n15" },
+        { id: "l18", value: 18, parent: "n18i" },
+        { id: "l27", value: 27, parent: "n18i" },
+        { id: "sec2_root", value: 6, parent: null, panel: "sec2", state: "answer" },
+        { id: "sec2_l6", value: 6, parent: "sec2_root", panel: "sec2", state: "idle" },
+        { id: "sec2_l11", value: 11, parent: "sec2_root", panel: "sec2", state: "idle" },
+      ],
+      caption: "Cada nodo del primario en X cuelga su propio secundario en Y — el desarrollo completo está en build-2d.",
+    },
+  ],
+}} />
 
 ## Estructura interna
 
@@ -254,6 +308,63 @@ concentran todo el análisis:
   multiplicar "una consulta de $O(\log n)$ en $O(\log n)$ árboles" (#50). Repetir
   el argumento por cada dimensión adicional da $O(\log^d n + k)$ en consulta y
   $O(n \log^{d-1} n)$ en espacio (#56-57).
+
+**Generalización a d dimensiones**: la multiplicidad no se detiene en el
+secundario de Y — ese mismo árbol es, para la siguiente dimensión, un
+primario más, y CUALQUIERA de sus nodos puede colgar a su vez un tercer
+range tree (Z). Repetir esto una dimensión más es exactamente por qué el
+factor $O(\log n)$ se multiplica una vez por cada dimensión adicional.
+
+<Visualization viz={{
+  type: 'range-tree',
+  steps: [
+    {
+      note: "Este es el árbol secundario de 7 (por Y) de la sección anterior, ya completo — dos hojas, 6 y 11. Para esta idea, ÉL hace de primario: cada uno de sus nodos también puede colgar un árbol más, ahora por Z.",
+      highlight: [],
+      nodes: [
+        { id: "y_root", value: 6, parent: null },
+        { id: "y_l6", value: 6, parent: "y_root" },
+        { id: "y_l11", value: 11, parent: "y_root" },
+      ],
+    },
+    {
+      note: "Su raíz cubre los mismos 2 puntos, (9,6) y (7,11), sólo que ahora se los mira por su tercera componente, Z. Nada distingue a este nodo de un nodo cualquiera del árbol primario en X de la sección anterior — el mecanismo es el mismo, una dimensión más adentro.",
+      highlight: ["y_root"],
+      nodes: [
+        { id: "y_root", value: 6, parent: null, state: "active" },
+        { id: "y_l6", value: 6, parent: "y_root" },
+        { id: "y_l11", value: 11, parent: "y_root" },
+      ],
+    },
+    {
+      note: "Los mismos 2 puntos, reordenados ahora por Z: (9,6,2) a la izquierda, (7,11,5) a la derecha. El tercer árbol todavía no tiene separador — otra vez hojas sueltas, el mismo punto de partida que en Y.",
+      highlight: ["y_root"],
+      panels: [{ id: "sec3", label: "Tercera dimensión (Z)", anchor: "y_root" }],
+      nodes: [
+        { id: "y_root", value: 6, parent: null, state: "marked" },
+        { id: "y_l6", value: 6, parent: "y_root" },
+        { id: "y_l11", value: 11, parent: "y_root" },
+        { id: "sec3_root", value: "?", parent: null, panel: "sec3", state: "idle" },
+        { id: "sec3_l2", value: 2, parent: "sec3_root", panel: "sec3", state: "idle" },
+        { id: "sec3_l5", value: 5, parent: "sec3_root", panel: "sec3", state: "idle" },
+      ],
+    },
+    {
+      note: "Separador calculado (máximo del subárbol izquierdo, 2) y puntero trazado: el tercer nivel de anidamiento queda armado con el MISMO procedimiento que armó el segundo. Repetir esto d-1 veces — colgar una dimensión más de cada nodo — es de dónde salen $O(\\log^d n + k)$ en consulta y $O(n \\log^{d-1} n)$ en espacio: cada punto termina viviendo en $O(\\log n)$ árboles por cada dimensión más allá de la primera.",
+      highlight: ["sec3_root"],
+      panels: [{ id: "sec3", label: "Tercera dimensión (Z)", anchor: "y_root" }],
+      nodes: [
+        { id: "y_root", value: 6, parent: null, state: "answer" },
+        { id: "y_l6", value: 6, parent: "y_root" },
+        { id: "y_l11", value: 11, parent: "y_root" },
+        { id: "sec3_root", value: 2, parent: null, panel: "sec3", state: "answer" },
+        { id: "sec3_l2", value: 2, parent: "sec3_root", panel: "sec3", state: "idle" },
+        { id: "sec3_l5", value: 5, parent: "sec3_root", panel: "sec3", state: "idle" },
+      ],
+      caption: "X → Y → Z: mismo mecanismo, un nivel más — así se llega a d dimensiones.",
+    },
+  ],
+}} />
 
 El profesor cierra anunciando una mejora futura sin desarrollarla: "¿Es
 posible mejorarlo? Sí, se puede mejorar por un factor de $O(\log n)$ las

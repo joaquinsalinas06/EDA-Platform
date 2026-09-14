@@ -84,6 +84,7 @@ visualization:
         - { from: P, fromIndex: 4, to: R, toIndex: 2, active: false }
       caption: "centinela: puenteIzq[4]=2, puenteDer[4]=2 — una posición extra que apunta al final de cada hijo"
 ---
+import Visualization from '../../../src/components/Visualization.astro';
 
 ## ¿Qué problema resuelve?
 
@@ -158,6 +159,78 @@ binaria real en la raíz) = $O(\lg n)$ en total — un factor de $\lg n$ menos.
 El espacio no se re-deriva: el profesor lo afirma igual al del range tree
 ingenuo, $O(n \lg n)$, con el argumento de que un puente por elemento (en
 realidad dos: uno por hijo) no agrega memoria significativa.
+
+De dónde sale exactamente ese factor de $\lg n$ que desaparece: no es una
+propiedad distinta del árbol, es lo que pasa al bajar **un solo nivel**, del
+mismo nodo P al mismo hijo L del ejemplo de arriba, repetido con y sin
+puente.
+
+<Visualization viz={{
+  type: 'range-tree',
+  mode: 'layers',
+  steps: [
+    {
+      note: "Punto de partida, común a los dos casos: la única búsqueda real, en la raíz, ya encontró que 8 vive en la posición 2 de P. Falta bajar a L (donde está el subárbol izquierdo) y encontrar la posición equivalente ahí. Todavía no hay puentes dibujados — R queda idle, no participa de esta bajada.",
+      mode: 'layers',
+      arrays: [
+        { id: 'L', label: 'L', row: 1, slot: 'left', cells: [3, 8], states: ['idle', 'idle'] },
+        { id: 'R', label: 'R', row: 1, slot: 'right', cells: [5, 9], states: ['idle', 'idle'] },
+        { id: 'P', label: 'P', row: 0, cells: [3, 5, 8, 9], states: ['idle', 'idle', 'answer', 'idle'] },
+      ],
+    },
+    {
+      note: "SIN puentes: bajar a L exige una búsqueda binaria propia, que no reutiliza nada de la búsqueda que ya se hizo en la raíz. Primera comparación: mid=0 (valor 3) contra el objetivo 8 — 3<8, se descarta la mitad izquierda (aquí, un solo elemento).",
+      mode: 'layers',
+      arrays: [
+        { id: 'L', label: 'L', row: 1, slot: 'left', cells: [3, 8], states: ['active', 'idle'] },
+        { id: 'R', label: 'R', row: 1, slot: 'right', cells: [5, 9], states: ['idle', 'idle'] },
+        { id: 'P', label: 'P', row: 0, cells: [3, 5, 8, 9], states: ['idle', 'idle', 'answer', 'idle'] },
+      ],
+    },
+    {
+      note: "Se descarta la posición 0 (podada, ya no compite) y el valor 8 se encuentra en la posición 1 de L. En este ejemplo diminuto fue una sola comparación, pero es O(lg n) del tamaño de L — con un arreglo de tamaño n en vez de 2, son lg n comparaciones repetidas EN CADA nivel que se baja: O(lg n) por nivel × O(lg n) niveles = O(lg² n) total, exactamente el costo del range tree ingenuo.",
+      mode: 'layers',
+      arrays: [
+        { id: 'L', label: 'L', row: 1, slot: 'left', cells: [3, 8], states: ['muted', 'answer'] },
+        { id: 'R', label: 'R', row: 1, slot: 'right', cells: [5, 9], states: ['idle', 'idle'] },
+        { id: 'P', label: 'P', row: 0, cells: [3, 5, 8, 9], states: ['idle', 'idle', 'answer', 'idle'] },
+      ],
+      caption: 'sin puentes: O(lg n) — una búsqueda binaria nueva en L, aunque ya sabíamos qué buscar',
+    },
+    {
+      note: "CON puentes: mismo punto de partida — 8 ya localizado en la posición 2 de P — pero ahora existe el puente que el propio merge calculó al construir P (ver bridge-build): puenteIzq[2]=1. Todavía no se siguió; L sigue en reposo.",
+      mode: 'layers',
+      arrays: [
+        { id: 'L', label: 'L', row: 1, slot: 'left', cells: [3, 8], states: ['idle', 'idle'] },
+        { id: 'R', label: 'R', row: 1, slot: 'right', cells: [5, 9], states: ['idle', 'idle'] },
+        { id: 'P', label: 'P', row: 0, cells: [3, 5, 8, 9], states: ['idle', 'idle', 'answer', 'idle'] },
+      ],
+      bridges: [{ from: 'P', fromIndex: 2, to: 'L', toIndex: 1, active: false }],
+    },
+    {
+      note: "Seguir el puente es O(1): no hace falta mirar el valor 3 de la posición 0 ni comparar nada — se salta directo a la posición 1 de L, que ya es la respuesta. Cero comparaciones en este nivel: todo el trabajo de O(lg n) ocurrió una única vez, en la búsqueda real de la raíz.",
+      mode: 'layers',
+      arrays: [
+        { id: 'L', label: 'L', row: 1, slot: 'left', cells: [3, 8], states: ['idle', 'answer'] },
+        { id: 'R', label: 'R', row: 1, slot: 'right', cells: [5, 9], states: ['idle', 'idle'] },
+        { id: 'P', label: 'P', row: 0, cells: [3, 5, 8, 9], states: ['idle', 'idle', 'answer', 'idle'] },
+      ],
+      bridges: [{ from: 'P', fromIndex: 2, to: 'L', toIndex: 1, active: true }],
+      caption: 'con puentes: O(1) — el puente ya calculado reemplaza la búsqueda',
+    },
+    {
+      note: "Generalizando a un árbol con lg n niveles: SIN puentes, cada nivel cobra otra búsqueda binaria completa → O(lg n) por nivel × O(lg n) niveles = O(lg² n). CON puentes, cada nivel después de la raíz cobra O(1) → O(lg n) niveles × O(1) = O(lg n) total. Ese es, paso a paso, el factor de lg n que fractional cascading elimina.",
+      mode: 'layers',
+      arrays: [
+        { id: 'L', label: 'L', row: 1, slot: 'left', cells: [3, 8], states: ['idle', 'answer'] },
+        { id: 'R', label: 'R', row: 1, slot: 'right', cells: [5, 9], states: ['idle', 'idle'] },
+        { id: 'P', label: 'P', row: 0, cells: [3, 5, 8, 9], states: ['idle', 'idle', 'answer', 'idle'] },
+      ],
+      bridges: [{ from: 'P', fromIndex: 2, to: 'L', toIndex: 1, active: true }],
+      caption: 'total: O(lg² n) sin puentes vs. O(lg n) con puentes',
+    },
+  ],
+}} />
 
 ## Tabla de complejidad
 

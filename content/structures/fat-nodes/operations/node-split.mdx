@@ -132,6 +132,7 @@ visualization:
         - { id: port-a1, label: a1, to: n_new }
         - { id: port-a2, label: a2, to: n_new }
 ---
+import Visualization from '../../../../src/components/Visualization.astro';
 
 ## Qué hace
 
@@ -230,6 +231,119 @@ campo puntero pasa a apuntar a `n'` mediante una escritura en el propio
 `leerCampo(a1.puntero, valor, 4)` sigue devolviendo el valor de `n` (el
 viejo): el registro de `a1` guarda que, en `t < 5`, su puntero apuntaba a
 `n`.
+
+### ¿Y funcionó el split?
+
+*(Derivado de la descripción; no aparece en las diapositivas.)* El split
+no es un fin en sí mismo — existe para que la *siguiente* escritura sobre
+la misma clave vuelva a costar $O(1)$ real, sin disparar otro split
+inmediato. Eso sólo se ve siguiendo una escritura más, después del split
+del ejemplo anterior:
+
+<Visualization viz={{
+  type: 'persistent',
+  mode: 'fat-node',
+  steps: [
+    {
+      note: "Punto de partida: justo después del split anterior. n' arrancó con una sola entrada (valor=999, t=5) — su registro tiene 3 de las 4 entradas libres. n (viejo) sigue congelado, compartido con la versión anterior, sin punteros vigentes que lo alcancen.",
+      highlight: ["n_new"],
+      nodes: [
+        { id: "n_old", value: "n", state: "shared", fields: [
+          { name: "valor", value: 10, time: 1 },
+          { name: "valor", value: 20, time: 2 },
+          { name: "valor", value: 30, time: 3 },
+          { name: "valor", value: 40, time: 4 }
+        ] },
+        { id: "n_new", value: "n'", state: "idle", fields: [
+          { name: "valor", value: 999, time: 5 }
+        ] }
+      ],
+      ports: [
+        { id: "port-a1", label: "a1", to: "n_new" },
+        { id: "port-a2", label: "a2", to: "n_new" }
+      ]
+    },
+    {
+      note: "Llega otra escritura: escribirCampo(n', color, 'rojo', t=6). Antes de aplicarla se revisa la capacidad del registro de n': tiene 1 de 4 entradas ocupadas, así que sobra espacio — no hace falta ningún split nuevo.",
+      highlight: ["n_new"],
+      nodes: [
+        { id: "n_old", value: "n", state: "shared", fields: [
+          { name: "valor", value: 10, time: 1 },
+          { name: "valor", value: 20, time: 2 },
+          { name: "valor", value: 30, time: 3 },
+          { name: "valor", value: 40, time: 4 }
+        ] },
+        { id: "n_new", value: "n'", state: "active", fields: [
+          { name: "valor", value: 999, time: 5 }
+        ] }
+      ],
+      ports: [
+        { id: "port-a1", label: "a1", to: "n_new" },
+        { id: "port-a2", label: "a2", to: "n_new" }
+      ]
+    },
+    {
+      note: "Como cabe, la escritura se aplica directo sobre el registro de n': se agrega (color, rojo, 6) como segunda entrada. Ni n ni los punteros a1/a2 se tocan — no hay nodo nuevo, no hay redirección.",
+      highlight: ["n_new"],
+      nodes: [
+        { id: "n_old", value: "n", state: "shared", fields: [
+          { name: "valor", value: 10, time: 1 },
+          { name: "valor", value: 20, time: 2 },
+          { name: "valor", value: 30, time: 3 },
+          { name: "valor", value: 40, time: 4 }
+        ] },
+        { id: "n_new", value: "n'", state: "active", fields: [
+          { name: "valor", value: 999, time: 5 },
+          { name: "color", value: "rojo", time: 6 }
+        ] }
+      ],
+      ports: [
+        { id: "port-a1", label: "a1", to: "n_new" },
+        { id: "port-a2", label: "a2", to: "n_new" }
+      ]
+    },
+    {
+      note: "a1 y a2 no se redirigen esta vez: ya apuntaban a n' desde el split anterior, y siguen intactos. No hubo cascada — el split de antes ya \"compró\" el espacio que esta escritura necesitaba.",
+      highlight: ["port-a1", "port-a2"],
+      nodes: [
+        { id: "n_old", value: "n", state: "shared", fields: [
+          { name: "valor", value: 10, time: 1 },
+          { name: "valor", value: 20, time: 2 },
+          { name: "valor", value: 30, time: 3 },
+          { name: "valor", value: 40, time: 4 }
+        ] },
+        { id: "n_new", value: "n'", state: "idle", fields: [
+          { name: "valor", value: 999, time: 5 },
+          { name: "color", value: "rojo", time: 6 }
+        ] }
+      ],
+      ports: [
+        { id: "port-a1", label: "a1", to: "n_new" },
+        { id: "port-a2", label: "a2", to: "n_new" }
+      ]
+    },
+    {
+      note: "Confirmación: n' quedó con 2 de 4 entradas — todavía con margen antes de necesitar un split propio. Esta escritura costó O(1) real, no sólo amortizado: el split anterior ya había pagado por adelantado el espacio que hacía falta. Es justo lo que garantiza el análisis de potencial.",
+      highlight: ["n_new"],
+      nodes: [
+        { id: "n_old", value: "n", state: "shared", fields: [
+          { name: "valor", value: 10, time: 1 },
+          { name: "valor", value: 20, time: 2 },
+          { name: "valor", value: 30, time: 3 },
+          { name: "valor", value: 40, time: 4 }
+        ] },
+        { id: "n_new", value: "n'", state: "answer", fields: [
+          { name: "valor", value: 999, time: 5 },
+          { name: "color", value: "rojo", time: 6 }
+        ] }
+      ],
+      ports: [
+        { id: "port-a1", label: "a1", to: "n_new" },
+        { id: "port-a2", label: "a2", to: "n_new" }
+      ]
+    }
+  ]
+}} />
 
 ## Casos límite
 

@@ -192,6 +192,8 @@ visualization:
       caption: "dimensión k+1 (primario de este paso) → dimensión k+2 (panel) → ... → d"
 ---
 
+import Visualization from '../../../../src/components/Visualization.astro';
+
 ## Qué hace
 
 Extiende la construcción 2D a `d` dimensiones: "en cada uno de los árboles
@@ -225,6 +227,115 @@ detalla en el mazo — sólo la idea general en #52.)*
    dimensión 1 que, por cada subárbol canónico, dispara una consulta en la
    dimensión 2 sobre su range tree colgado, que a su vez dispara una en la
    dimensión 3, y así hasta la dimensión `d`.
+
+La visualización de arriba muestra cómo se CONSTRUYE el anidamiento
+(mezclar hacia arriba, colgar hacia adentro); el paso 4 describe algo
+distinto — la CASCADA de una consulta bajando por esas mismas dimensiones
+ya construidas:
+
+<Visualization viz={{
+  type: 'range-tree',
+  steps: [
+    {
+      note: "Consulta cascada en 3 niveles: en la dimensión k, la descomposición canónica de range-query-1d encuentra dk_n7 (hojas k=7, k=9) como subárbol canónico — el primer nivel de la cascada.",
+      highlight: ["dk_n7"],
+      nodes: [
+        { id: "dk_r", value: "k:9", parent: null },
+        { id: "dk_n4", value: "k:4", parent: "dk_r" },
+        { id: "dk_n3", value: "k:3", parent: "dk_n4" },
+        { id: "dk_l3", value: "k:3", parent: "dk_n3" },
+        { id: "dk_l4", value: "k:4", parent: "dk_n3" },
+        { id: "dk_n7", value: "k:7", parent: "dk_n4", state: "active" },
+        { id: "dk_l7", value: "k:7", parent: "dk_n7" },
+        { id: "dk_l9", value: "k:9", parent: "dk_n7" },
+        { id: "dk_n15", value: "k:15", parent: "dk_r" },
+        { id: "dk_n13", value: "k:13", parent: "dk_n15" },
+        { id: "dk_l13", value: "k:13", parent: "dk_n13" },
+        { id: "dk_l15", value: "k:15", parent: "dk_n13" },
+        { id: "dk_n18", value: "k:18", parent: "dk_n15" },
+        { id: "dk_l18", value: "k:18", parent: "dk_n18" },
+        { id: "dk_l27", value: "k:27", parent: "dk_n18" },
+      ],
+    },
+    {
+      note: "Ese subárbol canónico dispara, dentro de su secundario en k+1 ({a,b}), otra consulta 1D — la misma rutina de range-query-1d, ahora resuelta en la dimensión k+1.",
+      highlight: ["dk_n7"],
+      panels: [{ id: "casc1", label: "RangeQuery1D en k+1 (secundario de dk_n7)", anchor: "dk_n7" }],
+      nodes: [
+        { id: "dk_r", value: "k:9", parent: null },
+        { id: "dk_n4", value: "k:4", parent: "dk_r" },
+        { id: "dk_n3", value: "k:3", parent: "dk_n4" },
+        { id: "dk_l3", value: "k:3", parent: "dk_n3" },
+        { id: "dk_l4", value: "k:4", parent: "dk_n3" },
+        { id: "dk_n7", value: "k:7", parent: "dk_n4", state: "marked" },
+        { id: "dk_l7", value: "k:7", parent: "dk_n7" },
+        { id: "dk_l9", value: "k:9", parent: "dk_n7" },
+        { id: "dk_n15", value: "k:15", parent: "dk_r" },
+        { id: "dk_n13", value: "k:13", parent: "dk_n15" },
+        { id: "dk_l13", value: "k:13", parent: "dk_n13" },
+        { id: "dk_l15", value: "k:15", parent: "dk_n13" },
+        { id: "dk_n18", value: "k:18", parent: "dk_n15" },
+        { id: "dk_l18", value: "k:18", parent: "dk_n18" },
+        { id: "dk_l27", value: "k:27", parent: "dk_n18" },
+        { id: "s7_root", value: "a", parent: null, panel: "casc1", state: "idle" },
+        { id: "s7_leafA", value: "a", parent: "s7_root", panel: "casc1", state: "idle" },
+        { id: "s7_leafB", value: "b", parent: "s7_root", panel: "casc1", state: "idle" },
+      ],
+    },
+    {
+      note: "La descomposición canónica dentro de esa dimensión k+1 encuentra la hoja b como subárbol canónico — segundo nivel resuelto.",
+      highlight: ["s7_leafB"],
+      panels: [{ id: "casc1", label: "RangeQuery1D en k+1 (secundario de dk_n7)", anchor: "dk_n7" }],
+      nodes: [
+        { id: "dk_r", value: "k:9", parent: null },
+        { id: "dk_n4", value: "k:4", parent: "dk_r" },
+        { id: "dk_n3", value: "k:3", parent: "dk_n4" },
+        { id: "dk_l3", value: "k:3", parent: "dk_n3" },
+        { id: "dk_l4", value: "k:4", parent: "dk_n3" },
+        { id: "dk_n7", value: "k:7", parent: "dk_n4", state: "answer" },
+        { id: "dk_l7", value: "k:7", parent: "dk_n7" },
+        { id: "dk_l9", value: "k:9", parent: "dk_n7" },
+        { id: "dk_n15", value: "k:15", parent: "dk_r" },
+        { id: "dk_n13", value: "k:13", parent: "dk_n15" },
+        { id: "dk_l13", value: "k:13", parent: "dk_n13" },
+        { id: "dk_l15", value: "k:15", parent: "dk_n13" },
+        { id: "dk_n18", value: "k:18", parent: "dk_n15" },
+        { id: "dk_l18", value: "k:18", parent: "dk_n18" },
+        { id: "dk_l27", value: "k:27", parent: "dk_n18" },
+        { id: "s7_root", value: "a", parent: null, panel: "casc1", state: "marked" },
+        { id: "s7_leafA", value: "a", parent: "s7_root", panel: "casc1", state: "muted" },
+        { id: "s7_leafB", value: "b", parent: "s7_root", panel: "casc1", state: "answer" },
+      ],
+    },
+    {
+      note: "Cambio de escala: ahora la hoja b (recién encontrada) hace de raíz — es la que dispara, a su vez, la consulta en la dimensión k+2 sobre SU propio secundario ({b.1,b.2}). Tercer nivel de la cascada, mismo mecanismo que los dos anteriores.",
+      highlight: ["s7_leafB"],
+      panels: [{ id: "casc2", label: "RangeQuery1D en k+2 (secundario de b)", anchor: "s7_leafB" }],
+      nodes: [
+        { id: "s7_root", value: "a", parent: null },
+        { id: "s7_leafA", value: "a", parent: "s7_root" },
+        { id: "s7_leafB", value: "b", parent: "s7_root", state: "answer" },
+        { id: "p7_root", value: "b.1", parent: null, panel: "casc2", state: "idle" },
+        { id: "p7_leafA", value: "b.1", parent: "p7_root", panel: "casc2", state: "idle" },
+        { id: "p7_leafB", value: "b.2", parent: "p7_root", panel: "casc2", state: "idle" },
+      ],
+    },
+    {
+      note: "La descomposición canónica en k+2 resuelve al último nivel: la hoja b.1 queda dentro del rango, b.2 fuera. Tres consultas 1D encadenadas — k → k+1 → k+2 — cada una disparada por el subárbol canónico que encontró la anterior: exactamente la multiplicidad que explica O(log^d n + k) en la consulta.",
+      highlight: ["p7_leafA"],
+      panels: [{ id: "casc2", label: "RangeQuery1D en k+2 (secundario de b)", anchor: "s7_leafB" }],
+      nodes: [
+        { id: "s7_root", value: "a", parent: null },
+        { id: "s7_leafA", value: "a", parent: "s7_root" },
+        { id: "s7_leafB", value: "b", parent: "s7_root", state: "answer" },
+        { id: "p7_root", value: "b.1", parent: null, panel: "casc2", state: "marked" },
+        { id: "p7_leafA", value: "b.1", parent: "p7_root", panel: "casc2", state: "answer" },
+        { id: "p7_leafB", value: "b.2", parent: "p7_root", panel: "casc2", state: "muted" },
+      ],
+      caption: "Cascada k → k+1 → k+2 → ... → d: cada dimensión dispara la siguiente sobre su subárbol canónico.",
+    },
+  ],
+}} />
 
 ## Pseudocódigo
 
@@ -271,8 +382,8 @@ en Y, y cada nodo de ese secundario en Y cuelga, a su vez, un range tree en
 Z — tres niveles de anidamiento, tres consultas 1D encadenadas. La
 visualización de arriba muestra ese mecanismo con claves abstractas a...h:
 primero construye el secundario de dimensión k+1 de dos nodos hermanos
-(dk_n7 con {a,b}, dk_n3 con {c,d}) y luego los **mezcla**, sin
-reconstruirlos, en el secundario de su padre dk_n4 ({a,b,c,d}) — el mismo
+(dk_n7 con `{a,b}`, dk_n3 con `{c,d}`) y luego los **mezcla**, sin
+reconstruirlos, en el secundario de su padre dk_n4 (`{a,b,c,d}`) — el mismo
 "MezclarPorY" de build-2d, hasta completar el secundario de la raíz con los
 8 puntos. El último paso toma un nodo cualquiera de ese secundario de k+1 y
 le cuelga, a su vez, un range tree de dimensión k+2: la familia de

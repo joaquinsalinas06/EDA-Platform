@@ -105,6 +105,7 @@ visualization:
         - { from: Lp1, fromIndex: 3, to: Lp2, toIndex: 3, active: false }
       caption: "|L'1| + |L'2| + |L3| = 5 + 5 + 5 = 15 = O(n)"
 ---
+import Visualization from '../../../src/components/Visualization.astro';
 
 ## ¿Qué problema resuelve?
 
@@ -170,6 +171,98 @@ real en $L'_1$ cuesta $O(\lg n)$. Desde esa posición, seguir el puente más
 cercano hacia $L'_2$ cae a lo más $\pm 1$ posición de donde $x$ realmente iría —
 ajustar con $O(1)$ comparaciones. Repetir para bajar a $L'_3, \ldots, L_k$: $O(1)$
 cada uno. Total: $O(\lg n) + O(k) = O(k + \lg n)$.
+
+Lo que hace que ese $O(1)$ por nivel sea real (no una promesa) son las
+decisiones de promoción que ya tomó `build`: cada puente que la consulta baja
+existe porque `build` decidió, nivel por nivel, qué mitad promover. El
+siguiente recorrido usa $x = 12$ (distinto del $x = 9$ de
+[`query`](/structures/fractional-cascading/operations/query), que sí está en
+las tres listas) para mostrar el otro caso: qué pasa cuando el valor buscado
+**no** es uno de los elementos que `build` promovió desde $L_3$.
+
+<Visualization viz={{
+  type: 'range-tree',
+  mode: 'layers',
+  steps: [
+    {
+      note: "Punto de partida: la estructura que dejó build, con sus puentes intactos. 5 y 12 fueron promovidos de L2 a L'1 (build, paso 5); 9 y 18 fueron promovidos de L3 a L'2 (build, paso 4). Vamos a buscar x = 12 reusando exactamente esos puentes, sin reconstruir nada.",
+      mode: 'layers',
+      arrays: [
+        { id: 'L3', label: 'L3', row: 2, cells: [4, 9, 13, 18, 22] },
+        { id: 'Lp2', label: "L'2", row: 1, cells: [3, 5, 9, 12, 18], states: ['idle', 'idle', 'marked', 'idle', 'marked'] },
+        { id: 'Lp1', label: "L'1", row: 0, cells: [2, 5, 8, 12, 15], states: ['idle', 'marked', 'idle', 'marked', 'idle'] },
+      ],
+      bridges: [
+        { from: 'Lp1', fromIndex: 1, to: 'Lp2', toIndex: 1, active: false },
+        { from: 'Lp1', fromIndex: 3, to: 'Lp2', toIndex: 3, active: false },
+        { from: 'Lp2', fromIndex: 2, to: 'L3', toIndex: 1, active: false },
+        { from: 'Lp2', fromIndex: 4, to: 'L3', toIndex: 3, active: false },
+      ],
+      caption: 'buscar x = 12',
+    },
+    {
+      note: "Única búsqueda binaria cara del recorrido: en L'1, 12 no cae ENTRE dos elementos — coincide exacto con uno de los promovidos en build (posición 3). No es casualidad: build lo puso ahí precisamente para que la búsqueda de x = 12 termine aquí, con su puente ya armado hacia L'2.",
+      mode: 'layers',
+      arrays: [
+        { id: 'L3', label: 'L3', row: 2, cells: [4, 9, 13, 18, 22] },
+        { id: 'Lp2', label: "L'2", row: 1, cells: [3, 5, 9, 12, 18], states: ['idle', 'idle', 'marked', 'idle', 'marked'] },
+        { id: 'Lp1', label: "L'1", row: 0, cells: [2, 5, 8, 12, 15], states: ['idle', 'marked', 'idle', 'answer', 'idle'] },
+      ],
+      bridges: [
+        { from: 'Lp1', fromIndex: 1, to: 'Lp2', toIndex: 1, active: false },
+        { from: 'Lp1', fromIndex: 3, to: 'Lp2', toIndex: 3, active: false },
+        { from: 'Lp2', fromIndex: 2, to: 'L3', toIndex: 1, active: false },
+        { from: 'Lp2', fromIndex: 4, to: 'L3', toIndex: 3, active: false },
+      ],
+    },
+    {
+      note: "Bajar el puente de 12 (el que build armó al promoverlo) hacia L'2 cuesta O(1): aterriza exacto en la posición de 12 en L'2, que también está ahí — nació en L2, no en L3. Cero comparaciones extra, cero búsqueda binaria nueva.",
+      mode: 'layers',
+      arrays: [
+        { id: 'L3', label: 'L3', row: 2, cells: [4, 9, 13, 18, 22] },
+        { id: 'Lp2', label: "L'2", row: 1, cells: [3, 5, 9, 12, 18], states: ['idle', 'idle', 'marked', 'answer', 'marked'] },
+        { id: 'Lp1', label: "L'1", row: 0, cells: [2, 5, 8, 12, 15], states: ['idle', 'marked', 'idle', 'answer', 'idle'] },
+      ],
+      bridges: [
+        { from: 'Lp1', fromIndex: 1, to: 'Lp2', toIndex: 1, active: false },
+        { from: 'Lp1', fromIndex: 3, to: 'Lp2', toIndex: 3, active: true },
+        { from: 'Lp2', fromIndex: 2, to: 'L3', toIndex: 1, active: false },
+        { from: 'Lp2', fromIndex: 4, to: 'L3', toIndex: 3, active: false },
+      ],
+    },
+    {
+      note: "12 no tiene puente propio hacia L3: no es de los elementos que build promovió desde L3 (sólo 9 y 18 lo son). Se usa el puente del vecino promovido más cercano — 9, en la posición 2 — el mismo puente que build calculó al subir 9 de L3 a L'2. Seguirlo también cuesta O(1): sigue sin haber una segunda búsqueda binaria.",
+      mode: 'layers',
+      arrays: [
+        { id: 'L3', label: 'L3', row: 2, cells: [4, 9, 13, 18, 22] },
+        { id: 'Lp2', label: "L'2", row: 1, cells: [3, 5, 9, 12, 18], states: ['idle', 'idle', 'marked', 'answer', 'marked'] },
+        { id: 'Lp1', label: "L'1", row: 0, cells: [2, 5, 8, 12, 15], states: ['idle', 'marked', 'idle', 'answer', 'idle'] },
+      ],
+      bridges: [
+        { from: 'Lp1', fromIndex: 1, to: 'Lp2', toIndex: 1, active: false },
+        { from: 'Lp1', fromIndex: 3, to: 'Lp2', toIndex: 3, active: false },
+        { from: 'Lp2', fromIndex: 2, to: 'L3', toIndex: 1, active: true },
+        { from: 'Lp2', fromIndex: 4, to: 'L3', toIndex: 3, active: false },
+      ],
+    },
+    {
+      note: "Aterriza en L3, posición 1 (el 9 que traía el puente). Ajuste O(1): 12 cae entre 9 (posición 1) y 13 (posición 2) — no está en L3. Ambas posiciones se descartan tras la comparación. Dos niveles bajados, una sola búsqueda binaria real pagada (en L'1) — igual que cuando x sí aparece en las tres listas (ver query).",
+      mode: 'layers',
+      arrays: [
+        { id: 'L3', label: 'L3', row: 2, cells: [4, 9, 13, 18, 22], states: ['idle', 'muted', 'muted', 'idle', 'idle'] },
+        { id: 'Lp2', label: "L'2", row: 1, cells: [3, 5, 9, 12, 18], states: ['idle', 'idle', 'marked', 'answer', 'marked'] },
+        { id: 'Lp1', label: "L'1", row: 0, cells: [2, 5, 8, 12, 15], states: ['idle', 'marked', 'idle', 'answer', 'idle'] },
+      ],
+      bridges: [
+        { from: 'Lp1', fromIndex: 1, to: 'Lp2', toIndex: 1, active: false },
+        { from: 'Lp1', fromIndex: 3, to: 'Lp2', toIndex: 3, active: false },
+        { from: 'Lp2', fromIndex: 2, to: 'L3', toIndex: 1, active: false },
+        { from: 'Lp2', fromIndex: 4, to: 'L3', toIndex: 3, active: false },
+      ],
+      caption: 'x = 12 ∉ L3 — pero el costo sigue siendo O(k + lg n)',
+    },
+  ],
+}} />
 
 **Tamaño de `build`** — serie geométrica:
 

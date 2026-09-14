@@ -140,6 +140,8 @@ visualization:
         todos los nodos del primario, escalando con el tamaño del subárbol.
 ---
 
+import Visualization from '../../../../src/components/Visualization.astro';
+
 ## Qué hace
 
 Convierte el árbol de [build-1d](/structures/range-tree/operations/build-1d)
@@ -169,6 +171,149 @@ de los hijos, sin pseudocódigo.)*
    Y, como en mergesort) los árboles secundarios ya construidos de sus dos
    hijos — "cada range tree correspondiente a subárboles puede ser
    construido en $O(n)$ usando la información de sus dos hijos" (#54).
+
+Ese paso 2 — la mezcla — es el que de verdad construye cada secundario; el
+ejemplo de arriba muestra el resultado ya armado para tres nodos, pero no
+CÓMO se llega a él. Con node4 (cubre los puntos de node3 y node7):
+
+<Visualization viz={{
+  type: 'range-tree',
+  steps: [
+    {
+      note: "El secundario de node4 no se arma desde cero: se MEZCLA (por Y, como el paso de fusión de mergesort) los secundarios que sus dos hijos ya construyeron — node3 → {7,10} (por Y), node7 → {6,11}.",
+      highlight: ["n4"],
+      nodes: [
+        { id: "r9", value: 9, parent: null },
+        { id: "n4", value: 4, parent: "r9", state: "marked" },
+        { id: "n3i", value: 3, parent: "n4" },
+        { id: "p3", value: 10, parent: "n3i" },
+        { id: "p4", value: 7, parent: "n3i" },
+        { id: "n7i", value: 7, parent: "n4" },
+        { id: "p7", value: 11, parent: "n7i" },
+        { id: "p9", value: 6, parent: "n7i" },
+        { id: "n15", value: 15, parent: "r9" },
+        { id: "n13i", value: 13, parent: "n15" },
+        { id: "p13", value: 0, parent: "n13i" },
+        { id: "p15", value: -2, parent: "n13i" },
+        { id: "n18i", value: 18, parent: "n15" },
+        { id: "p18", value: 3, parent: "n18i" },
+        { id: "p27", value: 1, parent: "n18i" },
+      ],
+    },
+    {
+      note: "Intercalar {7,10} y {6,11} por Y da la secuencia 6,7,10,11 — igual que fusionar dos arreglos ordenados. Todavía son 4 hojas sueltas: el orden ya está resuelto, falta construir la forma de árbol encima.",
+      highlight: ["n4"],
+      panels: [{ id: "merge4", label: "Secundario de node4 (mezcla)", anchor: "n4" }],
+      nodes: [
+        { id: "r9", value: 9, parent: null },
+        { id: "n4", value: 4, parent: "r9", state: "marked" },
+        { id: "n3i", value: 3, parent: "n4" },
+        { id: "p3", value: 10, parent: "n3i" },
+        { id: "p4", value: 7, parent: "n3i" },
+        { id: "n7i", value: 7, parent: "n4" },
+        { id: "p7", value: 11, parent: "n7i" },
+        { id: "p9", value: 6, parent: "n7i" },
+        { id: "n15", value: 15, parent: "r9" },
+        { id: "n13i", value: 13, parent: "n15" },
+        { id: "p13", value: 0, parent: "n13i" },
+        { id: "p15", value: -2, parent: "n13i" },
+        { id: "n18i", value: 18, parent: "n15" },
+        { id: "p18", value: 3, parent: "n18i" },
+        { id: "p27", value: 1, parent: "n18i" },
+        { id: "b_l6", value: 6, parent: null, panel: "merge4", state: "idle" },
+        { id: "b_l7", value: 7, parent: null, panel: "merge4", state: "idle" },
+        { id: "b_l10", value: 10, parent: null, panel: "merge4", state: "idle" },
+        { id: "b_l11", value: 11, parent: null, panel: "merge4", state: "idle" },
+      ],
+    },
+    {
+      note: "Mitad derecha de la secuencia mezclada: separador 10 (máximo de su subárbol izquierdo, la hoja 10) agrupa {10,11} — exactamente build-1d, aplicado a estas dos hojas.",
+      highlight: ["b_right"],
+      panels: [{ id: "merge4", label: "Secundario de node4 (mezcla)", anchor: "n4" }],
+      nodes: [
+        { id: "r9", value: 9, parent: null },
+        { id: "n4", value: 4, parent: "r9", state: "marked" },
+        { id: "n3i", value: 3, parent: "n4" },
+        { id: "p3", value: 10, parent: "n3i" },
+        { id: "p4", value: 7, parent: "n3i" },
+        { id: "n7i", value: 7, parent: "n4" },
+        { id: "p7", value: 11, parent: "n7i" },
+        { id: "p9", value: 6, parent: "n7i" },
+        { id: "n15", value: 15, parent: "r9" },
+        { id: "n13i", value: 13, parent: "n15" },
+        { id: "p13", value: 0, parent: "n13i" },
+        { id: "p15", value: -2, parent: "n13i" },
+        { id: "n18i", value: 18, parent: "n15" },
+        { id: "p18", value: 3, parent: "n18i" },
+        { id: "p27", value: 1, parent: "n18i" },
+        { id: "b_l6", value: 6, parent: null, panel: "merge4", state: "idle" },
+        { id: "b_l7", value: 7, parent: null, panel: "merge4", state: "idle" },
+        { id: "b_right", value: 10, parent: null, panel: "merge4", state: "marked" },
+        { id: "b_l10", value: 10, parent: "b_right", panel: "merge4" },
+        { id: "b_l11", value: 11, parent: "b_right", panel: "merge4" },
+      ],
+    },
+    {
+      note: "Mitad izquierda, el mismo procedimiento: separador 6 agrupa {6,7}. Las dos mitades del secundario de node4 ya están armadas, todavía sin unir bajo una raíz común.",
+      highlight: ["b_left"],
+      panels: [{ id: "merge4", label: "Secundario de node4 (mezcla)", anchor: "n4" }],
+      nodes: [
+        { id: "r9", value: 9, parent: null },
+        { id: "n4", value: 4, parent: "r9", state: "marked" },
+        { id: "n3i", value: 3, parent: "n4" },
+        { id: "p3", value: 10, parent: "n3i" },
+        { id: "p4", value: 7, parent: "n3i" },
+        { id: "n7i", value: 7, parent: "n4" },
+        { id: "p7", value: 11, parent: "n7i" },
+        { id: "p9", value: 6, parent: "n7i" },
+        { id: "n15", value: 15, parent: "r9" },
+        { id: "n13i", value: 13, parent: "n15" },
+        { id: "p13", value: 0, parent: "n13i" },
+        { id: "p15", value: -2, parent: "n13i" },
+        { id: "n18i", value: 18, parent: "n15" },
+        { id: "p18", value: 3, parent: "n18i" },
+        { id: "p27", value: 1, parent: "n18i" },
+        { id: "b_left", value: 6, parent: null, panel: "merge4", state: "marked" },
+        { id: "b_l6", value: 6, parent: "b_left", panel: "merge4" },
+        { id: "b_l7", value: 7, parent: "b_left", panel: "merge4" },
+        { id: "b_right", value: 10, parent: null, panel: "merge4" },
+        { id: "b_l10", value: 10, parent: "b_right", panel: "merge4" },
+        { id: "b_l11", value: 11, parent: "b_right", panel: "merge4" },
+      ],
+    },
+    {
+      note: "La raíz une las dos mitades: guarda el máximo de la mitad izquierda, 7. Secundario de node4 completo — {6,7,10,11} — construido en O(4) mezclando lo que sus hijos ya tenían armado, sin reordenar nada desde cero.",
+      highlight: ["b_root"],
+      panels: [{ id: "merge4", label: "Secundario de node4 (mezcla)", anchor: "n4" }],
+      nodes: [
+        { id: "r9", value: 9, parent: null },
+        { id: "n4", value: 4, parent: "r9", state: "answer" },
+        { id: "n3i", value: 3, parent: "n4" },
+        { id: "p3", value: 10, parent: "n3i" },
+        { id: "p4", value: 7, parent: "n3i" },
+        { id: "n7i", value: 7, parent: "n4" },
+        { id: "p7", value: 11, parent: "n7i" },
+        { id: "p9", value: 6, parent: "n7i" },
+        { id: "n15", value: 15, parent: "r9" },
+        { id: "n13i", value: 13, parent: "n15" },
+        { id: "p13", value: 0, parent: "n13i" },
+        { id: "p15", value: -2, parent: "n13i" },
+        { id: "n18i", value: 18, parent: "n15" },
+        { id: "p18", value: 3, parent: "n18i" },
+        { id: "p27", value: 1, parent: "n18i" },
+        { id: "b_root", value: 7, parent: null, panel: "merge4", state: "answer" },
+        { id: "b_left", value: 6, parent: "b_root", panel: "merge4" },
+        { id: "b_l6", value: 6, parent: "b_left", panel: "merge4" },
+        { id: "b_l7", value: 7, parent: "b_left", panel: "merge4" },
+        { id: "b_right", value: 10, parent: "b_root", panel: "merge4" },
+        { id: "b_l10", value: 10, parent: "b_right", panel: "merge4" },
+        { id: "b_l11", value: 11, parent: "b_right", panel: "merge4" },
+      ],
+      caption: "Mezcla node3{7,10} + node7{6,11} → node4{6,7,10,11}, en O(4).",
+    },
+  ],
+}} />
+
 3. La hoja de un solo punto es, trivialmente, su propio árbol secundario de
    tamaño 1.
 

@@ -120,6 +120,8 @@ visualization:
         - { from: v1-70, to: v0-80, kind: shared }
 ---
 
+import Visualization from '../../../src/components/Visualization.astro';
+
 ## ¿Qué problema resuelve?
 
 Una estructura [persistente](/structures/persistence-levels) nunca muta un
@@ -149,6 +151,87 @@ El caso degenerado de la técnica es el stack como lista enlazada: ya es un
 del nodo nuevo — [Push](/structures/path-copying/operations/stack-push) es
 persistencia funcional en su forma más pura, sin necesitar llamarla
 "path copying" para verla.
+
+<Visualization viz={{
+  type: 'persistent',
+  steps: [
+    {
+      note: 'v0 es un stack persistente como lista enlazada: tope 3, luego 2, luego 1 (fondo). El puntero de tope de v0 apunta a v0-3; cada nodo apunta al siguiente hacia el fondo.',
+      highlight: [],
+      nodes: [
+        { id: 'v0-3', value: 3, parent: null },
+        { id: 'v0-2', value: 2, parent: 'v0-3' },
+        { id: 'v0-1', value: 1, parent: 'v0-2' },
+      ],
+    },
+    {
+      note: 'Push(4) sobre v0: no hace falta bajar nivel por nivel como en un árbol — el "camino" completo de la versión vieja es un solo nodo, v0-3, marcado como la frontera: todo lo que hay debajo de él (2 y 1 incluidos) se va a reutilizar entero, sin tocarlo.',
+      highlight: ['v0-3'],
+      nodes: [
+        { id: 'v0-3', value: 3, parent: null, state: 'marked' },
+        { id: 'v0-2', value: 2, parent: 'v0-3' },
+        { id: 'v0-1', value: 1, parent: 'v0-2' },
+      ],
+    },
+    {
+      note: 'Se crea un único nodo nuevo, 4, con su puntero "siguiente" apuntando directamente a v0-3: la versión vieja completa (3, 2 y 1) queda compartida de un solo salto, no copiada nodo por nodo.',
+      highlight: ['v1-4'],
+      versions: [
+        { id: 'v0', label: 'v0' },
+        { id: 'v1', label: 'v1' },
+      ],
+      nodes: [
+        { id: 'v0-3', value: 3, parent: null, version: 'v0', state: 'shared' },
+        { id: 'v0-2', value: 2, parent: 'v0-3', version: 'v0', state: 'shared' },
+        { id: 'v0-1', value: 1, parent: 'v0-2', version: 'v0', state: 'shared' },
+        { id: 'v1-4', value: 4, parent: null, version: 'v1', state: 'copied' },
+      ],
+      links: [
+        { from: 'v0-3', to: 'v0-2', kind: 'tree' },
+        { from: 'v0-2', to: 'v0-1', kind: 'tree' },
+        { from: 'v1-4', to: 'v0-3', kind: 'shared' },
+      ],
+    },
+    {
+      note: 'v1 completa: tope 4, y desde ahí la cadena entera de v0 (3, 2, 1) es alcanzable sin ninguna copia adicional. Un solo nodo nuevo, un solo puntero compartido — el costo de Push es O(1) exacto, no amortizado.',
+      highlight: ['v1-4', 'v0-3', 'v0-2', 'v0-1'],
+      versions: [
+        { id: 'v0', label: 'v0' },
+        { id: 'v1', label: 'v1' },
+      ],
+      nodes: [
+        { id: 'v0-3', value: 3, parent: null, version: 'v0', state: 'shared' },
+        { id: 'v0-2', value: 2, parent: 'v0-3', version: 'v0', state: 'shared' },
+        { id: 'v0-1', value: 1, parent: 'v0-2', version: 'v0', state: 'shared' },
+        { id: 'v1-4', value: 4, parent: null, version: 'v1', state: 'copied' },
+      ],
+      links: [
+        { from: 'v0-3', to: 'v0-2', kind: 'tree' },
+        { from: 'v0-2', to: 'v0-1', kind: 'tree' },
+        { from: 'v1-4', to: 'v0-3', kind: 'shared' },
+      ],
+    },
+    {
+      note: 'Estado final: 4 es el único nodo nuevo, marcado `answer`. v0 sigue intacta y consultable por su propio tope (v0-3) — Push no le agregó ni le quitó nada; sólo construyó, por fuera, un tope nuevo que la envuelve.',
+      highlight: ['v1-4'],
+      versions: [
+        { id: 'v0', label: 'v0' },
+        { id: 'v1', label: 'v1' },
+      ],
+      nodes: [
+        { id: 'v0-3', value: 3, parent: null, version: 'v0', state: 'shared' },
+        { id: 'v0-2', value: 2, parent: 'v0-3', version: 'v0', state: 'shared' },
+        { id: 'v0-1', value: 1, parent: 'v0-2', version: 'v0', state: 'shared' },
+        { id: 'v1-4', value: 4, parent: null, version: 'v1', state: 'answer' },
+      ],
+      links: [
+        { from: 'v0-3', to: 'v0-2', kind: 'tree' },
+        { from: 'v0-2', to: 'v0-1', kind: 'tree' },
+        { from: 'v1-4', to: 'v0-3', kind: 'shared' },
+      ],
+    },
+  ],
+}} />
 
 ## Estructura interna
 

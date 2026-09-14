@@ -79,6 +79,8 @@ visualization:
         - { id: op5, value: "op₅", parent: op4 }
 ---
 
+import Visualization from '../../../src/components/Visualization.astro';
+
 ## ¿Qué problema resuelve?
 
 Las dos técnicas anteriores de esta semana ([retroactividad conmutativa e
@@ -146,6 +148,90 @@ operación individual, con `r` = número de operaciones posteriores a `t` en
 el log; y el profesor da además una cota inferior $\Omega(r)$ que muestra que, en
 general, no se puede hacer mejor sin explotar alguna propiedad extra de la
 estructura.
+
+La cota $O(r)$ es sobre **una** llamada retroactiva. Pero el argumento
+amortizado es sobre una **secuencia**: no importa cuántas operaciones ya
+tenga el log — cada una costó $O(1)$ al construirse — el precio de meter un
+cambio en el medio no vuelve a tocar esas operaciones más que una vez cada
+una (una vez al deshacerlas, una vez al rehacerlas). El siguiente diagrama
+usa el ejemplo "Normal" de [examples.md](/structures/rollback-method/examples)
+(cuatro operaciones ya en el log, `Insert(t=2.5, +4)` con `r=2`) para llevar
+una cuenta corriente del costo a lo largo de toda la secuencia — construir el
+log, deshacer, aplicar, rehacer — y así anclar el reclamo amortizado en un
+número concreto en vez de sólo en la fórmula. El argumento completo, con la
+cota general y el caso peor `r ≈ m`, está en
+[amortized-cost](/structures/rollback-method/operations/amortized-cost).
+
+<Visualization viz={{
+  type: 'persistent',
+  steps: [
+    {
+      note: 'Secuencia de m=4 operaciones ya aplicadas en orden (ejemplo "Normal" de examples.md): +5, −2, +10, +1. Cada aplicación cuesta O(1) individual — el costo acumulado de construir el log es 4.',
+      caption: 'log construido, costo acumulado = 4',
+      nodes: [
+        { id: 't1', value: '+5', parent: null },
+        { id: 't2', value: '−2', parent: 't1' },
+        { id: 't3', value: '+10', parent: 't2' },
+        { id: 't4', value: '+1', parent: 't3' },
+      ],
+    },
+    {
+      note: 'Se pide Insert(t=2.5, +4). Quedan marcadas las r=2 operaciones posteriores a t (+10 y +1) — las únicas que la modificación retroactiva va a tocar; nada del costo acumulado de construir el log se repite.',
+      caption: 'frontera en t=2.5 — marcar r=2',
+      highlight: ['t3', 't4'],
+      nodes: [
+        { id: 't1', value: '+5', parent: null },
+        { id: 't2', value: '−2', parent: 't1' },
+        { id: 't3', value: '+10', parent: 't2', state: 'marked' },
+        { id: 't4', value: '+1', parent: 't3', state: 'marked' },
+      ],
+    },
+    {
+      note: 'Deshacer (rollback) las r=2 marcadas, en orden inverso: primero +1, luego +10. Costo += 2 → acumulado 4+2=6.',
+      caption: 'deshacer r=2 → acumulado = 6',
+      highlight: ['t3', 't4'],
+      nodes: [
+        { id: 't1', value: '+5', parent: null },
+        { id: 't2', value: '−2', parent: 't1' },
+        { id: 't3', value: '+10', parent: 't2', state: 'muted' },
+        { id: 't4', value: '+1', parent: 't3', state: 'muted' },
+      ],
+    },
+    {
+      note: 'Aplicar el cambio pedido, +4, sobre el log ya rebobinado hasta justo antes de t=2.5. Costo += 1 → acumulado 6+1=7.',
+      caption: 'aplicar +4 → acumulado = 7',
+      highlight: ['t25'],
+      nodes: [
+        { id: 't1', value: '+5', parent: null },
+        { id: 't2', value: '−2', parent: 't1' },
+        { id: 't25', value: '+4', parent: 't2', state: 'active' },
+      ],
+    },
+    {
+      note: 'Rehacer (replay) las mismas r=2 operaciones, en el mismo orden original: +10, luego +1. Costo += 2 → acumulado final 7+2=9.',
+      caption: 'rehacer r=2 → acumulado = 9',
+      highlight: ['t3', 't4'],
+      nodes: [
+        { id: 't1', value: '+5', parent: null },
+        { id: 't2', value: '−2', parent: 't1' },
+        { id: 't25', value: '+4', parent: 't2', state: 'active' },
+        { id: 't3', value: '+10', parent: 't25', state: 'copied' },
+        { id: 't4', value: '+1', parent: 't3', state: 'copied' },
+      ],
+    },
+    {
+      note: 'Sobre esta secuencia de m+1=5 operaciones en el log, el costo total tocado fue 4 (construir) + 5 (2r+1 de la retroactiva) = 9 — no O(r) repetido por cada operación del log, sino una sola vez por operación tocada. Ese es el reclamo amortizado: repartido sobre toda la secuencia, el costo por operación se mantiene acotado salvo que t caiga sistemáticamente cerca del principio (r ≈ m, el peor caso — ver amortized-cost).',
+      caption: 'costo total = 9 sobre 5 operaciones — argumento completo en amortized-cost',
+      nodes: [
+        { id: 't1', value: '+5', parent: null },
+        { id: 't2', value: '−2', parent: 't1' },
+        { id: 't25', value: '+4', parent: 't2' },
+        { id: 't3', value: '+10', parent: 't25' },
+        { id: 't4', value: '+1', parent: 't3' },
+      ],
+    },
+  ],
+}} />
 
 ## Tabla de complejidad
 

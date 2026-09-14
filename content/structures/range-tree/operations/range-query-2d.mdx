@@ -148,10 +148,12 @@ visualization:
       caption: "[5,16] × [-3,8] → {(9,6), (13,0), (15,-2)}"
 ---
 
-<!-- El profesor da la complejidad y la intuición ("una consulta de O(log n)
+import Visualization from '../../../../src/components/Visualization.astro';
+
+{/* El profesor da la complejidad y la intuición ("una consulta de O(log n)
      en O(log n) árboles", #50) pero nunca el procedimiento paso a paso —
      está entre los huecos que señala el análisis. Todo lo de abajo,
-     incluida la mecánica exacta, es derivado. -->
+     incluida la mecánica exacta, es derivado. */}
 
 ## Qué hace
 
@@ -179,6 +181,94 @@ complejidad y la intuición general.)*
    `RangeQuery1D(s.secundario, y1, y2)` sobre su árbol secundario en Y, y
    combinar los resultados (existencia: basta uno no vacío; conteo: sumar;
    enumeración: concatenar).
+
+La visualización de arriba muestra el RESULTADO de ese paso 2 sobre el
+secundario de 7 (incluye/excluye), pero no el CÓMO: `RangeQuery1D` en el
+secundario es la misma rutina de
+[range-query-1d](/structures/range-tree/operations/range-query-1d) —
+predecessor/successor y descomposición canónica — aplicada ahora en Y.
+
+<Visualization viz={{
+  type: 'range-tree',
+  steps: [
+    {
+      note: "Sobre el subárbol canónico 7 (hojas 7, 9 en X), el paso 2 llama RangeQuery1D(secundario, -3, 8) — la misma rutina de range-query-1d, ahora sobre el árbol en Y de ese subárbol.",
+      highlight: ["n7i"],
+      panels: [{ id: "secY7b", label: "RangeQuery1D en Y, secundario de 7", anchor: "n7i" }],
+      nodes: [
+        { id: "r9", value: 9, parent: null },
+        { id: "n4", value: 4, parent: "r9" },
+        { id: "n3i", value: 3, parent: "n4" },
+        { id: "p3", value: 10, parent: "n3i" },
+        { id: "p4", value: 7, parent: "n3i" },
+        { id: "n7i", value: 7, parent: "n4", state: "active" },
+        { id: "p7", value: 11, parent: "n7i" },
+        { id: "p9", value: 6, parent: "n7i" },
+        { id: "n15", value: 15, parent: "r9" },
+        { id: "n13i", value: 13, parent: "n15" },
+        { id: "p13", value: 0, parent: "n13i" },
+        { id: "p15", value: -2, parent: "n13i" },
+        { id: "n18i", value: 18, parent: "n15" },
+        { id: "p18", value: 3, parent: "n18i" },
+        { id: "p27", value: 1, parent: "n18i" },
+        { id: "secY7b_root", value: 6, parent: null, panel: "secY7b", state: "idle" },
+        { id: "secY7b_p9", value: 6, parent: "secY7b_root", panel: "secY7b", state: "idle" },
+        { id: "secY7b_p7", value: 11, parent: "secY7b_root", panel: "secY7b", state: "idle" },
+      ],
+    },
+    {
+      note: "Predecessor(-3) no existe: ningún punto de este secundario es menor que -3, así que el límite izquierdo es 'antes de la primera hoja'. Successor(8) = la hoja Y=11: el primer punto que se sale del rango por arriba — el mismo rol que Predecessor/Successor cumplen en X, ahora en Y.",
+      highlight: ["secY7b_p7"],
+      panels: [{ id: "secY7b", label: "RangeQuery1D en Y, secundario de 7", anchor: "n7i" }],
+      nodes: [
+        { id: "r9", value: 9, parent: null },
+        { id: "n4", value: 4, parent: "r9" },
+        { id: "n3i", value: 3, parent: "n4" },
+        { id: "p3", value: 10, parent: "n3i" },
+        { id: "p4", value: 7, parent: "n3i" },
+        { id: "n7i", value: 7, parent: "n4", state: "marked" },
+        { id: "p7", value: 11, parent: "n7i" },
+        { id: "p9", value: 6, parent: "n7i" },
+        { id: "n15", value: 15, parent: "r9" },
+        { id: "n13i", value: 13, parent: "n15" },
+        { id: "p13", value: 0, parent: "n13i" },
+        { id: "p15", value: -2, parent: "n13i" },
+        { id: "n18i", value: 18, parent: "n15" },
+        { id: "p18", value: 3, parent: "n18i" },
+        { id: "p27", value: 1, parent: "n18i" },
+        { id: "secY7b_root", value: 6, parent: null, panel: "secY7b", state: "idle" },
+        { id: "secY7b_p9", value: 6, parent: "secY7b_root", panel: "secY7b", state: "idle" },
+        { id: "secY7b_p7", value: 11, parent: "secY7b_root", panel: "secY7b", state: "marked" },
+      ],
+    },
+    {
+      note: "Descomposición canónica en Y: al no haber predecessor, el único subárbol canónico que queda dentro de [-3,8] es la hoja Y=6 sola — ninguna arista se cruza a la izquierda de ella.",
+      highlight: ["secY7b_p9"],
+      panels: [{ id: "secY7b", label: "RangeQuery1D en Y, secundario de 7", anchor: "n7i" }],
+      nodes: [
+        { id: "r9", value: 9, parent: null },
+        { id: "n4", value: 4, parent: "r9" },
+        { id: "n3i", value: 3, parent: "n4" },
+        { id: "p3", value: 10, parent: "n3i" },
+        { id: "p4", value: 7, parent: "n3i" },
+        { id: "n7i", value: 7, parent: "n4", state: "marked" },
+        { id: "p7", value: 11, parent: "n7i" },
+        { id: "p9", value: 6, parent: "n7i" },
+        { id: "n15", value: 15, parent: "r9" },
+        { id: "n13i", value: 13, parent: "n15" },
+        { id: "p13", value: 0, parent: "n13i" },
+        { id: "p15", value: -2, parent: "n13i" },
+        { id: "n18i", value: 18, parent: "n15" },
+        { id: "p18", value: 3, parent: "n18i" },
+        { id: "p27", value: 1, parent: "n18i" },
+        { id: "secY7b_root", value: 6, parent: null, panel: "secY7b", state: "idle" },
+        { id: "secY7b_p9", value: 6, parent: "secY7b_root", panel: "secY7b", state: "answer" },
+        { id: "secY7b_p7", value: 11, parent: "secY7b_root", panel: "secY7b", state: "muted" },
+      ],
+      caption: "RangeQuery1D(secundario de 7, -3, 8) = {Y=6} → (9,6). Mismo resultado que la visualización de arriba, ahora mostrando el predecessor/successor y la descomposición canónica que lo producen.",
+    },
+  ],
+}} />
 
 ## Pseudocódigo
 

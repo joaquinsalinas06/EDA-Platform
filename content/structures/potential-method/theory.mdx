@@ -54,6 +54,7 @@ visualization:
       nodes:
         - { id: phi, value: 6, state: active }
 ---
+import Visualization from '../../../src/components/Visualization.astro';
 
 ## ¿Qué problema resuelve?
 
@@ -160,8 +161,91 @@ $$
 
 es decir, la suma de costos amortizados es una cota superior válida de la
 suma de costos reales — que es exactamente lo que se necesita para acotar el
-costo total de una secuencia de operaciones. Nótese que esto funciona para
-*cualquier* $\Phi$ que cumpla la condición: elegir un buen $\Phi$ (uno que cancele
+costo total de una secuencia de operaciones.
+
+La telescópica es álgebra abstracta; esto es lo mismo con números concretos,
+acumulando $\Sigma c$ (costo real) y $\Sigma\hat{c}$ (costo amortizado) operación
+por operación, sobre un montículo de Fibonacci que arranca vacío (a
+diferencia del ejemplo de arriba, que partía de un estado ya derivado a
+mitad de secuencia):
+
+<Visualization viz={{
+  type: 'tree',
+  steps: [
+    {
+      note: 'D0: montículo vacío. t=0 árboles, m=0 nodos marcados ⇒ Φ(D0)=0. Arrancan también los acumuladores: Σc (costo real sumado) y Σĉ (costo amortizado sumado), ambos en 0 — todavía no corrió ninguna operación.',
+      caption: 'Φ(D₀)=t+2m=0   Σc=0   Σĉ=0',
+      nodes: [
+        { id: 'phi', value: 0 },
+        { id: 'sc', value: 0 },
+        { id: 'shat', value: 0 },
+      ],
+    },
+    {
+      note: 'Insert: costo real c₁=1 (agrega un árbol de un nodo). t:0→1, m sigue en 0 ⇒ Φ(D1)=1. ΔΦ=1−0=1: sube porque Insert prepaga crédito futuro. ĉ₁=c₁+ΔΦ=1+1=2. Los acumuladores suben cada uno lo que les toca.',
+      caption: 'Insert   c₁=1   ΔΦ=1−0=1   ĉ₁=2   Σc=0+1=1   Σĉ=0+2=2',
+      highlight: ['phi', 'sc', 'shat'],
+      nodes: [
+        { id: 'phi', value: 1, state: 'active' },
+        { id: 'sc', value: 1, state: 'active' },
+        { id: 'shat', value: 2, state: 'active' },
+      ],
+    },
+    {
+      note: 'Union con un montículo vacío (misma simplificación que en el diagrama de arriba): sólo concatena listas de raíces, t y m no cambian ⇒ Φ(D2)=1 sigue igual, ΔΦ=0. c₂=1, ĉ₂=1+0=1: el costo amortizado coincide con el real, no hay nada que prepagar ni cobrar.',
+      caption: 'Union   c₂=1   ΔΦ=1−1=0   ĉ₂=1   Σc=1+1=2   Σĉ=2+1=3',
+      highlight: ['sc', 'shat'],
+      nodes: [
+        { id: 'phi', value: 1 },
+        { id: 'sc', value: 2, state: 'active' },
+        { id: 'shat', value: 3, state: 'active' },
+      ],
+    },
+    {
+      note: 'Decrease-Key que sólo marca un nodo (sin disparar corte todavía): c₃=1. t sigue en 1, m:0→1 ⇒ Φ(D3)=1+2·1=3. ΔΦ=3−1=+2: el término 2m guarda crédito para el corte que ese nodo marcado va a necesitar más adelante. ĉ₃=1+2=3.',
+      caption: 'Decrease-Key (marca)   c₃=1   ΔΦ=3−1=2   ĉ₃=3   Σc=2+1=3   Σĉ=3+3=6',
+      highlight: ['phi', 'sc', 'shat'],
+      nodes: [
+        { id: 'phi', value: 3, state: 'active' },
+        { id: 'sc', value: 3, state: 'active' },
+        { id: 'shat', value: 6, state: 'active' },
+      ],
+    },
+    {
+      note: 'Ese mismo nodo se corta en cascada: pasa a ser raíz nueva (t:1→2) y se desmarca (m:1→0). Φ(D4)=2+2·0=2. ΔΦ=2−3=−1: cae exactamente lo que el paso anterior había prepagado. c₄=O(1)=1 (un solo corte). ĉ₄=1+(−1)=0: el crédito guardado paga el corte entero, esta operación no le cuesta nada a la cota amortizada.',
+      caption: 'Decrease-Key (corte)   c₄=1   ΔΦ=2−3=−1   ĉ₄=0   Σc=3+1=4   Σĉ=6+0=6',
+      highlight: ['phi', 'sc'],
+      nodes: [
+        { id: 'phi', value: 2, state: 'active' },
+        { id: 'sc', value: 4, state: 'active' },
+        { id: 'shat', value: 6 },
+      ],
+    },
+    {
+      note: 'Extract-Min con Consolidate: hay t=2 raíces antes de fusionar, y Consolidate las visita todas (c₅=O(t)=2), dejando t=1, m=0 ⇒ Φ(D5)=1. ΔΦ=1−2=−1. ĉ₅=2+(−1)=1.',
+      caption: 'Extract-Min   c₅=2   ΔΦ=1−2=−1   ĉ₅=1   Σc=4+2=6   Σĉ=6+1=7',
+      highlight: ['phi', 'sc', 'shat'],
+      nodes: [
+        { id: 'phi', value: 1, state: 'active' },
+        { id: 'sc', value: 6, state: 'active' },
+        { id: 'shat', value: 7, state: 'active' },
+      ],
+    },
+    {
+      note: 'Verificación final sobre la secuencia completa: Σĉ=7 ≥ Σc=6, y en efecto Φ(D5)=1 ≥ Φ(D0)=0 — se cumple la condición de validez, así que la telescópica garantiza que la cota amortizada acotó por arriba el costo real, tal como predice el álgebra de arriba.',
+      caption: 'Σĉ=7 ≥ Σc=6   Φ(D₅)=1 ≥ Φ(D₀)=0 ⇒ condición de validez cumplida',
+      highlight: ['check'],
+      nodes: [
+        { id: 'phi', value: 1 },
+        { id: 'sc', value: 6 },
+        { id: 'shat', value: 7 },
+        { id: 'check', value: 'Σĉ≥Σc ✓', state: 'answer' },
+      ],
+    },
+  ],
+}} />
+
+Nótese que esto funciona para *cualquier* $\Phi$ que cumpla la condición: elegir un buen $\Phi$ (uno que cancele
 los términos costosos, como $2 \cdot m(H)$ cancela los cortes en cascada) es lo que
 hace que la cota amortizada resultante sea ajustada y útil, no sólo válida.
 

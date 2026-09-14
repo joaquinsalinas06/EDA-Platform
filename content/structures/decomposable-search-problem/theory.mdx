@@ -64,6 +64,7 @@ visualization:
         - { id: e1, value: 1, parent: a, state: muted }
         - { id: e3, value: 3, parent: b, state: muted }
 ---
+import Visualization from '../../../src/components/Visualization.astro';
 
 ## ¿Qué problema resuelve?
 
@@ -118,6 +119,83 @@ Cuatro ejemplos que el profesor da como descomponibles, con su `f`
 descomponibles: $f = \min, \max, +, \vee$, respectivamente." Ver la operación
 [Decomposability](/structures/decomposable-search-problem/operations/decomposability)
 para el detalle de esta condición, sus ejemplos y su contraejemplo.
+
+El punto que vale la pena ver dibujado dos veces es que `f` cambia con el
+problema — el diagrama de arriba usa $f = \min$; éste usa $f = \vee$
+(existencia) sobre el mismo mecanismo, para que quede claro que la condición
+no está atada a una sola función de combinación:
+
+<Visualization viz={{
+  type: 'tree',
+  steps: [
+    {
+      note: 'S = {2,7,10,13} con la propiedad P = "es múltiplo de 5". Partición S = A ∪ B, con A = {2,7} y B = {10,13} — arbitraria, como exige la definición.',
+      highlight: ['a', 'b'],
+      nodes: [
+        { id: 's', value: 'S', parent: null, state: 'idle' },
+        { id: 'a', value: 'A', parent: 's', state: 'marked' },
+        { id: 'b', value: 'B', parent: 's', state: 'marked' },
+        { id: 'e2', value: 2, parent: 'a', state: 'idle' },
+        { id: 'e7', value: 7, parent: 'a', state: 'idle' },
+        { id: 'e10', value: 10, parent: 'b', state: 'idle' },
+        { id: 'e13', value: 13, parent: 'b', state: 'idle' },
+      ],
+    },
+    {
+      note: 'Query(x, A) = existe(A) = falso: ni 2 ni 7 son múltiplos de 5. Se revisan sólo los elementos de A.',
+      highlight: ['a', 'e2', 'e7'],
+      nodes: [
+        { id: 's', value: 'S', parent: null, state: 'idle' },
+        { id: 'a', value: 'A → existe=falso', parent: 's', state: 'active' },
+        { id: 'b', value: 'B', parent: 's', state: 'idle' },
+        { id: 'e2', value: 2, parent: 'a', state: 'active' },
+        { id: 'e7', value: 7, parent: 'a', state: 'active' },
+        { id: 'e10', value: 10, parent: 'b', state: 'idle' },
+        { id: 'e13', value: 13, parent: 'b', state: 'idle' },
+      ],
+    },
+    {
+      note: 'Query(x, B) = existe(B) = cierto: 10 es múltiplo de 5. A ya respondió y no se vuelve a mirar.',
+      highlight: ['b', 'e10'],
+      nodes: [
+        { id: 's', value: 'S', parent: null, state: 'idle' },
+        { id: 'a', value: 'A → existe=falso', parent: 's', state: 'shared' },
+        { id: 'b', value: 'B → existe=cierto', parent: 's', state: 'active' },
+        { id: 'e2', value: 2, parent: 'a', state: 'muted' },
+        { id: 'e7', value: 7, parent: 'a', state: 'muted' },
+        { id: 'e10', value: 10, parent: 'b', state: 'active' },
+        { id: 'e13', value: 13, parent: 'b', state: 'muted' },
+      ],
+    },
+    {
+      note: 'f = ∨ combina los dos resúmenes en O(1): f(falso, cierto) = cierto — sin volver a mirar ningún elemento original de A ni de B.',
+      highlight: ['s'],
+      nodes: [
+        { id: 's', value: 'f(existe(A), existe(B))', parent: null, state: 'active' },
+        { id: 'a', value: 'A → existe=falso', parent: 's', state: 'shared' },
+        { id: 'b', value: 'B → existe=cierto', parent: 's', state: 'shared' },
+        { id: 'e2', value: 2, parent: 'a', state: 'muted' },
+        { id: 'e7', value: 7, parent: 'a', state: 'muted' },
+        { id: 'e10', value: 10, parent: 'b', state: 'muted' },
+        { id: 'e13', value: 13, parent: 'b', state: 'muted' },
+      ],
+    },
+    {
+      note: 'existe(S) = cierto: la misma mecánica de mín en O(1) por combinación funciona igual con ∨ como f, sin cambiar nada de la estructura.',
+      highlight: ['s'],
+      caption: 'existe(S) = cierto = f(existe(A), existe(B))',
+      nodes: [
+        { id: 's', value: 'existe(S)=cierto', parent: null, state: 'answer' },
+        { id: 'a', value: 'A → existe=falso', parent: 's', state: 'shared' },
+        { id: 'b', value: 'B → existe=cierto', parent: 's', state: 'shared' },
+        { id: 'e2', value: 2, parent: 'a', state: 'muted' },
+        { id: 'e7', value: 7, parent: 'a', state: 'muted' },
+        { id: 'e10', value: 10, parent: 'b', state: 'muted' },
+        { id: 'e13', value: 13, parent: 'b', state: 'muted' },
+      ],
+    },
+  ],
+}} />
 
 Dado un problema que sí cumple la condición, la construcción es (página
 34-35):

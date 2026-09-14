@@ -87,6 +87,8 @@ visualization:
         - { id: t5, value: "del-min -> quita 3", parent: t4, state: shared }
 ---
 
+import Visualization from '../../../src/components/Visualization.astro';
+
 ## ¿Qué problema resuelve?
 
 Una [priority queue / montículo](/structures/binary-heap) soporta `Insert(k)`
@@ -115,6 +117,72 @@ cuál es ese elemento, es todo el problema — y ahí es donde entra el
 **puente**: un instante donde la cola "se corta limpio" y nada de lo que
 sobrevivió hasta ese punto puede haber sido eliminado después. El puente
 más cercano acota exactamente cuánto pasado hay que mirar.
+
+Lo que un puente da, en concreto, es evitar recorrer el historial para
+saber qué había en la cola en cierto instante: si ese instante es un
+puente, su contenido se conoce de una — no hace falta reproducir las
+operaciones anteriores para confirmarlo.
+
+<Visualization viz={{
+  type: 'persistent',
+  steps: [
+    {
+      note: 'Historial: ins(6) en t=1, ins(3) en t=2, del-min en t=3 (quita 3, sobrevive 6), ins(9) en t=4. Éste es el resultado de aplicar todo en orden — Q_ahora, el único estado que existe sin retroactividad de por medio.',
+      caption: 'Q_ahora = {6, 9}',
+      highlight: [],
+      nodes: [
+        { id: 't1', value: 'ins(6)', parent: null },
+        { id: 't2', value: 'ins(3)', parent: 't1' },
+        { id: 't3', value: 'del-min -> quita 3', parent: 't2' },
+        { id: 't4', value: 'ins(9)', parent: 't3' },
+      ],
+    },
+    {
+      note: 'Se prueba t=3 como candidato a puente: justo después del del-min, Q_3 = {6}. La pregunta es si {6} ⊆ Q_ahora = {6,9} — si todo lo que había en t=3 sigue vivo ahora.',
+      caption: 'Q_3 = {6} — ¿es puente?',
+      highlight: ['t3'],
+      nodes: [
+        { id: 't1', value: 'ins(6)', parent: null },
+        { id: 't2', value: 'ins(3)', parent: 't1' },
+        { id: 't3', value: 'del-min -> Q_3 = {6}', parent: 't2', state: 'marked' },
+        { id: 't4', value: 'ins(9)', parent: 't3' },
+      ],
+    },
+    {
+      note: 'Sí lo es: {6} ⊆ {6,9}. A partir de aquí, t=3 queda confirmado como puente — su contenido, {6}, es conocido y confiable sin volver a mirar t=1 ni t=2. Lo anterior al puente deja de importar para responder nada sobre el presente.',
+      caption: 't=3 confirmado como puente: Q_3 = {6} es conocido de una',
+      highlight: ['t3'],
+      nodes: [
+        { id: 't1', value: 'ins(6)', parent: null, state: 'muted' },
+        { id: 't2', value: 'ins(3)', parent: 't1', state: 'muted' },
+        { id: 't3', value: 'del-min -> Q_3 = {6}', parent: 't2', state: 'answer' },
+        { id: 't4', value: 'ins(9)', parent: 't3' },
+      ],
+    },
+    {
+      note: 'Sin el puente, confirmar el contenido de t=3 exigiría reproducir la cadena entera desde el inicio: aplicar t1, t2 y t3 en orden, uno por uno, para reconstruir Q_3 desde cero. Es el costo O(r) que el puente evita.',
+      caption: 'sin puente: reproducir t1, t2, t3 desde cero para reconstruir Q_3',
+      highlight: ['t1', 't2', 't3'],
+      nodes: [
+        { id: 't1', value: 'ins(6)', parent: null, state: 'active' },
+        { id: 't2', value: 'ins(3)', parent: 't1', state: 'active' },
+        { id: 't3', value: 'del-min -> Q_3 = {6}', parent: 't2', state: 'active' },
+        { id: 't4', value: 'ins(9)', parent: 't3' },
+      ],
+    },
+    {
+      note: 'Con el puente confirmado, Q_ahora se obtiene partiendo directo de Q_3 = {6} (conocido, sin replay) y aplicando sólo la cola que queda después del puente — aquí, un único ins(9). t1 y t2 nunca se tocan.',
+      caption: 'Q_ahora = {6, 9}: desde el puente conocido + la cola (t4), no desde t=1',
+      highlight: ['t4'],
+      nodes: [
+        { id: 't1', value: 'ins(6)', parent: null, state: 'muted' },
+        { id: 't2', value: 'ins(3)', parent: 't1', state: 'muted' },
+        { id: 't3', value: 'del-min -> Q_3 = {6}', parent: 't2', state: 'answer' },
+        { id: 't4', value: 'ins(9)', parent: 't3', state: 'active' },
+      ],
+    },
+  ],
+}} />
 
 ## Estructura interna
 

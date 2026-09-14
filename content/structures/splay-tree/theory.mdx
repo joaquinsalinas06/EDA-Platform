@@ -52,6 +52,8 @@ visualization:
         - { id: n50, value: 50, parent: n40, side: right }
 ---
 
+import Visualization from '../../../src/components/Visualization.astro';
+
 ## ¿Qué problema resuelve?
 
 El [modelo computacional BST](/structures/bst-computational-model) fija qué
@@ -130,6 +132,85 @@ momento:
 > [método del potencial](/structures/potential-method) con
 > $\Phi = \sum \log(\text{tamaño del subárbol de cada nodo})$, pero eso no está en este
 > mazo: la cota se enuncia sin derivarla.
+
+Aterrizar esa $\Phi$ en un árbol concreto — no sólo en la fórmula — es lo
+que hace creíble "prepagó con búsquedas baratas anteriores". El
+[método del potencial](/structures/potential-method) ya explica el
+mecanismo en general (ahí está la cuenta $\hat{c}_i = c_i + \Delta\Phi$ y
+el ejemplo sobre el montículo de Fibonacci); acá se aplica exactamente esa
+misma $\Phi = \sum \log_2(\text{tamaño del subárbol})$ a un splay tree de 5
+nodos, para ver el "prepago" ocurrir sobre rotaciones reales:
+
+<Visualization viz={{
+  type: 'tree',
+  steps: [
+    {
+      note: 'Árbol balanceado de 5 nodos, en reposo. Φ = Σ log₂(tamaño del subárbol de cada nodo): las hojas (n2, n4) aportan log₂1=0, n1 y n5 (subárbol de tamaño 2) aportan log₂2=1 cada uno, y la raíz n3 (subárbol de tamaño 5) aporta log₂5≈2.32. Ningún nodo se tocó todavía.',
+      caption: 'Φ(D₀) = 0+0+1+1+2.32 = 4.32',
+      nodes: [
+        { id: 'n3', value: 3, parent: null },
+        { id: 'n1', value: 1, parent: 'n3', side: 'left' },
+        { id: 'n2', value: 2, parent: 'n1', side: 'right' },
+        { id: 'n5', value: 5, parent: 'n3', side: 'right' },
+        { id: 'n4', value: 4, parent: 'n5', side: 'left' },
+      ],
+    },
+    {
+      note: 'Búsqueda barata: Splay(1). n1 ya es hijo de la raíz ⇒ un solo zig, costo real c₁=1 rotación. El resultado sube el tamaño del subárbol de n1 a 5 (ahora es la raíz) y baja el de n3 a 4 — Φ SUBE (ΔΦ=+1): la operación es barata pero deja crédito prepagado para más adelante.',
+      caption: 'c₁=1 (un zig)   ΔΦ=Φ(D₁)−Φ(D₀)=5.32−4.32=+1   ĉ₁=c₁+ΔΦ=1+1=2',
+      highlight: ['n1'],
+      nodes: [
+        { id: 'n1', value: 1, parent: null, state: 'active' },
+        { id: 'n3', value: 3, parent: 'n1', side: 'right' },
+        { id: 'n2', value: 2, parent: 'n3', side: 'left' },
+        { id: 'n5', value: 5, parent: 'n3', side: 'right' },
+        { id: 'n4', value: 4, parent: 'n5', side: 'left' },
+      ],
+    },
+    {
+      note: 'Otra búsqueda barata: Splay(5). n5 y su padre n3 son ambos hijos derechos de su abuelo ⇒ zig-zig, costo real c₂=2 rotaciones (sigue siendo O(1), no O(n)). Esta vez Φ NO cambia (ΔΦ=0): ni banca crédito ni lo gasta, el costo amortizado coincide con el real — el mismo caso "neutro" que Union en el montículo de Fibonacci.',
+      caption: 'c₂=2 (zig-zig)   ΔΦ=Φ(D₂)−Φ(D₁)=5.32−5.32=0   ĉ₂=c₂+ΔΦ=2+0=2',
+      highlight: ['n5'],
+      nodes: [
+        { id: 'n5', value: 5, parent: null, state: 'active' },
+        { id: 'n3', value: 3, parent: 'n5', side: 'left' },
+        { id: 'n1', value: 1, parent: 'n3', side: 'left' },
+        { id: 'n2', value: 2, parent: 'n1', side: 'right' },
+        { id: 'n4', value: 4, parent: 'n3', side: 'right' },
+      ],
+    },
+    {
+      note: 'La búsqueda cara: Splay(2). n2 quedó a profundidad 3 (la más honda del árbol) — hace falta un zig-zag (n2 es hijo derecho de n1, hijo izquierdo de n3) y después un zig más para llegar a la raíz: c₃=3 rotaciones, el doble que cualquiera de los dos pasos anteriores.',
+      caption: 'c₃=3 (zig-zag + zig)',
+      highlight: ['n2'],
+      nodes: [
+        { id: 'n5', value: 5, parent: null },
+        { id: 'n3', value: 3, parent: 'n5', side: 'left' },
+        { id: 'n1', value: 1, parent: 'n3', side: 'left' },
+        { id: 'n2', value: 2, parent: 'n1', side: 'right', state: 'active' },
+        { id: 'n4', value: 4, parent: 'n3', side: 'right' },
+      ],
+    },
+    {
+      note: 'n2 termina en la raíz. Su subárbol pasó de tamaño 1 a 5, pero el de n5 (antes raíz, tamaño 5) cayó a 3 y el resto se reparte parejo: Φ CAE (ΔΦ=−0.42) — la caída absorbe parte del costo real, dejando el costo amortizado (2.58) por debajo del real (3). Ésta es la búsqueda que "cobra" el crédito que las dos búsquedas baratas anteriores dejaron prepagado — y Φ nunca bajó del valor inicial (4.32→5.32→5.32→4.91), la condición de validez del método del potencial se cumple en toda la secuencia.',
+      caption: 'ΔΦ=Φ(D₃)−Φ(D₂)=4.91−5.32=−0.42   ĉ₃=c₃+ΔΦ=3−0.42=2.58',
+      highlight: ['n2'],
+      nodes: [
+        { id: 'n2', value: 2, parent: null, state: 'answer' },
+        { id: 'n1', value: 1, parent: 'n2', side: 'left' },
+        { id: 'n5', value: 5, parent: 'n2', side: 'right' },
+        { id: 'n3', value: 3, parent: 'n5', side: 'left' },
+        { id: 'n4', value: 4, parent: 'n3', side: 'right' },
+      ],
+    },
+  ],
+}} />
+
+Los números son chicos porque $n=5$; con $n$ grande la misma mecánica es la
+que produce la brecha real: un Splay(x) puede costar $O(n)$ real (búsqueda
+cara de la nota anterior) mientras $\Delta\Phi$ absorbe casi todo, dejando
+$O(\log n)$ amortizado — exactamente lo que el Access Lemma demuestra en
+general y que aquí sólo se ve en miniatura.
 
 **El punto que hay que entender de verdad**: por qué `zig-zig` rota primero
 el **abuelo** `a` y no el padre `p`. El material da los diagramas (#65) pero

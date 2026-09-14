@@ -146,6 +146,8 @@ visualization:
         - { id: t5, value: "del-min -> quita 0 (antes quitaba 1)", parent: t45, state: active }
 ---
 
+import Visualization from '../../../../src/components/Visualization.astro';
+
 ## Qué hace
 
 Decide si un instante `t'` de la línea de tiempo es un **puente**: un punto
@@ -201,6 +203,78 @@ PuenteMasCercanoAntes(t):
         si EsPuente(t'): devolver t'
     devolver "inicio de la línea de tiempo"   # siempre es puente
 ```
+
+Todo lo anterior es sobre **construir/identificar** un puente. Una vez que
+un puente ya está confirmado, se usa como atajo para responder consultas
+sobre el pasado sin reconstruir nada desde el inicio de la línea de tiempo:
+basta partir del estado conocido en el puente y aplicar sólo las
+operaciones entre el puente y el instante consultado.
+
+<Visualization viz={{
+  type: 'persistent',
+  steps: [
+    {
+      note: 'Retomando el ejemplo derivado: ins(10) en t=1, del-min en t=2 (quita 10, Q_2 = ∅), ins(1) en t=3, ins(2) en t=4, del-min en t=5 (quita 1). t=2 ya quedó confirmado como puente en el análisis de arriba — no hay que volver a probarlo.',
+      caption: 'puente ya confirmado: t=2 (Q_2 = ∅)',
+      highlight: ['t2'],
+      nodes: [
+        { id: 't1', value: 'ins(10)', parent: null },
+        { id: 't2', value: 'del-min -> Q_2 = ∅ (puente)', parent: 't1', state: 'answer' },
+        { id: 't3', value: 'ins(1)', parent: 't2' },
+        { id: 't4', value: 'ins(2)', parent: 't3' },
+        { id: 't5', value: 'del-min -> quita 1', parent: 't4' },
+      ],
+    },
+    {
+      note: 'Llega una consulta: "¿qué había en la cola justo después de t=3?" (Q_3). No es una operación retroactiva nueva — es leer un instante intermedio ya fijado en la línea de tiempo.',
+      caption: 'consulta: Q_3 = ?',
+      highlight: ['t3'],
+      nodes: [
+        { id: 't1', value: 'ins(10)', parent: null },
+        { id: 't2', value: 'del-min -> Q_2 = ∅ (puente)', parent: 't1', state: 'answer' },
+        { id: 't3', value: 'ins(1) — consultado', parent: 't2', state: 'active' },
+        { id: 't4', value: 'ins(2)', parent: 't3' },
+        { id: 't5', value: 'del-min -> quita 1', parent: 't4' },
+      ],
+    },
+    {
+      note: 'Como t=2 ya es puente conocido, t=1 nunca se vuelve a mirar: Q_2 = ∅ se toma como punto de partida confiable, sin reproducir ins(10) ni volver a comprobar que t=2 es puente.',
+      caption: 't=1 se descarta: se parte directo de Q_2 = ∅',
+      highlight: ['t2'],
+      nodes: [
+        { id: 't1', value: 'ins(10)', parent: null, state: 'muted' },
+        { id: 't2', value: 'del-min -> Q_2 = ∅ (puente)', parent: 't1', state: 'answer' },
+        { id: 't3', value: 'ins(1) — consultado', parent: 't2', state: 'active' },
+        { id: 't4', value: 'ins(2)', parent: 't3' },
+        { id: 't5', value: 'del-min -> quita 1', parent: 't4' },
+      ],
+    },
+    {
+      note: 'Se aplica sólo lo que queda entre el puente y el instante pedido: una única operación, ins(1) en t=3. No hace falta tocar t=4 ni t=5 — están después del instante consultado y no participan en la respuesta.',
+      caption: 'Q_2 = ∅  ->  aplicar ins(1)  ->  Q_3 = {1}',
+      highlight: ['t3'],
+      nodes: [
+        { id: 't1', value: 'ins(10)', parent: null, state: 'muted' },
+        { id: 't2', value: 'del-min -> Q_2 = ∅ (puente)', parent: 't1', state: 'shared' },
+        { id: 't3', value: 'ins(1) -> Q_3 = {1}', parent: 't2', state: 'active' },
+        { id: 't4', value: 'ins(2)', parent: 't3', state: 'muted' },
+        { id: 't5', value: 'del-min -> quita 1', parent: 't4', state: 'muted' },
+      ],
+    },
+    {
+      note: 'Respuesta: Q_3 = {1}, obtenida con dos pasos (el puente ya conocido + un ins) en vez de reproducir t1, t2 y t3 desde cero. Es el mismo puente usado para construir la respuesta que antes se usó para acotar el trabajo — aquí como atajo de consulta, no de inserción retroactiva.',
+      caption: 'Q_3 = {1} — respondida desde el puente, sin reproducir t1',
+      highlight: ['t3'],
+      nodes: [
+        { id: 't1', value: 'ins(10)', parent: null, state: 'muted' },
+        { id: 't2', value: 'del-min -> Q_2 = ∅ (puente)', parent: 't1', state: 'answer' },
+        { id: 't3', value: 'ins(1) -> Q_3 = {1}', parent: 't2', state: 'answer' },
+        { id: 't4', value: 'ins(2)', parent: 't3', state: 'muted' },
+        { id: 't5', value: 'del-min -> quita 1', parent: 't4', state: 'muted' },
+      ],
+    },
+  ],
+}} />
 
 ## C++
 

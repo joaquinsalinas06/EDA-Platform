@@ -134,6 +134,7 @@ visualization:
         - { id: n8, value: 8, parent: n9, state: muted }
         - { id: n11, value: 11, parent: n9, state: muted }
 ---
+import Visualization from '../../../../src/components/Visualization.astro';
 
 ## Qué hace
 
@@ -167,7 +168,88 @@ implica:
 Por eso alcanza con las satélites $D_2$ (normal, a la derecha) y $D_2'$ (invertida,
 a la izquierda) construidas en `build`: cada una sólo tiene que resolver la
 mitad de la condición que le falta. Ver el diagrama paso a paso de la
-separación más abajo.
+separación más arriba.
+
+### Por qué tiene que ser ese nivel exacto
+
+*(derivado de la propiedad anterior; no aparece en las diapositivas)* La
+garantía de arriba depende de una palabra que es fácil pasar por alto:
+$v_{\text{split}}$ es el nodo **más profundo** donde los caminos coinciden — no
+cualquier nodo donde ya se sepa que van a divergir, ni cualquier nodo por
+donde el descenso siga pasando después. Un nivel antes o un nivel después,
+la garantía deja de sostenerse, por razones distintas:
+
+<Visualization viz={{
+  type: 'tree',
+  steps: [
+    {
+      note: "Recapitulando el resultado correcto: v_split=3 es el nodo más profundo donde a2=1 y b2=4 coincidían. Sus dos mitades: derecha(v_split)={4}, garantizada y≥a2=1 sin comparar nada más; izquierda(v_split)={1}, garantizada y≤b2=4 sin comparar nada más. El resto del árbol (raíz, subárbol de 9) ni se visita. Ahora: ¿qué pasa si se elige un nodo distinto como split?",
+      highlight: ["n3", "n4", "n1"],
+      nodes: [
+        { id: "r6", value: 6, parent: null, state: "muted" },
+        { id: "n3", value: 3, parent: "r6", state: "marked" },
+        { id: "n9", value: 9, parent: "r6", state: "muted" },
+        { id: "n1", value: 1, parent: "n3", state: "answer" },
+        { id: "n4", value: 4, parent: "n3", state: "answer" },
+        { id: "n8", value: 8, parent: "n9", state: "muted" },
+        { id: "n11", value: 11, parent: "n9", state: "muted" },
+      ],
+    },
+    {
+      note: "Hipótesis A — un nivel ANTES: ¿y si el descenso se hubiera detenido en la raíz (6)? En la raíz, b2=4 ≤ 6, así que a2 y b2 TODAVÍA van juntos hacia la izquierda — no hay divergencia ahí. La raíz no cumple la condición que define a v_split (que a2 y b2 caigan en lados distintos); tratarla como si la cumpliera es el error que se examina.",
+      highlight: ["r6"],
+      nodes: [
+        { id: "r6", value: 6, parent: null, state: "active" },
+        { id: "n3", value: 3, parent: "r6" },
+        { id: "n9", value: 9, parent: "r6" },
+        { id: "n1", value: 1, parent: "n3" },
+        { id: "n4", value: 4, parent: "n3" },
+        { id: "n8", value: 8, parent: "n9" },
+        { id: "n11", value: 11, parent: "n9" },
+      ],
+    },
+    {
+      note: "Consecuencia: tomar la raíz como split obligaría a aceptar derecha(raíz) = subárbol de 9 = {9, 8, 11} como mitad ya resuelta. Pero la garantía de v_split protege un solo extremo a la vez, y aquí falla el que hacía falta: y≤b2=4 NO se cumple para ninguno de los tres (9, 8 y 11 son todos mayores que b2=4). La mitad \"gratis\" mezclaría puntos que la consulta [1,4] no pidió — justo lo que v_split existe para evitar.",
+      highlight: ["n9", "n8", "n11"],
+      nodes: [
+        { id: "r6", value: 6, parent: null, state: "marked" },
+        { id: "n3", value: 3, parent: "r6" },
+        { id: "n9", value: 9, parent: "r6", state: "active" },
+        { id: "n1", value: 1, parent: "n3" },
+        { id: "n4", value: 4, parent: "n3" },
+        { id: "n8", value: 8, parent: "n9", state: "active" },
+        { id: "n11", value: 11, parent: "n9", state: "active" },
+      ],
+    },
+    {
+      note: "Hipótesis B — un nivel DESPUÉS: ¿y si el descenso hubiera seguido un paso más allá de v_split, hasta su hijo derecho (el nodo 4), tratando a ESE como el split? Seguir bajando obliga a comprometerse con un solo lado — aquí, el derecho. La mitad izquierda de v_split, {1}, no se pierde por violar ninguna cota: se pierde porque, a partir de ahí, nadie vuelve a descender hacia ese lado.",
+      highlight: ["n4", "n1"],
+      nodes: [
+        { id: "r6", value: 6, parent: null, state: "muted" },
+        { id: "n3", value: 3, parent: "r6", state: "marked" },
+        { id: "n9", value: 9, parent: "r6", state: "muted" },
+        { id: "n1", value: 1, parent: "n3", state: "muted" },
+        { id: "n4", value: 4, parent: "n3", state: "active" },
+        { id: "n8", value: 8, parent: "n9", state: "muted" },
+        { id: "n11", value: 11, parent: "n9", state: "muted" },
+      ],
+    },
+    {
+      note: "Por eso v_split tiene que ser exactamente el nodo más profundo de coincidencia: ni un nivel antes (mezcla puntos que no cumplen la otra cota, como 8/9/11 aquí) ni un nivel después (descarta un subárbol canónico entero, como {1} aquí). Es la única profundidad donde las dos mitades quedan completas y cada una resuelta por una sola cota, sin comparar de más ni perder nada.",
+      caption: "v_split = 3 es el único nivel correcto: ni antes, ni después",
+      highlight: ["n3"],
+      nodes: [
+        { id: "r6", value: 6, parent: null, state: "muted" },
+        { id: "n3", value: 3, parent: "r6", state: "marked" },
+        { id: "n9", value: 9, parent: "r6", state: "muted" },
+        { id: "n1", value: 1, parent: "n3", state: "answer" },
+        { id: "n4", value: 4, parent: "n3", state: "answer" },
+        { id: "n8", value: 8, parent: "n9", state: "muted" },
+        { id: "n11", value: 11, parent: "n9", state: "muted" },
+      ],
+    },
+  ],
+}} />
 
 Pie del profesor (#45): "Los caminos de $a_2$ y $b_2$ se separan en $v_{\text{split}}$; de ahí
 en adelante ya no hace falta seguir bajando."

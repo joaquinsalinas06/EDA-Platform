@@ -92,9 +92,14 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
       setPlaying(false);
       return;
     }
-    const t = setTimeout(() => setI((p) => p + 1), 1200);
+    // Una nota de una cláusula y una de tres oraciones no merecen el mismo
+    // tiempo en pantalla — 900ms de piso más ~45ms por palabra, acotado para
+    // que un paso larguísimo no estanque el autoplay.
+    const words = (step.note ?? '').trim().split(/\s+/).filter(Boolean).length;
+    const delay = Math.min(3200, Math.max(900, 900 + words * 45));
+    const t = setTimeout(() => setI((p) => p + 1), delay);
     return () => clearTimeout(t);
-  }, [playing, i, last]);
+  }, [playing, i, last, step.note]);
 
   const onKey = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
@@ -164,7 +169,13 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
           </defs>
 
           {groups.map((g) => (
-            <g key={g.id} style={{ transition: 'transform 450ms cubic-bezier(.2,.7,.3,1)' }}>
+            // La transición va en los atributos que de verdad cambian (x/y/
+            // width/height en el rect, x/y en el label) — antes estaba en el
+            // `<g>` envolvente, que nunca lleva `transform`, así que nunca
+            // disparaba: un panel que se movía o cambiaba de tamaño entre
+            // pasos (Union de heaps, versiones de path-copying, paneles
+            // secundarios de range-tree) tele-transportaba en vez de deslizar.
+            <g key={g.id}>
               <rect
                 x={g.x}
                 y={g.y}
@@ -175,6 +186,7 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
                 stroke="var(--rule)"
                 strokeWidth={1}
                 strokeDasharray={g.style === 'ghost' ? '3 3' : undefined}
+                style={{ transition: 'x 450ms cubic-bezier(.2,.7,.3,1), y 450ms cubic-bezier(.2,.7,.3,1), width 450ms cubic-bezier(.2,.7,.3,1), height 450ms cubic-bezier(.2,.7,.3,1)' }}
               />
               {g.label && (
                 <text
@@ -184,7 +196,10 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
                   fontFamily="var(--font-mono)"
                   letterSpacing="0.06em"
                   fill="var(--faint)"
-                  style={{ textTransform: 'uppercase' }}
+                  style={{
+                    textTransform: 'uppercase',
+                    transition: 'x 450ms cubic-bezier(.2,.7,.3,1), y 450ms cubic-bezier(.2,.7,.3,1)',
+                  }}
                 >
                   {g.label}
                 </text>
@@ -217,7 +232,12 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
                 strokeWidth={visual.strokeWidth}
                 strokeDasharray={visual.dash}
                 markerEnd={e.arrow ? `url(#${state === 'active' ? `${arrowId}-accent` : `${arrowId}-ink`})` : undefined}
-                style={{ transition: 'all 450ms cubic-bezier(.2,.7,.3,1)' }}
+                // `d` explícito (no `all`): `all` también intentaba transicionar
+                // `marker-end`/`fill`, que no son animables o no deben, y en
+                // navegadores sin soporte de interpolación de `d` (Safari
+                // &lt;16.4) degradaba de "no transiciona una cosa" a "no
+                // transiciona nada" por el shorthand.
+                style={{ transition: 'd 450ms cubic-bezier(.2,.7,.3,1), stroke 300ms, stroke-width 300ms' }}
               />
             );
           })}
@@ -414,7 +434,7 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
               fontSize={a.size ?? 12}
               fontFamily="var(--font-mono)"
               fill={a.state === 'active' ? 'var(--accent)' : a.state === 'muted' ? 'var(--faint)' : 'var(--muted)'}
-              style={{ transition: 'fill 300ms' }}
+              style={{ transition: 'fill 300ms, x 450ms cubic-bezier(.2,.7,.3,1), y 450ms cubic-bezier(.2,.7,.3,1)' }}
             >
               {a.text}
             </text>

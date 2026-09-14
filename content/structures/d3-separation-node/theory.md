@@ -1,6 +1,83 @@
 ---
 kind: theory
 title: "D₃ — nodo de separación"
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Árbol de rango sobre y = {1,3,4,6,8,9,11} — el mismo de
+        [locate-separation-node](/structures/d3-separation-node/operations/locate-separation-node).
+        Cada nodo interno (aquí, los tres marcados como internos: 6, 3 y 9)
+        va a guardar dos estructuras satélite sobre los puntos de sus dos
+        hijos. Todavía sin ninguna satélite colgada.
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6 }
+        - { id: n9, value: 9, parent: r6 }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: n4, value: 4, parent: n3 }
+        - { id: n8, value: 8, parent: n9 }
+        - { id: n11, value: 11, parent: n9 }
+    - note: >-
+        Se toma un nodo interno cualquiera, v=3, para mostrar qué cuelga de
+        él. Tiene dos hijos: derecha(v)=4 e izquierda(v)=1.
+      highlight: [n3]
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6, state: active }
+        - { id: n9, value: 9, parent: r6 }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: n4, value: 4, parent: n3 }
+        - { id: n8, value: 8, parent: n9 }
+        - { id: n11, value: 11, parent: n9 }
+    - note: >-
+        Sobre los puntos de derecha(v) (el subárbol de 4) se construye una
+        estructura D₂ normal, acotada por arriba ($y \le b_2$). Se dibuja
+        como triángulo colgando del hijo derecho porque es una estructura
+        completa sobre ese subárbol, no un valor suelto.
+      highlight: [n4]
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6 }
+        - { id: n9, value: 9, parent: r6 }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: n4, value: 4, parent: n3, state: active }
+        - { id: sat-r, value: "D₂ normal (y≤b₂)", parent: n4, collapsed: true }
+        - { id: n8, value: 8, parent: n9 }
+        - { id: n11, value: 11, parent: n9 }
+      links:
+        - { from: n4, to: sat-r, kind: pointer, label: "satélite" }
+    - note: >-
+        Simétricamente, sobre los puntos de izquierda(v) (el subárbol de 1)
+        se construye una D₂' invertida, acotada por abajo ($y \ge a_2$) —
+        la misma D₂, pero comparando en el sentido contrario.
+      highlight: [n1]
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6 }
+        - { id: n9, value: 9, parent: r6 }
+        - { id: n1, value: 1, parent: n3, state: active }
+        - { id: sat-l, value: "D₂' invertida (y≥a₂)", parent: n1, collapsed: true }
+        - { id: n4, value: 4, parent: n3 }
+        - { id: n8, value: 8, parent: n9 }
+        - { id: n11, value: 11, parent: n9 }
+      links:
+        - { from: n1, to: sat-l, kind: pointer, label: "satélite" }
+    - note: >-
+        El mismo par de satélites se repite en TODO nodo interno (también
+        en 6 y en 9) — no sólo en v=3. Por eso, sea cual sea el nodo de
+        separación que encuentre una consulta futura, ya va a tener sus dos
+        satélites listas: una normal a la derecha, una invertida a la
+        izquierda.
+      caption: "cada nodo interno paga dos D₂: una normal, una invertida — ningún nodo se queda sin las suyas"
+      nodes:
+        - { id: r6, value: 6, parent: null, state: active }
+        - { id: n3, value: 3, parent: r6, state: active }
+        - { id: n9, value: 9, parent: r6, state: active }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: n4, value: 4, parent: n3 }
+        - { id: n8, value: 8, parent: n9 }
+        - { id: n11, value: 11, parent: n9 }
 ---
 
 ## ¿Qué problema resuelve?

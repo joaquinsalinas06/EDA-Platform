@@ -21,5 +21,5 @@ complexity:
     source: "Sem5_Fractional_Cascading_II.pdf#26-31"
 
 professorAnalysisStyle: "conteo directo por pasos, output-sensitive"
-hasVisualization: false
+hasVisualization: true
 placeholder: false

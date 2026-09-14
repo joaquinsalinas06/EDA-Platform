@@ -7,6 +7,91 @@ cppSteps:
   - step-2-build.cpp
   - step-3-query.cpp
   - full-implementation.cpp
+visualization:
+  type: range-tree
+  steps:
+    - note: >-
+        Mismo BST de `build.md` (raíz x=4, hijo izquierdo x=3 con su propio
+        hijo izquierdo x=1, hijo derecho x=6), ya con su $D_1$ satélite
+        construida en cada nodo. Consulta ilustrativa
+        $[1, 4] \times (-\infty, 6] \times (-\infty, 10]$: rango cerrado
+        $[1,4]$ en x, dominancia $(b_2, b_3) = (6, 10)$ en (y, z). Todavía
+        sin visitar ningún nodo.
+      nodes:
+        - { id: r4, value: 4, parent: null }
+        - { id: n3, value: 3, parent: r4 }
+        - { id: n6, value: 6, parent: r4 }
+        - { id: n1, value: 1, parent: n3 }
+    - note: >-
+        Se visita la raíz x=4: 4 ∈ [1,4], está dentro del rango — pero su
+        subárbol completo {1,3,4,6} NO cabe entero en [1,4] (incluye x=6,
+        fuera). No puede tratarse como nodo canónico de lote: la raíz se
+        revisará individualmente más adelante, y hay que recorrer ambos
+        hijos por separado.
+      highlight: [r4]
+      nodes:
+        - { id: r4, value: 4, parent: null, state: active }
+        - { id: n3, value: 3, parent: r4 }
+        - { id: n6, value: 6, parent: r4 }
+        - { id: n1, value: 1, parent: n3 }
+    - note: >-
+        Hijo derecho x=6: 6 > 4 (fuera de $[1,4]$), y como es un BST, todo
+        su subárbol (aquí sólo él mismo) también queda fuera. Se descarta
+        de una vez, sin disparar ninguna consulta de dominancia sobre su
+        $D_1$ satélite — poda completa.
+      highlight: [n6]
+      nodes:
+        - { id: r4, value: 4, parent: null }
+        - { id: n3, value: 3, parent: r4 }
+        - { id: n6, value: 6, parent: r4, state: muted }
+        - { id: n1, value: 1, parent: n3 }
+    - note: >-
+        Hijo izquierdo x=3: su subárbol completo {1,3} SÍ cabe entero en
+        $[1,4]$ — este es un nodo canónico de verdad, del tipo que $D_2$
+        existe para aprovechar. Se cuelga su $D_1$ satélite, ya construida
+        en `build.md` sobre {1,3}, sin necesidad de visitar x=1 por
+        separado: su punto ya está incluido dentro de esa $D_1$.
+      highlight: [n3]
+      nodes:
+        - { id: r4, value: 4, parent: null }
+        - { id: n3, value: 3, parent: r4, state: active }
+        - { id: n6, value: 6, parent: r4, state: muted }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: d1-n3, value: "D₁({1,3})", parent: null, panel: sat }
+      panels:
+        - { id: sat, label: "D₁ satélite de x=3 (nodo canónico)", anchor: n3 }
+    - note: >-
+        Se dispara la consulta de dominancia sobre esa $D_1$ satélite con
+        $(b_2, b_3) = (6, 10)$ — la operación `dominance-query` de
+        [/structures/dominance-2d](/structures/dominance-2d), no se
+        reexplica aquí. Es la única consulta de dominancia de todo este
+        subárbol: una, no dos.
+      highlight: [n3, d1-n3]
+      nodes:
+        - { id: r4, value: 4, parent: null }
+        - { id: n3, value: 3, parent: r4, state: active }
+        - { id: n6, value: 6, parent: r4, state: muted }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: d1-n3, value: "D₁({1,3}) ⊳ query(6,10)", parent: null, panel: sat, state: active }
+      panels:
+        - { id: sat, label: "D₁ satélite de x=3 (nodo canónico)", anchor: n3 }
+    - note: >-
+        Resultado final. La $D_1$ de x=3 devuelve sus dos puntos, (1,5) y
+        (3,2): ambos cumplen y ≤ 6, así que x=1 aparece en la respuesta
+        aunque nunca se visitó por sí solo — esa es la ganancia de colgar
+        $D_1$ del árbol. La raíz se revisa por fin de forma individual (no
+        vía su $D_1$ satélite completa, que incluiría también x=1 y x=6):
+        su propio punto es (4,8), y 8 > 6 no cumple $b_2$ — queda fuera. x=6
+        sigue descartado desde el paso 3. Respuesta: {(1,5), (3,2)}.
+      highlight: [d1-n3, n3, n1, r4]
+      nodes:
+        - { id: r4, value: "4 — punto (4,8), y=8 > b2=6", parent: null, state: muted }
+        - { id: n3, value: "3 — (3,2), incluido", parent: r4, state: answer }
+        - { id: n6, value: 6, parent: r4, state: muted }
+        - { id: n1, value: "1 — (1,5), incluido vía D₁ de x=3", parent: n3, state: answer }
+        - { id: d1-n3, value: "D₁({1,3}) → {(1,5), (3,2)}", parent: null, panel: sat, state: answer }
+      panels:
+        - { id: sat, label: "D₁ satélite de x=3 (nodo canónico)", anchor: n3 }
 ---
 
 ## Qué hace

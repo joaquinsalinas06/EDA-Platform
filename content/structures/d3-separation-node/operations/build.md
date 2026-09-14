@@ -6,6 +6,95 @@ cppSteps:
   - step-1-node.cpp
   - step-2-build.cpp
   - full-implementation.cpp
+visualization:
+  type: range-tree
+  steps:
+    - note: >-
+        Primero el árbol de rango estándar sobre y, del mismo ejemplo de
+        [locate-separation-node](/structures/d3-separation-node/operations/locate-separation-node):
+        raíz 6, hijos 3 y 9, nietos 1/4 y 8/11. Construido por mediana
+        recursiva, igual que en [range-tree](/structures/range-tree).
+        Todavía sin ninguna satélite colgada.
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6 }
+        - { id: n9, value: 9, parent: r6 }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: n4, value: 4, parent: n3 }
+        - { id: n8, value: 8, parent: n9 }
+        - { id: n11, value: 11, parent: n9 }
+    - note: >-
+        En la raíz (y=6) se cuelgan sus dos satélites: una D₂ normal sobre
+        los puntos de derecha(raíz) = {8,9,11} (acotada por arriba,
+        $y \le b_2$) y una D₂' invertida sobre los puntos de
+        izquierda(raíz) = {1,3,4} (acotada por abajo, $y \ge a_2$). Ninguna
+        reutiliza a la otra: cada una se construye desde cero sobre su
+        propio subárbol.
+      highlight: [r6]
+      nodes:
+        - { id: r6, value: 6, parent: null, state: active }
+        - { id: n3, value: 3, parent: r6 }
+        - { id: n9, value: 9, parent: r6 }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: n4, value: 4, parent: n3 }
+        - { id: n8, value: 8, parent: n9 }
+        - { id: n11, value: 11, parent: n9 }
+        - { id: dr-root, value: "D₂({8,9,11})", parent: null, panel: sat-r }
+        - { id: dl-root, value: "D₂'({1,3,4})", parent: null, panel: sat-l }
+      panels:
+        - { id: sat-r, label: "D₂ normal de y=6", anchor: r6 }
+        - { id: sat-l, label: "D₂' invertida de y=6", anchor: r6 }
+    - note: >-
+        Un nivel abajo, en y=3, se repite el patrón con SUS propios hijos:
+        D₂ normal sobre derecha(3) = {4} y D₂' invertida sobre
+        izquierda(3) = {1}. No hereda nada de la satélite de la raíz.
+      highlight: [n3]
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6, state: active }
+        - { id: n9, value: 9, parent: r6 }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: n4, value: 4, parent: n3 }
+        - { id: n8, value: 8, parent: n9 }
+        - { id: n11, value: 11, parent: n9 }
+        - { id: dr-n3, value: "D₂({4})", parent: null, panel: sat-r }
+        - { id: dl-n3, value: "D₂'({1})", parent: null, panel: sat-l }
+      panels:
+        - { id: sat-r, label: "D₂ normal de y=3", anchor: n3 }
+        - { id: sat-l, label: "D₂' invertida de y=3", anchor: n3 }
+    - note: >-
+        Y en y=9, el mismo patrón: D₂ normal sobre derecha(9) = {11} y D₂'
+        invertida sobre izquierda(9) = {8}. Es el mismo par de satélites en
+        todo nodo interno, sin excepción.
+      highlight: [n9]
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6 }
+        - { id: n9, value: 9, parent: r6, state: active }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: n4, value: 4, parent: n3 }
+        - { id: n8, value: 8, parent: n9 }
+        - { id: n11, value: 11, parent: n9 }
+        - { id: dr-n9, value: "D₂({11})", parent: null, panel: sat-r }
+        - { id: dl-n9, value: "D₂'({8})", parent: null, panel: sat-l }
+      panels:
+        - { id: sat-r, label: "D₂ normal de y=9", anchor: n9 }
+        - { id: sat-l, label: "D₂' invertida de y=9", anchor: n9 }
+    - note: >-
+        Las cuatro hojas (1, 4, 8, 11) no tienen hijos, así que ninguna de
+        las dos satélites se construye para ellas — quedan sin marcar,
+        distinto de los tres nodos internos que sí pagaron su par de D₂.
+        Con esto, `build` terminó: un árbol de rango sobre y donde cada
+        nodo interno guarda dos D₂ completas.
+      caption: "3 nodos internos × 2 satélites cada uno = 6 estructuras D₂/D₂' construidas; las 4 hojas, ninguna"
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6 }
+        - { id: n9, value: 9, parent: r6 }
+        - { id: n1, value: 1, parent: n3, state: idle }
+        - { id: n4, value: 4, parent: n3, state: idle }
+        - { id: n8, value: 8, parent: n9, state: idle }
+        - { id: n11, value: 11, parent: n9, state: idle }
 ---
 
 ## Qué hace

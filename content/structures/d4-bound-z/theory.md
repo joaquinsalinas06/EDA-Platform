@@ -1,6 +1,87 @@
 ---
 kind: theory
 title: "D₄ — acotar z"
+visualization:
+  type: range-tree
+  steps:
+    - note: >-
+        El árbol de rango sobre z, en reposo — antes de buscar nada.
+      nodes:
+        - { id: rz, value: "z_raíz", parent: null }
+        - { id: zc, value: "camino común", parent: rz }
+        - { id: za, value: "izquierda(zc)", parent: zc }
+        - { id: zb, value: "derecha(zc)", parent: zc }
+    - note: >-
+        Una consulta con caja $[a_3,b_3]$ en z busca $a_3$ y $b_3$ desde la
+        raíz. Mientras el bit de z que decide el camino es el mismo para
+        ambos, los dos recorridos bajan juntos: por z_raíz y por camino
+        común, sin separarse todavía.
+      highlight: [rz, zc]
+      nodes:
+        - { id: rz, value: "z_raíz", parent: null, state: active }
+        - { id: zc, value: "camino común", parent: rz, state: active }
+        - { id: za, value: "izquierda(zc)", parent: zc }
+        - { id: zb, value: "derecha(zc)", parent: zc }
+      caption: "búsqueda de a3 y b3: todavía un solo camino"
+    - note: >-
+        En camino común los dos recorridos divergen: el de $a_3$ sigue por
+        izquierda(zc), el de $b_3$ por derecha(zc). Ese es el nodo de
+        separación — el único que hace falta visitar para responder la
+        consulta (la razón de por qué alcanza con uno solo ya se justificó
+        en D3-separation-node; aquí sólo se ve dónde ocurre para z).
+      highlight: [zc, za, zb]
+      nodes:
+        - { id: rz, value: "z_raíz", parent: null }
+        - { id: zc, value: "camino común", parent: rz, state: marked }
+        - { id: za, value: "izquierda(zc)", parent: zc, state: active }
+        - { id: zb, value: "derecha(zc)", parent: zc, state: active }
+      caption: "camino común = nodo de separación: aquí divergen a3 y b3"
+    - note: >-
+        derecha(zc) sólo necesita la cota superior de z (b3) — nunca la
+        inferior, porque todo punto de ese lado ya quedó por encima de
+        camino común. Por eso ahí cuelga una D₃ normal, acotada por arriba
+        ($z \le b_3$).
+      highlight: [zb]
+      nodes:
+        - { id: rz, value: "z_raíz", parent: null }
+        - { id: zc, value: "camino común", parent: rz }
+        - { id: za, value: "izquierda(zc)", parent: zc }
+        - { id: zb, value: "derecha(zc)", parent: zc, state: active }
+        - { id: d3n, value: "D₃ normal (z ≤ b3)", parent: null, panel: sat }
+      panels:
+        - { id: sat, label: "satélite de derecha(zc)", anchor: zb }
+    - note: >-
+        izquierda(zc) es la gemela simétrica: sólo necesita la cota inferior
+        de z (a3). Por eso ahí cuelga la D₃′ invertida, acotada por abajo
+        ($z \ge a_3$) — la mitad que D₃ sola no provee.
+      highlight: [za]
+      nodes:
+        - { id: rz, value: "z_raíz", parent: null }
+        - { id: zc, value: "camino común", parent: rz }
+        - { id: za, value: "izquierda(zc)", parent: zc, state: active }
+        - { id: zb, value: "derecha(zc)", parent: zc }
+        - { id: d3n, value: "D₃ normal (z ≤ b3)", parent: null, panel: sat }
+        - { id: d3i, value: "D₃′ invertida (z ≥ a3)", parent: null, panel: sat2 }
+      panels:
+        - { id: sat, label: "satélite de derecha(zc)", anchor: zb }
+        - { id: sat2, label: "satélite de izquierda(zc)", anchor: za }
+    - note: >-
+        Con las dos satélites disparadas — D₃ normal en derecha(zc) para
+        $z \le b_3$ y D₃′ invertida en izquierda(zc) para $z \ge a_3$ — la caja
+        $[x_1,x_2] \times [a_2,b_2] \times [a_3,b_3]$ queda cerrada en las tres
+        coordenadas: la respuesta se arma combinando el resultado de las dos,
+        sin bajar a ningún otro nodo del árbol sobre z.
+      nodes:
+        - { id: rz, value: "z_raíz", parent: null }
+        - { id: zc, value: "camino común", parent: rz }
+        - { id: za, value: "izquierda(zc)", parent: zc }
+        - { id: zb, value: "derecha(zc)", parent: zc }
+        - { id: d3n, value: "D₃ normal (z ≤ b3)", parent: null, panel: sat, state: answer }
+        - { id: d3i, value: "D₃′ invertida (z ≥ a3)", parent: null, panel: sat2, state: answer }
+      panels:
+        - { id: sat, label: "satélite de derecha(zc)", anchor: zb }
+        - { id: sat2, label: "satélite de izquierda(zc)", anchor: za }
+      caption: "caja cerrada en x, y y z — D₄ completo"
 ---
 
 ## ¿Qué problema resuelve?

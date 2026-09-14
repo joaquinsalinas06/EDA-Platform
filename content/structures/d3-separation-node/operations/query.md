@@ -8,6 +8,107 @@ cppSteps:
   - step-3-locate-separation-node.cpp
   - step-4-query.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Punto de partida: $v_{\text{split}}=3$ ya localizado para
+        $[a_2,b_2]=[1,4]$ — el resultado exacto de
+        [locate-separation-node](/structures/d3-separation-node/operations/locate-separation-node),
+        que no se repite aquí. El resto del árbol (9, 8, 11) ya quedó
+        descartado del descenso: de aquí en adelante sólo se dispara sobre
+        derecha(3)=4 e izquierda(3)=1.
+      highlight: [n3]
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n9, value: 9, parent: r6, state: muted }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: n4, value: 4, parent: n3 }
+        - { id: n8, value: 8, parent: n9, state: muted }
+        - { id: n11, value: 11, parent: n9, state: muted }
+    - note: >-
+        Primer disparo: sobre derecha(v_split)=4, la D₂ normal, con
+        $x\in[1,6]$ y cota superior $y\le b_2=4$ *(x derivado para este
+        diagrama, no del ejemplo de examples.md)*. La cota $y\ge a_2$ ya
+        está garantizada por construcción, así que D₂ sólo tiene que
+        resolver x — ese trabajo es de [D₂](/structures/d2-bound-x), no se
+        reimplementa aquí.
+      highlight: [n4]
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n9, value: 9, parent: r6, state: muted }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: n4, value: 4, parent: n3, state: active }
+        - { id: n8, value: 8, parent: n9, state: muted }
+        - { id: n11, value: 11, parent: n9, state: muted }
+        - { id: q-r, value: "D₂ normal: x∈[1,6], y≤4", parent: n4, collapsed: true, state: active }
+      links:
+        - { from: n4, to: q-r, kind: pointer, label: "consulta" }
+    - note: >-
+        El punto (x=2, y=4) que vive en derecha(v_split) cae dentro de
+        $x\in[1,6]$, así que D₂ normal lo devuelve — pasa a formar parte de
+        la respuesta canónica de esta consulta.
+      highlight: [n4]
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n9, value: 9, parent: r6, state: muted }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: n4, value: 4, parent: n3, state: answer }
+        - { id: n8, value: 8, parent: n9, state: muted }
+        - { id: n11, value: 11, parent: n9, state: muted }
+        - { id: q-r, value: "(2,4) ∈ respuesta", parent: n4, collapsed: true, state: answer }
+      links:
+        - { from: n4, to: q-r, kind: pointer, label: "resultado" }
+    - note: >-
+        Segundo disparo: sobre izquierda(v_split)=1, la D₂' invertida, con
+        el mismo $x\in[1,6]$ y cota inferior $y\ge a_2=1$. Aquí la cota
+        $y\le b_2$ ya está garantizada; D₂' sólo resuelve x, igual que D₂
+        normal pero comparando al revés.
+      highlight: [n1]
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n9, value: 9, parent: r6, state: muted }
+        - { id: n1, value: 1, parent: n3, state: active }
+        - { id: n4, value: 4, parent: n3, state: answer }
+        - { id: n8, value: 8, parent: n9, state: muted }
+        - { id: n11, value: 11, parent: n9, state: muted }
+        - { id: q-l, value: "D₂' invertida: x∈[1,6], y≥1", parent: n1, collapsed: true, state: active }
+      links:
+        - { from: n1, to: q-l, kind: pointer, label: "consulta" }
+    - note: >-
+        El punto (x=2, y=1) que vive en izquierda(v_split) también cae en
+        $x\in[1,6]$, así que D₂' lo devuelve — segundo punto de la
+        respuesta canónica.
+      highlight: [n1]
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n9, value: 9, parent: r6, state: muted }
+        - { id: n1, value: 1, parent: n3, state: answer }
+        - { id: n4, value: 4, parent: n3, state: answer }
+        - { id: n8, value: 8, parent: n9, state: muted }
+        - { id: n11, value: 11, parent: n9, state: muted }
+        - { id: q-l, value: "(2,1) ∈ respuesta", parent: n1, collapsed: true, state: answer }
+      links:
+        - { from: n1, to: q-l, kind: pointer, label: "resultado" }
+    - note: >-
+        La respuesta final es la unión de los dos disparos — (2,4) y
+        (2,1) — sin haber recorrido más nodos que v_split y sus dos hijos.
+        Dos consultas, un solo nodo (#43): no $O(\lg n)$ nodos canónicos
+        como en la descomposición canónica en y que este diseño evita (#36).
+      caption: "respuesta = {(2,4), (2,1)} — 2 disparos totales"
+      nodes:
+        - { id: r6, value: 6, parent: null }
+        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n9, value: 9, parent: r6, state: muted }
+        - { id: n1, value: 1, parent: n3, state: answer }
+        - { id: n4, value: 4, parent: n3, state: answer }
+        - { id: n8, value: 8, parent: n9, state: muted }
+        - { id: n11, value: 11, parent: n9, state: muted }
 ---
 
 ## Qué hace

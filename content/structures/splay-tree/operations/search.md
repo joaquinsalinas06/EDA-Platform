@@ -10,6 +10,75 @@ cppSteps:
   - step-5-splay.cpp
   - step-6-search.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Buscar 27 en este árbol de 5 nodos. Es el descenso plano de
+        [`Buscar`](/structures/bst-computational-model/operations/search)
+        del modelo BST — todavía no hay ningún Splay, sólo comparar y bajar.
+        Se arranca en la raíz.
+      highlight: ["n20"]
+      nodes:
+        - { id: n20, value: 20, parent: null, state: active }
+        - { id: n10, value: 10, parent: n20, side: left }
+        - { id: n30, value: 30, parent: n20, side: right }
+        - { id: n25, value: 25, parent: n30, side: left }
+        - { id: n27, value: 27, parent: n25, side: right }
+    - note: >-
+        27 > 20: el valor buscado es mayor que la raíz, así que se descarta
+        todo el subárbol izquierdo (10) y se desciende al hijo derecho, 30.
+      highlight: ["n20", "n30"]
+      nodes:
+        - { id: n20, value: 20, parent: null, state: marked }
+        - { id: n10, value: 10, parent: n20, side: left, state: muted }
+        - { id: n30, value: 30, parent: n20, side: right, state: active }
+        - { id: n25, value: 25, parent: n30, side: left }
+        - { id: n27, value: 27, parent: n25, side: right }
+    - note: >-
+        27 < 30: ahora el valor buscado es menor que el nodo actual, así que
+        se descarta el subárbol derecho de 30 (vacío en este ejemplo) y se
+        desciende al hijo izquierdo, 25.
+      highlight: ["n30", "n25"]
+      nodes:
+        - { id: n20, value: 20, parent: null, state: muted }
+        - { id: n10, value: 10, parent: n20, side: left, state: muted }
+        - { id: n30, value: 30, parent: n20, side: right, state: marked }
+        - { id: n25, value: 25, parent: n30, side: left, state: active }
+        - { id: n27, value: 27, parent: n25, side: right }
+    - note: >-
+        27 > 25: se descarta el subárbol izquierdo de 25 (vacío) y se
+        desciende al hijo derecho, 27.
+      highlight: ["n25", "n27"]
+      nodes:
+        - { id: n20, value: 20, parent: null, state: muted }
+        - { id: n10, value: 10, parent: n20, side: left, state: muted }
+        - { id: n30, value: 30, parent: n20, side: right, state: muted }
+        - { id: n25, value: 25, parent: n30, side: left, state: marked }
+        - { id: n27, value: 27, parent: n25, side: right, state: active }
+    - note: >-
+        27 = 27: encontrado, a profundidad 3. Aquí termina el descenso de
+        `Buscar` — el trabajo de `Search` no termina todavía.
+      highlight: ["n27"]
+      nodes:
+        - { id: n20, value: 20, parent: null, state: muted }
+        - { id: n10, value: 10, parent: n20, side: left, state: muted }
+        - { id: n30, value: 30, parent: n20, side: right, state: muted }
+        - { id: n25, value: 25, parent: n30, side: left, state: muted }
+        - { id: n27, value: 27, parent: n25, side: right, state: answer }
+    - note: >-
+        Search(27) llama Splay(27): el nodo encontrado sube por rotaciones
+        hasta la raíz — ver
+        [`splay`](/structures/splay-tree/operations/splay) para el
+        detalle paso a paso de esa parte (zig/zig-zig/zig-zag no se
+        repiten aquí, es la misma operación referenciada, no reexplicada).
+      highlight: ["n27"]
+      nodes:
+        - { id: n27, value: 27, parent: null, state: answer }
+        - { id: n25, value: 25, parent: n27, side: left }
+        - { id: n20, value: 20, parent: n25, side: left }
+        - { id: n10, value: 10, parent: n20, side: left }
+        - { id: n30, value: 30, parent: n27, side: right }
 ---
 
 ## Qué hace

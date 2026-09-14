@@ -1,6 +1,88 @@
 ---
 kind: theory
 title: Layered range tree
+visualization:
+  type: range-tree
+  mode: layers
+  steps:
+    - note: >-
+        Estructura interna: cada nodo del árbol primario en X guarda un
+        arreglo ordenado con las Y de su subárbol, en vez del árbol
+        secundario del range tree ingenuo. Aquí un hijo izquierdo L=[3,8] y
+        un hijo derecho R=[5,9] ya lo tienen construido; su padre P=[3,5,8,9]
+        también, pero todavía sin ningún puente.
+      mode: layers
+      arrays:
+        - { id: L, label: L, row: 1, slot: left, cells: [3, 8] }
+        - { id: R, label: R, row: 1, slot: right, cells: [5, 9] }
+        - { id: P, label: P, row: 0, cells: [3, 5, 8, 9] }
+    - note: >-
+        El invariante: el arreglo del padre P no es independiente de los de
+        sus hijos, es exactamente la unión de L y R. Es la precondición que
+        fractional cascading necesita para funcionar sin trabajo extra — no
+        hay que elegir qué mitad de qué lista promover, porque toda la
+        lista del padre ya viene de los hijos.
+      mode: layers
+      arrays:
+        - { id: L, label: L, row: 1, slot: left, cells: [3, 8] }
+        - { id: R, label: R, row: 1, slot: right, cells: [5, 9] }
+        - { id: P, label: P, row: 0, cells: [3, 5, 8, 9] }
+    - note: >-
+        puenteIzq[i] guarda, para cada posición i del padre, la posición
+        equivalente en el arreglo del hijo izquierdo. P[0]=3 vino de L[0]=3,
+        así que puenteIzq[0]=0 — el puente activo, en azul.
+      mode: layers
+      arrays:
+        - { id: L, label: L, row: 1, slot: left, cells: [3, 8] }
+        - { id: R, label: R, row: 1, slot: right, cells: [5, 9] }
+        - { id: P, label: P, row: 0, cells: [3, 5, 8, 9] }
+      bridges:
+        - { from: P, fromIndex: 0, to: L, toIndex: 0, active: true }
+    - note: >-
+        puenteDer[i] hace lo mismo hacia el hijo derecho. P[1]=5 vino de
+        R[0]=5, así que puenteDer[1]=0.
+      mode: layers
+      arrays:
+        - { id: L, label: L, row: 1, slot: left, cells: [3, 8] }
+        - { id: R, label: R, row: 1, slot: right, cells: [5, 9] }
+        - { id: P, label: P, row: 0, cells: [3, 5, 8, 9] }
+      bridges:
+        - { from: P, fromIndex: 0, to: L, toIndex: 0, active: false }
+        - { from: P, fromIndex: 1, to: R, toIndex: 0, active: true }
+    - note: >-
+        El invariante no se detiene ahí: las posiciones 0, 1 y 2 de P llevan
+        puente hacia AMBOS hijos, no sólo hacia el que aportó el valor — a
+        diferencia del caso general de fractional cascading, donde sólo se
+        promueve la mitad de cada lista, aquí no hay nada que decidir
+        promover, porque todo elemento del padre viene de alguno de los dos.
+      mode: layers
+      arrays:
+        - { id: L, label: L, row: 1, slot: left, cells: [3, 8] }
+        - { id: R, label: R, row: 1, slot: right, cells: [5, 9] }
+        - { id: P, label: P, row: 0, cells: [3, 5, 8, 9] }
+      bridges:
+        - { from: P, fromIndex: 0, to: L, toIndex: 0, active: false }
+        - { from: P, fromIndex: 0, to: R, toIndex: 0, active: false }
+        - { from: P, fromIndex: 1, to: L, toIndex: 1, active: false }
+        - { from: P, fromIndex: 1, to: R, toIndex: 0, active: false }
+        - { from: P, fromIndex: 2, to: L, toIndex: 1, active: false }
+        - { from: P, fromIndex: 2, to: R, toIndex: 1, active: false }
+    - note: >-
+        Nota de apoyo (no está en las diapositivas): qué hacer cuando i cae
+        después del último elemento de un hijo necesita un centinela — una
+        posición extra, marcada como frontera (•), en cada arreglo de
+        puentes que apunta al final del arreglo del hijo correspondiente.
+        Sin él, ninguna búsqueda tendría a dónde apuntar cuando ningún
+        elemento del hijo es mayor o igual.
+      mode: layers
+      arrays:
+        - { id: L, label: L, row: 1, slot: left, cells: [3, 8, "•"], states: [idle, idle, marked] }
+        - { id: R, label: R, row: 1, slot: right, cells: [5, 9, "•"], states: [idle, idle, marked] }
+        - { id: P, label: P, row: 0, cells: [3, 5, 8, 9, "•"], states: [idle, idle, idle, idle, marked] }
+      bridges:
+        - { from: P, fromIndex: 4, to: L, toIndex: 2, active: false }
+        - { from: P, fromIndex: 4, to: R, toIndex: 2, active: false }
+      caption: "centinela: puenteIzq[4]=2, puenteDer[4]=2 — una posición extra que apunta al final de cada hijo"
 ---
 
 ## ¿Qué problema resuelve?

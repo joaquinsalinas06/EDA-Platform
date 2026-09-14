@@ -1,6 +1,55 @@
 ---
 kind: theory
 title: Splay tree
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Un splay tree de 5 nodos en cadena hacia la izquierda: 50-40-30-20-10.
+        Estado de reposo, antes de cualquier búsqueda — un BST ordinario,
+        sin ningún campo de balance extra.
+      nodes:
+        - { id: n50, value: 50, parent: null }
+        - { id: n40, value: 40, parent: n50, side: left }
+        - { id: n30, value: 30, parent: n40, side: left }
+        - { id: n20, value: 20, parent: n30, side: left }
+        - { id: n10, value: 10, parent: n20, side: left }
+    - note: >-
+        Se busca 10: el nodo más profundo, a distancia 4 de la raíz. La
+        búsqueda desciende como en cualquier BST y lo encuentra — hasta acá,
+        ningún BST balanceado haría nada distinto.
+      highlight: ["n10"]
+      nodes:
+        - { id: n50, value: 50, parent: null }
+        - { id: n40, value: 40, parent: n50, side: left }
+        - { id: n30, value: 30, parent: n40, side: left }
+        - { id: n20, value: 20, parent: n30, side: left }
+        - { id: n10, value: 10, parent: n20, side: left, state: active }
+    - note: >-
+        Lo que distingue al splay tree pasa después de encontrarlo:
+        Splay(10) lo sube con rotaciones hasta la raíz — ver
+        [`splay`](/structures/splay-tree/operations/splay) para el
+        detalle paso a paso de zig/zig-zig/zig-zag que produce este
+        resultado.
+      highlight: ["n10"]
+      nodes:
+        - { id: n10, value: 10, parent: null, state: answer }
+        - { id: n20, value: 20, parent: n10, side: right }
+        - { id: n30, value: 30, parent: n20, side: right }
+        - { id: n40, value: 40, parent: n30, side: right }
+        - { id: n50, value: 50, parent: n40, side: right }
+    - note: >-
+        Si ahora se vuelve a buscar 10, el costo es 0: ya está en la raíz.
+        Ésa es la apuesta del splay tree — un valor buscado seguido queda
+        barato de volver a buscar, a costa de que la forma del árbol
+        cambie con cada acceso.
+      highlight: ["n10"]
+      nodes:
+        - { id: n10, value: 10, parent: null, state: active }
+        - { id: n20, value: 20, parent: n10, side: right }
+        - { id: n30, value: 30, parent: n20, side: right }
+        - { id: n40, value: 40, parent: n30, side: right }
+        - { id: n50, value: 50, parent: n40, side: right }
 ---
 
 ## ¿Qué problema resuelve?

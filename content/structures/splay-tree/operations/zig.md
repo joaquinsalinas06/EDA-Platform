@@ -6,6 +6,78 @@ cppSteps:
   - step-1-node.cpp
   - step-2-rotate.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Caso zig: x es hijo directo de la raíz p — no hay abuelo, sólo dos
+        niveles. Aquí, x es hijo izquierdo de p. A, B, C son subárboles
+        completos, dibujados colapsados: sólo importa de quién cuelgan, no
+        su contenido.
+      highlight: [x, p]
+      nodes:
+        - { id: p, value: p, parent: null }
+        - { id: x, value: x, parent: p }
+        - { id: C, value: C, parent: p, collapsed: true }
+        - { id: A, value: A, parent: x, collapsed: true }
+        - { id: B, value: B, parent: x, collapsed: true }
+    - note: >-
+        x es hijo izquierdo de p, así que la operación es Right-Rotate(x) —
+        una sola rotación, sin decidir entre varios casos como en zig-zig o
+        zig-zag. Los punteros que van a cambiar son tres: `p.izquierdo`,
+        `x.derecho` y el puntero a la raíz del subárbol.
+      highlight: [x, p]
+      nodes:
+        - { id: p, value: p, parent: null }
+        - { id: x, value: x, parent: p }
+        - { id: C, value: C, parent: p, collapsed: true }
+        - { id: A, value: A, parent: x, collapsed: true }
+        - { id: B, value: B, parent: x, collapsed: true }
+    - note: >-
+        Primer puntero: B, el hijo derecho de x, se desprende de x — es el
+        único subárbol que cambia de padre en esta rotación. Todavía no
+        tiene nuevo padre asignado.
+      highlight: [x]
+      nodes:
+        - { id: p, value: p, parent: null }
+        - { id: x, value: x, parent: p }
+        - { id: C, value: C, parent: p, collapsed: true }
+        - { id: A, value: A, parent: x, collapsed: true }
+        - { id: B, value: B, parent: null, collapsed: true, state: marked }
+    - note: >-
+        Segundo puntero: `p.izquierdo ← B`. B pasa a colgar de p, del lado
+        izquierdo — el mismo lado del que colgaba x. p todavía está en su
+        posición original; x y p siguen sin haberse movido entre sí.
+      highlight: [p]
+      nodes:
+        - { id: p, value: p, parent: null }
+        - { id: x, value: x, parent: p }
+        - { id: C, value: C, parent: p, collapsed: true }
+        - { id: A, value: A, parent: x, collapsed: true }
+        - { id: B, value: B, parent: p, collapsed: true, state: marked }
+    - note: >-
+        Tercer puntero: `x.derecho ← p`. p se desprende de su posición
+        original y pasa a colgar de x — es el giro en sí, el momento donde
+        x y p intercambian quién es padre de quién.
+      highlight: [x, p]
+      nodes:
+        - { id: x, value: x, parent: null, state: marked }
+        - { id: A, value: A, parent: x, collapsed: true }
+        - { id: p, value: p, parent: x }
+        - { id: B, value: B, parent: p, collapsed: true }
+        - { id: C, value: C, parent: p, collapsed: true }
+    - note: >-
+        Rotación completa: x ocupa la posición de p (raíz de este
+        subárbol), p es su hijo derecho, y B (que era hijo derecho de x)
+        ahora cuelga del hijo izquierdo de p. A no se tocó en ningún
+        momento — sigue colgando de x, como al principio.
+      highlight: [x]
+      nodes:
+        - { id: x, value: x, parent: null, state: answer }
+        - { id: A, value: A, parent: x, collapsed: true }
+        - { id: p, value: p, parent: x }
+        - { id: B, value: B, parent: p, collapsed: true }
+        - { id: C, value: C, parent: p, collapsed: true }
 ---
 
 ## Qué hace

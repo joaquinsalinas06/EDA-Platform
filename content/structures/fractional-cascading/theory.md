@@ -1,6 +1,109 @@
 ---
 kind: theory
 title: Fractional cascading
+visualization:
+  type: range-tree
+  mode: layers
+  steps:
+    - note: >-
+        Partimos de las mismas tres listas del ejemplo de esta página: L1,
+        L2, L3, cada una ordenada por separado. Buscar el mismo x en las
+        tres, una por una, exige tres búsquedas binarias independientes —
+        sin ninguna relación entre ellas.
+      mode: layers
+      arrays:
+        - { id: L3, label: L3, row: 2, cells: [4, 9, 13, 18, 22] }
+        - { id: L2raw, label: L2, row: 1, cells: [3, 5, 12] }
+        - { id: L1raw, label: L1, row: 0, cells: [2, 8, 15] }
+    - note: >-
+        Si L2 guardara una copia COMPLETA de L3 (no sólo una fracción),
+        localizar x en L3 se traduciría directo a su posición en L2 — pero
+        el tamaño se dispara: L2 pasa de 3 elementos propios a 8 (los 5 de
+        L3 copiados enteros), y ese crecimiento se repite en cada nivel
+        hasta Θ(kn).
+      mode: layers
+      arrays:
+        - { id: L3, label: L3, row: 2, cells: [4, 9, 13, 18, 22] }
+        - id: L2full
+          label: "L2 (copia completa de L3)"
+          row: 1
+          cells: [3, 4, 5, 9, 12, 13, 18, 22]
+          states: [idle, copied, idle, copied, idle, copied, copied, copied]
+    - note: >-
+        En cambio, promovemos sólo la mitad de L3: de cada dos elementos,
+        uno sube (9 y 18, marcados como frontera de lo que se va a
+        promover). Alcanza para heredar la posición sin duplicar el
+        tamaño de la lista de arriba.
+      mode: layers
+      arrays:
+        - id: L3
+          label: L3
+          row: 2
+          cells: [4, 9, 13, 18, 22]
+          states: [idle, marked, idle, marked, idle]
+        - { id: L2raw, label: L2, row: 1, cells: [3, 5, 12] }
+    - note: >-
+        Se construye L'2 = L2 ∪ {mitad de L3}. Los promovidos (9 y 18)
+        quedan marcados como nuevos en esta versión y guardan un puente a
+        su posición exacta en L3; el resto de L'2 (3, 5, 12) son los
+        propios de L2, sin puente.
+      mode: layers
+      arrays:
+        - { id: L3, label: L3, row: 2, cells: [4, 9, 13, 18, 22] }
+        - id: Lp2
+          label: "L'2"
+          row: 1
+          cells: [3, 5, 9, 12, 18]
+          states: [idle, idle, copied, idle, copied]
+      bridges:
+        - { from: Lp2, fromIndex: 2, to: L3, toIndex: 1, active: true }
+        - { from: Lp2, fromIndex: 4, to: L3, toIndex: 3, active: true }
+    - note: >-
+        El mismo patrón se repite un nivel más arriba: L'1 = L1 ∪ {mitad
+        de L'2} (5 y 12, promovidos y marcados como nuevos). El invariante
+        |L'i| ≤ |Li| + ½|L'i+1| se cumple en cada nivel — es justo lo que
+        evita el Θ(kn) del segundo paso.
+      mode: layers
+      arrays:
+        - { id: L3, label: L3, row: 2, cells: [4, 9, 13, 18, 22] }
+        - id: Lp2
+          label: "L'2"
+          row: 1
+          cells: [3, 5, 9, 12, 18]
+          states: [idle, marked, idle, marked, idle]
+        - id: Lp1
+          label: "L'1"
+          row: 0
+          cells: [2, 5, 8, 12, 15]
+          states: [idle, copied, idle, copied, idle]
+      bridges:
+        - { from: Lp2, fromIndex: 2, to: L3, toIndex: 1, active: false }
+        - { from: Lp2, fromIndex: 4, to: L3, toIndex: 3, active: false }
+        - { from: Lp1, fromIndex: 1, to: Lp2, toIndex: 1, active: true }
+        - { from: Lp1, fromIndex: 3, to: Lp2, toIndex: 3, active: true }
+    - note: >-
+        Resultado final: tres listas de 5 elementos cada una — 15 en
+        total, lineal en n, no Θ(kn) como en el segundo paso. La cadena de
+        puentes conecta L'1 con L'2 y L'2 con L3: es lo que permite bajar
+        de nivel en O(1) en vez de repetir la búsqueda binaria completa
+        (ver `query`).
+      mode: layers
+      arrays:
+        - { id: L3, label: L3, row: 2, cells: [4, 9, 13, 18, 22] }
+        - id: Lp2
+          label: "L'2"
+          row: 1
+          cells: [3, 5, 9, 12, 18]
+        - id: Lp1
+          label: "L'1"
+          row: 0
+          cells: [2, 5, 8, 12, 15]
+      bridges:
+        - { from: Lp2, fromIndex: 2, to: L3, toIndex: 1, active: false }
+        - { from: Lp2, fromIndex: 4, to: L3, toIndex: 3, active: false }
+        - { from: Lp1, fromIndex: 1, to: Lp2, toIndex: 1, active: false }
+        - { from: Lp1, fromIndex: 3, to: Lp2, toIndex: 3, active: false }
+      caption: "|L'1| + |L'2| + |L3| = 5 + 5 + 5 = 15 = O(n)"
 ---
 
 ## ¿Qué problema resuelve?

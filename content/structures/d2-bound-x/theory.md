@@ -1,6 +1,75 @@
 ---
 kind: theory
 title: "D₂ — acotar x"
+visualization:
+  type: range-tree
+  steps:
+    - note: >-
+        Un BST estándar sobre x — el mismo [/structures/range-tree](/structures/range-tree)
+        de siempre, sin nada nuevo todavía: raíz x=4, hijo izquierdo x=3 (con
+        su propio hijo izquierdo x=1) e hijo derecho x=6.
+      nodes:
+        - { id: r4, value: 4, parent: null }
+        - { id: n3, value: 3, parent: r4 }
+        - { id: n6, value: 6, parent: r4 }
+        - { id: n1, value: 1, parent: n3 }
+    - note: >-
+        Lo único que $D_2$ le agrega: cada nodo, además de su rol en el BST,
+        guarda una copia completa de la estructura de dominancia
+        [/structures/dominance-2d](/structures/dominance-2d) ($D_1$) sobre
+        los puntos de su propio subárbol — aquí, en la raíz, $D_1$ sobre los
+        4 puntos. $D_2$ es literalmente $D_1$ colgado de un árbol.
+      highlight: [r4]
+      nodes:
+        - { id: r4, value: 4, parent: null, state: active }
+        - { id: n3, value: 3, parent: r4 }
+        - { id: n6, value: 6, parent: r4 }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: d1-r4, value: "D₁({1,3,4,6})", parent: null, panel: sat }
+      panels:
+        - { id: sat, label: "D₁ satélite de la raíz", anchor: r4 }
+    - note: >-
+        Acotar x se resuelve exactamente como en el range tree: descomposición
+        canónica sobre el BST. Aquí x=3 es un nodo canónico de un rango que
+        acote x — se marca como delimitador de esa descomposición, igual que
+        en range tree (no se reexplica esa parte).
+      highlight: [n3]
+      nodes:
+        - { id: r4, value: 4, parent: null }
+        - { id: n3, value: 3, parent: r4, state: marked }
+        - { id: n6, value: 6, parent: r4 }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: d1-r4, value: "D₁({1,3,4,6})", parent: null, panel: sat }
+      panels:
+        - { id: sat, label: "D₁ satélite de la raíz", anchor: r4 }
+    - note: >-
+        Acotar (y, z) se resuelve delegando en $D_1$, que ya sabe hacerlo:
+        sobre ese nodo canónico se dispara **una** consulta de dominancia
+        sobre su propia $D_1$ satélite — no una nueva descomposición canónica
+        en y, sólo delegación directa.
+      highlight: [n3]
+      nodes:
+        - { id: r4, value: 4, parent: null }
+        - { id: n3, value: 3, parent: r4, state: marked }
+        - { id: n6, value: 6, parent: r4 }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: d1-n3, value: "D₁({1,3}) ⊳ dominance-query", parent: null, panel: sat2, state: active }
+      panels:
+        - { id: sat2, label: "D₁ satélite de x=3", anchor: n3 }
+    - note: >-
+        Composición final: descomposición canónica en x (delimitador ámbar)
+        × delegación en $D_1$ (consulta activa) = $D_2$. Ningún dato se
+        recalcula: x=3 reutiliza la $D_1$ ya construida sobre su subárbol.
+      highlight: [n3]
+      caption: "D₂ = BST sobre x + D₁ por nodo"
+      nodes:
+        - { id: r4, value: 4, parent: null }
+        - { id: n3, value: 3, parent: r4, state: marked }
+        - { id: n6, value: 6, parent: r4 }
+        - { id: n1, value: 1, parent: n3 }
+        - { id: d1-n3, value: "D₁({1,3}) ⊳ dominance-query", parent: null, panel: sat2, state: answer }
+      panels:
+        - { id: sat2, label: "D₁ satélite de x=3", anchor: n3 }
 ---
 
 ## ¿Qué problema resuelve?

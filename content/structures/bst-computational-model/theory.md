@@ -1,6 +1,61 @@
 ---
 kind: theory
 title: Modelo computacional del BST
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        El modelo arranca de un nodo n solo, antes de fijar qué punteros
+        guarda.
+      highlight: [n]
+      nodes:
+        - { id: n, value: n, parent: null, state: active }
+    - note: >-
+        n conoce a su hijo izquierdo y a su derecho — eso ya lo tenía
+        cualquier BST, es el invariante de orden de siempre.
+      highlight: [l, r]
+      nodes:
+        - { id: n, value: n, parent: null }
+        - { id: l, value: hijo-izq, parent: n, side: left, state: active }
+        - { id: r, value: hijo-der, parent: n, side: right, state: active }
+    - note: >-
+        El modelo agrega una tercera flecha, de n hacia su padre p — la
+        que un BST simple no necesita y este modelo sí exige.
+      highlight: [p]
+      links:
+        - { from: n, to: p, kind: pointer, label: padre }
+      nodes:
+        - { id: p, value: p, parent: null, state: active }
+        - { id: n, value: n, parent: p }
+        - { id: l, value: hijo-izq, parent: n, side: left }
+        - { id: r, value: hijo-der, parent: n, side: right }
+    - note: >-
+        Sin ese puntero directo, encontrar a p desde n exigiría bajar de
+        nuevo desde la raíz g: g→p→n, dos pointer-moves ya gastados sólo
+        para llegar a n — y habría que repetir el camino para volver a
+        subir cada vez que una rotación necesite el padre de un nodo
+        profundo.
+      highlight: [g, p, n]
+      nodes:
+        - { id: g, value: raíz, parent: null }
+        - { id: p, value: p, parent: g }
+        - { id: n, value: n, parent: p }
+        - { id: l, value: hijo-izq, parent: n, side: left }
+        - { id: r, value: hijo-der, parent: n, side: right }
+    - note: >-
+        Con el puntero directo, subir de n a p es un único pointer-move,
+        O(1), sin pasar por g — la ventaja concreta de la tercera flecha
+        que fija esta sección, y condición necesaria para que rotate sea
+        O(1).
+      highlight: [n, p]
+      links:
+        - { from: n, to: p, kind: pointer, label: padre }
+      nodes:
+        - { id: g, value: raíz, parent: null }
+        - { id: p, value: p, parent: g, state: active }
+        - { id: n, value: n, parent: p, state: active }
+        - { id: l, value: hijo-izq, parent: n, side: left }
+        - { id: r, value: hijo-der, parent: n, side: right }
 ---
 
 ## ¿Qué problema resuelve?

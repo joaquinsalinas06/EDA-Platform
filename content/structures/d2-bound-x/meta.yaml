@@ -13,5 +13,5 @@ complexity: {}
 # más adelante, en el cierre general (#53-54, #59-63) y le toca a esa sección.
 
 professorAnalysisStyle: composición estructural
-hasVisualization: false
+hasVisualization: true
 placeholder: false

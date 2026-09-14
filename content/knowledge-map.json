@@ -471,7 +471,7 @@
       "usedBy": ["d2-bound-x"],
       "operations": ["ray-reformulation", "subdivision-build", "dominance-query"],
       "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#16-31"],
-      "hasVisualization": false,
+      "hasVisualization": true,
       "complexityStyleFromProfessor": "conteo directo output-sensitive",
       "status": "generated"
     },
@@ -484,7 +484,7 @@
       "usedBy": ["d3-separation-node"],
       "operations": ["build", "query"],
       "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#32-34"],
-      "hasVisualization": false,
+      "hasVisualization": true,
       "complexityStyleFromProfessor": "composición estructural",
       "status": "generated"
     },
@@ -511,7 +511,7 @@
       "usedBy": ["generalized-fractional-cascading"],
       "operations": ["build"],
       "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#44-50"],
-      "hasVisualization": false,
+      "hasVisualization": true,
       "complexityStyleFromProfessor": "composición estructural",
       "status": "generated"
     },
@@ -524,7 +524,7 @@
       "usedBy": [],
       "operations": ["applicability", "bounded-degree-check", "composition"],
       "sourceSlides": ["Sem5_Fractional_Cascading_II.pdf#51-53"],
-      "hasVisualization": false,
+      "hasVisualization": true,
       "complexityStyleFromProfessor": "conteo directo",
       "status": "generated"
     },

@@ -6,6 +6,91 @@ cppSteps:
   - step-1-node.cpp
   - step-2-instrumented-move.cpp
   - full-implementation.cpp
+visualization:
+  type: tree
+  steps:
+    - note: >-
+        Posición inicial: el puntero de recorrido está en la raíz (n4). Aún
+        no se movió, así que el contador de pointer-moves está en 0.
+      highlight: [n4]
+      nodes:
+        - { id: n4, value: 4, parent: null, state: active }
+        - { id: n2, value: 2, parent: n4, side: left }
+        - { id: n6, value: 6, parent: n4, side: right }
+        - { id: n1, value: 1, parent: n2, side: left }
+        - { id: n3, value: 3, parent: n2, side: right }
+        - { id: n5, value: 5, parent: n6, side: left }
+        - { id: n7, value: 7, parent: n6, side: right }
+      caption: "pointer-moves: 0"
+    - note: >-
+        Pointer-Move(n4, derecha): el puntero sigue el enlace al hijo
+        derecho y queda en n6. Un movimiento, un incremento del contador.
+      highlight: [n6]
+      nodes:
+        - { id: n4, value: 4, parent: null }
+        - { id: n2, value: 2, parent: n4, side: left }
+        - { id: n6, value: 6, parent: n4, side: right, state: active }
+        - { id: n1, value: 1, parent: n2, side: left }
+        - { id: n3, value: 3, parent: n2, side: right }
+        - { id: n5, value: 5, parent: n6, side: left }
+        - { id: n7, value: 7, parent: n6, side: right }
+      caption: "pointer-moves: 1"
+    - note: >-
+        Pointer-Move(n6, izquierda): baja al hijo izquierdo, n5. Sigue
+        siendo el mismo paso atómico que antes, sólo cambió la dirección.
+      highlight: [n5]
+      nodes:
+        - { id: n4, value: 4, parent: null }
+        - { id: n2, value: 2, parent: n4, side: left }
+        - { id: n6, value: 6, parent: n4, side: right }
+        - { id: n1, value: 1, parent: n2, side: left }
+        - { id: n3, value: 3, parent: n2, side: right }
+        - { id: n5, value: 5, parent: n6, side: left, state: active }
+        - { id: n7, value: 7, parent: n6, side: right }
+      caption: "pointer-moves: 2"
+    - note: >-
+        Pointer-Move(n5, padre): el modelo también cuenta subir como un
+        pointer-move de costo unitario, no sólo bajar. El puntero vuelve a
+        n6 y el contador sigue subiendo igual que en el paso anterior.
+      highlight: [n6]
+      nodes:
+        - { id: n4, value: 4, parent: null }
+        - { id: n2, value: 2, parent: n4, side: left }
+        - { id: n6, value: 6, parent: n4, side: right, state: active }
+        - { id: n1, value: 1, parent: n2, side: left }
+        - { id: n3, value: 3, parent: n2, side: right }
+        - { id: n5, value: 5, parent: n6, side: left }
+        - { id: n7, value: 7, parent: n6, side: right }
+      caption: "pointer-moves: 3"
+    - note: >-
+        Pointer-Move(n6, derecha): baja ahora al otro hijo, n7. Cada
+        llamada es independiente de las anteriores — el modelo no recuerda
+        de dónde vino, sólo dónde está el puntero ahora.
+      highlight: [n7]
+      nodes:
+        - { id: n4, value: 4, parent: null }
+        - { id: n2, value: 2, parent: n4, side: left }
+        - { id: n6, value: 6, parent: n4, side: right }
+        - { id: n1, value: 1, parent: n2, side: left }
+        - { id: n3, value: 3, parent: n2, side: right }
+        - { id: n5, value: 5, parent: n6, side: left }
+        - { id: n7, value: 7, parent: n6, side: right, state: active }
+      caption: "pointer-moves: 4"
+    - note: >-
+        Pointer-Move(n7, padre): último paso, vuelve a n6. Cinco llamadas a
+        pointer-move, cinco unidades de costo — el contador final es
+        exactamente el número de aristas recorridas, sin importar si fueron
+        bajadas o subidas.
+      highlight: [n6]
+      nodes:
+        - { id: n4, value: 4, parent: null }
+        - { id: n2, value: 2, parent: n4, side: left }
+        - { id: n6, value: 6, parent: n4, side: right, state: active }
+        - { id: n1, value: 1, parent: n2, side: left }
+        - { id: n3, value: 3, parent: n2, side: right }
+        - { id: n5, value: 5, parent: n6, side: left }
+        - { id: n7, value: 7, parent: n6, side: right }
+      caption: "pointer-moves: 5"
 ---
 
 ## Qué hace
@@ -56,7 +141,8 @@ $O(1)$ adicional: sólo se actualiza el puntero a la posición actual.
 
 ## Ejemplo
 
-Ver [examples.md](/structures/bst-computational-model/examples).
+Ver la visualización de arriba y
+[examples.md](/structures/bst-computational-model/examples).
 
 ## Casos límite
 

@@ -16,5 +16,5 @@ usedBy: ["generalized-fractional-cascading"]
 complexity: {}
 
 professorAnalysisStyle: "composición estructural"
-hasVisualization: false
+hasVisualization: true
 placeholder: false

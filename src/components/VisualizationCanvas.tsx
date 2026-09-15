@@ -224,21 +224,41 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
             const cy = my + (dx / len) * curve;
             const d = curve === 0 ? `M${a.x},${a.y} L${b.x},${b.y}` : `M${a.x},${a.y} Q${cx},${cy} ${b.x},${b.y}`;
             return (
-              <path
-                key={e.id ?? `${e.from}-${e.to}`}
-                d={d}
-                fill="none"
-                stroke={visual.stroke}
-                strokeWidth={visual.strokeWidth}
-                strokeDasharray={visual.dash}
-                markerEnd={e.arrow ? `url(#${state === 'active' ? `${arrowId}-accent` : `${arrowId}-ink`})` : undefined}
-                // `d` explícito (no `all`): `all` también intentaba transicionar
-                // `marker-end`/`fill`, que no son animables o no deben, y en
-                // navegadores sin soporte de interpolación de `d` (Safari
-                // &lt;16.4) degradaba de "no transiciona una cosa" a "no
-                // transiciona nada" por el shorthand.
-                style={{ transition: 'd 450ms cubic-bezier(.2,.7,.3,1), stroke 300ms, stroke-width 300ms' }}
-              />
+              <g key={e.id ?? `${e.from}-${e.to}`}>
+                <path
+                  d={d}
+                  fill="none"
+                  stroke={visual.stroke}
+                  strokeWidth={visual.strokeWidth}
+                  strokeDasharray={visual.dash}
+                  markerEnd={e.arrow ? `url(#${state === 'active' ? `${arrowId}-accent` : `${arrowId}-ink`})` : undefined}
+                  // `d` explícito (no `all`): `all` también intentaba transicionar
+                  // `marker-end`/`fill`, que no son animables o no deben, y en
+                  // navegadores sin soporte de interpolación de `d` (Safari
+                  // &lt;16.4) degradaba de "no transiciona una cosa" a "no
+                  // transiciona nada" por el shorthand.
+                  style={{ transition: 'd 450ms cubic-bezier(.2,.7,.3,1), stroke 300ms, stroke-width 300ms' }}
+                />
+                {e.label && (
+                  // `label` existía en el schema desde siempre pero nunca se
+                  // pintaba — sin esto no hay forma de distinguir en el
+                  // dibujo "este es el puntero left" de "este es right"
+                  // cuando dos aristas `pointer` van entre el mismo par de
+                  // nodos en direcciones opuestas.
+                  <text
+                    x={cx}
+                    y={cy}
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fontSize={9}
+                    fontFamily="var(--font-mono)"
+                    fill={visual.stroke}
+                    style={{ transition: 'x 450ms cubic-bezier(.2,.7,.3,1), y 450ms cubic-bezier(.2,.7,.3,1)' }}
+                  >
+                    {e.label}
+                  </text>
+                )}
+              </g>
             );
           })}
 

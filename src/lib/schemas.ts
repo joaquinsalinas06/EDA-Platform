@@ -46,6 +46,11 @@ const vizLink = z.object({
   to: z.string(),
   kind: z.enum(['tree', 'shared', 'pointer']).default('tree'),
   label: z.string().optional(),
+  /** Curvatura explícita (family `tree`; persistent/range-tree ya la
+   * calculan solos). Para un par de punteros opuestos entre los mismos dos
+   * nodos (izquierda de uno = derecha del otro) — sin esto se dibujan
+   * exactamente encima, indistinguibles. Positivo/negativo = lado. */
+  curve: z.number().optional(),
 });
 
 const vizArray = z.object({

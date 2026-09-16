@@ -5,7 +5,7 @@ week: week-02
 
 prerequisites: []
 buildsOn: []
-usedBy: ["fibonacci-heap", "fat-nodes"]
+usedBy: ["fibonacci-heap", "fat-nodes", "access-lemma"]
 
 # Es un concepto (una técnica de análisis), no una estructura con operaciones
 # que costar. El profesor da la definición y la condición de validez, no una

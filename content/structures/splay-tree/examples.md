@@ -4,16 +4,17 @@ title: Ejemplos
 ---
 
 <!--
-El material (#59-75) no trae ni una traza numérica de Splay: los tres casos
-se dan sólo como diagramas simbólicos (#64-66), sin valores. Los tres
-ejemplos de abajo están *derivados* ejecutando a mano el pseudocódigo de
-splay.md/zig.md/zig-zig.md/zig-zag.md sobre árboles concretos — ninguno
-aparece en las diapositivas.
+El material no trae ninguna traza numérica de Splay: la semana 5 da los tres
+casos como diagramas simbólicos (#64-66) y la semana 6 da el pseudocódigo
+completo (Sem6 #10) y la tabla en términos de Rotar (Sem6 #9) — todo sin
+valores concretos. Los tres ejemplos de abajo están *derivados* ejecutando a
+mano ese pseudocódigo del profesor sobre árboles concretos; los árboles no
+aparecen en las diapositivas, el algoritmo sí.
 -->
 
 ## Mínimo
 
-*(derivado del pseudocódigo; no aparece en las diapositivas)*
+*(traza derivada del pseudocódigo del profesor (Sem6 #10); el árbol concreto no aparece en las diapositivas)*
 
 Árbol de 7 nodos, ya balanceado:
 
@@ -25,7 +26,7 @@ aparece en las diapositivas.
    1   3 5   7
 ```
 
-`Search(6)`: 6 es hijo directo de la raíz 4 → un único
+`Buscar(6)`: 6 es hijo directo de la raíz 4 → un único
 [`zig`](/structures/splay-tree/operations/zig), sin abuelo involucrado.
 
 ```
@@ -45,9 +46,9 @@ estaba a un nivel de la raíz.
 
 ## Normal
 
-*(derivado del pseudocódigo; no aparece en las diapositivas)*
+*(traza derivada del pseudocódigo del profesor (Sem6 #10); el árbol concreto no aparece en las diapositivas)*
 
-A partir del árbol resultante de arriba, `Search(1)`. El camino es
+A partir del árbol resultante de arriba, `Buscar(1)`. El camino es
 6 → 4 → 2 → 1 (profundidad 3): 1 es hijo izquierdo de 2, y 2 es hijo
 izquierdo de 4 → primera iteración es
 [`zig-zig`](/structures/splay-tree/operations/zig-zig).
@@ -91,7 +92,7 @@ amortizada (que sólo aplica promediada sobre una secuencia).
 
 ## Límite
 
-*(derivado del pseudocódigo; no aparece en las diapositivas)*
+*(traza derivada del pseudocódigo del profesor (Sem6 #10); el árbol concreto no aparece en las diapositivas)*
 
 El caso patológico: una cadena degenerada de 7 nodos (insertados en orden
 creciente sin nunca hacer splay), donde cada nodo es hijo derecho del
@@ -113,14 +114,15 @@ anterior:
             7
 ```
 
-`Search(7)`: el nodo más profundo, a distancia 6 de la raíz. Cada par
+`Buscar(7)`: el nodo más profundo, a distancia 6 de la raíz. Cada par
 consecutivo del camino (7,6,5), (5... etc.) está alineado del mismo lado
 (derecho-derecho) → **puros pasos zig-zig** hasta que 7 llega a la raíz:
 tres iteraciones de zig-zig (6 rotaciones) más ninguna de zig (la
 profundidad es par respecto del último par). Costo real de esta única
-llamada: $O(n)$ — exactamente el caso que el análisis de
-[`splay.md`](/structures/splay-tree/operations/splay) señala como el peor
-caso real de una operación aislada, distinto de la cota amortizada $O(\log n)$.
+llamada: $O(n)$ — es el "$\Theta(n)$ en el peor caso individual" que el
+profesor señala al pie del pseudocódigo de
+[`Splay`](/structures/splay-tree/operations/splay) (Sem6 #10), distinto de
+la cota amortizada $O(\log n)$.
 Después de este único Splay, sin embargo, el árbol queda considerablemente
 más plano que la cadena original — es la propiedad (no demostrada aquí) que
 hace que la *siguiente* búsqueda en esa zona ya no cueste $O(n)$.

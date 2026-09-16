@@ -1,7 +1,7 @@
 ---
 kind: operation
 title: Zig
-order: 1
+order: 2
 cppSteps:
   - step-1-node.cpp
   - step-2-rotate.cpp
@@ -114,13 +114,14 @@ antes:            después:
 
 ## Pseudocódigo
 
+La tabla del profesor lo resume en una llamada: `Zig = Rotar(x)` (Sem6 #9).
+[`Rotar`](/structures/splay-tree/operations/rotate) ya decide sola el lado
+según de dónde cuelga x, así que no hay dos variantes que escribir:
+
 ```
 Algoritmo: Zig(x)
-p ← x.padre                      // p es la raíz
-si x = p.izquierdo entonces
-     Rotate(x)                   // right rotation, ver bst-computational-model
-sino
-     Rotate(x)                   // left rotation
+// p = padre(x) es la raíz
+Rotar(x)                         // right o left según el lado de x
 // x es ahora la raíz
 ```
 

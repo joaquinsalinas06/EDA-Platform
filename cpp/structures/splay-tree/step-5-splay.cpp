@@ -1,6 +1,9 @@
-// Paso 5 — Splay(x): el bucle que el mazo no da explícitamente (#64-66 son
-// sólo los tres diagramas de caso). Aplica zig / zig-zig / zig-zag según la
-// posición relativa de x hasta que x llega a la raíz.
+// Paso 5 — Splay(x): el bucle completo del profesor (Sem6 #10), traducido
+// línea por línea. Aplica zig / zig-zig / zig-zag según la posición relativa
+// de x hasta que x llega a la raíz. Los tres casos son sólo combinaciones de
+// rotate (Sem6 #8-9). El costo real es proporcional a la profundidad de x —
+// hasta Theta(n) en el peor caso individual; la cota O(log n) es amortizada
+// y se demuestra en /structures/access-lemma.
 
 #include "step-4-zig-zag.cpp"
 

@@ -94,6 +94,10 @@ búsqueda**: Splay(x), que siempre termina con x en la raíz.
 
 ## Operaciones
 
+- [`rotate`](/structures/splay-tree/operations/rotate) — la primitiva:
+  `Rotar(v)` sube v un nivel sobre su padre. Los tres casos de abajo se
+  arman todos a partir de ella, y sólo se distinguen por sobre qué nodo se
+  llama primero (Sem6 #8-9).
 - [`zig`](/structures/splay-tree/operations/zig) — caso base: x es hijo de
   la raíz, una sola rotación.
 - [`zig-zig`](/structures/splay-tree/operations/zig-zig) — x y su padre p
@@ -102,8 +106,9 @@ búsqueda**: Splay(x), que siempre termina con x en la raíz.
   son hijos de lados opuestos.
 - [`splay`](/structures/splay-tree/operations/splay) — la operación madre:
   aplica repetidamente el caso que corresponda hasta que x llega a la raíz.
-- [`search`](/structures/splay-tree/operations/search) — Buscar(x) sobre el
-  modelo BST, seguido de Splay(x).
+- [`search`](/structures/splay-tree/operations/search) — Buscar(k) sobre el
+  modelo BST, seguido de Splay: del nodo encontrado si k está, del último
+  nodo visitado si no (Sem6 #13).
 
 ## Análisis de complejidad
 
@@ -125,13 +130,13 @@ momento:
   cota amortizada garantiza es que esa búsqueda cara sólo puede ocurrir si
   "prepagó" con búsquedas baratas anteriores.
 
-> **Nota de apoyo** (no está en las diapositivas): el profesor **enuncia**
-> la cota $O(\log n)$ amortizada pero no la **demuestra** — no define una
-> función de potencial $\Phi$, no da un argumento de rango, no prueba el Access
-> Lemma. La demostración estándar en la literatura usa exactamente el
-> [método del potencial](/structures/potential-method) con
-> $\Phi = \sum \log(\text{tamaño del subárbol de cada nodo})$, pero eso no está en este
-> mazo: la cota se enuncia sin derivarla.
+En la semana 5 esa cota se **enuncia** sin derivarse: el mazo no define
+ninguna función de potencial $\Phi$, no da el argumento de rango ni prueba el
+Lema de Acceso. La semana 6 cierra ese hueco completo, y no acá: la
+demostración vive en [access-lemma](/structures/access-lemma) — la función
+de potencial $\Phi = \sum r(x)$ con $r(x) = \lg s(x)$, el enunciado del Lema
+de Acceso de Sleator & Tarjan (1985) y su prueba, caso por caso. Este tema
+la usa como resultado; no la reexplica.
 
 Aterrizar esa $\Phi$ en un árbol concreto — no sólo en la fórmula — es lo
 que hace creíble "prepagó con búsquedas baratas anteriores". El
@@ -209,13 +214,19 @@ nodos, para ver el "prepago" ocurrir sobre rotaciones reales:
 Los números son chicos porque $n=5$; con $n$ grande la misma mecánica es la
 que produce la brecha real: un Splay(x) puede costar $O(n)$ real (búsqueda
 cara de la nota anterior) mientras $\Delta\Phi$ absorbe casi todo, dejando
-$O(\log n)$ amortizado — exactamente lo que el Access Lemma demuestra en
-general y que aquí sólo se ve en miniatura.
+$O(\log n)$ amortizado — exactamente lo que
+[el Lema de Acceso](/structures/access-lemma) demuestra en general y que
+aquí sólo se ve en miniatura.
 
 **El punto que hay que entender de verdad**: por qué `zig-zig` rota primero
-el **abuelo** `a` y no el padre `p`. El material da los diagramas (#65) pero
-no discute esta decisión explícitamente — es la nota de apoyo más
-importante de este tema:
+el **abuelo** `a` y no el padre `p`. El profesor lo plantea como pregunta
+explícita — "x e y son **ambos** hijos izquierdos (o ambos derechos) de sus
+padres. ¿Por qué no basta con rotar x con y, y luego x con z (dos rotaciones
+«ingenuas»)?" (Sem6 #6) — y responde sólo la mitad: "el orden importa:
+primero y con z, luego x con y — nunca al revés" (Sem6 #9). El *porqué* de
+fondo sigue siendo apoyo, y ahora tiene dónde cerrarse:
+[access-lemma](/structures/access-lemma) acota el paso zig-zig formalmente,
+y ahí se ve que el argumento sólo cierra con este orden.
 
 > **Nota de apoyo** (no está en las diapositivas): rotar primero `p` (subir
 > a `x` un nivel, luego rotar de nuevo) es el algoritmo "move-to-root"
@@ -228,16 +239,20 @@ importante de este tema:
 > (rota `a` primero) y aplicar `zig` dos veces seguidas (rota `p` primero,
 > luego rota otra vez) — mismo destino final (x en la raíz), pero la forma
 > intermedia del árbol es distinta, y esa forma es la que determina si el
-> argumento de potencial de la literatura cierra o no.
+> argumento de potencial cierra o no. Ese argumento está en
+> [access-lemma](/structures/access-lemma); lo que la nota agrega es la
+> lectura geométrica de por qué se rompe con el otro orden.
 
 ## Tabla de complejidad
 
-La tabla se genera desde `meta.yaml`. Nota de lectura: `zig`, `zig-zig` y
-`zig-zag` llevan **costo real** $O(1)$ (son los pasos atómicos); `splay` y
-`search` llevan **costo amortizado** $O(\log n)$ (son las cotas que promedian
-sobre una secuencia). No hay fila de "peor caso real de una operación
-individual" para splay/search porque el profesor no la da — sí se discute
-en el análisis de arriba (puede ser $O(n)$).
+La tabla se genera desde `meta.yaml`. Nota de lectura: `rotate`, `zig`,
+`zig-zig` y `zig-zag` llevan **costo real** $O(1)$ (son la primitiva y los
+pasos atómicos); `splay` y `search` llevan **costo amortizado** $O(\log n)$
+(son las cotas que promedian sobre una secuencia). El peor caso real de una
+llamada individual no tiene fila propia porque no es una cota más de la
+tabla, sino la observación que el profesor hace al pie del pseudocódigo: "el
+costo real es proporcional a la profundidad de $x$ — hasta $\Theta(n)$ en el
+peor caso individual" (Sem6 #10).
 
 ## Ejemplos
 
@@ -261,6 +276,21 @@ trabajo de una estructura concreta que se adapte a la secuencia". El splay
 tree es esa estructura (#69-72): las cumple todas. Lo que sigue sin
 responderse (#74-75) es si además cumple la propiedad unificada y si es
 $O(1)$-competitivo contra el óptimo offline — ambas abiertas.
+
+### Qué sigue (semana 6)
+
+Este tema cierra con Splay y Buscar. La semana 6 continúa desde acá en tres
+direcciones, y cada una vive en su propio tema:
+
+- [splay-tree-adt](/structures/splay-tree-adt) — las operaciones del TDA
+  (Separar, Unir, Insertar, Eliminar) construidas **sólo** sobre Buscar y
+  Splay, sin ningún recorrido extra del árbol.
+- [access-lemma](/structures/access-lemma) — la demostración de la cota
+  amortizada que acá sólo se enuncia: la función de potencial, el Lema de
+  Acceso y su prueba.
+- [static-optimality](/structures/static-optimality) — la cota de entropía
+  de [search-sequence-properties](/structures/search-sequence-properties),
+  ahora demostrada como corolario del Lema de Acceso.
 
 ## Prueba de dominio
 

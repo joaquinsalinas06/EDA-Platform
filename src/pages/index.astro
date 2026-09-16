@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { knowledgeMap } from '../lib/knowledge-map';
+import { knowledgeMap, TYPE_LABEL } from '../lib/knowledge-map';
 
 const topics = Object.entries(knowledgeMap.topics);
 const done = topics.filter(([, t]) => t.status === 'generated').length;
@@ -64,7 +64,7 @@ const pct = Math.round((done / topics.length) * 100);
                   >
                     <div>
                       <p class="tag">
-                        {t?.supportConcept ? 'concepto de apoyo' : t?.type}
+                        {t?.supportConcept ? 'concepto de apoyo' : t && TYPE_LABEL[t.type]}
                       </p>
                       <p class="mt-1.5 text-[1.0625rem] leading-snug font-medium group-hover:text-[var(--accent)]">
                         {t?.title ?? id}

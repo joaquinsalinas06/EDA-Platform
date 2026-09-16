@@ -5,7 +5,7 @@ week: week-05
 
 prerequisites: ["bst-computational-model"]
 buildsOn: ["bst-computational-model"]
-usedBy: ["dynamic-optimality", "splay-tree"]
+usedBy: ["dynamic-optimality", "splay-tree", "static-optimality"]
 
 # Es un concepto: cinco propiedades sobre secuencias de búsqueda + dos lemas
 # de implicación, no una estructura con su propia interfaz. `operations: []`

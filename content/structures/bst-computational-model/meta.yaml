@@ -5,7 +5,7 @@ week: week-05
 
 prerequisites: [balanced-bst]
 buildsOn: []
-usedBy: [search-sequence-properties, dynamic-optimality, splay-tree]
+usedBy: [search-sequence-properties, dynamic-optimality, splay-tree, splay-tree-adt]
 
 complexity:
   pointer-move:

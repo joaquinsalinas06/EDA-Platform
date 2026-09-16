@@ -1,6 +1,7 @@
 ---
 import Base from './Base.astro';
 import type { Meta } from '../lib/schemas';
+import { TYPE_LABEL } from '../lib/knowledge-map';
 
 interface Props {
   meta: Meta;
@@ -35,7 +36,7 @@ const { meta, section, tabs, rail = false } = Astro.props;
     }
 
     <p class="tag">
-      {meta.week} · {meta.type === 'structure' ? 'estructura' : 'algoritmo'}
+      {meta.week} · {TYPE_LABEL[meta.type]}
     </p>
 
     <h1 class="mt-2 text-[clamp(2.25rem,4.5vw,3.25rem)] leading-[1.05] font-semibold tracking-[-0.035em]">

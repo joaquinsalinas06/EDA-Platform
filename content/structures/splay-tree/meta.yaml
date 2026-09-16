@@ -5,9 +5,19 @@ week: week-05
 
 prerequisites: [bst-computational-model, dynamic-optimality, balanced-bst]
 buildsOn: [bst-computational-model]
-usedBy: []
+usedBy: [splay-tree-adt, access-lemma]
 
 complexity:
+  rotate:
+    worst: O(1)
+    reasoning: >-
+      Costo real: es la primitiva única de la que se arman los tres casos —
+      "rotar un nodo v con su padre, para que v suba un nivel" (Sem6 #8) — y
+      es exactamente el rotate ya postulado como O(1) en
+      /structures/bst-computational-model: una cantidad constante de
+      reasignaciones de punteros, sin importar el tamaño de los subárboles
+      que cuelgan.
+    source: Sem6_Dynamic_Optimality_II.pdf#8
   zig:
     worst: O(1)
     reasoning: >-

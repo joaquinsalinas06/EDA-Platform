@@ -1,7 +1,7 @@
 ---
 kind: operation
 title: Zig-zig
-order: 2
+order: 3
 cppSteps:
   - step-1-node.cpp
   - step-2-rotate.cpp
@@ -131,16 +131,26 @@ raíz) es el mismo en ambos órdenes, pero la forma **intermedia** no lo es:
 rotar (p, a) primero reparte el subárbol que compartían p y a de forma más
 pareja entre los dos, en vez de dejar a uno de ellos casi tan profundo como
 estaba. Esa forma intermedia es la que hace que el argumento de potencial de
-la literatura (no dado por el profesor) cierre.
+[access-lemma](/structures/access-lemma) cierre.
 
-> **Nota de apoyo** (no está en las diapositivas): si en cambio se rotara
-> (x, p) primero y luego (x, a) — subir a x un nivel a la vez — se obtiene
-> el algoritmo "move-to-root", que **no** logra $O(\log n)$ amortizado: existen
-> secuencias de búsquedas donde move-to-root cuesta $\Omega(n)$ por operación en
-> promedio, mientras que zig-zig (rotando el abuelo primero) sí logra
-> $O(\log n)$. El material no discute esta distinción explícitamente — el
-> profesor sólo da el diagrama de la forma final (#65) — pero es la razón
-> de fondo por la que el orden de las dos rotaciones importa.
+El profesor plantea esto mismo como pregunta: "x e y son **ambos** hijos
+izquierdos (o ambos derechos) de sus padres. ¿Por qué no basta con rotar x
+con y, y luego x con z (dos rotaciones «ingenuas»)?" (Sem6 #6). Y da la
+mitad de la respuesta al traducirlo a la primitiva
+[`Rotar`](/structures/splay-tree/operations/rotate): "el orden de las
+rotaciones importa: primero y con z, luego x con y — nunca al revés"
+(Sem6 #9), es decir `Rotar(padre(x)); Rotar(x)`.
+
+> **Nota de apoyo** (no está en las diapositivas): la otra mitad — *por qué*
+> el orden importa — es ésta. Si se rotara (x, p) primero y luego (x, a)
+> —subir a x un nivel a la vez— se obtiene el algoritmo "move-to-root", que
+> **no** logra $O(\log n)$ amortizado: existen secuencias de búsquedas donde
+> move-to-root cuesta $\Omega(n)$ por operación en promedio, mientras que
+> zig-zig (rotando el abuelo primero) sí logra $O(\log n)$. El profesor
+> plantea la pregunta pero no exhibe ese contraejemplo; lo que sí hace es
+> acotar el paso zig-zig formalmente en
+> [access-lemma](/structures/access-lemma), y ahí se ve que el argumento
+> sólo cierra con este orden.
 
 ## Algoritmo
 
@@ -154,13 +164,17 @@ la literatura (no dado por el profesor) cierre.
 
 ## Pseudocódigo
 
+En términos de la primitiva
+[`Rotar`](/structures/splay-tree/operations/rotate), la tabla del profesor
+(Sem6 #9) lo escribe en una línea: `Zig-Zig = Rotar(padre(x)); Rotar(x)`.
+
 ```
 Algoritmo: ZigZig(x)
-p ← x.padre
-a ← p.padre
+p ← padre(x)
+a ← padre(p)
 // mismo lado: x es izquierdo de p, y p es izquierdo de a (o el espejo)
-Rotate(p)          // rota el par (p, a) — el abuelo — PRIMERO
-Rotate(x)          // rota el par (x, p) — ahora x llega a la raíz
+Rotar(p)           // rota el par (p, a) — el abuelo — PRIMERO
+Rotar(x)           // rota el par (x, p) — ahora x llega a la raíz
 ```
 
 ## C++

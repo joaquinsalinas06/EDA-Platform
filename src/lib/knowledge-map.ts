@@ -15,6 +15,13 @@ export function loadKnowledgeMap(): KnowledgeMap {
 
 export const knowledgeMap = loadKnowledgeMap();
 
+/** El `type` del schema es en inglés; la interfaz está toda en español. */
+export const TYPE_LABEL = {
+  structure: 'estructura',
+  algorithm: 'algoritmo',
+  concept: 'concepto',
+} as const;
+
 export function topic(id: string) {
   const t = knowledgeMap.topics[id];
   if (!t) throw new Error(`topic "${id}" no existe en knowledge-map.json`);

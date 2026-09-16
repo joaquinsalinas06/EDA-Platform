@@ -1,16 +1,19 @@
-// Splay tree completo (#59-75): nodo con puntero al padre, rotate genérico,
-// los tres casos de Splay (zig #64, zig-zig #65, zig-zag #66) y Search(x)
-// (Buscar + Splay, #60). insertPlain/buildBalanced/buildChain son andamiaje
-// para construir árboles de prueba, NO operaciones del modelo (que sólo
-// define Buscar).
+// Splay tree completo (#59-75, Sem6 #5-14): nodo con puntero al padre,
+// rotate (la única primitiva, Sem6 #8), los tres casos armados con ella
+// (Sem6 #9), el bucle de Splay (Sem6 #10) y Buscar(k) con su caso fallido
+// (Sem6 #13). insertPlain/buildBalanced son andamiaje para construir árboles
+// de prueba; Insertar y Eliminar del TDA viven en
+// /structures/splay-tree-adt, construidas sobre Buscar + Splay.
 //
 // main() verifica:
 //   1. Que zig, zig-zig y zig-zag producen exactamente la forma de los
 //      diagramas del profesor (#64-66), y que zig-zig rota primero el par
 //      (p, a) — no (x, p) — sin caer en move-to-root.
-//   2. Que Search(x) preserva el recorrido inorden (sigue siendo un BST
-//      válido) y deja x en la raíz.
-//   3. La comparación que search-sequence-properties dejó sin medir:
+//   2. Que Buscar(k) preserva el recorrido inorden (sigue siendo un BST
+//      válido) y deja k en la raíz.
+//   3. Que Buscar(k) con k AUSENTE devuelve falso y deja en la raíz al
+//      predecesor o al sucesor de k — la garantía de Sem6 #13-14.
+//   4. La comparación que search-sequence-properties dejó sin medir:
 //      acceso secuencial y repetición de un conjunto de trabajo pequeño,
 //      splay tree contra BST estático — imprime el costo real de cada uno.
 
@@ -28,8 +31,9 @@ struct Node {
     explicit Node(int v) : value(v) {}
 };
 
-// rotate genérico (#20-21 del modelo BST, generalizado a "decide el lado
-// según de dónde cuelga x"): promueve x sobre su padre actual.
+// rotate: la ÚNICA primitiva del splay tree (Sem6 #8) — "rotar un nodo v
+// con su padre, para que v suba un nivel". Es el rotate del modelo BST
+// (#20-21), generalizado a "decide el lado según de dónde cuelga x".
 void rotate(Node*& root, Node* x) {
     Node* p = x->parent;
     Node* g = p->parent;
@@ -51,26 +55,32 @@ void rotate(Node*& root, Node* x) {
     else g->right = x;
 }
 
-// Zig (#64): x hijo directo de la raíz.
+// Los tres casos, en términos de rotate (tabla de Sem6 #9).
+
+// Zig (#64) = Rotar(x): x hijo directo de la raíz.
 void zig(Node*& root, Node* x) { rotate(root, x); }
 
-// Zig-zig (#65): rota (p, a) PRIMERO, luego (x, p). Invertir este orden
-// (rotar (x, p) dos veces) es move-to-root, no zig-zig.
+// Zig-zig (#65) = Rotar(padre(x)); Rotar(x): rota (p, a) PRIMERO, luego
+// (x, p). Invertir este orden (rotar (x, p) dos veces) es move-to-root, no
+// zig-zig — "nunca al revés" (Sem6 #9).
 void zigZig(Node*& root, Node* x) {
     Node* p = x->parent;
     rotate(root, p);
     rotate(root, x);
 }
 
-// Zig-zag (#66): rotar x dos veces seguidas sí es correcto aquí, porque las
-// dos direcciones opuestas no se refuerzan entre sí.
+// Zig-zag (#66) = Rotar(x); Rotar(x): las DOS llamadas son sobre x mismo
+// (Sem6 #9), porque las dos direcciones opuestas no se refuerzan entre sí.
 void zigZag(Node*& root, Node* x) {
     rotate(root, x);
     rotate(root, x);
 }
 
-// Splay(x) (#60-63): el bucle que el mazo no da explícitamente. Aplica el
-// caso correspondiente hasta que x es la raíz.
+// Splay(x) (#60-63, Sem6 #10): el bucle del profesor, línea por línea.
+// Aplica el caso correspondiente hasta que x es la raíz. Costo real
+// proporcional a la profundidad de x — hasta Theta(n) en el peor caso
+// individual; la cota O(log n) amortizada se demuestra en
+// /structures/access-lemma.
 void splay(Node*& root, Node* x) {
     while (x != root) {
         Node* p = x->parent;
@@ -86,19 +96,30 @@ void splay(Node*& root, Node* x) {
     }
 }
 
-// Search(x) (#60): Buscar(x) del modelo BST + Splay(x) siempre.
+// Buscar(k) (#60, Sem6 #13): descenso estándar guardando el ÚLTIMO nodo
+// visitado, y Splay siempre — del nodo encontrado si k está, del último
+// visitado si no. Devuelve verdadero/falso. Al terminar, la raíz es k, o
+// bien su predecesor o sucesor: ésa es la precondición de Separar en
+// /structures/splay-tree-adt.
 // costOut, si no es nullptr, acumula el número de pasos de descenso real
 // (para medir el costo real de cada búsqueda, no sólo verificar correctud).
-Node* search(Node*& root, int x, long* costOut = nullptr) {
+bool search(Node*& root, int k, long* costOut = nullptr) {
     Node* v = root;
+    Node* last = nullptr;
     long steps = 0;
-    while (v->value != x) {
+    while (v != nullptr) {
+        last = v;
+        if (k == v->value) {
+            if (costOut != nullptr) *costOut += steps;
+            splay(root, v);
+            return true;
+        }
         steps++;
-        v = (x < v->value) ? v->left : v->right;
+        v = (k < v->value) ? v->left : v->right;
     }
     if (costOut != nullptr) *costOut += steps;
-    splay(root, v);
-    return v;
+    if (last != nullptr) splay(root, last);
+    return false;
 }
 
 // --- Andamiaje: no son operaciones del splay tree ---
@@ -254,25 +275,65 @@ int main() {
         int sumBefore = inorderSum(root);
         int h0 = height(root);
 
-        Node* found = search(root, 1, nullptr); // 1 es la hoja mas profunda
-        assert(root == found);
+        bool found = search(root, 1, nullptr); // 1 es la hoja mas profunda
+        assert(found);
         assert(root->value == 1);
         assert(inorderSum(root) == sumBefore);
-        cout << "OK: Search(1) deja 1 en la raiz y preserva el recorrido "
-                "inorden (sigue siendo un BST valido). Altura antes: " << h0
+        cout << "OK: Buscar(1) devuelve verdadero, deja 1 en la raiz y "
+                "preserva el recorrido inorden (sigue siendo un BST valido). "
+                "Altura antes: " << h0
              << ", despues de un solo splay la raiz cambio.\n";
     }
 
-    // --- 5. Caso limite: x ya es la raiz -> Search es practicamente un no-op ---
+    // --- 5. Caso limite: x ya es la raiz -> Splay es un no-op ---
     {
         Node* root = buildBalanced(1, 7);
         int rootValueBefore = root->value;
         long cost = 0;
-        Node* found = search(root, rootValueBefore, &cost);
-        assert(found == root);
+        assert(search(root, rootValueBefore, &cost));
+        assert(root->value == rootValueBefore);
         assert(cost == 0);
-        cout << "OK: Search(raiz) cuesta 0 pasos de descenso -- caso limite "
+        cout << "OK: Buscar(raiz) cuesta 0 pasos de descenso -- caso limite "
                 "de Splay como no-op.\n";
+    }
+
+    // --- 5b. Buscar(k) con k AUSENTE (Sem6 #13-14): splay del ULTIMO nodo
+    // visitado -- el predecesor o el sucesor de k -- y devolver falso. ---
+    {
+        // Arbol con huecos, para que existan llaves ausentes "interiores":
+        // 20 en la raiz; 10 a su izquierda; 30 a su derecha; 25 como hijo
+        // izquierdo de 30; 27 como hijo derecho de 25.
+        Node* root = nullptr;
+        for (int k : {20, 10, 30, 25, 27}) root = insertPlain(root, new Node(k));
+        int sumBefore = inorderSum(root);
+
+        // 26 no esta. El descenso termina en 27 (su SUCESOR), que se splaya.
+        assert(!search(root, 26));
+        assert(root->value == 27);
+        assert(inorderSum(root) == sumBefore); // sigue siendo el mismo BST
+
+        // Sobre el arbol ya reorganizado, buscar 26 otra vez termina en 25
+        // (su PREDECESOR): cual de los dos vecinos toca depende del ultimo
+        // giro del descenso, pero siempre es uno de los dos.
+        assert(!search(root, 26));
+        assert(root->value == 25);
+        assert(inorderSum(root) == sumBefore);
+
+        // Fuera de rango por ambos lados: minimo y maximo del arbol.
+        assert(!search(root, 100));
+        assert(root->value == 30); // el maximo es el predecesor de 100
+        assert(!search(root, 0));
+        assert(root->value == 10); // el minimo es el sucesor de 0
+        assert(inorderSum(root) == sumBefore);
+
+        // Arbol vacio: no hay ultimo nodo, no se splaya nada, devuelve falso.
+        Node* empty = nullptr;
+        assert(!search(empty, 42));
+        assert(empty == nullptr);
+
+        cout << "OK: Buscar(k) con k ausente devuelve falso y deja en la raiz "
+                "al predecesor o al sucesor de k (Sem6 #13-14), preservando "
+                "el inorden. Arbol vacio: falso, sin tocar nada.\n";
     }
 
     // --- 6. La comparacion que search-sequence-properties dejo sin medir ---

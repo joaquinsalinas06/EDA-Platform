@@ -1,7 +1,7 @@
 ---
 kind: operation
 title: Zig-zag
-order: 3
+order: 4
 cppSteps:
   - step-1-node.cpp
   - step-2-rotate.cpp
@@ -120,7 +120,12 @@ A diferencia de [zig-zig](/structures/splay-tree/operations/zig-zig), aquí
 no hay distinción entre "rotar el abuelo primero" o "rotar el padre
 primero": como las dos direcciones son opuestas, rotar `(x, p)` primero y
 `(x, a)` después es simplemente el único orden razonable — x se mueve hacia
-arriba en zigzag, nunca en línea recta. El resultado visual también es
+arriba en zigzag, nunca en línea recta. En términos de la primitiva
+[`Rotar`](/structures/splay-tree/operations/rotate) eso se ve de golpe: las
+dos llamadas son sobre **x mismo**, `Rotar(x); Rotar(x)` (Sem6 #9) — la
+primera lo rota con p, y como después x ocupa el lugar que tenía p, la
+segunda ya lo rota con a. Es la única diferencia con zig-zig, donde la
+primera llamada es sobre el padre. El resultado visual también es
 distinto: en zig-zig, p y a terminan en cascada (uno colgando del otro); en
 zig-zag, p y a terminan como los dos hijos **directos** de x. Esa es la
 diferencia que hay que ver, no sólo leer.
@@ -138,11 +143,10 @@ diferencia que hay que ver, no sólo leer.
 
 ```
 Algoritmo: ZigZag(x)
-p ← x.padre
-a ← p.padre
+// tabla del profesor (Sem6 #9): Zig-Zag = Rotar(x); Rotar(x)
 // lados opuestos: x es derecho de p, y p es izquierdo de a (o el espejo)
-Rotate(x)          // rota el par (x, p) — x sube un nivel
-Rotate(x)          // rota el par (x, a) — x sube a la raíz
+Rotar(x)           // rota el par (x, p) — x sube un nivel
+Rotar(x)           // rota el par (x, a) — x sube a la raíz
 ```
 
 ## C++

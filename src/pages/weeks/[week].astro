@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { knowledgeMap } from '../../lib/knowledge-map';
+import { knowledgeMap, TYPE_LABEL } from '../../lib/knowledge-map';
 
 export async function getStaticPaths() {
   const weeks = await getCollection('weeks');
@@ -47,7 +47,7 @@ const topics = knowledgeMap.weeks.find((w) => w.id === week.id)?.topics ?? [];
                 ]}
               >
                 <span>
-                  <span class="tag">{t?.supportConcept ? 'concepto de apoyo' : t?.type}</span>
+                  <span class="tag">{t?.supportConcept ? 'concepto de apoyo' : t && TYPE_LABEL[t.type]}</span>
                   <span class="mt-1 block text-[1.0625rem] font-medium group-hover:text-[var(--accent)]">
                     {t?.title ?? id}
                   </span>

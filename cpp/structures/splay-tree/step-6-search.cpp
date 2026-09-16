@@ -1,22 +1,31 @@
-// Paso 6 — Search(x): Buscar(x) del modelo BST (descenso estándar) seguido
-// siempre de Splay(x) (#60). El modelo del curso sólo define Buscar
-// (#22-23); insertPlain de abajo es andamiaje para construir árboles de
-// prueba, no una operación del splay tree.
+// Paso 6 — Buscar(k) completo (Sem6 #13): descenso estándar guardando el
+// ÚLTIMO nodo visitado, y Splay siempre — del nodo encontrado si k está,
+// del último visitado (predecesor o sucesor de k) si no. Devuelve bool.
+// Después de la llamada, la raíz es k, o su vecino inmediato: ésa es la
+// garantía que usa /structures/splay-tree-adt.
+// insertPlain de abajo es andamiaje para construir árboles de prueba;
+// Insertar/Eliminar de verdad viven en splay-tree-adt.
 
 #include "step-5-splay.cpp"
 
-Node* search(Node*& root, int x) {
+bool search(Node*& root, int k) {
     Node* v = root;
-    while (v->value != x) {
-        v = (x < v->value) ? v->left : v->right;
+    Node* last = nullptr;
+    while (v != nullptr) {
+        last = v;
+        if (k == v->value) {
+            splay(root, v);
+            return true;
+        }
+        v = (k < v->value) ? v->left : v->right;
     }
-    splay(root, v);
-    return v;
+    if (last != nullptr) splay(root, last);
+    return false;
 }
 
 // Andamiaje: inserción de BST sin balanceo, para construir árboles de
-// prueba con las llaves que hagan falta. No es una operación del splay
-// tree (el modelo del curso no define Insert, ver huecos en el análisis).
+// prueba con las llaves que hagan falta. No es la Insertar del TDA (ésa
+// está en /structures/splay-tree-adt, y se construye sobre Buscar+Splay).
 Node* insertPlain(Node* root, Node* node) {
     if (root == nullptr) return node;
     Node* v = root;

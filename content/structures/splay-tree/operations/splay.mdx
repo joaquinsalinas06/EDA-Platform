@@ -1,7 +1,7 @@
 ---
 kind: operation
 title: Splay
-order: 4
+order: 5
 cppSteps:
   - step-1-node.cpp
   - step-2-rotate.cpp
@@ -29,27 +29,23 @@ Splay(x) repite "mira dónde está x respecto de su padre y su abuelo, aplica
 el caso que corresponda" hasta que x llega a la raíz. Cada iteración sube a
 x al menos un nivel (dos, si el caso es zig-zig o zig-zag), así que el
 número de iteraciones está acotado por la profundidad inicial de x. El
-material da los tres casos como diagramas (#64-66) pero no da explícitamente
-el bucle que los aplica repetidamente ni el criterio de selección — eso es
-lo que se completa aquí.
+criterio para elegir caso en cada iteración es puramente estructural, no
+depende de valores (Sem6 #10):
 
-> **Nota de apoyo** (no está en las diapositivas): el criterio para elegir
-> caso en cada iteración es puramente estructural, no depende de valores:
-> - si x no tiene abuelo (su padre es la raíz) → [`zig`](/structures/splay-tree/operations/zig);
-> - si x y su padre son hijos del mismo lado de su abuelo → [`zig-zig`](/structures/splay-tree/operations/zig-zig);
-> - si son hijos de lados opuestos → [`zig-zag`](/structures/splay-tree/operations/zig-zag).
->
-> El deck no dice explícitamente que estos tres casos se repiten en bucle
-> hasta que x es raíz, ni qué hace Splay si x ya es la raíz al llamarlo
-> (la respuesta razonable: nada, cero rotaciones) — es el hueco más
-> bloqueante para implementar Splay a partir sólo de las diapositivas.
+- si x no tiene abuelo (su padre es la raíz) → [`zig`](/structures/splay-tree/operations/zig);
+- si x y su padre son hijos del mismo lado de su abuelo → [`zig-zig`](/structures/splay-tree/operations/zig-zig);
+- si son hijos de lados opuestos → [`zig-zag`](/structures/splay-tree/operations/zig-zag).
+
+Los tres casos no son tres mecanismos distintos: son tres combinaciones de
+la misma primitiva [`Rotar`](/structures/splay-tree/operations/rotate)
+(Sem6 #8-9). Eso es lo que hace que el bucle de abajo quepa en diez líneas.
 
 ### Subida completa: de hoja a raíz
 
-*(derivado del pseudocódigo; no aparece en las diapositivas)* Splay(x) no se
-ve completo mirando un solo caso — hay que verlo encadenar dos iteraciones
-sobre una cadena degenerada de 5 nodos, para ver cómo cada tramo elige su
-caso.
+*(derivado del pseudocódigo del profesor (Sem6 #10), ejecutado a mano sobre
+un árbol concreto)* Splay(x) no se ve completo mirando un solo caso — hay
+que verlo encadenar dos iteraciones sobre una cadena degenerada de 5 nodos,
+para ver cómo cada tramo elige su caso.
 
 <Visualization viz={{
   type: 'tree',
@@ -104,48 +100,64 @@ caso.
 ## Algoritmo
 
 1. Mientras `x` no sea la raíz:
-2. Si `x.padre` es la raíz → aplicar [`zig`](/structures/splay-tree/operations/zig)
-   y terminar (x ya es la raíz).
-3. Si `x` y `x.padre` son hijos del mismo lado de `x.padre.padre` → aplicar
-   [`zig-zig`](/structures/splay-tree/operations/zig-zig).
-4. Si son hijos de lados opuestos → aplicar
-   [`zig-zag`](/structures/splay-tree/operations/zig-zag).
+2. `p ← padre(x)`. Si `p` es la raíz → `Rotar(x)` (caso
+   [`zig`](/structures/splay-tree/operations/zig)); x queda en la raíz y el
+   bucle termina.
+3. Si no, `g ← padre(p)`. Si `x` y `p` son hijos del mismo lado de `g` →
+   `Rotar(p); Rotar(x)` (caso
+   [`zig-zig`](/structures/splay-tree/operations/zig-zig)).
+4. Si son hijos de lados opuestos → `Rotar(x); Rotar(x)` (caso
+   [`zig-zag`](/structures/splay-tree/operations/zig-zag)).
 5. Repetir desde el paso 1.
 
 ## Pseudocódigo
 
+El del profesor, literal (Sem6 #10) — escrito sólo con la primitiva
+[`Rotar`](/structures/splay-tree/operations/rotate):
+
 ```
 Algoritmo: Splay(x)
-mientras x ≠ raíz hacer
-     p ← x.padre
-     si p = raíz entonces
-          Zig(x)
-     sino
-          a ← p.padre
-          si (x = p.izquierdo y p = a.izquierdo) o
-             (x = p.derecho y p = a.derecho) entonces
-               ZigZig(x)
-          sino
-               ZigZag(x)
+mientras x ≠ raiz hacer
+     p ← padre(x)
+     si p = raiz entonces
+          Rotar(x)                          // Zig
+     en otro caso
+          g ← padre(p)
+          si (x = p.izq) = (p = g.izq) entonces
+               Rotar(p);  Rotar(x)          // Zig-Zig
+          en otro caso
+               Rotar(x);  Rotar(x)          // Zig-Zag
 // x es ahora la raíz
 ```
+
+Dos detalles que sólo se leen del pseudocódigo: la condición del `si` compara
+dos booleanos (`x` es izquierdo de `p` **si y sólo si** `p` es izquierdo de
+`g`), lo que cubre de una vez los dos espejos de zig-zig; y si `x` ya es la
+raíz al entrar, el bucle no se ejecuta ni una vez — Splay es un no-op.
 
 ## C++
 
 Ver `step-5-splay.cpp` y `full-implementation.cpp` en el editor de arriba:
-`splay(x)` es el bucle de arriba, llamando `zig`, `zigZig` o `zigZag` según
-la posición relativa de x, p y a.
+`splay(x)` es exactamente ese bucle, llamando `zig`, `zigZig` o `zigZag`
+según la posición relativa de x, p y g — y los tres, a su vez, sólo llaman a
+`rotate`.
 
 ## Complejidad temporal
 
 $O(\log n)$ **amortizado** (#63) — no peor caso de una llamada aislada. Cada
-iteración del bucle es $O(1)$ real (un `zig`, `zig-zig` o `zig-zag`, cada uno
-$O(1)$), y el número de iteraciones es a lo más la profundidad de x, que en el
-peor caso real es $O(n)$ (un árbol degenerado): el costo real de **una**
-llamada a Splay puede ser $O(n)$. Lo que el profesor garantiza es que,
-promediado sobre cualquier secuencia de llamadas a Splay, el costo por
-llamada es $O(\log n)$ — la cota amortizada no dice nada sobre una llamada
-aislada, sólo sobre el total de la secuencia.
+iteración del bucle es $O(1)$ real (una o dos llamadas a
+[`Rotar`](/structures/splay-tree/operations/rotate)), y el número de
+iteraciones es a lo más la profundidad de x: "el costo real es proporcional a
+la profundidad de $x$ — hasta $\Theta(n)$ en el peor caso individual"
+(Sem6 #10). Lo que el profesor garantiza es que, promediado sobre cualquier
+secuencia de llamadas a Splay, el costo por llamada es $O(\log n)$ — la cota
+amortizada no dice nada sobre una llamada aislada, sólo sobre el total de la
+secuencia.
+
+Esa cota amortizada no se queda enunciada: se **demuestra** en
+[access-lemma](/structures/access-lemma), con la función de potencial y el
+Lema de Acceso de Sleator & Tarjan. Ahí es donde el paso zig-zig de este
+bucle se acota formalmente, término a término.
 
 ## Complejidad espacial
 
@@ -153,10 +165,12 @@ $O(1)$ adicional (versión iterativa, sin recursión).
 
 ### Por qué "move-to-root" no funciona
 
-*(derivado del pseudocódigo; no aparece en las diapositivas)* La [nota de
-zig-zig](/structures/splay-tree/operations/zig-zig) menciona que invertir el
-orden de las dos rotaciones da un algoritmo distinto, "move-to-root", que no
-logra la cota amortizada. Aquí se ve el contraste completo sobre el mismo
+El profesor **plantea** exactamente esta pregunta — "¿por qué no basta con
+rotar x con y, y luego x con z (las dos rotaciones «ingenuas»)?" (Sem6 #6) —
+y la responde sólo en parte: "el orden de las rotaciones importa: primero y
+con z, luego x con y — nunca al revés" (Sem6 #9). *Por qué* el orden importa
+es lo que se ve acá, y se demuestra en
+[access-lemma](/structures/access-lemma). Aquí está el contraste sobre el mismo
 caso mínimo (x, p, a en cadena, mismo lado): mismo destino — x en la raíz,
 misma profundidad final para todos — pero **forma final distinta** según el
 orden de rotación.
@@ -235,11 +249,13 @@ Ver [examples.md](/structures/splay-tree/examples).
 
 ## Casos límite
 
-- **`x` ya es la raíz**: el bucle no se ejecuta ni una vez, cero
-  rotaciones — Splay es un no-op.
+- **`x` ya es la raíz**: la guarda `mientras x ≠ raiz` (Sem6 #10) no se
+  cumple, el bucle no se ejecuta ni una vez, cero rotaciones — Splay es un
+  no-op.
 - **`x` es hijo directo de la raíz**: una sola iteración, siempre
   [`zig`](/structures/splay-tree/operations/zig) (nunca zig-zig ni
   zig-zag, porque no hay abuelo).
 - **Árbol degenerado en cadena, x es la hoja más profunda**: el número de
-  iteraciones es $O(n)$ — el peor caso real de una llamada, distinto de la
-  cota amortizada de $O(\log n)$.
+  iteraciones es $O(n)$ — es el $\Theta(n)$ "en el peor caso individual" que
+  el profesor señala al pie del pseudocódigo (Sem6 #10), distinto de la cota
+  amortizada de $O(\log n)$.

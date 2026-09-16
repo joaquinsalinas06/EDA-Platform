@@ -63,7 +63,7 @@ visualization:
       highlight: [n3]
       nodes:
         - { id: r6, value: 6, parent: null }
-        - { id: n3, value: 3, parent: r6, state: active }
+        - { id: n3, value: 3, parent: r6, state: active, tag: v_split }
         - { id: n9, value: 9, parent: r6 }
         - { id: n1, value: 1, parent: n3 }
         - { id: n4, value: 4, parent: n3 }
@@ -80,7 +80,7 @@ visualization:
       highlight: [n3]
       nodes:
         - { id: r6, value: 6, parent: null }
-        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n3, value: 3, parent: r6, state: marked, tag: v_split }
         - { id: n9, value: 9, parent: r6 }
         - { id: n1, value: 1, parent: n3 }
         - { id: n4, value: 4, parent: n3 }
@@ -95,7 +95,7 @@ visualization:
       highlight: [n4]
       nodes:
         - { id: r6, value: 6, parent: null }
-        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n3, value: 3, parent: r6, state: marked, tag: v_split }
         - { id: n9, value: 9, parent: r6 }
         - { id: n1, value: 1, parent: n3 }
         - { id: n4, value: 4, parent: n3, state: active }
@@ -112,7 +112,7 @@ visualization:
       highlight: [n1]
       nodes:
         - { id: r6, value: 6, parent: null }
-        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n3, value: 3, parent: r6, state: marked, tag: v_split }
         - { id: n9, value: 9, parent: r6 }
         - { id: n1, value: 1, parent: n3, state: active }
         - { id: n4, value: 4, parent: n3 }
@@ -127,7 +127,7 @@ visualization:
       caption: "v_split = 3 — de aquí en adelante, dos consultas satélite, no más descenso"
       nodes:
         - { id: r6, value: 6, parent: null }
-        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n3, value: 3, parent: r6, state: marked, tag: v_split }
         - { id: n9, value: 9, parent: r6, state: muted }
         - { id: n1, value: 1, parent: n3 }
         - { id: n4, value: 4, parent: n3 }
@@ -187,7 +187,7 @@ la garantía deja de sostenerse, por razones distintas:
       highlight: ["n3", "n4", "n1"],
       nodes: [
         { id: "r6", value: 6, parent: null, state: "muted" },
-        { id: "n3", value: 3, parent: "r6", state: "marked" },
+        { id: "n3", value: 3, parent: "r6", state: "marked", tag: "v_split" },
         { id: "n9", value: 9, parent: "r6", state: "muted" },
         { id: "n1", value: 1, parent: "n3", state: "answer" },
         { id: "n4", value: 4, parent: "n3", state: "answer" },
@@ -226,7 +226,7 @@ la garantía deja de sostenerse, por razones distintas:
       highlight: ["n4", "n1"],
       nodes: [
         { id: "r6", value: 6, parent: null, state: "muted" },
-        { id: "n3", value: 3, parent: "r6", state: "marked" },
+        { id: "n3", value: 3, parent: "r6", state: "marked", tag: "v_split" },
         { id: "n9", value: 9, parent: "r6", state: "muted" },
         { id: "n1", value: 1, parent: "n3", state: "muted" },
         { id: "n4", value: 4, parent: "n3", state: "active" },
@@ -240,7 +240,7 @@ la garantía deja de sostenerse, por razones distintas:
       highlight: ["n3"],
       nodes: [
         { id: "r6", value: 6, parent: null, state: "muted" },
-        { id: "n3", value: 3, parent: "r6", state: "marked" },
+        { id: "n3", value: 3, parent: "r6", state: "marked", tag: "v_split" },
         { id: "n9", value: 9, parent: "r6", state: "muted" },
         { id: "n1", value: 1, parent: "n3", state: "answer" },
         { id: "n4", value: 4, parent: "n3", state: "answer" },

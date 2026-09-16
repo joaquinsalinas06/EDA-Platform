@@ -17,24 +17,24 @@ visualization:
         eso el algoritmo sólo asume "mismo grado", no "sin hijos".
       highlight: []
       nodes:
-        - { id: y, value: 7, parent: null }
-        - { id: z, value: 3, parent: null }
+        - { id: y, value: 7, tag: y, parent: null }
+        - { id: z, value: 3, tag: z, parent: null }
     - note: >-
         Comparación: la precondición de Binomial-Link es key(y) >= key(z).
         Se comparan las dos llaves de raíz para decidir cuál conserva la
         propiedad de min-heap si se queda arriba.
       highlight: ["y", "z"]
       nodes:
-        - { id: y, value: 7, parent: null }
-        - { id: z, value: 3, parent: null }
+        - { id: y, value: 7, tag: y, parent: null }
+        - { id: z, value: 3, tag: z, parent: null }
     - note: >-
         Decisión: como key(y)=7 >= key(z)=3, z (la llave menor) gana y se
         queda como raíz del árbol combinado; y (la llave mayor) es quien va
         a moverse.
       highlight: ["z"]
       nodes:
-        - { id: y, value: 7, parent: null }
-        - { id: z, value: 3, parent: null, state: active }
+        - { id: y, value: 7, tag: y, parent: null }
+        - { id: z, value: 3, tag: z, parent: null, state: active }
     - note: >-
         Reconexión, primer puntero: siguiente-hermano(y) ← hijo(z). Como z
         no tenía hijos antes (era un B0), ese puntero queda apuntando a
@@ -44,24 +44,24 @@ visualization:
         z (su padre sigue siendo null en este instante).
       highlight: ["y", "z"]
       nodes:
-        - { id: y, value: 7, parent: null, state: active }
-        - { id: z, value: 3, parent: null, state: active }
+        - { id: y, value: 7, tag: y, parent: null, state: active }
+        - { id: z, value: 3, tag: z, parent: null, state: active }
     - note: >-
         Reconexión, segundo puntero: hijo(z) ← y y padre(y) ← z. Recién
         ahora y pasa a ser, formalmente, el hijo más a la izquierda de z;
         grado(z) sube en 1 (de 0 a 1).
       highlight: ["y", "z"]
       nodes:
-        - { id: z, value: 3, parent: null, state: active }
-        - { id: y, value: 7, parent: z, state: active }
+        - { id: z, value: 3, tag: z, parent: null, state: active }
+        - { id: y, value: 7, tag: y, parent: z, state: active }
     - note: >-
         Estado final: un B1 con raíz 3 y un único hijo, 7. y es el nodo
         recién reconectado (por eso sigue activo); el árbol ya cumple
         min-heap: key(z)=3 <= key(y)=7.
       highlight: []
       nodes:
-        - { id: z, value: 3, parent: null }
-        - { id: y, value: 7, parent: z, state: active }
+        - { id: z, value: 3, tag: z, parent: null }
+        - { id: y, value: 7, tag: y, parent: z, state: active }
 ---
 
 <!-- derivado del pseudocódigo del Algoritmo 5; no aparece en las diapositivas

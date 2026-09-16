@@ -21,7 +21,7 @@ visualization:
       highlight: [n3]
       nodes:
         - { id: r6, value: 6, parent: null }
-        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n3, value: 3, parent: r6, state: marked, tag: v_split }
         - { id: n9, value: 9, parent: r6, state: muted }
         - { id: n1, value: 1, parent: n3 }
         - { id: n4, value: 4, parent: n3 }
@@ -37,7 +37,7 @@ visualization:
       highlight: [n4]
       nodes:
         - { id: r6, value: 6, parent: null }
-        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n3, value: 3, parent: r6, state: marked, tag: v_split }
         - { id: n9, value: 9, parent: r6, state: muted }
         - { id: n1, value: 1, parent: n3 }
         - { id: n4, value: 4, parent: n3, state: active }
@@ -53,7 +53,7 @@ visualization:
       highlight: [n4]
       nodes:
         - { id: r6, value: 6, parent: null }
-        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n3, value: 3, parent: r6, state: marked, tag: v_split }
         - { id: n9, value: 9, parent: r6, state: muted }
         - { id: n1, value: 1, parent: n3 }
         - { id: n4, value: 4, parent: n3, state: answer }
@@ -70,7 +70,7 @@ visualization:
       highlight: [n1]
       nodes:
         - { id: r6, value: 6, parent: null }
-        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n3, value: 3, parent: r6, state: marked, tag: v_split }
         - { id: n9, value: 9, parent: r6, state: muted }
         - { id: n1, value: 1, parent: n3, state: active }
         - { id: n4, value: 4, parent: n3, state: answer }
@@ -86,7 +86,7 @@ visualization:
       highlight: [n1]
       nodes:
         - { id: r6, value: 6, parent: null }
-        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n3, value: 3, parent: r6, state: marked, tag: v_split }
         - { id: n9, value: 9, parent: r6, state: muted }
         - { id: n1, value: 1, parent: n3, state: answer }
         - { id: n4, value: 4, parent: n3, state: answer }
@@ -103,7 +103,7 @@ visualization:
       caption: "respuesta = {(2,4), (2,1)} — 2 disparos totales"
       nodes:
         - { id: r6, value: 6, parent: null }
-        - { id: n3, value: 3, parent: r6, state: marked }
+        - { id: n3, value: 3, parent: r6, state: marked, tag: v_split }
         - { id: n9, value: 9, parent: r6, state: muted }
         - { id: n1, value: 1, parent: n3, state: answer }
         - { id: n4, value: 4, parent: n3, state: answer }

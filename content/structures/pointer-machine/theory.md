@@ -10,40 +10,28 @@ visualization:
         directo a una posición.
       highlight: ["n1"]
       nodes:
-        - { id: n1, value: 7, parent: null, state: active }
-        - { id: n2, value: 2, parent: n1 }
-        - { id: n3, value: 7, parent: n2 }
-        - { id: n4, value: 42, parent: n3 }
-      links:
-        - { from: n1, to: n2, kind: pointer }
-        - { from: n2, to: n3, kind: pointer }
-        - { from: n3, to: n4, kind: pointer }
+        - { id: n1, value: 7, tag: n1, parent: null, state: active }
+        - { id: n2, value: 2, tag: n2, parent: n1 }
+        - { id: n3, value: 7, tag: n3, parent: n2 }
+        - { id: n4, value: 42, tag: n4, parent: n3 }
     - note: >-
         Un paso más: seguir el puntero de n1 a n2 es una operación O(1),
         pero ya van dos operaciones para llegar aquí.
       highlight: ["n2"]
       nodes:
-        - { id: n1, value: 7, parent: null }
-        - { id: n2, value: 2, parent: n1, state: active }
-        - { id: n3, value: 7, parent: n2 }
-        - { id: n4, value: 42, parent: n3 }
-      links:
-        - { from: n1, to: n2, kind: pointer }
-        - { from: n2, to: n3, kind: pointer }
-        - { from: n3, to: n4, kind: pointer }
+        - { id: n1, value: 7, tag: n1, parent: null }
+        - { id: n2, value: 2, tag: n2, parent: n1, state: active }
+        - { id: n3, value: 7, tag: n3, parent: n2 }
+        - { id: n4, value: 42, tag: n4, parent: n3 }
     - note: >-
         Tercer puntero seguido. El costo crece con la distancia a la raíz:
         no hay forma de evitar los pasos intermedios.
       highlight: ["n3"]
       nodes:
-        - { id: n1, value: 7, parent: null }
-        - { id: n2, value: 2, parent: n1 }
-        - { id: n3, value: 7, parent: n2, state: active }
-        - { id: n4, value: 42, parent: n3 }
-      links:
-        - { from: n1, to: n2, kind: pointer }
-        - { from: n2, to: n3, kind: pointer }
-        - { from: n3, to: n4, kind: pointer }
+        - { id: n1, value: 7, tag: n1, parent: null }
+        - { id: n2, value: 2, tag: n2, parent: n1 }
+        - { id: n3, value: 7, tag: n3, parent: n2, state: active }
+        - { id: n4, value: 42, tag: n4, parent: n3 }
     - note: >-
         Llegar a n4 costó 3 pasos de puntero (O(k) con k = distancia a la
         raíz). Una máquina RAM llegaría aquí indexando directo, en O(1),
@@ -51,14 +39,10 @@ visualization:
         de la semana (fat-nodes, path-copying) sobre este modelo.
       highlight: ["n4"]
       nodes:
-        - { id: n1, value: 7, parent: null }
-        - { id: n2, value: 2, parent: n1 }
-        - { id: n3, value: 7, parent: n2 }
-        - { id: n4, value: 42, parent: n3, state: active }
-      links:
-        - { from: n1, to: n2, kind: pointer }
-        - { from: n2, to: n3, kind: pointer }
-        - { from: n3, to: n4, kind: pointer }
+        - { id: n1, value: 7, tag: n1, parent: null }
+        - { id: n2, value: 2, tag: n2, parent: n1 }
+        - { id: n3, value: 7, tag: n3, parent: n2 }
+        - { id: n4, value: 42, tag: n4, parent: n3, state: active }
     - note: >-
         Contraste con el modelo RAM (el otro modelo de cómputo estándar,
         no el de este curso): un arreglo indexado llega al mismo valor
@@ -68,10 +52,10 @@ visualization:
         puntero y O(1) de indexación directa.
       highlight: ["ram"]
       nodes:
-        - { id: n1, value: 7, parent: null, state: muted }
-        - { id: n2, value: 2, parent: n1, state: muted }
-        - { id: n3, value: 7, parent: n2, state: muted }
-        - { id: n4, value: 42, parent: n3, state: muted }
+        - { id: n1, value: 7, tag: n1, parent: null, state: muted }
+        - { id: n2, value: 2, tag: n2, parent: n1, state: muted }
+        - { id: n3, value: 7, tag: n3, parent: n2, state: muted }
+        - { id: n4, value: 42, tag: n4, parent: n3, state: muted }
         - { id: ram, value: "A[3]", parent: null, state: active }
 ---
 

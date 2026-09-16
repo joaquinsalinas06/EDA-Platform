@@ -20,7 +20,7 @@ visualization:
         el nodo que Extract-Min va a quitar.
       highlight: ["x"]
       nodes:
-        - { id: x, value: 3, parent: null, state: active }
+        - { id: x, value: 3, tag: x, parent: null, state: active }
         - { id: c1, value: 8, parent: x }
         - { id: d1, value: 15, parent: c1 }
         - { id: c0, value: 20, parent: x }

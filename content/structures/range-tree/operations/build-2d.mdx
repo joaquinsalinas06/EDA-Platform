@@ -100,10 +100,12 @@ visualization:
         X (raíz separadora, dos hijos separadores, cuatro hojas por lado) —
         sólo que construido sobre los valores de Y en vez de X. Esto escala:
         cada nodo, sin excepción, trae su propio árbol secundario del mismo
-        tamaño que su propio subárbol.
+        tamaño que su propio subárbol (aquí sólo se dibujan sus dos primeros
+        niveles — raíz y separadores — el resto son las mismas 8 hojas ya
+        vistas, siguiendo el mismo patrón).
       highlight: [r9]
       panels:
-        - { id: secondary, label: "Secundario de la raíz", anchor: r9 }
+        - { id: secondary, label: "Secundario de la raíz (2 primeros niveles)", anchor: r9 }
       nodes:
         - { id: r9, value: 9, parent: null, state: marked }
         - { id: n4, value: 4, parent: r9 }
@@ -122,19 +124,7 @@ visualization:
         - { id: p27, value: 1, parent: n18i }
         - { id: yroot, value: 3, parent: null, panel: secondary }
         - { id: ryc, value: 0, parent: yroot, panel: secondary }
-        - { id: rya, value: -2, parent: ryc, panel: secondary }
-        - { id: yleaf15, value: -2, parent: rya, panel: secondary }
-        - { id: yleaf13, value: 0, parent: rya, panel: secondary }
-        - { id: ryb, value: 1, parent: ryc, panel: secondary }
-        - { id: yleaf27, value: 1, parent: ryb, panel: secondary }
-        - { id: yleaf18, value: 3, parent: ryb, panel: secondary }
         - { id: ryf, value: 7, parent: yroot, panel: secondary }
-        - { id: ryd, value: 6, parent: ryf, panel: secondary }
-        - { id: yleaf9, value: 6, parent: ryd, panel: secondary }
-        - { id: yleaf4, value: 7, parent: ryd, panel: secondary }
-        - { id: rye, value: 10, parent: ryf, panel: secondary }
-        - { id: yleaf3, value: 10, parent: rye, panel: secondary }
-        - { id: yleaf7, value: 11, parent: rye, panel: secondary }
       caption: >-
         Nodo 3 (2 pts), nodo 15 (4 pts), raíz (8 pts): el mismo patrón en
         todos los nodos del primario, escalando con el tamaño del subárbol.

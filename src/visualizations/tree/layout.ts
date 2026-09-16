@@ -22,6 +22,14 @@ export type TreeNode = {
   /** Panel al que pertenece (p.ej. "H1"/"H2" en Union): cada panel es su
    * propio bosque, posicionado aparte. Ver TreeStep.panels. */
   panel?: string;
+  /** Si es `false`, el nodo se POSICIONA bajo `parent` (misma fila que sus
+   * hermanos) pero NO se dibuja la arista — para una estructura donde el
+   * padre real sólo guarda UN puntero a un hijo cualquiera (Fibonacci
+   * heap, montículo binomial: `child`/`sibling` + hermanos enlazados
+   * entre sí), dibujar una línea de `parent` a CADA hijo mentiría sobre
+   * cuántos punteros existen de verdad — eso se dibuja aparte, con
+   * `links`. Default `true` (el comportamiento de siempre). */
+  edge?: boolean;
 };
 export type LaidOut = {
   id: string;

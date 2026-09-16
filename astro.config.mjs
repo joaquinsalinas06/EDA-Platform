@@ -30,5 +30,15 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
 
+  // Sin esto, cada click en una pestaña (teoría/operaciones/ejemplos...) es
+  // una navegación de página completa desde cero: pedir el HTML, parsear,
+  // hidratar los islands de React del diagrama — la espera perceptible que
+  // se reportó. Con prefetch en "viewport", Astro precarga el HTML de cada
+  // link del nav apenas entra en pantalla, así que para cuando el usuario
+  // hace click ya está en caché y la navegación se siente instantánea.
+  prefetch: {
+    defaultStrategy: 'viewport',
+  },
+
   adapter: vercel()
 });

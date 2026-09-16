@@ -15,49 +15,78 @@ visualization:
         Estado inicial *(derivado del pseudocódigo)*: `r(1)` es raíz y
         `min(H)`, `p(8)` es su hijo, y `p` tiene tres hijos —
         `x(15)`, ya marcado por haber perdido un hijo antes, `y(20)` y
-        `z(25)`. `grado(p) = 3`. Se va a llamar `Cut(H, x, p)`. **El
-        detalle línea por línea de `removeFromList` y del puntero
-        `p->child` está más abajo, en Algoritmo.**
+        `z(25)`. `grado(p) = 3`. Se va a llamar `Cut(H, x, p)`. Fiel al
+        struct: `p` sólo guarda UN puntero real (`child`, hoy apuntando a
+        `x`) — `x`/`y`/`z` no cuelgan cada uno de `p`, están enlazados
+        entre sí en su propio anillo (`R`/`L`). El detalle línea por línea
+        de `removeFromList` está más abajo, en Algoritmo.
       highlight: ["x"]
       nodes:
         - { id: r, value: 1, tag: r, parent: null }
         - { id: p, value: 8, tag: p, parent: r }
-        - { id: x, value: 15, tag: x, parent: p, state: marked }
-        - { id: y, value: 20, tag: y, parent: p }
-        - { id: z, value: 25, tag: z, parent: p }
+        - { id: x, value: 15, tag: x, parent: p, state: marked, edge: false }
+        - { id: y, value: 20, tag: y, parent: p, edge: false }
+        - { id: z, value: 25, tag: z, parent: p, edge: false }
+      links:
+        - { from: p, to: x, kind: pointer, label: "child" }
+        - { from: x, to: y, kind: pointer, label: "R" }
+        - { from: y, to: z, kind: pointer, label: "R" }
+        - { from: z, to: x, kind: pointer, label: "R" }
+        - { from: y, to: x, kind: pointer, label: "L" }
+        - { from: z, to: y, kind: pointer, label: "L" }
+        - { from: x, to: z, kind: pointer, label: "L" }
     - note: >-
-        Paso 1a: se quita `x` de la lista de hijos de `p`. `x` se separa
-        del enlace padre-hijo; a `p` sólo le quedan `y` y `z`.
+        Paso 1a: se quita `x` del anillo — `z.right`/`y.left` se
+        reconectan entre sí (ver Algoritmo para las 3 líneas exactas). Como
+        `p->child` apuntaba justo a `x`, también se redirige a `y`
+        (cualquier otro sobreviviente sirve). `x` se separa del enlace
+        padre-hijo; a `p` sólo le quedan `y` y `z`, ahora en un anillo de 2
+        (su `R` y `L` coinciden, como en el caso base de Insert).
       highlight: ["x", "p"]
       nodes:
         - { id: r, value: 1, tag: r, parent: null }
         - { id: p, value: 8, tag: p, parent: r, state: active }
         - { id: x, value: 15, tag: x, parent: null, state: active }
-        - { id: y, value: 20, tag: y, parent: p }
-        - { id: z, value: 25, tag: z, parent: p }
+        - { id: y, value: 20, tag: y, parent: p, edge: false }
+        - { id: z, value: 25, tag: z, parent: p, edge: false }
+      links:
+        - { from: p, to: y, kind: pointer, label: "child" }
+        - { from: y, to: z, kind: pointer, label: "R,L" }
+        - { from: z, to: y, kind: pointer, label: "R,L" }
     - note: >-
         Paso 1b: `grado(p) ← grado(p) − 1`, de 3 a 2. Es una actualización
         de contador, separada de desenlazar a `x` — ninguna otra
-        estructura se toca.
+        estructura se toca (el anillo `y`↔`z` y `p->child` quedan igual
+        que en el paso anterior).
       highlight: ["p"]
       nodes:
         - { id: r, value: 1, tag: r, parent: null }
         - { id: p, value: 8, tag: p, parent: r, state: active }
         - { id: x, value: 15, tag: x, parent: null }
-        - { id: y, value: 20, tag: y, parent: p }
-        - { id: z, value: 25, tag: z, parent: p }
+        - { id: y, value: 20, tag: y, parent: p, edge: false }
+        - { id: z, value: 25, tag: z, parent: p, edge: false }
+      links:
+        - { from: p, to: y, kind: pointer, label: "child" }
+        - { from: y, to: z, kind: pointer, label: "R,L" }
+        - { from: z, to: y, kind: pointer, label: "R,L" }
     - note: >-
         Paso 2a: se agrega `x` a la lista de raíces de `H` — empalme de
         punteros en O(1), igual que en
         [Insert](/structures/fibonacci-heap/operations/insert). `x`
-        todavía conserva su marca vieja en este instante.
+        todavía conserva su marca vieja en este instante. El anillo de `p`
+        (`y`↔`z`) no cambió — este empalme es sobre la lista de raíces de
+        `H`, un anillo aparte.
       highlight: ["x"]
       nodes:
         - { id: r, value: 1, tag: r, parent: null }
         - { id: p, value: 8, tag: p, parent: r }
         - { id: x, value: 15, tag: x, parent: null, state: marked }
-        - { id: y, value: 20, tag: y, parent: p }
-        - { id: z, value: 25, tag: z, parent: p }
+        - { id: y, value: 20, tag: y, parent: p, edge: false }
+        - { id: z, value: 25, tag: z, parent: p, edge: false }
+      links:
+        - { from: p, to: y, kind: pointer, label: "child" }
+        - { from: y, to: z, kind: pointer, label: "R,L" }
+        - { from: z, to: y, kind: pointer, label: "R,L" }
     - note: >-
         Paso 2b: `padre(x) ← nulo` (ya lo estaba desde el paso 1a) y
         `marca(x) ← falso`. Como raíz, `x` no puede seguir marcado — la
@@ -67,11 +96,16 @@ visualization:
         - { id: r, value: 1, tag: r, parent: null }
         - { id: p, value: 8, tag: p, parent: r }
         - { id: x, value: 15, tag: x, parent: null, state: active }
-        - { id: y, value: 20, tag: y, parent: p }
-        - { id: z, value: 25, tag: z, parent: p }
+        - { id: y, value: 20, tag: y, parent: p, edge: false }
+        - { id: z, value: 25, tag: z, parent: p, edge: false }
+      links:
+        - { from: p, to: y, kind: pointer, label: "child" }
+        - { from: y, to: z, kind: pointer, label: "R,L" }
+        - { from: z, to: y, kind: pointer, label: "R,L" }
     - note: >-
         Estado final: `x(15)` es raíz independiente y sin marca,
-        `p(8)` quedó con `grado = 2` y sus hijos restantes `y`, `z`. Aquí
+        `p(8)` quedó con `grado = 2`, `p->child` apuntando a `y`, y sus
+        hijos restantes `y`/`z` en su propio anillo de 2. Aquí
         `p` no estaba marcado, así que el corte termina sin propagarse. Si
         `p` ya hubiera estado marcado (por haber perdido un hijo antes),
         este mismo `Cut` sería el disparador de
@@ -82,8 +116,12 @@ visualization:
         - { id: r, value: 1, tag: r, parent: null }
         - { id: p, value: 8, tag: p, parent: r }
         - { id: x, value: 15, tag: x, parent: null }
-        - { id: y, value: 20, tag: y, parent: p }
-        - { id: z, value: 25, tag: z, parent: p }
+        - { id: y, value: 20, tag: y, parent: p, edge: false }
+        - { id: z, value: 25, tag: z, parent: p, edge: false }
+      links:
+        - { from: p, to: y, kind: pointer, label: "child" }
+        - { from: y, to: z, kind: pointer, label: "R,L" }
+        - { from: z, to: y, kind: pointer, label: "R,L" }
 ---
 import Visualization from '../../../../src/components/Visualization.astro';
 
@@ -139,9 +177,9 @@ static void removeFromList(Node* x) {
       highlight: [],
       nodes: [
         { id: "p", value: 8, tag: "p", parent: null },
-        { id: "x", value: 15, tag: "x", parent: "p", state: "marked" },
-        { id: "y", value: 20, tag: "y", parent: "p" },
-        { id: "z", value: 25, tag: "z", parent: "p" },
+        { id: "x", value: 15, tag: "x", parent: "p", state: "marked", edge: false },
+        { id: "y", value: 20, tag: "y", parent: "p", edge: false },
+        { id: "z", value: 25, tag: "z", parent: "p", edge: false },
       ],
       links: [
         { from: "p", to: "x", kind: "pointer", label: "child" },
@@ -158,9 +196,9 @@ static void removeFromList(Node* x) {
       highlight: ["p", "x", "y"],
       nodes: [
         { id: "p", value: 8, tag: "p", parent: null },
-        { id: "x", value: 15, tag: "x", parent: "p", state: "marked" },
-        { id: "y", value: 20, tag: "y", parent: "p" },
-        { id: "z", value: 25, tag: "z", parent: "p" },
+        { id: "x", value: 15, tag: "x", parent: "p", state: "marked", edge: false },
+        { id: "y", value: 20, tag: "y", parent: "p", edge: false },
+        { id: "z", value: 25, tag: "z", parent: "p", edge: false },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
@@ -177,9 +215,9 @@ static void removeFromList(Node* x) {
       highlight: ["z", "y"],
       nodes: [
         { id: "p", value: 8, tag: "p", parent: null },
-        { id: "x", value: 15, tag: "x", parent: "p", state: "marked" },
-        { id: "y", value: 20, tag: "y", parent: "p" },
-        { id: "z", value: 25, tag: "z", parent: "p" },
+        { id: "x", value: 15, tag: "x", parent: "p", state: "marked", edge: false },
+        { id: "y", value: 20, tag: "y", parent: "p", edge: false },
+        { id: "z", value: 25, tag: "z", parent: "p", edge: false },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
@@ -195,9 +233,9 @@ static void removeFromList(Node* x) {
       highlight: ["y", "z"],
       nodes: [
         { id: "p", value: 8, tag: "p", parent: null },
-        { id: "x", value: 15, tag: "x", parent: "p", state: "marked" },
-        { id: "y", value: 20, tag: "y", parent: "p" },
-        { id: "z", value: 25, tag: "z", parent: "p" },
+        { id: "x", value: 15, tag: "x", parent: "p", state: "marked", edge: false },
+        { id: "y", value: 20, tag: "y", parent: "p", edge: false },
+        { id: "z", value: 25, tag: "z", parent: "p", edge: false },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
@@ -213,8 +251,8 @@ static void removeFromList(Node* x) {
       nodes: [
         { id: "p", value: 8, tag: "p", parent: null },
         { id: "x", value: 15, tag: "x", parent: null, state: "active" },
-        { id: "y", value: 20, tag: "y", parent: "p" },
-        { id: "z", value: 25, tag: "z", parent: "p" },
+        { id: "y", value: 20, tag: "y", parent: "p", edge: false },
+        { id: "z", value: 25, tag: "z", parent: "p", edge: false },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
@@ -228,8 +266,8 @@ static void removeFromList(Node* x) {
       nodes: [
         { id: "p", value: 8, tag: "p", parent: null },
         { id: "x", value: 15, tag: "x", parent: null, state: "active" },
-        { id: "y", value: 20, tag: "y", parent: "p" },
-        { id: "z", value: 25, tag: "z", parent: "p" },
+        { id: "y", value: 20, tag: "y", parent: "p", edge: false },
+        { id: "z", value: 25, tag: "z", parent: "p", edge: false },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
@@ -243,8 +281,8 @@ static void removeFromList(Node* x) {
       nodes: [
         { id: "p", value: 8, tag: "p", parent: null },
         { id: "x", value: 15, tag: "x", parent: null },
-        { id: "y", value: 20, tag: "y", parent: "p" },
-        { id: "z", value: 25, tag: "z", parent: "p" },
+        { id: "y", value: 20, tag: "y", parent: "p", edge: false },
+        { id: "z", value: 25, tag: "z", parent: "p", edge: false },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
@@ -258,8 +296,8 @@ static void removeFromList(Node* x) {
       nodes: [
         { id: "p", value: 8, tag: "p", parent: null },
         { id: "x", value: 15, tag: "x", parent: null, state: "answer" },
-        { id: "y", value: 20, tag: "y", parent: "p" },
-        { id: "z", value: 25, tag: "z", parent: "p" },
+        { id: "y", value: 20, tag: "y", parent: "p", edge: false },
+        { id: "z", value: 25, tag: "z", parent: "p", edge: false },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },

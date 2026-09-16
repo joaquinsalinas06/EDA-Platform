@@ -38,7 +38,7 @@ function collapsedShape(n: { collapsed?: boolean; label: string }) {
 export default function TreeVisualization({ steps }: { steps: TreeStep[] }) {
   const canvasSteps: CanvasStep[] = steps.map((s) => {
     const edges = [
-      ...s.nodes.filter((n) => n.parent).map((n) => ({ from: n.parent!, to: n.id })),
+      ...s.nodes.filter((n) => n.parent && n.edge !== false).map((n) => ({ from: n.parent!, to: n.id })),
       // `pointer` siempre lleva punta de flecha — igual que ya hacen
       // persistent/range-tree (layout.ts de cada familia); acá faltaba, así
       // que un link `kind: 'pointer'` se veía como una línea suelta sin

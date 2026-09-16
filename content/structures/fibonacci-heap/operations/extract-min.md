@@ -21,7 +21,7 @@ visualization:
         que se va a quitar.
       highlight: ["z"]
       nodes:
-        - { id: z, value: 3, parent: null, state: active }
+        - { id: z, value: 3, tag: z, parent: null, state: active }
         - { id: n9, value: 9, parent: z }
         - { id: n15, value: 15, parent: z }
         - { id: r7, value: 7, parent: null }
@@ -33,7 +33,7 @@ visualization:
         sueltas, sin tocar a `7` ni a `20`.
       highlight: ["n9", "n15"]
       nodes:
-        - { id: z, value: 3, parent: null, state: active }
+        - { id: z, value: 3, tag: z, parent: null, state: active }
         - { id: n9, value: 9, parent: null }
         - { id: n15, value: 15, parent: null }
         - { id: r7, value: 7, parent: null }
@@ -46,7 +46,7 @@ visualization:
         desde ahí.
       highlight: ["n9"]
       nodes:
-        - { id: n9, value: 9, parent: null, state: active }
+        - { id: n9, value: 9, tag: remaining, parent: null, state: active }
         - { id: n15, value: 15, parent: null }
         - { id: r7, value: 7, parent: null }
         - { id: r20, value: 20, parent: null }

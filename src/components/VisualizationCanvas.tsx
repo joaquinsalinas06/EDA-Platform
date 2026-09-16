@@ -214,18 +214,20 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
             const state = resolveEdgeState(e, step.highlight);
             const visual = edgeStyle(e.kind ?? 'tree', state);
             const b = e.arrow ? trimToBox(a, bRaw) : bRaw;
-            // `pointer` sin `curve` explícito ya no es una línea recta: dos
-            // punteros opuestos entre el mismo par de nodos (el `left` de
-            // uno = el `right` del otro) se dibujaban exactamente encima,
-            // ilegibles. Con un default consistente el autor no tiene que
-            // adivinar una magnitud — sólo cuenta la dirección (from→to vs
-            // to→from), que ya se separa sola a lados opuestos.
-            const curve = e.curve ?? (e.kind === 'pointer' ? 20 : 0);
             const mx = (a.x + b.x) / 2;
             const my = (a.y + b.y) / 2;
             const dx = b.x - a.x;
             const dy = b.y - a.y;
             const len = Math.hypot(dx, dy) || 1;
+            // `pointer` sin `curve` explícito ya no es una línea recta: dos
+            // punteros opuestos entre el mismo par de nodos (el `left` de
+            // uno = el `right` del otro) se dibujaban exactamente encima,
+            // ilegibles. Un default FIJO (20px) se notaba entre nodos
+            // lejanos pero se perdía entre nodos pegados (poco ángulo real
+            // → las dos flechas casi se pisan) — ahora escala con la
+            // distancia, con un piso más alto, así el par siempre queda
+            // visiblemente separado sin que el autor tenga que adivinar.
+            const curve = e.curve ?? (e.kind === 'pointer' ? Math.max(26, len * 0.24) : 0);
             const cx = mx - (dy / len) * curve;
             const cy = my + (dx / len) * curve;
             const d = curve === 0 ? `M${a.x},${a.y} L${b.x},${b.y}` : `M${a.x},${a.y} Q${cx},${cy} ${b.x},${b.y}`;

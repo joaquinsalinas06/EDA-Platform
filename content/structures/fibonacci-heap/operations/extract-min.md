@@ -18,14 +18,21 @@ visualization:
         Estado inicial *(derivado del pseudocódigo; no aparece así en las
         diapositivas)*: `min(H) = z(3)`, de grado 2, con hijos `9` y `15`;
         además hay dos raíces sueltas más, `7` y `20`. `z` es lo único
-        que se va a quitar.
+        que se va a quitar. Fiel al struct: `z` sólo guarda UN puntero real
+        (`child`, hoy a `9`) — `9` y `15` no cuelgan cada uno de `z`,
+        están enlazados entre sí en su propio anillo (`R`/`L`), igual que
+        en [Cut](/structures/fibonacci-heap/operations/cut).
       highlight: ["z"]
       nodes:
         - { id: z, value: 3, tag: z, parent: null, state: active }
-        - { id: n9, value: 9, parent: z }
-        - { id: n15, value: 15, parent: z }
+        - { id: n9, value: 9, parent: z, edge: false }
+        - { id: n15, value: 15, parent: z, edge: false }
         - { id: r7, value: 7, parent: null }
         - { id: r20, value: 20, parent: null }
+      links:
+        - { from: z, to: n9, kind: pointer, label: "child" }
+        - { from: n9, to: n15, kind: pointer, label: "R,L" }
+        - { from: n15, to: n9, kind: pointer, label: "R,L" }
     - note: >-
         Paso 1.1: cada hijo de `z` pasa a la lista de raíces de `H`,
         perdiendo su padre — y, como las raíces nunca están marcadas, se
@@ -75,8 +82,12 @@ visualization:
       nodes:
         - { id: r7, value: 7, parent: null }
         - { id: n9, value: 9, parent: null }
-        - { id: n15, value: 15, parent: n9 }
-        - { id: r20, value: 20, parent: n9 }
+        - { id: n15, value: 15, parent: n9, edge: false }
+        - { id: r20, value: 20, parent: n9, edge: false }
+      links:
+        - { from: n9, to: n15, kind: pointer, label: "child" }
+        - { from: n15, to: r20, kind: pointer, label: "R,L" }
+        - { from: r20, to: n15, kind: pointer, label: "R,L" }
     - note: >-
         Paso final: `min(H)` se actualiza al verdadero mínimo entre las
         raíces que dejó Consolidate — aquí `7`, no el `9` que se había
@@ -87,8 +98,12 @@ visualization:
       nodes:
         - { id: r7, value: 7, parent: null, state: answer }
         - { id: n9, value: 9, parent: null }
-        - { id: n15, value: 15, parent: n9 }
-        - { id: r20, value: 20, parent: n9 }
+        - { id: n15, value: 15, parent: n9, edge: false }
+        - { id: r20, value: 20, parent: n9, edge: false }
+      links:
+        - { from: n9, to: n15, kind: pointer, label: "child" }
+        - { from: n15, to: r20, kind: pointer, label: "R,L" }
+        - { from: r20, to: n15, kind: pointer, label: "R,L" }
 ---
 
 ## Qué hace

@@ -214,7 +214,13 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
             const state = resolveEdgeState(e, step.highlight);
             const visual = edgeStyle(e.kind ?? 'tree', state);
             const b = e.arrow ? trimToBox(a, bRaw) : bRaw;
-            const curve = e.curve ?? 0;
+            // `pointer` sin `curve` explícito ya no es una línea recta: dos
+            // punteros opuestos entre el mismo par de nodos (el `left` de
+            // uno = el `right` del otro) se dibujaban exactamente encima,
+            // ilegibles. Con un default consistente el autor no tiene que
+            // adivinar una magnitud — sólo cuenta la dirección (from→to vs
+            // to→from), que ya se separa sola a lados opuestos.
+            const curve = e.curve ?? (e.kind === 'pointer' ? 20 : 0);
             const mx = (a.x + b.x) / 2;
             const my = (a.y + b.y) / 2;
             const dx = b.x - a.x;
@@ -244,19 +250,29 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
                   // pintaba — sin esto no hay forma de distinguir en el
                   // dibujo "este es el puntero left" de "este es right"
                   // cuando dos aristas `pointer` van entre el mismo par de
-                  // nodos en direcciones opuestas.
-                  <text
-                    x={cx}
-                    y={cy}
-                    textAnchor="middle"
-                    dominantBaseline="central"
-                    fontSize={9}
-                    fontFamily="var(--font-mono)"
-                    fill={visual.stroke}
-                    style={{ transition: 'x 450ms cubic-bezier(.2,.7,.3,1), y 450ms cubic-bezier(.2,.7,.3,1)' }}
-                  >
-                    {e.label}
-                  </text>
+                  // nodos en direcciones opuestas. El chip de fondo evita que
+                  // el texto se pierda encima de otra línea que cruza justo
+                  // por el punto medio de la curva.
+                  <g style={{ transition: 'transform 450ms cubic-bezier(.2,.7,.3,1)' }} transform={`translate(${cx}, ${cy})`}>
+                    <rect
+                      x={-(e.label.length * 3.4 + 4)}
+                      y={-6.5}
+                      width={e.label.length * 6.8 + 8}
+                      height={13}
+                      rx={3}
+                      fill="var(--paper)"
+                    />
+                    <text
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      fontSize={10}
+                      fontWeight={600}
+                      fontFamily="var(--font-mono)"
+                      fill={visual.stroke}
+                    >
+                      {e.label}
+                    </text>
+                  </g>
                 )}
               </g>
             );
@@ -440,6 +456,24 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
                       {n.label}
                     </text>
                   </>
+                )}
+                {n.tag && (
+                  // Nombre de variable/puntero arriba de la caja — "p" sobre
+                  // "8", no sólo "8" solo. Sin esto, una nota que dice "p(8)"
+                  // no tenía ninguna pista visual de cuál caja era `p`.
+                  <text
+                    x={0}
+                    y={-h / 2 - 7}
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fontSize={10}
+                    fontWeight={600}
+                    fontFamily="var(--font-mono)"
+                    fill="var(--muted)"
+                    style={{ transition: 'x 450ms cubic-bezier(.2,.7,.3,1), y 450ms cubic-bezier(.2,.7,.3,1)' }}
+                  >
+                    {n.tag}
+                  </text>
                 )}
               </g>
             );

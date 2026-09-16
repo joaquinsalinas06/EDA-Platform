@@ -24,40 +24,36 @@ visualization:
         - { id: h1, label: "H1" }
         - { id: h2, label: "H2" }
       links:
-        - { from: a, to: b, kind: pointer, label: "R", curve: 12 }
-        - { from: a, to: b, kind: pointer, label: "L", curve: 26 }
-        - { from: b, to: a, kind: pointer, label: "R", curve: 12 }
-        - { from: b, to: a, kind: pointer, label: "L", curve: 26 }
-        - { from: d, to: e, kind: pointer, label: "R", curve: 12 }
-        - { from: d, to: e, kind: pointer, label: "L", curve: 26 }
-        - { from: e, to: d, kind: pointer, label: "R", curve: 12 }
-        - { from: e, to: d, kind: pointer, label: "L", curve: 26 }
+        - { from: a, to: b, kind: pointer, label: "R,L" }
+        - { from: b, to: a, kind: pointer, label: "R,L" }
+        - { from: d, to: e, kind: pointer, label: "R,L" }
+        - { from: e, to: d, kind: pointer, label: "R,L" }
       nodes:
-        - { id: a, value: 5, parent: null, panel: h1, state: active }
-        - { id: b, value: 9, parent: null, panel: h1 }
-        - { id: c, value: 14, parent: b, panel: h1 }
-        - { id: d, value: 12, parent: null, panel: h2, state: active }
-        - { id: e, value: 20, parent: null, panel: h2 }
+        - { id: a, value: 5, tag: a, parent: null, panel: h1, state: active }
+        - { id: b, value: 9, tag: b, parent: null, panel: h1 }
+        - { id: c, value: 14, tag: c, parent: b, panel: h1 }
+        - { id: d, value: 12, tag: d, parent: null, panel: h2, state: active }
+        - { id: e, value: 20, tag: e, parent: null, panel: h2 }
     - note: >-
         Paso 2 (comparación): se comparan `min(H1)=5` y `min(H2)=12` para
         decidir cuál sobrevive como `min(H)` del montículo unido.
       highlight: ["a", "d"]
       nodes:
-        - { id: a, value: 5, parent: null, state: active }
-        - { id: b, value: 9, parent: null }
-        - { id: c, value: 14, parent: b }
-        - { id: d, value: 12, parent: null, state: active }
-        - { id: e, value: 20, parent: null }
+        - { id: a, value: 5, tag: a, parent: null, state: active }
+        - { id: b, value: 9, tag: b, parent: null }
+        - { id: c, value: 14, tag: c, parent: b }
+        - { id: d, value: 12, tag: d, parent: null, state: active }
+        - { id: e, value: 20, tag: e, parent: null }
     - note: >-
         `min(H) ← mín(5, 12) = 5`. `a` queda como el mínimo global; `d`
         sigue siendo una raíz suelta más, sin ningún rol especial.
       highlight: ["a"]
       nodes:
-        - { id: a, value: 5, parent: null, state: active }
-        - { id: b, value: 9, parent: null }
-        - { id: c, value: 14, parent: b }
-        - { id: d, value: 12, parent: null }
-        - { id: e, value: 20, parent: null }
+        - { id: a, value: 5, tag: a, parent: null, state: active }
+        - { id: b, value: 9, tag: b, parent: null }
+        - { id: c, value: 14, tag: c, parent: b }
+        - { id: d, value: 12, tag: d, parent: null }
+        - { id: e, value: 20, tag: e, parent: null }
     - note: >-
         Estado final: una sola lista de raíces con los cuatro árboles de
         `H1` y `H2` sin fusionar entre sí — `b(9)` y `d(12)` mismo grado
@@ -67,11 +63,11 @@ visualization:
         [Extract-Min](/structures/fibonacci-heap/operations/extract-min).
       highlight: []
       nodes:
-        - { id: a, value: 5, parent: null }
-        - { id: b, value: 9, parent: null }
-        - { id: c, value: 14, parent: b }
-        - { id: d, value: 12, parent: null }
-        - { id: e, value: 20, parent: null }
+        - { id: a, value: 5, tag: a, parent: null }
+        - { id: b, value: 9, tag: b, parent: null }
+        - { id: c, value: 14, tag: c, parent: b }
+        - { id: d, value: 12, tag: d, parent: null }
+        - { id: e, value: 20, tag: e, parent: null }
 ---
 import Visualization from '../../../../src/components/Visualization.astro';
 
@@ -130,160 +126,143 @@ Llamada acá como `spliceInto(head=a, x=d)` — `a` es `min(H1)`, `d` es
         { id: "h2", label: "H2" },
       ],
       nodes: [
-        { id: "a", value: 5, parent: null, panel: "h1" },
-        { id: "b", value: 9, parent: null, panel: "h1" },
-        { id: "d", value: 12, parent: null, panel: "h2" },
-        { id: "e", value: 20, parent: null, panel: "h2" },
+        { id: "a", value: 5, tag: "a", parent: null, panel: "h1" },
+        { id: "b", value: 9, tag: "b", parent: null, panel: "h1" },
+        { id: "d", value: 12, tag: "d", parent: null, panel: "h2" },
+        { id: "e", value: 20, tag: "e", parent: null, panel: "h2" },
       ],
       links: [
-        { from: "a", to: "b", kind: "pointer", label: "R", curve: 12 },
-        { from: "a", to: "b", kind: "pointer", label: "L", curve: 26 },
-        { from: "b", to: "a", kind: "pointer", label: "R", curve: 12 },
-        { from: "b", to: "a", kind: "pointer", label: "L", curve: 26 },
-        { from: "d", to: "e", kind: "pointer", label: "R", curve: 12 },
-        { from: "d", to: "e", kind: "pointer", label: "L", curve: 26 },
-        { from: "e", to: "d", kind: "pointer", label: "R", curve: 12 },
-        { from: "e", to: "d", kind: "pointer", label: "L", curve: 26 },
+        { from: "a", to: "b", kind: "pointer", label: "R,L" },
+        { from: "b", to: "a", kind: "pointer", label: "R,L" },
+        { from: "d", to: "e", kind: "pointer", label: "R,L" },
+        { from: "e", to: "d", kind: "pointer", label: "R,L" },
       ],
     },
     {
       note: "Línea 1 — headLeft = head->left;  head es a, así que headLeft toma el valor de a.left, que hoy es b. Sólo una lectura — nada muta todavía. Los paneles ya desaparecen: a partir de acá es un solo bosque, porque la fusión ocurre entre nodos concretos, no entre 'contenedores' H1/H2 (que ni existen en el struct).",
       highlight: ["a", "b"],
       nodes: [
-        { id: "a", value: 5, parent: null },
-        { id: "b", value: 9, parent: null },
-        { id: "d", value: 12, parent: null },
-        { id: "e", value: 20, parent: null },
+        { id: "a", value: 5, tag: "a", parent: null },
+        { id: "b", value: 9, tag: "b", parent: null },
+        { id: "d", value: 12, tag: "d", parent: null },
+        { id: "e", value: 20, tag: "e", parent: null },
       ],
       links: [
-        { from: "a", to: "b", kind: "pointer", label: "R", curve: 12 },
-        { from: "a", to: "b", kind: "pointer", label: "L", curve: 26 },
-        { from: "b", to: "a", kind: "pointer", label: "R", curve: 12 },
-        { from: "b", to: "a", kind: "pointer", label: "L", curve: 26 },
-        { from: "d", to: "e", kind: "pointer", label: "R", curve: 12 },
-        { from: "d", to: "e", kind: "pointer", label: "L", curve: 26 },
-        { from: "e", to: "d", kind: "pointer", label: "R", curve: 12 },
-        { from: "e", to: "d", kind: "pointer", label: "L", curve: 26 },
+        { from: "a", to: "b", kind: "pointer", label: "R,L" },
+        { from: "b", to: "a", kind: "pointer", label: "R,L" },
+        { from: "d", to: "e", kind: "pointer", label: "R,L" },
+        { from: "e", to: "d", kind: "pointer", label: "R,L" },
       ],
     },
     {
       note: "Línea 2 — headLeft->right = x;  headLeft es b, x es d: b.right deja de apuntar a a y ahora apunta a d. Primera mutación — y ya es el puente entre las dos listas. a.right sigue intacto (todavía b): esa mitad de H1 no se toca.",
       highlight: ["b", "d"],
       nodes: [
-        { id: "a", value: 5, parent: null },
-        { id: "b", value: 9, parent: null },
-        { id: "d", value: 12, parent: null },
-        { id: "e", value: 20, parent: null },
+        { id: "a", value: 5, tag: "a", parent: null },
+        { id: "b", value: 9, tag: "b", parent: null },
+        { id: "d", value: 12, tag: "d", parent: null },
+        { id: "e", value: 20, tag: "e", parent: null },
       ],
       links: [
-        { from: "a", to: "b", kind: "pointer", label: "R", curve: 12 },
-        { from: "a", to: "b", kind: "pointer", label: "L", curve: 26 },
-        { from: "b", to: "a", kind: "pointer", label: "L", curve: 26 },
-        { from: "b", to: "d", kind: "pointer", label: "R", curve: 12 },
-        { from: "d", to: "e", kind: "pointer", label: "R", curve: 12 },
-        { from: "d", to: "e", kind: "pointer", label: "L", curve: 26 },
-        { from: "e", to: "d", kind: "pointer", label: "R", curve: 12 },
-        { from: "e", to: "d", kind: "pointer", label: "L", curve: 26 },
+        { from: "a", to: "b", kind: "pointer", label: "R,L" },
+        { from: "b", to: "a", kind: "pointer", label: "L" },
+        { from: "b", to: "d", kind: "pointer", label: "R" },
+        { from: "d", to: "e", kind: "pointer", label: "R,L" },
+        { from: "e", to: "d", kind: "pointer", label: "R,L" },
       ],
     },
     {
       note: "Línea 3 — xLeft = x->left;  x es d, así que xLeft toma el valor de d.left, que hoy es e (nadie tocó los punteros de H2 todavía). Otra lectura, ninguna mutación.",
       highlight: ["d", "e"],
       nodes: [
-        { id: "a", value: 5, parent: null },
-        { id: "b", value: 9, parent: null },
-        { id: "d", value: 12, parent: null },
-        { id: "e", value: 20, parent: null },
+        { id: "a", value: 5, tag: "a", parent: null },
+        { id: "b", value: 9, tag: "b", parent: null },
+        { id: "d", value: 12, tag: "d", parent: null },
+        { id: "e", value: 20, tag: "e", parent: null },
       ],
       links: [
-        { from: "a", to: "b", kind: "pointer", label: "R", curve: 12 },
-        { from: "a", to: "b", kind: "pointer", label: "L", curve: 26 },
-        { from: "b", to: "a", kind: "pointer", label: "L", curve: 26 },
-        { from: "b", to: "d", kind: "pointer", label: "R", curve: 12 },
-        { from: "d", to: "e", kind: "pointer", label: "R", curve: 12 },
-        { from: "d", to: "e", kind: "pointer", label: "L", curve: 26 },
-        { from: "e", to: "d", kind: "pointer", label: "R", curve: 12 },
-        { from: "e", to: "d", kind: "pointer", label: "L", curve: 26 },
+        { from: "a", to: "b", kind: "pointer", label: "R,L" },
+        { from: "b", to: "a", kind: "pointer", label: "L" },
+        { from: "b", to: "d", kind: "pointer", label: "R" },
+        { from: "d", to: "e", kind: "pointer", label: "R,L" },
+        { from: "e", to: "d", kind: "pointer", label: "R,L" },
       ],
     },
     {
       note: "Línea 4 — x->left = headLeft;  x es d, headLeft es b: d.left deja de apuntar a e y ahora apunta a b. d.right sigue intacto (todavía e) — esa mitad de H2 tampoco se toca.",
       highlight: ["d", "b"],
       nodes: [
-        { id: "a", value: 5, parent: null },
-        { id: "b", value: 9, parent: null },
-        { id: "d", value: 12, parent: null },
-        { id: "e", value: 20, parent: null },
+        { id: "a", value: 5, tag: "a", parent: null },
+        { id: "b", value: 9, tag: "b", parent: null },
+        { id: "d", value: 12, tag: "d", parent: null },
+        { id: "e", value: 20, tag: "e", parent: null },
       ],
       links: [
-        { from: "a", to: "b", kind: "pointer", label: "R", curve: 12 },
-        { from: "a", to: "b", kind: "pointer", label: "L", curve: 26 },
-        { from: "b", to: "a", kind: "pointer", label: "L", curve: 26 },
-        { from: "b", to: "d", kind: "pointer", label: "R", curve: 12 },
-        { from: "d", to: "e", kind: "pointer", label: "R", curve: 12 },
-        { from: "d", to: "b", kind: "pointer", label: "L", curve: 26 },
-        { from: "e", to: "d", kind: "pointer", label: "R", curve: 12 },
-        { from: "e", to: "d", kind: "pointer", label: "L", curve: 26 },
+        { from: "a", to: "b", kind: "pointer", label: "R,L" },
+        { from: "b", to: "a", kind: "pointer", label: "L" },
+        { from: "b", to: "d", kind: "pointer", label: "R" },
+        { from: "d", to: "e", kind: "pointer", label: "R" },
+        { from: "d", to: "b", kind: "pointer", label: "L" },
+        { from: "e", to: "d", kind: "pointer", label: "R,L" },
       ],
     },
     {
       note: "Línea 5 — xLeft->right = head;  xLeft es e (línea 3), head es a: e.right deja de apuntar a d y ahora apunta a a. Con esto las dos listas ya quedaron conectadas en las DOS direcciones — falta un solo puntero.",
       highlight: ["e", "a"],
       nodes: [
-        { id: "a", value: 5, parent: null },
-        { id: "b", value: 9, parent: null },
-        { id: "d", value: 12, parent: null },
-        { id: "e", value: 20, parent: null },
+        { id: "a", value: 5, tag: "a", parent: null },
+        { id: "b", value: 9, tag: "b", parent: null },
+        { id: "d", value: 12, tag: "d", parent: null },
+        { id: "e", value: 20, tag: "e", parent: null },
       ],
       links: [
-        { from: "a", to: "b", kind: "pointer", label: "R", curve: 12 },
-        { from: "a", to: "b", kind: "pointer", label: "L", curve: 26 },
-        { from: "b", to: "a", kind: "pointer", label: "L", curve: 26 },
-        { from: "b", to: "d", kind: "pointer", label: "R", curve: 12 },
-        { from: "d", to: "e", kind: "pointer", label: "R", curve: 12 },
-        { from: "d", to: "b", kind: "pointer", label: "L", curve: 26 },
-        { from: "e", to: "a", kind: "pointer", label: "R", curve: 12 },
-        { from: "e", to: "d", kind: "pointer", label: "L", curve: 26 },
+        { from: "a", to: "b", kind: "pointer", label: "R,L" },
+        { from: "b", to: "a", kind: "pointer", label: "L" },
+        { from: "b", to: "d", kind: "pointer", label: "R" },
+        { from: "d", to: "e", kind: "pointer", label: "R" },
+        { from: "d", to: "b", kind: "pointer", label: "L" },
+        { from: "e", to: "a", kind: "pointer", label: "R" },
+        { from: "e", to: "d", kind: "pointer", label: "L" },
       ],
     },
     {
       note: "Línea 6 — head->left = xLeft;  head es a, xLeft es e: a.left deja de apuntar a b y ahora apunta a e. Último puntero pendiente. a.right nunca cambió en las 6 líneas — sigue siendo b, igual que al principio. d.right tampoco — sigue siendo e. Sólo se tocaron 4 punteros (b.right, d.left, e.right, a.left), sin importar cuántas raíces tuviera cada lista.",
       highlight: ["a", "e"],
       nodes: [
-        { id: "a", value: 5, parent: null },
-        { id: "b", value: 9, parent: null },
-        { id: "d", value: 12, parent: null },
-        { id: "e", value: 20, parent: null },
+        { id: "a", value: 5, tag: "a", parent: null },
+        { id: "b", value: 9, tag: "b", parent: null },
+        { id: "d", value: 12, tag: "d", parent: null },
+        { id: "e", value: 20, tag: "e", parent: null },
       ],
       links: [
-        { from: "a", to: "b", kind: "pointer", label: "R", curve: 12 },
-        { from: "a", to: "e", kind: "pointer", label: "L", curve: 26 },
-        { from: "b", to: "a", kind: "pointer", label: "L", curve: 26 },
-        { from: "b", to: "d", kind: "pointer", label: "R", curve: 12 },
-        { from: "d", to: "e", kind: "pointer", label: "R", curve: 12 },
-        { from: "d", to: "b", kind: "pointer", label: "L", curve: 26 },
-        { from: "e", to: "a", kind: "pointer", label: "R", curve: 12 },
-        { from: "e", to: "d", kind: "pointer", label: "L", curve: 26 },
+        { from: "a", to: "b", kind: "pointer", label: "R" },
+        { from: "a", to: "e", kind: "pointer", label: "L" },
+        { from: "b", to: "a", kind: "pointer", label: "L" },
+        { from: "b", to: "d", kind: "pointer", label: "R" },
+        { from: "d", to: "e", kind: "pointer", label: "R" },
+        { from: "d", to: "b", kind: "pointer", label: "L" },
+        { from: "e", to: "a", kind: "pointer", label: "R" },
+        { from: "e", to: "d", kind: "pointer", label: "L" },
       ],
     },
     {
       note: "Después: un solo ciclo de 4. Siguiendo 'R' (right): a → b → d → e → a. Siguiendo 'L' (left): a → e → d → b → a — el mismo ciclo, al revés. Nótese que el orden final intercala H1 y H2 (a,b de H1; d,e de H2) — no importa, la lista de raíces no tiene ningún orden con significado algorítmico.",
       highlight: [],
       nodes: [
-        { id: "a", value: 5, parent: null },
-        { id: "b", value: 9, parent: null },
-        { id: "d", value: 12, parent: null },
-        { id: "e", value: 20, parent: null },
+        { id: "a", value: 5, tag: "a", parent: null },
+        { id: "b", value: 9, tag: "b", parent: null },
+        { id: "d", value: 12, tag: "d", parent: null },
+        { id: "e", value: 20, tag: "e", parent: null },
       ],
       links: [
-        { from: "a", to: "b", kind: "pointer", label: "R", curve: 12 },
-        { from: "b", to: "d", kind: "pointer", label: "R", curve: 12 },
-        { from: "d", to: "e", kind: "pointer", label: "R", curve: 12 },
-        { from: "e", to: "a", kind: "pointer", label: "R", curve: 12 },
-        { from: "a", to: "e", kind: "pointer", label: "L", curve: 26 },
-        { from: "e", to: "d", kind: "pointer", label: "L", curve: 26 },
-        { from: "d", to: "b", kind: "pointer", label: "L", curve: 26 },
-        { from: "b", to: "a", kind: "pointer", label: "L", curve: 26 },
+        { from: "a", to: "b", kind: "pointer", label: "R" },
+        { from: "b", to: "d", kind: "pointer", label: "R" },
+        { from: "d", to: "e", kind: "pointer", label: "R" },
+        { from: "e", to: "a", kind: "pointer", label: "R" },
+        { from: "a", to: "e", kind: "pointer", label: "L" },
+        { from: "e", to: "d", kind: "pointer", label: "L" },
+        { from: "d", to: "b", kind: "pointer", label: "L" },
+        { from: "b", to: "a", kind: "pointer", label: "L" },
       ],
     },
   ],

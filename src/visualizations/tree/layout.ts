@@ -3,6 +3,8 @@ import type { NodeState } from '../canvas-types.ts';
 export type TreeNode = {
   id: string;
   value: string | number;
+  /** Nombre de variable/puntero mostrado arriba de la caja — ver CanvasNode.tag. */
+  tag?: string;
   parent: string | null;
   /** Si falta, el canvas lo deriva de `highlight` (activo/en reposo) — pero
    * un estado explícito (marked/answer/shared/copied/muted) SIEMPRE tiene
@@ -21,7 +23,15 @@ export type TreeNode = {
    * propio bosque, posicionado aparte. Ver TreeStep.panels. */
   panel?: string;
 };
-export type LaidOut = { id: string; label: string; x: number; y: number; collapsed?: boolean; state?: NodeState };
+export type LaidOut = {
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  collapsed?: boolean;
+  state?: NodeState;
+  tag?: string;
+};
 
 export const W = 640;
 const ROW = 56;
@@ -66,7 +76,15 @@ export function layout(nodes: TreeNode[]): LaidOut[] {
       cx = (Math.min(...xs) + Math.max(...xs)) / 2;
     }
 
-    out.push({ id: node.id, label: String(node.value), x: cx, y: depth, collapsed: node.collapsed, state: node.state });
+    out.push({
+      id: node.id,
+      label: String(node.value),
+      x: cx,
+      y: depth,
+      collapsed: node.collapsed,
+      state: node.state,
+      tag: node.tag,
+    });
     return cx;
   };
 

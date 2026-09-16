@@ -20,32 +20,32 @@ visualization:
         `p->child` está más abajo, en Algoritmo.**
       highlight: ["x"]
       nodes:
-        - { id: r, value: 1, parent: null }
-        - { id: p, value: 8, parent: r }
-        - { id: x, value: 15, parent: p, state: marked }
-        - { id: y, value: 20, parent: p }
-        - { id: z, value: 25, parent: p }
+        - { id: r, value: 1, tag: r, parent: null }
+        - { id: p, value: 8, tag: p, parent: r }
+        - { id: x, value: 15, tag: x, parent: p, state: marked }
+        - { id: y, value: 20, tag: y, parent: p }
+        - { id: z, value: 25, tag: z, parent: p }
     - note: >-
         Paso 1a: se quita `x` de la lista de hijos de `p`. `x` se separa
         del enlace padre-hijo; a `p` sólo le quedan `y` y `z`.
       highlight: ["x", "p"]
       nodes:
-        - { id: r, value: 1, parent: null }
-        - { id: p, value: 8, parent: r, state: active }
-        - { id: x, value: 15, parent: null, state: active }
-        - { id: y, value: 20, parent: p }
-        - { id: z, value: 25, parent: p }
+        - { id: r, value: 1, tag: r, parent: null }
+        - { id: p, value: 8, tag: p, parent: r, state: active }
+        - { id: x, value: 15, tag: x, parent: null, state: active }
+        - { id: y, value: 20, tag: y, parent: p }
+        - { id: z, value: 25, tag: z, parent: p }
     - note: >-
         Paso 1b: `grado(p) ← grado(p) − 1`, de 3 a 2. Es una actualización
         de contador, separada de desenlazar a `x` — ninguna otra
         estructura se toca.
       highlight: ["p"]
       nodes:
-        - { id: r, value: 1, parent: null }
-        - { id: p, value: 8, parent: r, state: active }
-        - { id: x, value: 15, parent: null }
-        - { id: y, value: 20, parent: p }
-        - { id: z, value: 25, parent: p }
+        - { id: r, value: 1, tag: r, parent: null }
+        - { id: p, value: 8, tag: p, parent: r, state: active }
+        - { id: x, value: 15, tag: x, parent: null }
+        - { id: y, value: 20, tag: y, parent: p }
+        - { id: z, value: 25, tag: z, parent: p }
     - note: >-
         Paso 2a: se agrega `x` a la lista de raíces de `H` — empalme de
         punteros en O(1), igual que en
@@ -53,22 +53,22 @@ visualization:
         todavía conserva su marca vieja en este instante.
       highlight: ["x"]
       nodes:
-        - { id: r, value: 1, parent: null }
-        - { id: p, value: 8, parent: r }
-        - { id: x, value: 15, parent: null, state: marked }
-        - { id: y, value: 20, parent: p }
-        - { id: z, value: 25, parent: p }
+        - { id: r, value: 1, tag: r, parent: null }
+        - { id: p, value: 8, tag: p, parent: r }
+        - { id: x, value: 15, tag: x, parent: null, state: marked }
+        - { id: y, value: 20, tag: y, parent: p }
+        - { id: z, value: 25, tag: z, parent: p }
     - note: >-
         Paso 2b: `padre(x) ← nulo` (ya lo estaba desde el paso 1a) y
         `marca(x) ← falso`. Como raíz, `x` no puede seguir marcado — la
         marca sólo tiene sentido en un nodo con padre.
       highlight: ["x"]
       nodes:
-        - { id: r, value: 1, parent: null }
-        - { id: p, value: 8, parent: r }
-        - { id: x, value: 15, parent: null, state: active }
-        - { id: y, value: 20, parent: p }
-        - { id: z, value: 25, parent: p }
+        - { id: r, value: 1, tag: r, parent: null }
+        - { id: p, value: 8, tag: p, parent: r }
+        - { id: x, value: 15, tag: x, parent: null, state: active }
+        - { id: y, value: 20, tag: y, parent: p }
+        - { id: z, value: 25, tag: z, parent: p }
     - note: >-
         Estado final: `x(15)` es raíz independiente y sin marca,
         `p(8)` quedó con `grado = 2` y sus hijos restantes `y`, `z`. Aquí
@@ -79,11 +79,11 @@ visualization:
         sobre `p` — esa continuación no se repite aquí.
       highlight: []
       nodes:
-        - { id: r, value: 1, parent: null }
-        - { id: p, value: 8, parent: r }
-        - { id: x, value: 15, parent: null }
-        - { id: y, value: 20, parent: p }
-        - { id: z, value: 25, parent: p }
+        - { id: r, value: 1, tag: r, parent: null }
+        - { id: p, value: 8, tag: p, parent: r }
+        - { id: x, value: 15, tag: x, parent: null }
+        - { id: y, value: 20, tag: y, parent: p }
+        - { id: z, value: 25, tag: z, parent: p }
 ---
 import Visualization from '../../../../src/components/Visualization.astro';
 
@@ -138,144 +138,136 @@ static void removeFromList(Node* x) {
       note: "Antes: p tiene 3 hijos en su propio ciclo circular — x, y, z (p->child apunta a x, el 'algún hijo' arbitrario). Ciclo: x→y→z→x (right), x→z→y→x (left, el mismo ciclo al revés).",
       highlight: [],
       nodes: [
-        { id: "p", value: 8, parent: null },
-        { id: "x", value: 15, parent: "p", state: "marked" },
-        { id: "y", value: 20, parent: "p" },
-        { id: "z", value: 25, parent: "p" },
+        { id: "p", value: 8, tag: "p", parent: null },
+        { id: "x", value: 15, tag: "x", parent: "p", state: "marked" },
+        { id: "y", value: 20, tag: "y", parent: "p" },
+        { id: "z", value: 25, tag: "z", parent: "p" },
       ],
       links: [
         { from: "p", to: "x", kind: "pointer", label: "child" },
-        { from: "x", to: "y", kind: "pointer", label: "R", curve: 12 },
-        { from: "y", to: "z", kind: "pointer", label: "R", curve: 12 },
-        { from: "z", to: "x", kind: "pointer", label: "R", curve: 12 },
-        { from: "y", to: "x", kind: "pointer", label: "L", curve: 26 },
-        { from: "z", to: "y", kind: "pointer", label: "L", curve: 26 },
-        { from: "x", to: "z", kind: "pointer", label: "L", curve: 26 },
+        { from: "x", to: "y", kind: "pointer", label: "R" },
+        { from: "y", to: "z", kind: "pointer", label: "R" },
+        { from: "z", to: "x", kind: "pointer", label: "R" },
+        { from: "y", to: "x", kind: "pointer", label: "L" },
+        { from: "z", to: "y", kind: "pointer", label: "L" },
+        { from: "x", to: "z", kind: "pointer", label: "L" },
       ],
     },
     {
       note: "p->child == x, así que hay que moverlo ANTES de desenlazar: como x->right (y) no es el propio x, p->child pasa a ser y. (Si x fuera el único hijo, x->right sería x mismo — ver el caso aparte más abajo, donde p->child termina en nullptr.)",
       highlight: ["p", "x", "y"],
       nodes: [
-        { id: "p", value: 8, parent: null },
-        { id: "x", value: 15, parent: "p", state: "marked" },
-        { id: "y", value: 20, parent: "p" },
-        { id: "z", value: 25, parent: "p" },
+        { id: "p", value: 8, tag: "p", parent: null },
+        { id: "x", value: 15, tag: "x", parent: "p", state: "marked" },
+        { id: "y", value: 20, tag: "y", parent: "p" },
+        { id: "z", value: 25, tag: "z", parent: "p" },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
-        { from: "x", to: "y", kind: "pointer", label: "R", curve: 12 },
-        { from: "y", to: "z", kind: "pointer", label: "R", curve: 12 },
-        { from: "z", to: "x", kind: "pointer", label: "R", curve: 12 },
-        { from: "y", to: "x", kind: "pointer", label: "L", curve: 26 },
-        { from: "z", to: "y", kind: "pointer", label: "L", curve: 26 },
-        { from: "x", to: "z", kind: "pointer", label: "L", curve: 26 },
+        { from: "x", to: "y", kind: "pointer", label: "R" },
+        { from: "y", to: "z", kind: "pointer", label: "R" },
+        { from: "z", to: "x", kind: "pointer", label: "R" },
+        { from: "y", to: "x", kind: "pointer", label: "L" },
+        { from: "z", to: "y", kind: "pointer", label: "L" },
+        { from: "x", to: "z", kind: "pointer", label: "L" },
       ],
     },
     {
       note: "removeFromList línea 1 — x->left->right = x->right;  x->left es z, x->right es y: z.right deja de apuntar a x y ahora apunta a y. z 'salta por encima' de x.",
       highlight: ["z", "y"],
       nodes: [
-        { id: "p", value: 8, parent: null },
-        { id: "x", value: 15, parent: "p", state: "marked" },
-        { id: "y", value: 20, parent: "p" },
-        { id: "z", value: 25, parent: "p" },
+        { id: "p", value: 8, tag: "p", parent: null },
+        { id: "x", value: 15, tag: "x", parent: "p", state: "marked" },
+        { id: "y", value: 20, tag: "y", parent: "p" },
+        { id: "z", value: 25, tag: "z", parent: "p" },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
-        { from: "x", to: "y", kind: "pointer", label: "R", curve: 12 },
-        { from: "y", to: "z", kind: "pointer", label: "R", curve: 12 },
-        { from: "z", to: "y", kind: "pointer", label: "R", curve: 12 },
-        { from: "y", to: "x", kind: "pointer", label: "L", curve: 26 },
-        { from: "z", to: "y", kind: "pointer", label: "L", curve: 26 },
-        { from: "x", to: "z", kind: "pointer", label: "L", curve: 26 },
+        { from: "x", to: "y", kind: "pointer", label: "R" },
+        { from: "y", to: "z", kind: "pointer", label: "R" },
+        { from: "z", to: "y", kind: "pointer", label: "R" },
+        { from: "y", to: "x", kind: "pointer", label: "L" },
+        { from: "z", to: "y", kind: "pointer", label: "L" },
+        { from: "x", to: "z", kind: "pointer", label: "L" },
       ],
     },
     {
       note: "removeFromList línea 2 — x->right->left = x->left;  x->right es y, x->left es z: y.left deja de apuntar a x y ahora apunta a z. Con esto y y z ya se saltaron a x en las dos direcciones — sólo faltan los propios punteros de x.",
       highlight: ["y", "z"],
       nodes: [
-        { id: "p", value: 8, parent: null },
-        { id: "x", value: 15, parent: "p", state: "marked" },
-        { id: "y", value: 20, parent: "p" },
-        { id: "z", value: 25, parent: "p" },
+        { id: "p", value: 8, tag: "p", parent: null },
+        { id: "x", value: 15, tag: "x", parent: "p", state: "marked" },
+        { id: "y", value: 20, tag: "y", parent: "p" },
+        { id: "z", value: 25, tag: "z", parent: "p" },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
-        { from: "x", to: "y", kind: "pointer", label: "R", curve: 12 },
-        { from: "y", to: "z", kind: "pointer", label: "R", curve: 12 },
-        { from: "z", to: "y", kind: "pointer", label: "R", curve: 12 },
-        { from: "y", to: "z", kind: "pointer", label: "L", curve: 26 },
-        { from: "z", to: "y", kind: "pointer", label: "L", curve: 26 },
-        { from: "x", to: "z", kind: "pointer", label: "L", curve: 26 },
+        { from: "x", to: "y", kind: "pointer", label: "R" },
+        { from: "y", to: "z", kind: "pointer", label: "R" },
+        { from: "z", to: "y", kind: "pointer", label: "R" },
+        { from: "y", to: "z", kind: "pointer", label: "L" },
+        { from: "z", to: "y", kind: "pointer", label: "L" },
+        { from: "x", to: "z", kind: "pointer", label: "L" },
       ],
     },
     {
       note: "removeFromList línea 3 — x->left = x->right = x;  x vuelve a auto-referenciarse (no se dibuja como flecha propia, mismo caso que un nodo recién creado en Insert). Sus dos flechas viejas hacia y/z (x→y R, x→z L) desaparecen del dibujo. y y z quedan en un ciclo de 2 — right y left vuelven a coincidir entre ellos, igual que el caso base de Insert.",
       highlight: ["x"],
       nodes: [
-        { id: "p", value: 8, parent: null },
-        { id: "x", value: 15, parent: null, state: "active" },
-        { id: "y", value: 20, parent: "p" },
-        { id: "z", value: 25, parent: "p" },
+        { id: "p", value: 8, tag: "p", parent: null },
+        { id: "x", value: 15, tag: "x", parent: null, state: "active" },
+        { id: "y", value: 20, tag: "y", parent: "p" },
+        { id: "z", value: 25, tag: "z", parent: "p" },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
-        { from: "y", to: "z", kind: "pointer", label: "R", curve: 12 },
-        { from: "z", to: "y", kind: "pointer", label: "R", curve: 12 },
-        { from: "y", to: "z", kind: "pointer", label: "L", curve: 26 },
-        { from: "z", to: "y", kind: "pointer", label: "L", curve: 26 },
+        { from: "y", to: "z", kind: "pointer", label: "R,L" },
+        { from: "z", to: "y", kind: "pointer", label: "R,L" },
       ],
     },
     {
       note: "--p->degree: de 3 a 2. Sólo un contador — no reconecta nada, pero sin decrementarlo grado(p) mentiría sobre cuántos hijos tiene p de verdad.",
       highlight: ["p"],
       nodes: [
-        { id: "p", value: 8, parent: null },
-        { id: "x", value: 15, parent: null, state: "active" },
-        { id: "y", value: 20, parent: "p" },
-        { id: "z", value: 25, parent: "p" },
+        { id: "p", value: 8, tag: "p", parent: null },
+        { id: "x", value: 15, tag: "x", parent: null, state: "active" },
+        { id: "y", value: 20, tag: "y", parent: "p" },
+        { id: "z", value: 25, tag: "z", parent: "p" },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
-        { from: "y", to: "z", kind: "pointer", label: "R", curve: 12 },
-        { from: "z", to: "y", kind: "pointer", label: "R", curve: 12 },
-        { from: "y", to: "z", kind: "pointer", label: "L", curve: 26 },
-        { from: "z", to: "y", kind: "pointer", label: "L", curve: 26 },
+        { from: "y", to: "z", kind: "pointer", label: "R,L" },
+        { from: "z", to: "y", kind: "pointer", label: "R,L" },
       ],
     },
     {
       note: "x->parent = nullptr; x->mark = false. x ya no depende de p para nada — ni como hijo (el ciclo de arriba ya no lo incluye) ni como marcado (las raíces nunca están marcadas).",
       highlight: ["x"],
       nodes: [
-        { id: "p", value: 8, parent: null },
-        { id: "x", value: 15, parent: null },
-        { id: "y", value: 20, parent: "p" },
-        { id: "z", value: 25, parent: "p" },
+        { id: "p", value: 8, tag: "p", parent: null },
+        { id: "x", value: 15, tag: "x", parent: null },
+        { id: "y", value: 20, tag: "y", parent: "p" },
+        { id: "z", value: 25, tag: "z", parent: "p" },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
-        { from: "y", to: "z", kind: "pointer", label: "R", curve: 12 },
-        { from: "z", to: "y", kind: "pointer", label: "R", curve: 12 },
-        { from: "y", to: "z", kind: "pointer", label: "L", curve: 26 },
-        { from: "z", to: "y", kind: "pointer", label: "L", curve: 26 },
+        { from: "y", to: "z", kind: "pointer", label: "R,L" },
+        { from: "z", to: "y", kind: "pointer", label: "R,L" },
       ],
     },
     {
       note: "spliceInto(minNode, x) — el mismo empalme de Insert, línea por línea allá; acá sólo el resultado: x entra a la lista de raíces de H (no se dibuja aquí para no repetir el mismo diagrama dos veces).",
       highlight: ["x"],
       nodes: [
-        { id: "p", value: 8, parent: null },
-        { id: "x", value: 15, parent: null, state: "answer" },
-        { id: "y", value: 20, parent: "p" },
-        { id: "z", value: 25, parent: "p" },
+        { id: "p", value: 8, tag: "p", parent: null },
+        { id: "x", value: 15, tag: "x", parent: null, state: "answer" },
+        { id: "y", value: 20, tag: "y", parent: "p" },
+        { id: "z", value: 25, tag: "z", parent: "p" },
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
-        { from: "y", to: "z", kind: "pointer", label: "R", curve: 12 },
-        { from: "z", to: "y", kind: "pointer", label: "R", curve: 12 },
-        { from: "y", to: "z", kind: "pointer", label: "L", curve: 26 },
-        { from: "z", to: "y", kind: "pointer", label: "L", curve: 26 },
+        { from: "y", to: "z", kind: "pointer", label: "R,L" },
+        { from: "z", to: "y", kind: "pointer", label: "R,L" },
       ],
     },
   ],
@@ -294,8 +286,8 @@ solo en su propio ciclo — `x->right == x` — y eso cambia el primer paso:
       note: "Antes: p tiene un solo hijo, x. Al estar solo en su ciclo, x->right == x y x->left == x (auto-referenciado, no se dibuja flecha — igual que un nodo recién creado). p->child apunta a x.",
       highlight: [],
       nodes: [
-        { id: "p", value: 8, parent: null },
-        { id: "x", value: 15, parent: "p" },
+        { id: "p", value: 8, tag: "p", parent: null },
+        { id: "x", value: 15, tag: "x", parent: "p" },
       ],
       links: [{ from: "p", to: "x", kind: "pointer", label: "child" }],
     },
@@ -303,8 +295,8 @@ solo en su propio ciclo — `x->right == x` — y eso cambia el primer paso:
       note: "p->child == x, y esta vez x->right SÍ es x mismo — la condición del if se cumple con el otro resultado: p->child = nullptr. Se dibuja quitando la flecha 'child' por completo: p ya no apunta a ningún hijo, no a un nodo especial 'null'. (El trazo fino que sigue uniendo p con x es el borde de árbol de siempre, por el campo parent — todavía no se tocó; eso pasa recién más abajo.)",
       highlight: ["p"],
       nodes: [
-        { id: "p", value: 8, parent: null },
-        { id: "x", value: 15, parent: "p", state: "muted" },
+        { id: "p", value: 8, tag: "p", parent: null },
+        { id: "x", value: 15, tag: "x", parent: "p", state: "muted" },
       ],
       links: [],
     },
@@ -312,8 +304,8 @@ solo en su propio ciclo — `x->right == x` — y eso cambia el primer paso:
       note: "removeFromList(x) corre igual, pero no cambia nada real: x->left->right = x->right sigue siendo x->right = x (x apuntándose a sí mismo con otro nombre); las 3 líneas son, en este caso, no-ops. Con un solo hijo no hay nadie más en el ciclo a quien reconectar.",
       highlight: ["x"],
       nodes: [
-        { id: "p", value: 8, parent: null },
-        { id: "x", value: 15, parent: null, state: "active" },
+        { id: "p", value: 8, tag: "p", parent: null },
+        { id: "x", value: 15, tag: "x", parent: null, state: "active" },
       ],
       links: [],
     },
@@ -321,8 +313,8 @@ solo en su propio ciclo — `x->right == x` — y eso cambia el primer paso:
       note: "--p->degree: de 1 a 0. x->parent = nullptr, x->mark = false. p queda con grado 0 y child = nullptr — un nodo sin hijos, exactamente como cualquier hoja del montículo.",
       highlight: ["p", "x"],
       nodes: [
-        { id: "p", value: 8, parent: null },
-        { id: "x", value: 15, parent: null },
+        { id: "p", value: 8, tag: "p", parent: null },
+        { id: "x", value: 15, tag: "x", parent: null },
       ],
       links: [],
     },

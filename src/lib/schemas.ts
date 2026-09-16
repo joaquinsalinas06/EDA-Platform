@@ -18,6 +18,9 @@ export const VISUALIZATION_MODES = ['path-copying', 'version-tree', 'fat-node', 
 const vizNode = z.object({
   id: z.string(),
   value: z.union([z.string(), z.number()]),
+  /** Nombre de variable mostrado arriba de la caja (p.ej. "p", "x") —
+   * ver CanvasNode.tag. Opcional, no cambia nada de lo ya escrito. */
+  tag: z.string().optional(),
   parent: z.string().nullable().default(null),
   state: z.enum(NODE_STATES).optional(),
   /** Sólo para un BST binario con UN hijo, donde el orden de hermanos no

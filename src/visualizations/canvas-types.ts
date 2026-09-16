@@ -60,6 +60,13 @@ export type CanvasNode = {
   label: string;
   x: number;
   y: number;
+  /** Nombre de variable/puntero mostrado ARRIBA de la caja (p.ej. "p", "x",
+   * "headLeft") cuando el id del nodo no es el valor que se lee dentro —
+   * "p(8)" en la prosa sin esto se veía como una caja con sólo "8" adentro,
+   * sin ninguna pista de que ese nodo se llama `p`. Opcional: la mayoría
+   * de los diagramas del curso usan ids técnicos (n4, v1, t2) que NO
+   * deberían mostrarse así — sólo se pinta cuando el autor lo pide. */
+  tag?: string;
   /** default 'box' */
   shape?: NodeShape;
   /** default NODE_W / NODE_H según `shape` */

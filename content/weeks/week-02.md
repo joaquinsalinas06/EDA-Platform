@@ -4,10 +4,10 @@ summary: "El método del potencial y la estructura que lo exprime: inserción y 
 sourceFiles: ["raw-materials/week2/CS3014_Estructuras_de_Datos_Avanzadas_2s2026 (1)-1.pdf"]
 ---
 
-Es el mazo donde el análisis amortizado deja de ser un comentario y se vuelve la
-herramienta principal. El método del potencial se define aquí y se reusa en la
-semana 3 para los nodos gordos.
+La semana tiene dos ideas:
 
-El montículo de Fibonacci pospone el trabajo —no consolida al insertar— y paga la
-cuenta en `Extract-Min`. Las marcas y los cortes en cascada son el mecanismo que
-mantiene acotado el grado.
+1. El método del potencial distingue costo real y costo amortizado.
+2. El montículo de Fibonacci pospone Consolidate: Insert, Union y Decrease-Key
+   quedan baratos; Extract-Min paga la reorganización.
+
+Lee primero el método del potencial y luego el montículo de Fibonacci.

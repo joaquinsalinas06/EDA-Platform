@@ -170,19 +170,13 @@ arriba.
 
 ## Complejidad temporal
 
-Costo real $O(D(n) + t(H))$: subir los hijos de `z` a la lista de raíces
-es $O(\text{grado}(z))$, acotado por $O(D(n))$ (la cota de grado máximo); y
-[Consolidate](/structures/fibonacci-heap/operations/consolidate) recorre
-las $t(H)$ raíces resultantes. Con el potencial
-$\Phi(H) = t(H) + 2 \cdot m(H)$: después de consolidar quedan a lo más $D(n) + 1$
-raíces (por cómo funciona el arreglo `A[0..D(n)]` de Consolidate), y
-$m(H)$ no aumenta (subir hijos a la raíz sólo los desmarca), así que
-$\Delta\Phi \le (D(n) + 1) - t(H)$. El costo amortizado resulta
-$\hat{c} = O(D(n) + t(H)) + (D(n) + 1) - t(H) = O(D(n)) = O(\lg n)$, porque
-$D(n) = O(\lg n)$ por la cota de grado probada vía la recurrencia de
-Fibonacci (ver
-[Análisis de complejidad](/structures/fibonacci-heap#análisis-de-complejidad)
-en la teoría).
+El costo real es $O(D(n)+t(H))$: mover los hijos del mínimo está acotado por
+su grado máximo $D(n)$ y Consolidate procesa las $t(H)$ raíces. El costo
+amortizado es $O(\lg n)$.
+
+La explicación de por qué Consolidate deja a lo sumo $D(n)+1$ raíces y de
+cómo el potencial cancela $t(H)$ está en
+[El método del potencial](/structures/potential-method#análisis-de-complejidad).
 
 ## Complejidad espacial
 
@@ -213,6 +207,12 @@ dejar el verdadero mínimo (`7`) como `min(H)`.
   profesor no distingue este sub-caso por separado.
 - **`z` es una hoja (grado 0) y hay más raíces**: el paso de subir hijos
   no hace nada; sólo se quita `z` de la lista y se consolida el resto.
+- **El mínimo sí tiene hijos**. Si `1` tiene hijos `4` y `6`, al eliminar
+  `1` ambos pasan a la lista de raíces junto con las raíces que ya había:
+  `4    6    8`. Cada hijo promovido recibe `parent = nullptr` y
+  `mark = false`; después todos participan en Consolidate.
+- **El mínimo es el único nodo y no tiene hijos**. Al extraer `1`, no queda
+  ninguna raíz: el heap termina vacío y `minNode = nullptr`.
 - **Todas las raíces terminan con grados distintos sin que Consolidate
   tenga que enlazar nada**: sigue costando $O(t(H))$ recorrerlas, aunque
   no haya ningún `Binomial-Link`.

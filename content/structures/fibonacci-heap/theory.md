@@ -5,242 +5,131 @@ visualization:
   type: tree
   steps:
     - note: >-
-        Estado tras varios `Insert` previos *(derivado; ver
-        [Insert](/structures/fibonacci-heap/operations/insert) para el
-        detalle paso a paso)*: dos árboles sueltos en la lista de raíces,
-        `min(H)` apunta a `a(3)`. Insertar y unir sólo empalman esta
-        lista — nada se reorganiza todavía.
-      highlight: ["a"]
+        Un montículo de Fibonacci es una lista de árboles. Las raíces 3 y 8
+        están en la lista circular; min(H) apunta a 3, la llave menor.
+      highlight: [a]
       nodes:
         - { id: a, value: 3, parent: null, state: active }
         - { id: b, value: 8, parent: null }
         - { id: c, value: 12, parent: b }
-        - { id: d, value: 20, parent: c }
     - note: >-
-        `Decrease-Key(H, d, 5)`: `llave(d) ← 5` rompe el invariante con su
-        padre `c(12)` (`5 < 12`). A diferencia de un montículo binario, NO
-        se burbujea intercambiando con el padre — eso obligaría a
-        recorrer el árbol. En su lugar, se corta.
-      highlight: ["d", "c"]
+        Si bajar 12 a 2 rompe el orden con su padre 8, el nodo se corta y
+        pasa a ser una raíz. No se recorre el camino intercambiando llaves.
+      highlight: [b, c]
       nodes:
         - { id: a, value: 3, parent: null }
         - { id: b, value: 8, parent: null }
-        - { id: c, value: 12, parent: b }
-        - { id: d, value: 5, parent: c, state: active }
+        - { id: c, value: 2, parent: b, state: active }
     - note: >-
-        [Cut](/structures/fibonacci-heap/operations/cut)`(H, d, c)`: `d`
-        se separa de `c` y se agrega como raíz nueva, sin marca — empalme
-        de punteros en O(1), sin importar cuán abajo estuviera `d`. Como
-        `llave(d)=5 > llave(min(H))=3`, `min(H)` no cambia esta vez.
-      highlight: ["d"]
+        El nodo 2 queda como raíz y se vuelve el mínimo. Consolidate se
+        reserva para Extract-Min, cuando se unen raíces de igual grado.
+      highlight: [c]
       nodes:
         - { id: a, value: 3, parent: null }
-        - { id: b, value: 8, parent: null }
-        - { id: c, value: 12, parent: b, state: marked }
-        - { id: d, value: 5, parent: null, state: active }
-    - note: >-
-        La **regla de las marcas**: `c` acaba de perder a `d`, su primer
-        hijo perdido desde que se enlazó bajo `b` — se marca
-        (`marca(c) ← verdadero`), pero no se corta. Si perdiera un
-        *segundo* hijo, ahí sí dispararía su propio corte en cascada.
-      highlight: ["c"]
-      nodes:
-        - { id: a, value: 3, parent: null }
-        - { id: b, value: 8, parent: null }
-        - { id: c, value: 12, parent: b, state: marked }
-        - { id: d, value: 5, parent: null }
-    - note: >-
-        Estado final, todavía "desordenado" a propósito: tres árboles
-        sueltos en la lista de raíces (`a`, `b` con hijo `c` marcado,
-        `d`), `min(H)` sigue en `a(3)`. El costo de acomodar todo esto —
-        fusionar árboles de igual grado — se pospone entero a
-        [Consolidate](/structures/fibonacci-heap/operations/consolidate),
-        que sólo corre dentro de
-        [Extract-Min](/structures/fibonacci-heap/operations/extract-min).
-        Es exactamente la pereza que hace O(1) amortizado a Insert, Union
-        y Decrease-Key.
-      highlight: []
-      nodes:
-        - { id: a, value: 3, parent: null }
-        - { id: b, value: 8, parent: null }
-        - { id: c, value: 12, parent: b, state: marked }
-        - { id: d, value: 5, parent: null }
+        - { id: b, value: 8, parent: null, state: marked }
+        - { id: c, value: 2, parent: null, state: active }
 ---
 
 ## ¿Qué problema resuelve?
 
-El profesor lo formula como propiedad, no como problema externo: "¿Por qué
-es tan rápido insert, union y decrease-key? Porque no reorganizan nada de
-inmediato: solo agregan el nuevo nodo/árbol a la lista de raíces en $O(1)$, o
-cortan un nodo y lo agregan como raíz en $O(1)$. Todo el 'desorden' se limpia
-recién en Extract-Min". En el resumen del mazo: "el montículo de Fibonacci
-es **perezoso**". Es la cola de prioridad que logra `Insert`, `Union` y
-`Decrease-Key` en $O(1)$ amortizado, pagando ese trabajo pospuesto de golpe
-en `Extract-Min`. La [tabla comparativa de la semana 1](/structures/binary-heap#comparación-con-estructuras-relacionadas)
-ya anunciaba esta mejora frente al [montículo binario](/structures/binary-heap)
-y el [montículo binomial](/structures/binomial-heap).
+El montículo de Fibonacci es una cola de prioridad que retrasa el trabajo de
+reorganizar sus árboles. Así, Insert, Union y Decrease-Key son baratos ahora;
+el trabajo pendiente se concentra principalmente en Extract-Min.
 
 ## Intuición
 
-Una colección de árboles con raíz — "no necesariamente binomiales", a
-diferencia del binomial — organizados en una lista circular de raíces, con
-un puntero directo `min(H)` al menor. Insertar y unir son casi gratis
-porque sólo empalman listas. La pereza tiene un precio: los árboles se
-dejan crecer desordenados, y sólo cuando hace falta encontrar el mínimo
-después de extraerlo (`Extract-Min`) se paga, de una sola vez, el trabajo
-de reordenar (`Consolidate`) — igual que en un montículo binomial, fusionar
-árboles del mismo grado hasta que todos los grados en la lista de raíces
-sean distintos.
+No es un solo árbol: es una **colección de árboles** cuyas raíces viven en una
+lista circular. El heap mantiene un puntero al mínimo.
 
-`Decrease-Key` añade una segunda idea: cuando bajar una llave rompe el
-invariante de montículo mínimo con el padre, el nodo se corta y sube a la
-lista de raíces en O(1) — pero cortar demasiados hijos del mismo padre sin
-control destruiría la cota de grado que hace rápido a `Extract-Min`. La
-**regla de las marcas** limita el daño: "cada nodo puede perder a lo mucho
-un hijo sin ser cortado de su propio padre". Perder un segundo hijo
-dispara un corte en cascada hacia arriba.
+~~~text
+      3          8          12
+     /                     /
+    5   7                  20
+
+raíces: 3, 8, 12       min(H) = 3
+~~~
+
+La idea clave del profesor es que el heap es **perezoso**: no consolida al
+insertar ni al unir. Sólo guarda las raíces y paga el ordenamiento cuando se
+extrae el mínimo.
+
+> **Para recordar.** Muchas raíces no son un error: son trabajo pospuesto.
 
 ## Estructura interna
 
-Cada nodo guarda: `llave`, `grado` (número de hijos), `padre`, un puntero a
-un hijo, punteros de lista circular doblemente enlazada entre hermanos, y
-`marca(x)` — un booleano.
+Cada nodo guarda una llave, su padre, un hijo, su grado y una marca. El grado
+es el número de hijos.
 
-Invariantes:
+Se conservan tres reglas:
 
-- **Montículo mínimo** en cada árbol: la llave de un nodo es menor o igual
-  que la de sus hijos (igual que en [binary-heap](/structures/binary-heap),
-  pero aquí sobre árboles de grado arbitrario, no un arreglo).
-- **Las raíces nunca están marcadas** (página 20 del mazo) — invariante
-  explícita y crítica: `marca` sólo tiene sentido en un nodo que tiene
-  padre.
-- **Regla de las marcas**: un nodo no-raíz que ya perdió un hijo se marca
-  (`marca(x) ← verdadero`); si pierde un *segundo* hijo, se corta de su
-  propio padre en cascada. `marca(x)` se activa la primera vez que `x`
-  pierde un hijo desde que se convirtió en hijo de alguien, y se resetea a
-  `falso` en cuanto `x` mismo se corta y pasa a la lista de raíces (`Cut`
-  lo pone en `falso` explícitamente).
+- En cada árbol se cumple min-heap: un padre tiene llave menor o igual que sus hijos.
+- Las raíces nunca están marcadas.
+- Un nodo que pierde su primer hijo se marca; si pierde otro, se corta y pasa
+  a la lista de raíces. Si su padre ya estaba marcado, el corte continúa en
+  cascada.
 
-Esta regla está formulada como "a lo más un hijo perdido sin corte" — y no,
-por ejemplo, "nunca perder un hijo" — porque es exactamente lo que la
-demostración de la cota de grado $D(n) = O(\lg n)$ necesita: acota cuánto
-puede haber decrecido el grado de un hijo desde que se enlazó, sin prohibir
-que decrezca del todo (eso volvería la estructura demasiado rígida para que
-`Decrease-Key` siga siendo O(1) amortizado).
+La última regla limita cuánto puede degradarse un árbol sin dejar de permitir
+cortes rápidos.
 
 ## Operaciones
 
-- [Insert](/structures/fibonacci-heap/operations/insert) — agrega un
-  nodo nuevo como árbol de un solo elemento a la lista de raíces.
-- [Union](/structures/fibonacci-heap/operations/union) — concatena dos
-  listas de raíces.
-- [Cut](/structures/fibonacci-heap/operations/cut) — separa un nodo de su
-  padre y lo agrega como raíz.
-- [Cascading-Cut](/structures/fibonacci-heap/operations/cascading-cut) —
-  aplica la regla de las marcas, subiendo el corte por la cadena de
-  ancestros si hace falta.
-- [Decrease-Key](/structures/fibonacci-heap/operations/decrease-key) —
-  baja una llave y, si rompe el invariante con el padre, dispara `Cut` y
-  `Cascading-Cut`.
-- [Consolidate](/structures/fibonacci-heap/operations/consolidate) —
-  fusiona árboles de igual grado hasta que todos los grados en la lista de
-  raíces son distintos.
-- [Extract-Min](/structures/fibonacci-heap/operations/extract-min) —
-  retira la raíz mínima, sube sus hijos a la lista de raíces y llama a
-  `Consolidate`.
+- [Insert](/structures/fibonacci-heap/operations/insert): agrega una raíz nueva.
+- [Union](/structures/fibonacci-heap/operations/union): concatena listas de raíces.
+- [Decrease-Key](/structures/fibonacci-heap/operations/decrease-key): baja una
+  llave; puede disparar Cut y Cascading-Cut.
+- [Extract-Min](/structures/fibonacci-heap/operations/extract-min): elimina el
+  mínimo y llama a Consolidate.
+- [Consolidate](/structures/fibonacci-heap/operations/consolidate): une raíces
+  que tienen el mismo grado.
 
-`Find-Min` y `Delete` **no tienen pseudocódigo ni análisis en este mazo**:
-sólo aparecen con su complejidad ($\Theta(1)$ y $O(\lg n)$ respectivamente) en la
-tabla comparativa de la semana 1. `Find-Min` existe implícitamente como
-leer el puntero `min(H)` que `Insert` y `Union` mantienen; no se documenta
-como operación separada aquí.
+El código completo del editor sigue el mismo orden: Node, lista de raíces,
+Link, Consolidate, Cut, Cascading-Cut y operaciones públicas.
 
 ## Análisis de complejidad
 
-El profesor introduce aquí, por primera vez en el curso, el
-**[método del potencial](/structures/potential-method)**: define el costo
-amortizado de la operación `i` como $\hat{c}_i = c_i + \Phi(D_i) - \Phi(D_{i-1})$, con la
-condición de que si $\Phi$ nunca cae por debajo de su valor inicial, la suma
-de costos amortizados acota por arriba la suma de costos reales. El
-potencial concreto que fija para este montículo es:
+Hay dos ideas que sostienen los costos:
 
-```
-Φ(H) = t(H) + 2·m(H)
-```
+1. El grado máximo $D(n)$ es $O(lg n)$. La regla de marcas implica que un
+   árbol de grado grande necesita muchos nodos; esa relación sigue los números
+   de Fibonacci.
+2. El potencial es $Phi(H)=t(H)+2m(H)$, donde $t(H)$ cuenta raíces y $m(H)$
+   cuenta nodos marcados. Las raíces y las marcas guardan el crédito que paga
+   trabajo futuro.
 
-donde $t(H)$ es el número de árboles en la lista de raíces y $m(H)$ el
-número de nodos marcados. Aplicado operación por operación:
+Por eso:
 
-- **Insert**: agrega un árbol, $t(H)$ sube en 1, $m(H)$ no cambia →
-  $\Delta\Phi = 1$. Costo amortizado $\hat{c} = O(1) + 1 = O(1)$.
-- **Union**: concatenar no cambia ni $t(H)$ ni $m(H)$ (la suma de ambos se
-  conserva) → $\Delta\Phi = 0$. Costo amortizado $\hat{c} = O(1)$.
-- **Decrease-Key**: con $c$ cortes reales en cascada, cada corte agrega un
-  árbol (+1 a $t(H)$) y desmarca un nodo (−2 al potencial por ese nodo),
-  salvo el último de la cadena, que sólo se marca (+2). El profesor acota
-  $\Delta\Phi \le 4 - c$, y el costo amortizado
-  $\hat{c}_i = O(c) + (4 - c) = O(1)$: cuantos más cortes reales hace la
-  operación, más cae el potencial, y esa caída paga exactamente el trabajo
-  extra.
-- **Extract-Min**: tras mover los hijos de la raíz mínima y consolidar,
-  quedan a lo más $D(n) + 1$ árboles (contra los $t(H)$ de antes), así que
-  $\Delta\Phi \le (D(n) + 1) - t(H)$. El costo amortizado resulta
-  $\hat{c} = O(D(n) + t(H)) + (D(n) + 1) - t(H) = O(D(n))$.
+- Insert y Union son $O(1)$ amortizado.
+- Decrease-Key es $O(1)$ amortizado aunque pueda haber cortes en cascada.
+- Extract-Min es $O(lg n)$ amortizado: Consolidate reduce las raíces a lo
+  sumo una por cada grado posible.
 
-Todo esto depende de la cota estructural $D(n) = O(\lg n)$ (el grado máximo
-posible de cualquier nodo), que el profesor prueba con un argumento
-**combinatorio/inductivo** separado (páginas 24-31), subordinado al
-potencial:
-
-Sea $x$ un nodo de grado $k$, con hijos $y_1, \dots, y_k$ en el orden en que se
-enlazaron. Cuando $y_i$ se convirtió en el i-ésimo hijo de $x$, $x$ ya tenía
-al menos $i - 1$ hijos previos ($y_1, \dots, y_{i-1}$) — y por cómo enlaza
-`Consolidate` (dos árboles se enlazan sólo si tienen el mismo grado),
-$y_i$ tenía en ese momento grado al menos $i - 1$ también. Por la regla de
-las marcas, desde entonces $y_i$ puede haber perdido a lo mucho un hijo sin
-haber sido cortado de $x$; su grado actual es, entonces, al menos $i - 2$.
-Sea $s_k$ el número mínimo de nodos que puede tener un árbol cuya raíz
-tiene grado $k$. Contando la raíz, más al menos 1 nodo del hijo $y_1$
-(grado 0 en el peor caso), más al menos $s_{i-2}$ nodos por cada hijo
-$y_i$ con $i \ge 2$:
-
-$$
-s_k \ge 2 + \sum_{i=0}^{k-2} s_i
-$$
-
-Esta es exactamente la recurrencia de los números de Fibonacci
-($s_k \ge F_{k+2}$, demostrable por inducción), y el **Teorema** que cierra
-el argumento dice: "el número mínimo de nodos en un árbol cuya raíz tiene
-grado k es $F_{k+2}$", con $F_{k+2} = \Theta(\varphi^k)$ y $\varphi = (1+\sqrt{5})/2$ la razón
-áurea. Como $n \ge s_k = \Theta(\varphi^k)$, despejar $k$ da $D(n) = O(\lg n)$ — de ahí
-el nombre de la estructura: la cota de grado crece tan lento como
-Fibonacci crece rápido.
+La demostración paso a paso de estas tres cotas está en
+[El método del potencial](/structures/potential-method). La derivación de
+$D(n)=O(lg n)$ se mantiene sólo donde se necesita en esa explicación.
 
 ## Tabla de complejidad
 
-La tabla se genera desde `meta.yaml`. El profesor nunca distingue
-mejor/promedio/peor caso ni menciona espacio en este mazo (igual que en
-[binary-heap](/structures/binary-heap) y
-[binomial-heap](/structures/binomial-heap)): da un costo real y, cuando
-corresponde, uno amortizado — ambos aparecen en el `reasoning` de cada
-operación.
+| Operación | Costo amortizado |
+| --- | --- |
+| Insert | $O(1)$ |
+| Union | $O(1)$ |
+| Decrease-Key | $O(1)$ |
+| Extract-Min | $O(lg n)$ |
 
 ## Ejemplos
 
-Ver [Ejemplos](/structures/fibonacci-heap/examples).
+Para ver cada operación con árboles y pasos concretos:
+
+- [Insert](/structures/fibonacci-heap/operations/insert)
+- [Decrease-Key](/structures/fibonacci-heap/operations/decrease-key)
+- [Cascading-Cut](/structures/fibonacci-heap/operations/cascading-cut)
+- [Consolidate](/structures/fibonacci-heap/operations/consolidate)
 
 ## Comparación con estructuras relacionadas
 
-| | Insert | Union | Decrease-Key | Extract-Min |
-| --- | --- | --- | --- | --- |
-| [Montículo binario](/structures/binary-heap) | $\Theta(\lg n)$ | $\Theta(n)$ | $\Theta(\lg n)$ | $\Theta(\lg n)$ |
-| [Montículo binomial](/structures/binomial-heap) | $O(\lg n)$ | $O(\lg n)$ | $O(\lg n)$ | $O(\lg n)$ |
-| Montículo de Fibonacci | $O(1)$ amortizado | $O(1)$ amortizado | $O(1)$ amortizado | $O(\lg n)$ amortizado |
-
-El mazo de semana 2 no reproduce esta tabla comparativa (viene de la
-semana 1); se arma aquí a partir de las tres estructuras ya documentadas.
-La ganancia declarada de Fibonacci sobre binomial es exactamente pasar
-Insert, Union y Decrease-Key de $O(\lg n)$ a $O(1)$ amortizado, siendo perezoso.
+Frente al [montículo binomial](/structures/binomial-heap), Fibonacci mejora
+Insert, Union y Decrease-Key al postergar Consolidate. El precio es que
+Extract-Min concentra ese trabajo diferido.
 
 ## Prueba de dominio
 

@@ -235,3 +235,13 @@ mecanismo que muestra el mazo con una sola.
   ningún corte adicional — el caso más común, y la razón por la que el
   costo amortizado de Decrease-Key sigue siendo $O(1)$ a pesar de este
   peor caso $O(c)$.
+- **Primer hijo perdido por un nodo no raíz**. Después de cortar un hijo
+  de `y`, si `y.mark = false`, Cascading-Cut sólo lo marca. No crea otra
+  raíz y termina: la marca significa “ya perdió un hijo”.
+- **Segundo hijo perdido por un nodo marcado**. Si `y.mark = true` y `y`
+  todavía tiene padre `z`, se ejecuta `Cut(y, z)`. `y` se vuelve una nueva
+  raíz, se desmarca y el algoritmo revisa a `z`.
+- **Varios ancestros marcados**. En la cadena `2` raíz, hijo `5*`, hijo
+  `7*`, si `7` pierde otro hijo: se corta `7`, se revisa `5` (marcado), se
+  corta `5` y se llega a `2`, donde se detiene. Eso es Cascading-Cut: una
+  sucesión de Cut, no una operación independiente que cree raíces.

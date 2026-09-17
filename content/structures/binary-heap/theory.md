@@ -16,27 +16,68 @@ montículo binomial.
 
 ## Intuición
 
-Un árbol binario casi completo (todos los niveles llenos salvo quizás el
-último, que se llena de izquierda a derecha) guardado sin punteros: cada
-posición del arreglo *es* un nodo, y su posición numérica determina quiénes
-son su padre y sus hijos. El invariante de montículo **máximo** dice que
-cada nodo es mayor o igual que sus hijos — así la raíz siempre tiene el
-elemento más grande, sin tener que buscarlo.
+### ¿Qué significa?
+
+Un **árbol binario casi completo** tiene todos sus niveles llenos, salvo
+quizá el último. Si el último no está lleno, sus nodos aparecen de izquierda
+a derecha, sin huecos intermedios. Esa forma es la razón por la que el árbol
+se puede guardar en un arreglo: al no haber huecos arbitrarios, la posición
+de un nodo ya indica dónde deben estar su padre y sus hijos.
+
+Un **Max-Heap** (o montículo máximo) no ordena todo el arreglo de mayor a
+menor. Sólo exige una regla local: cada padre es mayor o igual que cada hijo.
+Por eso la raíz contiene el máximo, aunque dos nodos de ramas distintas no
+tengan por qué estar ordenados entre sí.
+
+### Ejemplo
+
+Con índices que empiezan en 1, como en el material:
+
+```text
+A = [14, 8, 10, 4, 2, 9, 3]
+
+          14
+        /    \
+       8      10
+      / \    / \
+     4   2  9   3
+```
+
+El arreglo se lee por niveles, de izquierda a derecha. Por ejemplo, el valor
+de `A[2]` es 8 y sus hijos están en `A[4]` y `A[5]`: 4 y 2. Se verifica que
+14 es mayor que 8 y 10; 8 es mayor que 4 y 2; y 10 es mayor que 9 y 3.
+
+> **Para recordar.** Un Max-Heap no es un arreglo ordenado. Es un árbol casi
+> completo guardado por niveles, donde cada padre domina sólo a sus hijos.
 
 ## Estructura interna
 
-Arreglo `A[1..n]` (1-indexado, como lo define el profesor con las fórmulas
-de índice). Para una posición `i`:
+### ¿Qué significa?
 
-- padre: $\lfloor i/2 \rfloor$
-- hijo izquierdo: $2i$
-- hijo derecho: $2i + 1$
+Sea `i` el índice de una celda del arreglo `A[1..n]`. Como el árbol se llena
+por niveles, al agrupar los índices de dos en dos aparece la relación:
 
-Invariante de montículo máximo: para todo nodo `i` con padre, $A[\lfloor i/2 \rfloor] \ge A[i]$.
-Está formulado como comparación local padre-hijo (no un orden total del
-arreglo) porque es lo único que Max-Heapify necesita revisar y restaurar en
-cada paso — de esa localidad sale que la reparación cueste sólo $O(\text{altura})$ y
-no $O(n)$.
+$$
+parent(i)=\lfloor i/2\rfloor,\qquad left(i)=2i,\qquad right(i)=2i+1.
+$$
+
+Aquí `floor` (\(\lfloor\ \rfloor\)) significa redondear hacia abajo. Por
+ejemplo, `parent(5)=floor(5/2)=2`; por eso el nodo `A[5]=2` del ejemplo tiene
+como padre a `A[2]=8`.
+
+La regla que debe mantenerse es el **invariante de montículo máximo**:
+
+$$A[parent(i)] \ge A[i].$$
+
+La variable `i` representa cualquier nodo que sí tenga padre. La fórmula no
+ordena hermanos ni ramas distintas: sólo compara una arista padre-hijo. Esa
+es exactamente la pequeña parte de la estructura que `Max-Heapify` repara.
+
+### Duda frecuente: ¿por qué no hay hijos después de \(\lfloor n/2\rfloor\)?
+
+Si `i > floor(n/2)`, entonces `2i > n`. Pero `2i` sería el índice del hijo
+izquierdo, así que ese nodo no puede tener hijos: es una hoja. De ahí sale
+que `Build-Max-Heap` empiece en `floor(n/2)`.
 
 ## Operaciones
 
@@ -58,6 +99,40 @@ no $O(n)$.
   arbitrario del montículo.
 
 ## Análisis de complejidad
+
+### ¿Por qué aparece \(\lg n\) en los heaps?
+
+Primero llamemos `h` a la altura del árbol y `n` a su número de nodos. Un
+árbol binario casi completo de altura `h` tiene al menos un nivel completo
+hasta esa altura y no alcanza a tener un nivel completo más. Por eso el
+tamaño `n` queda entre estas dos potencias de 2:
+
+$$h \le \lg n < h+1.$$
+
+No es todavía una conclusión: dice que el logaritmo de `n` está entre la
+altura entera `h` y el siguiente entero. Elevamos los tres lados en base 2;
+como la potencia de base 2 crece al aumentar el exponente, se conserva el
+orden:
+
+$$2^h \le 2^{\lg n} < 2^{h+1}.$$
+
+Por definición de `lg`, \(2^{\lg n}=n\). Sustituyendo ese término central:
+
+$$2^h \le n < 2^{h+1}.$$
+
+Esta desigualdad significa: `n` nodos alcanzan para tener altura `h`, pero
+no para completar un árbol de altura `h+1`. Por tanto, el entero que está
+debajo de \(\lg n\) es justamente `h`:
+
+$$h=\lfloor\lg n\rfloor.$$
+
+Una operación que baja por un solo camino raíz-hoja o sube por un único
+camino hoja-raíz visita como máximo un nodo por nivel. Por ello visita a lo
+sumo \(O(\lg n)\) niveles; no explora todos los nodos del árbol.
+
+> **Para recordar.** El `log n` no aparece por magia: contar niveles de un
+> árbol binario equivale a preguntar cuántas veces se puede duplicar hasta
+> llegar a `n`.
 
 El profesor usa dos estilos distintos, ambos **recurrence-based por conteo
 de niveles**, nunca amortizado ni potencial (esos aparecen recién con el

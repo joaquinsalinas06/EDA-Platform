@@ -402,6 +402,13 @@ raíces de `H`, y pone `padre(x) ← nulo`, `marca(x) ← falso`
   `nullptr` — el puntero de `p` a "algún hijo" queda en `nullptr` de
   verdad, no apuntando a ningún nodo. Ver el diagrama del caso borde más
   arriba.
+- **`p` tiene varios hijos**. Si `p = 5` tiene `8`, `10` y `12` como hijos,
+  `Cut(10, 5)` desconecta sólo a `10` del ciclo de hijos. Quedan `8` y
+  `12` bajo `5`, el grado baja de 3 a 2, y `10` pasa a ser una nueva raíz.
+- **`x` tiene sus propios hijos**. Cut no desarma el árbol bajo `x`. Si
+  `5` tiene hijo `8`, y `8` tiene hijos `12` y `14`, cortar `8` deja dos
+  raíces: `5` y el subárbol de `8` con `12` y `14` intactos. Se mueve `x`
+  junto con todo su subárbol, no sus hijos por separado.
 - **`x` ya estaba marcado**: `Cut` lo desmarca igual — es la raíz que
   hace que la cuenta de nodos marcados $m(H)$ baje en el análisis de
   potencial de Decrease-Key.

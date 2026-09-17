@@ -260,6 +260,34 @@ $O(D(n))$ para el arreglo `A`.
 
 ## Ejemplo
 
+### El caso mínimo tras Extract-Min
+
+Si una lista de raíces de grado 0 contiene `2, 9, 7, 3`:
+
+```text
+2    9    7    3
+```
+
+primero se enlazan 2 y 9, quedando 2 como padre; también se enlazan 7 y 3,
+quedando 3 como padre. Ahora hay dos raíces de grado 1, por lo que se unen
+otra vez y la menor llave, 2, queda como raíz:
+
+```text
+      2
+     / \
+    9   3
+        /
+       7
+```
+
+Cada enlace compara sólo las dos raíces del mismo grado. El resultado sube
+un grado y puede volver a colisionar: ésa es la razón del `mientras A[d] ≠
+nulo` del pseudocódigo.
+
+> **Para recordar.** Consolidate une sólo raíces del mismo grado porque el
+> arreglo `A` usa el grado como casillero: una colisión representa dos árboles
+> que se pueden enlazar en uno de grado siguiente.
+
 Ver las visualizaciones paso a paso arriba: primero el escaneo por
 casillero — cuatro raíces sueltas de grado 0 (llaves 8, 4, 6, 2) se
 reducen, con dos acarreos encadenados, a un único sobreviviente en `A`
@@ -277,7 +305,21 @@ ejemplo, al colapsar todo a una sola raíz, no alcanza a mostrar.
 - **Todas las raíces ya tienen grados distintos**: cada una encuentra su
   casilla `A[d]` vacía en el primer intento; no ocurre ningún
   `Binomial-Link`, pero igual se paga el recorrido $O(t(H))$ completo.
+- **Dos raíces con grados distintos**. Una raíz `2` con un hijo tiene grado
+  1; una raíz sola `8` tiene grado 0. Como 1 y 0 son distintos, no se
+  ejecuta Link: Consolidate compara grados, no llaves.
+- **Dos raíces con el mismo grado**. Si `2` y `4` son raíces de grado 1,
+  se aplica Link. La llave menor queda arriba: `2` conserva la raíz y `4`
+  pasa a ser hijo suyo. El ganador aumenta su grado a 2; el perdedor recibe
+  un padre y queda sin marca.
 - **Muchas raíces del mismo grado (el caso que sí hace trabajo real)**:
   cada fusión sube el grado en 1 y puede volver a colisionar con `A[d+1]`,
   encadenando varios enlaces para una sola raíz original — acotado por
   $D(n)$ porque el grado no puede subir más que eso.
+- **El enlace crea otro grado repetido**. Al unir dos raíces de grado 1 se
+  obtiene una raíz de grado 2. Si ya había otra raíz de grado 2, se vuelve
+  a aplicar Link. Consolidate termina sólo cuando no haya dos raíces con
+  el mismo grado.
+- **No necesariamente queda un solo árbol**. Es válido acabar con una raíz
+  de grado 0, otra de grado 2 y otra de grado 3. La condición final es
+  “grados distintos entre raíces”, no “una sola raíz”.

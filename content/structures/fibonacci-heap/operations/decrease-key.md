@@ -123,14 +123,13 @@ el invariante de montículo mínimo (caso que el mazo no comenta).
 
 ## Complejidad temporal
 
-Costo real $O(c)$ con $c$ el número de cortes en cascada disparados. Con
-el potencial $\Phi(H) = t(H) + 2 \cdot m(H)$: cada uno de los $c$ cortes agrega un
-árbol a la lista de raíces ($+1$ a $t(H)$) y desmarca a un nodo ($-2$ al
-potencial, porque `Cut` siempre pone `marca ← falso`), salvo el último
-nodo de la cadena, que sólo se marca sin cortarse ($+2$). El profesor
-acota $\Delta\Phi \le 4 - c$, y el costo amortizado resulta
-$\hat{c}_i = O(c) + (4 - c) = O(1)$: entre más cortes reales hace la operación,
-más cae el potencial, y esa caída paga exactamente ese trabajo extra.
+Si esta llamada provoca `c` cortes, su costo real es $O(c)$: cada Cut hace
+trabajo constante. Su costo amortizado es $O(1)$; las marcas que se eliminan
+en una cascada pagan los cortes adicionales.
+
+La demostración paso a paso —origen de $+c$, $-2(c-1)$ y $+2$, más el caso
+numérico `c=3`— está en
+[El método del potencial](/structures/potential-method#análisis-de-complejidad).
 
 ## Complejidad espacial
 
@@ -138,6 +137,33 @@ $O(c)$ de pila de recursión dentro de `Cascading-Cut` (o $O(1)$ con una
 versión iterativa).
 
 ## Ejemplo
+
+### Dos casos antes de pensar en una cascada
+
+Si bajar una llave no la hace menor que su padre, no se corta nada:
+
+```text
+      2                 2
+     /                 /
+    8       8 → 5      5
+```
+
+En cambio, si la nueva llave viola el invariante de montículo mínimo, el
+nodo se convierte en raíz:
+
+```text
+      2                 2       1
+     /       8 → 1              ↑
+    8                         min(H)
+```
+
+El primer dibujo tiene costo real `O(1)` porque sólo cambia una llave. El
+segundo puede activar más cortes; si hay `c` cortes, su costo real es
+`O(c)`, aunque su costo amortizado se analiza como `O(1)`.
+
+> **Duda frecuente: ¿por qué cortar en vez de intercambiar?** El material
+> conserva la llave del nodo y lo vuelve raíz; así evita recorrer el camino
+> hacia arriba. Las marcas controlan el desorden que ese corte deja atrás.
 
 *(Derivado del pseudocódigo; no aparece en las diapositivas.)* Sobre el
 mismo escenario `G → P → C` de la visualización de
@@ -149,13 +175,18 @@ además `k < llave(min(H))`, el propio `C` se vuelve el nuevo mínimo.
 
 ## Casos límite
 
-- **`x` ya es una raíz** (`p = nulo`): el paso 3 no aplica; sólo se
-  actualiza la llave y, si corresponde, `min(H)`.
-- **La nueva llave no rompe el invariante con el padre**
-  (`llave(x) ≥ llave(p)`): no se corta nada; sólo cambia la llave.
+- **La llave baja, pero no rompe con el padre**. De `2` con hijo `8`,
+  `Decrease-Key(8, 5)` deja `5 > 2`. `5` sigue siendo hijo: no hay Cut ni
+  Cascading-Cut.
+- **La llave queda menor que el padre**. En el mismo árbol,
+  `Decrease-Key(8, 1)` deja temporalmente `1 < 2`. Se viola el orden de
+  min-heap, así que `Cut(1, 2)` mueve `1` a la lista de raíces.
+- **`x` ya es una raíz** (`p = nulo`). Entre `5    8    10`, bajar `8` a
+  `2` no puede romper una relación con padre: sólo cambia la llave y
+  `min(H)` pasa a `2`.
 - **$c = 0$ cortes** (el caso anterior): el costo real es $O(1)$, y el
   amortizado sigue siendo $O(1)$ — el análisis de potencial cubre ambos
   extremos con la misma fórmula.
-- **`k > llave(x)`**: no está en el pseudocódigo del profesor, que lo
-  asignaría igual y corrompería el invariante en silencio; esta
-  implementación lo rechaza con una excepción en vez de eso.
+- **`k > llave(x)`**. No es una petición válida para Decrease-Key: la
+  nueva llave debe ser menor o igual a la actual. El código del editor la
+  rechaza antes de modificar el nodo.

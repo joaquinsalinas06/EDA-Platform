@@ -4,9 +4,11 @@ summary: Del montículo binario al binomial. La pregunta que recorre la semana e
 sourceFiles: ["raw-materials/week1/Sem_1_Heaps_I-1.pdf"]
 ---
 
-El mazo arranca con el montículo binario sobre arreglo —indexación padre/hijo,
-`Max-Heapify`, `Build-Max-Heap` en `Θ(n)`— y cierra mostrando su punto débil: la
-unión cuesta `Θ(n)`.
+La ruta de la semana es corta:
 
-Los árboles binomiales son la respuesta a eso, y el montículo binomial es la
-estructura que los usa para conseguir unión logarítmica.
+1. El montículo binario usa un arreglo y permite construir un heap en `Θ(n)`.
+2. Su debilidad es Union: cuesta `Θ(n)`.
+3. Los árboles y montículos binomiales organizan esa unión para que cueste
+   `O(lg n)`.
+
+Empieza por el montículo binario y continúa con los temas en orden.

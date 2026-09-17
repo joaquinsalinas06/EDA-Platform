@@ -22,7 +22,7 @@ const topics = knowledgeMap.weeks.find((w) => w.id === week.id)?.topics ?? [];
     <hr class="draw mt-6 border-0 border-t-2 border-[var(--ink)]" />
   </header>
 
-  <div class="prose mb-16"><Content /></div>
+  <div class="prose mb-12 max-w-[72ch]"><Content /></div>
 
   <section>
     <div class="mb-5 flex items-baseline gap-4">
@@ -30,35 +30,36 @@ const topics = knowledgeMap.weeks.find((w) => w.id === week.id)?.topics ?? [];
       <span class="h-px flex-1 bg-[var(--rule)]"></span>
     </div>
 
-    <ul class="grid gap-3 sm:grid-cols-2">
+    <ol class="border-t border-[var(--rule)]">
       {
-        topics.map((id) => {
+        topics.map((id, index) => {
           const t = knowledgeMap.topics[id];
           const ready = t?.status === 'generated';
           return (
-            <li class="reveal">
+            <li class="reveal border-b border-[var(--rule)]">
               <a
                 href={ready ? `/structures/${id}` : '#'}
                 class:list={[
-                  'group flex items-center justify-between gap-4 rounded-lg border p-4 no-underline transition-all',
+                  'group grid grid-cols-[2.25rem_1fr_auto] items-baseline gap-3 py-4 no-underline transition-colors',
                   ready
-                    ? 'border-[var(--rule)] hover:border-[var(--accent)]'
-                    : 'pointer-events-none border-dashed border-[var(--rule)] opacity-55',
+                    ? 'hover:bg-[var(--fill)]'
+                    : 'pointer-events-none opacity-55',
                 ]}
               >
+                <span class="font-mono text-[0.75rem] text-[var(--faint)]">{String(index + 1).padStart(2, '0')}</span>
                 <span>
                   <span class="tag">{t?.supportConcept ? 'concepto de apoyo' : t && TYPE_LABEL[t.type]}</span>
                   <span class="mt-1 block text-[1.0625rem] font-medium group-hover:text-[var(--accent)]">
                     {t?.title ?? id}
                   </span>
                 </span>
-                <span class="tag shrink-0">{ready ? '↗' : 'pendiente'}</span>
+                <span class="tag shrink-0">{ready ? 'ver tema ↗' : 'pendiente'}</span>
               </a>
             </li>
           );
         })
       }
-    </ul>
+    </ol>
   </section>
 
   {

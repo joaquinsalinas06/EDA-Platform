@@ -24,6 +24,17 @@ interface Props {
 }
 
 const raw = Astro.props.viz;
+// Las visualizaciones de los montículos de semanas 1 y 2 se retiran
+// temporalmente de la lectura: sus pasos no representan con fiabilidad las
+// listas circulares de hermanos. El contenido y los editores siguen
+// disponibles; las familias de visualización posteriores no se afectan.
+const disabledForWeekOneOrTwo = [
+  '/structures/binary-heap',
+  '/structures/binomial-tree',
+  '/structures/binomial-heap',
+  '/structures/potential-method',
+  '/structures/fibonacci-heap',
+].some((path) => Astro.url.pathname.startsWith(path));
 
 // Un .mdx pasa el objeto a mano y NO pasa por Zod, así que se queda sin los
 // valores por defecto del schema (`parent: null`, `highlight: []`…). Eso hacía
@@ -47,6 +58,6 @@ const viz = parsed.data;
 const steps = viz.mode ? viz.steps.map((s) => ({ mode: viz.mode, ...s })) : viz.steps;
 ---
 
-{viz.type === 'tree' && <TreeVisualization client:visible steps={steps} />}
-{viz.type === 'persistent' && <PersistentVisualization client:visible steps={steps} />}
-{viz.type === 'range-tree' && <RangeTreeVisualization client:visible steps={steps} />}
+{!disabledForWeekOneOrTwo && viz.type === 'tree' && <TreeVisualization client:visible steps={steps} />}
+{!disabledForWeekOneOrTwo && viz.type === 'persistent' && <PersistentVisualization client:visible steps={steps} />}
+{!disabledForWeekOneOrTwo && viz.type === 'range-tree' && <RangeTreeVisualization client:visible steps={steps} />}

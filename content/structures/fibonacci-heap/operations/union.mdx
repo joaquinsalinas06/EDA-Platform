@@ -286,17 +286,38 @@ que empalmar un solo nodo.
 
 ## Complejidad temporal
 
-Costo real $O(1)$: concatenar dos listas circulares es reconectar cuatro
-punteros, sin importar cuántas raíces tenga cada una. Con
-$\Phi(H) = t(H) + 2 \cdot m(H)$: $t(H)$ y $m(H)$ del resultado son exactamente la
-suma de los de `H1` y `H2` (nada se crea ni se destruye al concatenar), así
-que $\Delta\Phi = 0$ y el costo amortizado $\hat{c} = O(1) + 0 = O(1)$.
+Costo real $O(1)$: concatenar dos listas circulares reconecta una cantidad
+constante de punteros, sin importar cuántas raíces tenga cada heap. El costo
+amortizado también es $O(1)$ porque Union no crea ni elimina raíces o marcas.
+
+La demostración con $c_i$, $\hat c_i$ y $\Delta\Phi$ está centralizada en
+[El método del potencial](/structures/potential-method#análisis-de-complejidad);
+así esta página se concentra en el funcionamiento de Union.
 
 ## Complejidad espacial
 
 $O(1)$ adicional.
 
 ## Ejemplo
+
+### Concatenar, no reconstruir
+
+```text
+H1:  2   8
+H2:  1   7   9
+
+H :  2   8   1   7   9
+             ↑
+           min(H)
+```
+
+Union conserva todos los árboles que ya existían. Sólo empalma ambas listas
+circulares y compara los dos punteros mínimos; como `1 < 2`, el mínimo del
+resultado apunta a 1. No hay enlaces por grado ni Consolidate en esta
+operación.
+
+> **Para recordar.** Union es `O(1)` real: no cuenta raíces ni recorre los
+> árboles. El trabajo de ordenarlos sigue pospuesto.
 
 *(Derivado del pseudocódigo; no aparece en las diapositivas.)* `H1` con
 `min(H1)` de llave `5` y `H2` con `min(H2)` de llave `12`: tras
@@ -305,11 +326,13 @@ ambos, y `min(H) = 5` porque `5 < 12`.
 
 ## Casos límite
 
-- **Uno de los dos está vacío**: si `H2` no tiene raíces, el resultado es
-  simplemente `H1` sin cambios (y viceversa) — no hay nada que concatenar.
-  En C++, `unionWith` chequea `other.minNode == nullptr` y retorna antes
-  de llamar a `spliceInto`, precisamente porque no hay ningún `x` que
-  empalmar.
+- **Ambos tienen elementos**. `2 ⇄ 8` unido a `1 ⇄ 7 ⇄ 9` queda como una
+  lista circular `2 ⇄ 8 ⇄ 1 ⇄ 7 ⇄ 9`; se compara `2` con `1` y el nuevo
+  `minNode` apunta a `1`. Union sólo junta listas: no hace Consolidate.
+- **El primer heap está vacío**. `H1` adopta la lista de raíces de `H2` y
+  su `minNode`; vacío unido a `1 ⇄ 7 ⇄ 9` termina con `minNode → 1`.
+- **El segundo heap está vacío**. `H1` queda igual; no hay nada que
+  concatenar.
 - **Ambos vacíos**: el resultado es un montículo vacío, `min(H) = nulo`.
 - **Los dos mínimos empatan**: cualquiera de los dos puede quedar como
   `min(H)`; el pseudocódigo no distingue el caso de igualdad.

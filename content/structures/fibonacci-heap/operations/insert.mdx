@@ -275,6 +275,25 @@ $O(1)$ adicional por nodo insertado (el nodo mismo).
 
 ## Ejemplo
 
+### Insertar una secuencia, sin consolidar
+
+Partimos de un heap vacío e insertamos `2, 9, 7, 3, 1`. Cada operación crea
+una raíz de grado 0; ninguna une árboles durante Insert. Al final la lista de
+raíces contiene:
+
+```text
+2    9    7    3    1
+                    ↑
+                  min(H)
+```
+
+El `1` es el mínimo porque fue el último valor menor que el `min(H)` que
+había antes. Los cinco nodos siguen siendo raíces de grado 0. La unión entre
+raíces de igual grado se reserva para Consolidate, dentro de Extract-Min.
+
+> **Para recordar.** Insert sólo agrega una raíz y, si corresponde, cambia
+> `min(H)`. Su costo real es `O(1)` y su costo amortizado también es `O(1)`.
+
 *(Derivado del pseudocódigo; no aparece en las diapositivas.)* Sobre un
 montículo con `min(H)` de llave `7`: `Insert(H, 3)` crea un nodo con
 `grado = 0`, `marca = falso`, lo agrega a la lista de raíces, y como
@@ -282,19 +301,31 @@ montículo con `min(H)` de llave `7`: `Insert(H, 3)` crea un nodo con
 
 ## Casos límite
 
-- **Montículo vacío**: `min(H) = nulo`, la condición del paso 3 se cumple
-  de inmediato y el nuevo nodo se vuelve `min(H)` sin comparar llaves. En
-  ese caso `spliceInto` ni se llama — `insert()` en C++ hace
-  `minNode = x` directo, porque no hay ninguna lista donde empalmar.
+- **Heap vacío**. Antes, `minNode = nullptr`. `Insert(5)` crea una lista
+  circular de un nodo: `5.left → 5` y `5.right → 5`. Como no hay otra
+  raíz, `5` es raíz, mínimo, de grado 0 y sin marca; luego `minNode → 5`.
+- **Ya hay raíces**. Si la lista es `5 ⇄ 8 ⇄ 10` y `minNode → 5`, al
+  insertar `3` se empalma junto a `minNode`:
+
+  ```text
+  x->right = minNode->right     5 ⇄ 3 ⇄ 8 ⇄ 10
+  x->left  = minNode
+  minNode->right->left = x
+  minNode->right = x
+  ```
+
+  Son cuatro cambios de puntero; no se recorre la lista.
 - **`left`/`right` nunca son `null`**: a diferencia de `parent` y `child`
   (que sí nacen en `nullptr` y pueden volver a estarlo), un nodo recién
   creado por `new Node(k)` ya sale de su constructor con
   `left = right = this` — su propia lista circular de tamaño 1. `left` y
   `right` de cualquier nodo vivo siempre apuntan a algo real; nunca hay que
   chequearlos contra `null` en `spliceInto` ni en `removeFromList`.
-- **Insertar el nuevo mínimo global**: actualiza `min(H)`, sin tocar la
-  estructura de árboles existente.
-- **Insertar un valor mayor que todos**: el nodo queda como raíz suelta en
-  la lista, sin afectar `min(H)`; sólo se reordenará cuando algún
-  `Extract-Min` futuro llame a
-  [Consolidate](/structures/fibonacci-heap/operations/consolidate).
+- **La nueva llave es menor que el mínimo**. En el ejemplo anterior,
+  `3 < 5`, así que el nodo recién insertado pasa a ser el mínimo:
+  `5 ⇄ 3 ⇄ 8 ⇄ 10`, con `minNode → 3`. No cambia ningún padre ni hijo.
+- **La nueva llave no es menor**. Si `minNode → 3` e `Insert(7)`, queda
+  `3 ⇄ 7 ⇄ …`, pero `minNode` sigue apuntando a `3`.
+- **Regla que evita una confusión frecuente**. Insert nunca hace hijo al
+  nodo nuevo. Lo correcto es `3    5` (dos raíces), no `3` con `5` debajo.
+  Sólo Consolidate podría convertirlo en hijo más adelante.

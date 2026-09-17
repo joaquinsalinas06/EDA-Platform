@@ -116,11 +116,30 @@ pseudocódigo) y `full-implementation.cpp` en el editor de arriba.
 
 ## Complejidad temporal
 
-$O(\lg n)$ en el peor caso. El profesor no plantea la recurrencia con teorema
-maestro; razona por conteo de niveles: "$O(1)$ de trabajo por nivel, y a lo
-más $O(\lg n)$ niveles" — Max-Heapify recorre un único camino desde `i` hasta
-una hoja, y ese camino tiene a lo más $\lfloor \lg n \rfloor$ aristas porque la altura del
-árbol casi completo es $\lfloor \lg n \rfloor$.
+### Matemática paso a paso
+
+En cada llamada se calculan dos índices, se hacen como máximo dos
+comparaciones y, si hace falta, un intercambio. Ese trabajo no depende de
+cuántos nodos tenga el heap: es \(O(1)\) **por nivel**.
+
+Tras un intercambio, el elemento que estaba en `i` baja a uno de sus hijos.
+No vuelve a subir ni visita la otra rama, así que la recursión sigue un único
+camino hasta una hoja. Un heap de `n` nodos tiene altura
+\(\lfloor\lg n\rfloor\), de modo que ese camino contiene a lo más
+\(O(\lg n)\) niveles.
+
+$$
+\underbrace{O(1)}_{\text{trabajo por nivel}}
+\times
+\underbrace{O(\lg n)}_{\text{niveles de un camino}}
+=O(\lg n).
+$$
+
+Esto es el **costo real de esta llamada**, no un promedio amortizado sobre
+otras llamadas. El peor caso es que el valor de `A[i]` llegue hasta una hoja.
+
+> **Para recordar.** Max-Heapify no recorre el árbol completo: sólo baja por
+> una rama. Una rama tiene altura `lg n`, por eso cuesta `O(lg n)`.
 
 ## Complejidad espacial
 

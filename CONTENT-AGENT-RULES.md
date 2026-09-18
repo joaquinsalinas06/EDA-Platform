@@ -104,6 +104,15 @@ sin necesidad.
 con la forma actual y **reporta en tu respuesta final exactamente qué campo te faltó**.
 Eso se canaliza al equipo de plataforma; tú no.
 
+**Si un diagrama que ya existe se ve mal (aristas superpuestas, un anillo de
+hermanos poco claro), arréglalo con los campos que ya existen o repórtalo —
+nunca lo apagues.** `src/components/Visualization.astro` decide qué familia
+de visualización se renderiza para TODAS las estructuras; una condición ahí
+que oculte una familia entera (o un rango de rutas) apaga contenido de otros
+agentes sin que ellos se enteren. Ver AGENTS.md § "Listas circulares de
+hermanos" para el patrón correcto de `child`/`sibling` con anillo `left`/
+`right` (incluye `bidirectional` para un par de punteros opuestos).
+
 ## C++
 
 Pasos acumulativos (`step-1-*.cpp` … ) y `full-implementation.cpp`. Nada de un bloque

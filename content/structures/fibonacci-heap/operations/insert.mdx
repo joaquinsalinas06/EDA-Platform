@@ -121,7 +121,7 @@ static void spliceInto(Node* head, Node* x) {
   type: "tree",
   steps: [
     {
-      note: "Antes de spliceInto(head=g, x): la lista de raíces sólo tiene g(7) y n(4) — un ciclo de tamaño 2, así que g.right=n Y g.left=n a la vez (mismo vecino, dos flechas 'R'/'L' superpuestas en el dibujo). x(3) ya existe — new Node(3) corrió su constructor, que hace left = right = this: x nace apuntándose a sí mismo, nunca queda en null. (Contraste: parent y child sí nacen en null — left/right nunca.)",
+      note: "Antes de spliceInto(head=g, x): la lista de raíces sólo tiene g(7) y n(4) — un ciclo de tamaño 2, así que g.right=n Y g.left=n a la vez (mismo vecino: una sola arista con punta de flecha en los dos extremos, 'R,L'). x(3) ya existe — new Node(3) corrió su constructor, que hace left = right = this: x nace apuntándose a sí mismo, nunca queda en null. (Contraste: parent y child sí nacen en null — left/right nunca.)",
       highlight: [],
       nodes: [
         { id: "g", value: 7, tag: "g", parent: null },
@@ -129,8 +129,7 @@ static void spliceInto(Node* head, Node* x) {
         { id: "x", value: 3, tag: "x", parent: null, state: "copied" },
       ],
       links: [
-        { from: "g", to: "n", kind: "pointer", label: "R,L" },
-        { from: "n", to: "g", kind: "pointer", label: "R,L" },
+        { from: "g", to: "n", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -142,8 +141,7 @@ static void spliceInto(Node* head, Node* x) {
         { id: "x", value: 3, tag: "x", parent: null, state: "copied" },
       ],
       links: [
-        { from: "g", to: "n", kind: "pointer", label: "R,L" },
-        { from: "n", to: "g", kind: "pointer", label: "R,L" },
+        { from: "g", to: "n", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -185,8 +183,7 @@ static void spliceInto(Node* head, Node* x) {
       links: [
         { from: "g", to: "n", kind: "pointer", label: "R,L" },
         { from: "n", to: "g", kind: "pointer", label: "L" },
-        { from: "n", to: "x", kind: "pointer", label: "R" },
-        { from: "x", to: "n", kind: "pointer", label: "L" },
+        { from: "n", to: "x", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -200,8 +197,7 @@ static void spliceInto(Node* head, Node* x) {
       links: [
         { from: "g", to: "n", kind: "pointer", label: "R,L" },
         { from: "n", to: "g", kind: "pointer", label: "L" },
-        { from: "n", to: "x", kind: "pointer", label: "R" },
-        { from: "x", to: "n", kind: "pointer", label: "L" },
+        { from: "n", to: "x", kind: "pointer", label: "R,L", bidirectional: true },
         { from: "x", to: "g", kind: "pointer", label: "R" },
       ],
     },
@@ -214,12 +210,9 @@ static void spliceInto(Node* head, Node* x) {
         { id: "x", value: 3, tag: "x", parent: null, state: "active" },
       ],
       links: [
-        { from: "g", to: "n", kind: "pointer", label: "R" },
-        { from: "n", to: "g", kind: "pointer", label: "L" },
-        { from: "n", to: "x", kind: "pointer", label: "R" },
-        { from: "x", to: "n", kind: "pointer", label: "L" },
-        { from: "x", to: "g", kind: "pointer", label: "R" },
-        { from: "g", to: "x", kind: "pointer", label: "L" },
+        { from: "g", to: "n", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "n", to: "x", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "x", to: "g", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -231,12 +224,9 @@ static void spliceInto(Node* head, Node* x) {
         { id: "x", value: 3, tag: "x", parent: null },
       ],
       links: [
-        { from: "g", to: "n", kind: "pointer", label: "R" },
-        { from: "n", to: "x", kind: "pointer", label: "R" },
-        { from: "x", to: "g", kind: "pointer", label: "R" },
-        { from: "n", to: "g", kind: "pointer", label: "L" },
-        { from: "x", to: "n", kind: "pointer", label: "L" },
-        { from: "g", to: "x", kind: "pointer", label: "L" },
+        { from: "g", to: "n", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "n", to: "x", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "x", to: "g", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
   ],

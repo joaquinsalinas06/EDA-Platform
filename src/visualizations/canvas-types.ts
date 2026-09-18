@@ -92,6 +92,10 @@ export type CanvasEdge = {
   state?: EdgeState;
   /** default false */
   arrow?: boolean;
+  /** Punta de flecha también en `from` — un par real de punteros opuestos
+   * entre los mismos dos nodos (izquierda/derecha de una lista circular de
+   * hermanos) dibujado como UNA arista, no dos superpuestas. default false. */
+  arrowStart?: boolean;
   /** Desviación perpendicular del control cuadrático, en px. default 0 (recta). */
   curve?: number;
   label?: string;

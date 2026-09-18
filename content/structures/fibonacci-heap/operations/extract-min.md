@@ -31,8 +31,7 @@ visualization:
         - { id: r20, value: 20, parent: null }
       links:
         - { from: z, to: n9, kind: pointer, label: "child" }
-        - { from: n9, to: n15, kind: pointer, label: "R,L" }
-        - { from: n15, to: n9, kind: pointer, label: "R,L" }
+        - { from: n9, to: n15, kind: pointer, label: "R,L", bidirectional: true }
     - note: >-
         Paso 1.1: cada hijo de `z` pasa a la lista de raíces de `H`,
         perdiendo su padre — y, como las raíces nunca están marcadas, se
@@ -86,8 +85,7 @@ visualization:
         - { id: r20, value: 20, parent: n9, edge: false }
       links:
         - { from: n9, to: n15, kind: pointer, label: "child" }
-        - { from: n15, to: r20, kind: pointer, label: "R,L" }
-        - { from: r20, to: n15, kind: pointer, label: "R,L" }
+        - { from: n15, to: r20, kind: pointer, label: "R,L", bidirectional: true }
     - note: >-
         Paso final: `min(H)` se actualiza al verdadero mínimo entre las
         raíces que dejó Consolidate — aquí `7`, no el `9` que se había
@@ -102,8 +100,7 @@ visualization:
         - { id: r20, value: 20, parent: n9, edge: false }
       links:
         - { from: n9, to: n15, kind: pointer, label: "child" }
-        - { from: n15, to: r20, kind: pointer, label: "R,L" }
-        - { from: r20, to: n15, kind: pointer, label: "R,L" }
+        - { from: n15, to: r20, kind: pointer, label: "R,L", bidirectional: true }
 ---
 
 ## Qué hace

@@ -29,12 +29,9 @@ visualization:
         - { id: z, value: 25, tag: z, parent: p, edge: false }
       links:
         - { from: p, to: x, kind: pointer, label: "child" }
-        - { from: x, to: y, kind: pointer, label: "R" }
-        - { from: y, to: z, kind: pointer, label: "R" }
-        - { from: z, to: x, kind: pointer, label: "R" }
-        - { from: y, to: x, kind: pointer, label: "L" }
-        - { from: z, to: y, kind: pointer, label: "L" }
-        - { from: x, to: z, kind: pointer, label: "L" }
+        - { from: x, to: y, kind: pointer, label: "R,L", bidirectional: true }
+        - { from: y, to: z, kind: pointer, label: "R,L", bidirectional: true }
+        - { from: z, to: x, kind: pointer, label: "R,L", bidirectional: true }
     - note: >-
         Paso 1a: se quita `x` del anillo — `z.right`/`y.left` se
         reconectan entre sí (ver Algoritmo para las 3 líneas exactas). Como
@@ -51,8 +48,7 @@ visualization:
         - { id: z, value: 25, tag: z, parent: p, edge: false }
       links:
         - { from: p, to: y, kind: pointer, label: "child" }
-        - { from: y, to: z, kind: pointer, label: "R,L" }
-        - { from: z, to: y, kind: pointer, label: "R,L" }
+        - { from: y, to: z, kind: pointer, label: "R,L", bidirectional: true }
     - note: >-
         Paso 1b: `grado(p) ← grado(p) − 1`, de 3 a 2. Es una actualización
         de contador, separada de desenlazar a `x` — ninguna otra
@@ -67,8 +63,7 @@ visualization:
         - { id: z, value: 25, tag: z, parent: p, edge: false }
       links:
         - { from: p, to: y, kind: pointer, label: "child" }
-        - { from: y, to: z, kind: pointer, label: "R,L" }
-        - { from: z, to: y, kind: pointer, label: "R,L" }
+        - { from: y, to: z, kind: pointer, label: "R,L", bidirectional: true }
     - note: >-
         Paso 2a: se agrega `x` a la lista de raíces de `H` — empalme de
         punteros en O(1), igual que en
@@ -85,8 +80,7 @@ visualization:
         - { id: z, value: 25, tag: z, parent: p, edge: false }
       links:
         - { from: p, to: y, kind: pointer, label: "child" }
-        - { from: y, to: z, kind: pointer, label: "R,L" }
-        - { from: z, to: y, kind: pointer, label: "R,L" }
+        - { from: y, to: z, kind: pointer, label: "R,L", bidirectional: true }
     - note: >-
         Paso 2b: `padre(x) ← nulo` (ya lo estaba desde el paso 1a) y
         `marca(x) ← falso`. Como raíz, `x` no puede seguir marcado — la
@@ -100,8 +94,7 @@ visualization:
         - { id: z, value: 25, tag: z, parent: p, edge: false }
       links:
         - { from: p, to: y, kind: pointer, label: "child" }
-        - { from: y, to: z, kind: pointer, label: "R,L" }
-        - { from: z, to: y, kind: pointer, label: "R,L" }
+        - { from: y, to: z, kind: pointer, label: "R,L", bidirectional: true }
     - note: >-
         Estado final: `x(15)` es raíz independiente y sin marca,
         `p(8)` quedó con `grado = 2`, `p->child` apuntando a `y`, y sus
@@ -120,8 +113,7 @@ visualization:
         - { id: z, value: 25, tag: z, parent: p, edge: false }
       links:
         - { from: p, to: y, kind: pointer, label: "child" }
-        - { from: y, to: z, kind: pointer, label: "R,L" }
-        - { from: z, to: y, kind: pointer, label: "R,L" }
+        - { from: y, to: z, kind: pointer, label: "R,L", bidirectional: true }
 ---
 import Visualization from '../../../../src/components/Visualization.astro';
 
@@ -183,12 +175,9 @@ static void removeFromList(Node* x) {
       ],
       links: [
         { from: "p", to: "x", kind: "pointer", label: "child" },
-        { from: "x", to: "y", kind: "pointer", label: "R" },
-        { from: "y", to: "z", kind: "pointer", label: "R" },
-        { from: "z", to: "x", kind: "pointer", label: "R" },
-        { from: "y", to: "x", kind: "pointer", label: "L" },
-        { from: "z", to: "y", kind: "pointer", label: "L" },
-        { from: "x", to: "z", kind: "pointer", label: "L" },
+        { from: "x", to: "y", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "y", to: "z", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "z", to: "x", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -202,12 +191,9 @@ static void removeFromList(Node* x) {
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
-        { from: "x", to: "y", kind: "pointer", label: "R" },
-        { from: "y", to: "z", kind: "pointer", label: "R" },
-        { from: "z", to: "x", kind: "pointer", label: "R" },
-        { from: "y", to: "x", kind: "pointer", label: "L" },
-        { from: "z", to: "y", kind: "pointer", label: "L" },
-        { from: "x", to: "z", kind: "pointer", label: "L" },
+        { from: "x", to: "y", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "y", to: "z", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "z", to: "x", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -240,8 +226,7 @@ static void removeFromList(Node* x) {
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
         { from: "x", to: "y", kind: "pointer", label: "R" },
-        { from: "y", to: "z", kind: "pointer", label: "R,L" },
-        { from: "z", to: "y", kind: "pointer", label: "R,L" },
+        { from: "y", to: "z", kind: "pointer", label: "R,L", bidirectional: true },
         { from: "x", to: "z", kind: "pointer", label: "L" },
       ],
     },
@@ -256,8 +241,7 @@ static void removeFromList(Node* x) {
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
-        { from: "y", to: "z", kind: "pointer", label: "R,L" },
-        { from: "z", to: "y", kind: "pointer", label: "R,L" },
+        { from: "y", to: "z", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -271,8 +255,7 @@ static void removeFromList(Node* x) {
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
-        { from: "y", to: "z", kind: "pointer", label: "R,L" },
-        { from: "z", to: "y", kind: "pointer", label: "R,L" },
+        { from: "y", to: "z", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -286,8 +269,7 @@ static void removeFromList(Node* x) {
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
-        { from: "y", to: "z", kind: "pointer", label: "R,L" },
-        { from: "z", to: "y", kind: "pointer", label: "R,L" },
+        { from: "y", to: "z", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -301,8 +283,7 @@ static void removeFromList(Node* x) {
       ],
       links: [
         { from: "p", to: "y", kind: "pointer", label: "child" },
-        { from: "y", to: "z", kind: "pointer", label: "R,L" },
-        { from: "z", to: "y", kind: "pointer", label: "R,L" },
+        { from: "y", to: "z", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
   ],

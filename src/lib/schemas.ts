@@ -58,6 +58,12 @@ const vizLink = z.object({
    * nodos (izquierda de uno = derecha del otro) — sin esto se dibujan
    * exactamente encima, indistinguibles. Positivo/negativo = lado. */
   curve: z.number().optional(),
+  /** UN par de punteros reales en direcciones opuestas entre los MISMOS dos
+   * nodos (p.ej. `left`/`right` de una lista circular de hermanos) es UNA
+   * arista con flecha en ambos extremos, no dos aristas superpuestas — así
+   * se ve en la lista de hermanos de un montículo binomial/Fibonacci. Sólo
+   * para `kind: pointer`. Default `false` (una sola punta, como siempre). */
+  bidirectional: z.boolean().default(false),
 });
 
 const vizArray = z.object({

@@ -149,6 +149,48 @@ fractional cascading con línea punteada, no con color. Como el estado se
 codifica en el trazo, cada nodo lleva un `<title>` con su estado en palabras
 ("hoja 4 — delimitador") para quien usa lector de pantalla.
 
+### Listas circulares de hermanos (`child`/`sibling` con anillo `left`/`right`)
+
+Fibonacci heap y montículo binomial no guardan un puntero por hijo: el padre
+apunta a UN hijo cualquiera (`child`) y el resto se alcanza por un anillo
+doblemente enlazado (`left`/`right`) entre hermanos. Esto se dibuja con
+`edge: false` en cada hijo (se posiciona bajo el padre pero no se traza esa
+arista) más un `links: [...]` explícito con `kind: pointer` para el puntero
+real — ver `src/lib/schemas.ts` § `vizNode.edge` / `vizLink`.
+
+**Un par de punteros opuestos entre los MISMOS dos nodos es UNA arista, no
+dos.** Cuando `A.right = B` y `B.left = A` (el caso normal: dos hermanos
+adyacentes), usa `{ from: A, to: B, kind: pointer, label: "R,L",
+bidirectional: true }` — una sola línea con flecha en ambos extremos, nunca
+dos líneas superpuestas en direcciones opuestas. `bidirectional` sólo es
+seguro cuando **ambos lados del par están completos**: o los dos aportan la
+misma etiqueta completa (`"R,L"` + `"R,L"`, un anillo de 2 sin tocar), o cada
+lado aporta exactamente una letra y son complementarias (`"R"` + `"L"`). Si
+un lado tiene `"R,L"` y el otro sólo `"L"` (un nodo cuyo propio `right` y
+`left` todavía coinciden, mientras el otro nodo YA movió uno de los suyos a
+un tercer nodo) **no fusiones** — son hechos distintos a mitad de una cirugía
+de punteros (ver `cut.mdx`/`insert.mdx`/`union.mdx` línea por línea para el
+patrón). Fusionar ahí inventa una mutualidad que el struct no tiene en ese
+instante exacto.
+
+Entre dos hermanos (misma fila del layout) el canvas siempre curva la arista
+`pointer` hacia ABAJO, nunca hacia arriba — así el arco de "vuelta" de un
+anillo de 3+ nodos (último hermano → primero) no atraviesa la fila del padre
+ni su propio puntero `child`. No hace falta declarar `curve` a mano para
+esto.
+
+**Si un diagrama de anillo no se ve claro, arréglalo — nunca lo apagues.**
+Ya pasó una vez (semana 6→7, PR de un colaborador): en vez de corregir la
+geometría de las aristas `pointer` de Fibonacci heap, alguien apagó el
+render de la familia `tree` completa para 5 estructuras enteras
+(`Visualization.astro`, una lista `disabledForWeekOneOrTwo`) — silenciando
+también binary-heap, binomial-heap, binomial-tree y potential-method, que ni
+siquiera tenían el problema. Si una familia de visualización no representa
+bien algo, el arreglo vive en `src/visualizations/` o en el `links`/`nodes`
+del contenido — jamás en un interruptor que apague contenido ya escrito y
+validado. Ver también CONTENT-AGENT-RULES.md § "Si la forma de `nodes` no te
+alcanza".
+
 ## MDX — diagramas a mitad de la explicación
 
 `content/structures/<id>/**/*.md` y `**/*.mdx` conviven en la misma colección

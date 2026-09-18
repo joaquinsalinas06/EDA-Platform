@@ -208,11 +208,12 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
           ))}
 
           {step.edges.map((e) => {
-            const a = pos.get(e.from);
+            const aRaw = pos.get(e.from);
             const bRaw = pos.get(e.to);
-            if (!a || !bRaw) return null;
+            if (!aRaw || !bRaw) return null;
             const state = resolveEdgeState(e, step.highlight);
             const visual = edgeStyle(e.kind ?? 'tree', state);
+            const a = e.arrowStart ? trimToBox(bRaw, aRaw) : aRaw;
             const b = e.arrow ? trimToBox(a, bRaw) : bRaw;
             const mx = (a.x + b.x) / 2;
             const my = (a.y + b.y) / 2;
@@ -228,8 +229,17 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
             // distancia, con un piso más alto, así el par siempre queda
             // visiblemente separado sin que el autor tenga que adivinar.
             const curve = e.curve ?? (e.kind === 'pointer' ? Math.max(26, len * 0.24) : 0);
-            const cx = mx - (dy / len) * curve;
-            const cy = my + (dx / len) * curve;
+            // Entre dos HERMANOS (misma fila: `dy` ~0) la arista siempre se
+            // curva hacia ABAJO, nunca hacia arriba — antes el signo salía
+            // de `dx/dy`, que se invertía con la dirección del puntero, así
+            // que el anillo de un padre con 3+ hijos (todos adyacentes entre
+            // sí) mandaba el arco de "vuelta" (último → primero) hacia
+            // arriba, atravesando la fila del padre y su propio puntero
+            // `child`. Fuera de una fila (padre↔hijo) se deja el cálculo de
+            // siempre: ahí no hay ambigüedad de signo que resolver.
+            const sameRow = Math.abs(dy) < 1;
+            const cx = sameRow ? mx : mx - (dy / len) * curve;
+            const cy = sameRow ? my + Math.abs(curve) : my + (dx / len) * curve;
             const d = curve === 0 ? `M${a.x},${a.y} L${b.x},${b.y}` : `M${a.x},${a.y} Q${cx},${cy} ${b.x},${b.y}`;
             return (
               <g key={e.id ?? `${e.from}-${e.to}`}>
@@ -239,6 +249,7 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
                   stroke={visual.stroke}
                   strokeWidth={visual.strokeWidth}
                   strokeDasharray={visual.dash}
+                  markerStart={e.arrowStart ? `url(#${state === 'active' ? `${arrowId}-accent` : `${arrowId}-ink`})` : undefined}
                   markerEnd={e.arrow ? `url(#${state === 'active' ? `${arrowId}-accent` : `${arrowId}-ink`})` : undefined}
                   // `d` explícito (no `all`): `all` también intentaba transicionar
                   // `marker-end`/`fill`, que no son animables o no deben, y en

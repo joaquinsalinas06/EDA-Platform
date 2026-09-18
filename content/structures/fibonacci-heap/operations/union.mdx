@@ -24,10 +24,8 @@ visualization:
         - { id: h1, label: "H1" }
         - { id: h2, label: "H2" }
       links:
-        - { from: a, to: b, kind: pointer, label: "R,L" }
-        - { from: b, to: a, kind: pointer, label: "R,L" }
-        - { from: d, to: e, kind: pointer, label: "R,L" }
-        - { from: e, to: d, kind: pointer, label: "R,L" }
+        - { from: a, to: b, kind: pointer, label: "R,L", bidirectional: true }
+        - { from: d, to: e, kind: pointer, label: "R,L", bidirectional: true }
       nodes:
         - { id: a, value: 5, tag: a, parent: null, panel: h1, state: active }
         - { id: b, value: 9, tag: b, parent: null, panel: h1 }
@@ -132,10 +130,8 @@ Llamada acá como `spliceInto(head=a, x=d)` — `a` es `min(H1)`, `d` es
         { id: "e", value: 20, tag: "e", parent: null, panel: "h2" },
       ],
       links: [
-        { from: "a", to: "b", kind: "pointer", label: "R,L" },
-        { from: "b", to: "a", kind: "pointer", label: "R,L" },
-        { from: "d", to: "e", kind: "pointer", label: "R,L" },
-        { from: "e", to: "d", kind: "pointer", label: "R,L" },
+        { from: "a", to: "b", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "d", to: "e", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -148,10 +144,8 @@ Llamada acá como `spliceInto(head=a, x=d)` — `a` es `min(H1)`, `d` es
         { id: "e", value: 20, tag: "e", parent: null },
       ],
       links: [
-        { from: "a", to: "b", kind: "pointer", label: "R,L" },
-        { from: "b", to: "a", kind: "pointer", label: "R,L" },
-        { from: "d", to: "e", kind: "pointer", label: "R,L" },
-        { from: "e", to: "d", kind: "pointer", label: "R,L" },
+        { from: "a", to: "b", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "d", to: "e", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -167,8 +161,7 @@ Llamada acá como `spliceInto(head=a, x=d)` — `a` es `min(H1)`, `d` es
         { from: "a", to: "b", kind: "pointer", label: "R,L" },
         { from: "b", to: "a", kind: "pointer", label: "L" },
         { from: "b", to: "d", kind: "pointer", label: "R" },
-        { from: "d", to: "e", kind: "pointer", label: "R,L" },
-        { from: "e", to: "d", kind: "pointer", label: "R,L" },
+        { from: "d", to: "e", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -184,8 +177,7 @@ Llamada acá como `spliceInto(head=a, x=d)` — `a` es `min(H1)`, `d` es
         { from: "a", to: "b", kind: "pointer", label: "R,L" },
         { from: "b", to: "a", kind: "pointer", label: "L" },
         { from: "b", to: "d", kind: "pointer", label: "R" },
-        { from: "d", to: "e", kind: "pointer", label: "R,L" },
-        { from: "e", to: "d", kind: "pointer", label: "R,L" },
+        { from: "d", to: "e", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -200,9 +192,8 @@ Llamada acá como `spliceInto(head=a, x=d)` — `a` es `min(H1)`, `d` es
       links: [
         { from: "a", to: "b", kind: "pointer", label: "R,L" },
         { from: "b", to: "a", kind: "pointer", label: "L" },
-        { from: "b", to: "d", kind: "pointer", label: "R" },
+        { from: "b", to: "d", kind: "pointer", label: "R,L", bidirectional: true },
         { from: "d", to: "e", kind: "pointer", label: "R" },
-        { from: "d", to: "b", kind: "pointer", label: "L" },
         { from: "e", to: "d", kind: "pointer", label: "R,L" },
       ],
     },
@@ -218,11 +209,9 @@ Llamada acá como `spliceInto(head=a, x=d)` — `a` es `min(H1)`, `d` es
       links: [
         { from: "a", to: "b", kind: "pointer", label: "R,L" },
         { from: "b", to: "a", kind: "pointer", label: "L" },
-        { from: "b", to: "d", kind: "pointer", label: "R" },
-        { from: "d", to: "e", kind: "pointer", label: "R" },
-        { from: "d", to: "b", kind: "pointer", label: "L" },
+        { from: "b", to: "d", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "d", to: "e", kind: "pointer", label: "R,L", bidirectional: true },
         { from: "e", to: "a", kind: "pointer", label: "R" },
-        { from: "e", to: "d", kind: "pointer", label: "L" },
       ],
     },
     {
@@ -235,14 +224,10 @@ Llamada acá como `spliceInto(head=a, x=d)` — `a` es `min(H1)`, `d` es
         { id: "e", value: 20, tag: "e", parent: null },
       ],
       links: [
-        { from: "a", to: "b", kind: "pointer", label: "R" },
-        { from: "a", to: "e", kind: "pointer", label: "L" },
-        { from: "b", to: "a", kind: "pointer", label: "L" },
-        { from: "b", to: "d", kind: "pointer", label: "R" },
-        { from: "d", to: "e", kind: "pointer", label: "R" },
-        { from: "d", to: "b", kind: "pointer", label: "L" },
-        { from: "e", to: "a", kind: "pointer", label: "R" },
-        { from: "e", to: "d", kind: "pointer", label: "L" },
+        { from: "a", to: "b", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "b", to: "d", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "d", to: "e", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "e", to: "a", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
     {
@@ -255,14 +240,10 @@ Llamada acá como `spliceInto(head=a, x=d)` — `a` es `min(H1)`, `d` es
         { id: "e", value: 20, tag: "e", parent: null },
       ],
       links: [
-        { from: "a", to: "b", kind: "pointer", label: "R" },
-        { from: "b", to: "d", kind: "pointer", label: "R" },
-        { from: "d", to: "e", kind: "pointer", label: "R" },
-        { from: "e", to: "a", kind: "pointer", label: "R" },
-        { from: "a", to: "e", kind: "pointer", label: "L" },
-        { from: "e", to: "d", kind: "pointer", label: "L" },
-        { from: "d", to: "b", kind: "pointer", label: "L" },
-        { from: "b", to: "a", kind: "pointer", label: "L" },
+        { from: "a", to: "b", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "b", to: "d", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "d", to: "e", kind: "pointer", label: "R,L", bidirectional: true },
+        { from: "e", to: "a", kind: "pointer", label: "R,L", bidirectional: true },
       ],
     },
   ],

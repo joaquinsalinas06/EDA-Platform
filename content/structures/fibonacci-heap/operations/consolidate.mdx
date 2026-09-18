@@ -210,8 +210,7 @@ colapsa a un único árbol:
       caption: "lista de raíces = ( 8 ⇄ 20 ), circular",
       highlight: ["r8", "r20"],
       links: [
-        { from: "r8", to: "r20", kind: "pointer" },
-        { from: "r20", to: "r8", kind: "pointer" },
+        { from: "r8", to: "r20", kind: "pointer", bidirectional: true },
       ],
       nodes: [
         { id: "r8", value: 8, parent: null },
@@ -223,8 +222,7 @@ colapsa a un único árbol:
       caption: "min(H) → 8",
       highlight: ["r8"],
       links: [
-        { from: "r8", to: "r20", kind: "pointer" },
-        { from: "r20", to: "r8", kind: "pointer" },
+        { from: "r8", to: "r20", kind: "pointer", bidirectional: true },
       ],
       nodes: [
         { id: "r8", value: 8, parent: null, state: "answer" },

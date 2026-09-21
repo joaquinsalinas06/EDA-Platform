@@ -37,5 +37,5 @@ struct FatNode {
         : id(id_), originalValue(value), originalNext(next) {}
 };
 
-constexpr int P = 2;                   // p = O(1) por hipotesis
-constexpr size_t MAX_LOG = 2 * P;       // tamano acotado del registro
+int P = 2;             // p = O(1) por hipotesis
+int MAX_LOG = 2 * P; // tamano acotado del registro

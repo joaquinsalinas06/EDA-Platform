@@ -46,7 +46,7 @@ struct FatNode {
 
     // Registro de modificaciones: lista de tuplas (campo, valor nuevo,
     // tiempo), en orden de inserción (más antigua primero). Tamaño
-    // acotado por MAX_LOG = 2p (páginas 25-26).
+    // acotado por MAX_LOG = 2 * P (páginas 25-26).
     struct Entry {
         Field field;
         long time;
@@ -76,8 +76,8 @@ struct FatNode {
 
 // p = número máximo de punteros entrantes por hipótesis (p = O(1)).
 // Tamaño máximo del registro: 2p (página 26).
-constexpr int P = 2;
-constexpr size_t MAX_LOG = 2 * P;
+int P = 2;
+int MAX_LOG = 2 * P;
 
 long currentTime = 0; // reloj lógico global, uno por escritura
 
@@ -278,7 +278,7 @@ int main() {
     assert(shared->incoming.size() == 2); // p = 2 punteros entrantes
 
     long t = 10;
-    for (int i = 0; i < (int)MAX_LOG; ++i) {
+    for (int i = 0; i < MAX_LOG; ++i) {
         writeField(shared, Field::Value, 100 + i, nullptr, ++t);
     }
     assert(shared->log.size() == MAX_LOG);

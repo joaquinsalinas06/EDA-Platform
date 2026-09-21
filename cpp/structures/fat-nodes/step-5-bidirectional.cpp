@@ -52,8 +52,8 @@ struct BiFatNode {
         : id(id_), originalValue(value), originalNext(next) {}
 };
 
-constexpr int P = 2;
-constexpr size_t MAX_LOG = 2 * P;
+int P = 2;
+int MAX_LOG = 2 * P;
 
 // Lectura hacia adelante: igual que read-field original.
 int readValueForward(const BiFatNode* node, long t) {

@@ -46,8 +46,8 @@ struct FatNode {
         : id(id_), originalValue(value), originalNext(next) {}
 };
 
-constexpr int P = 2;
-constexpr size_t MAX_LOG = 2 * P;
+int P = 2;
+int MAX_LOG = 2 * P;
 int nextId = 1;
 
 int readValue(const FatNode* node, long t) {

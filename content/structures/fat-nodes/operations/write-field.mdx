@@ -73,6 +73,7 @@ visualization:
         - { id: e4, value: "t=4: valor=203", state: marked }
         - { id: attempt, value: "intento t=5: valor=204 -> node-split", state: active }
 ---
+import Visualization from '../../../../src/components/Visualization.astro';
 
 ## Qué hace
 
@@ -137,6 +138,91 @@ que promete el teorema DSST.
 registro pasa de 0 a 1 entrada. `escribirCampo(v, valor, 201, 2)` agrega
 una segunda — el registro sigue con espacio (2 de 4), así que ninguna de
 estas dos escrituras dispara un split.
+
+## Redirigir un puntero: el caso `campo == Next`
+
+Todo lo de arriba escribe el campo `valor` — pero `escribirCampo` también
+es como se redirige un **puntero**: `campo == Next` es exactamente
+`escribirCampo(v, siguiente, nuevoDestino, t)`. `step-3-write-field.cpp`
+trata ese caso aparte (líneas 71-74 de `writeFieldNoSplit`), porque además
+de agregar la entrada al registro de `v` hay que actualizar el
+**bookkeeping inverso**: cada nodo lleva también un `incoming` — la lista
+de quién le apunta y por qué campo — para que [node-split](
+/structures/fat-nodes/operations/node-split) sepa, sin recorrer toda la
+estructura, a quién redirigir cuando le toque partirse. Redirigir un
+puntero significa sacar a `v` del `incoming` del destino viejo
+(`untrackIncoming`) y meterlo en el del destino nuevo (`trackIncoming`) —
+**antes** de tocar el registro de `v`.
+
+<Visualization viz={{
+  type: 'persistent',
+  mode: 'fat-node',
+  steps: [
+    {
+      note: "Estado inicial: v.siguiente apunta a A (desde su construcción, sin entrada en el registro todavía). A sabe que v es uno de sus incoming — por eso A.incoming trae (v,Next). B existe pero nadie lo apunta: su incoming está vacío.",
+      nodes: [
+        { id: "v", value: "v", fields: [{ name: "valor", value: 10, time: 1 }] },
+        { id: "A", value: "A", fields: [{ name: "incoming", value: "(v,Next)" }] },
+        { id: "B", value: "B", fields: [] }
+      ],
+      links: [{ from: "v", to: "A", kind: "pointer", label: "next" }]
+    },
+    {
+      note: "Llega escribirCampo(v, siguiente, B, t=2). campo == Next: antes de tocar el registro de v, hay que arreglar el bookkeeping inverso en los dos nodos involucrados.",
+      caption: "campo == Next -> bookkeeping de incoming antes del registro",
+      highlight: ["v"],
+      nodes: [
+        { id: "v", value: "v", fields: [{ name: "valor", value: 10, time: 1 }] },
+        { id: "A", value: "A", fields: [{ name: "incoming", value: "(v,Next)" }] },
+        { id: "B", value: "B", fields: [] }
+      ],
+      links: [{ from: "v", to: "A", kind: "pointer", label: "next" }]
+    },
+    {
+      note: "untrackIncoming(A, v, Next): A ya no cuenta a v entre quienes lo apuntan por Next — se busca la pareja (v,Next) en su vector incoming y se borra.",
+      caption: "untrackIncoming(A, v, Next)",
+      highlight: ["A"],
+      nodes: [
+        { id: "v", value: "v", fields: [{ name: "valor", value: 10, time: 1 }] },
+        { id: "A", value: "A", state: "muted", fields: [] },
+        { id: "B", value: "B", fields: [] }
+      ],
+      links: [{ from: "v", to: "A", kind: "pointer", label: "next" }]
+    },
+    {
+      note: "trackIncoming(B, v, Next): B gana la entrada (v,Next) en su vector incoming. Nótese que esto pasa ANTES de que el registro de v se toque — el puntero de v, leído con readNext, todavía resuelve a A en este instante; el bookkeeping de incoming va un paso adelantado al registro real.",
+      caption: "trackIncoming(B, v, Next) -- el registro de v aún no cambió",
+      highlight: ["B"],
+      nodes: [
+        { id: "v", value: "v", fields: [{ name: "valor", value: 10, time: 1 }] },
+        { id: "A", value: "A", state: "muted", fields: [] },
+        { id: "B", value: "B", state: "active", fields: [{ name: "incoming", value: "(v,Next)" }] }
+      ],
+      links: [{ from: "v", to: "A", kind: "pointer", label: "next" }]
+    },
+    {
+      note: "Recién ahora se toca el registro de v: se agrega (siguiente,B,2). El registro de v pasa de 1 a 2 entradas — igual que cualquier otra escritura con espacio, pero esta vez el campo era Next.",
+      caption: "registro(v).agregar((Next,B,2))",
+      highlight: ["v"],
+      nodes: [
+        { id: "v", value: "v", state: "answer", fields: [{ name: "valor", value: 10, time: 1 }, { name: "siguiente", value: "B", time: 2 }] },
+        { id: "A", value: "A", state: "muted", fields: [] },
+        { id: "B", value: "B", fields: [{ name: "incoming", value: "(v,Next)" }] }
+      ],
+      links: [{ from: "v", to: "B", kind: "pointer", label: "next" }]
+    },
+    {
+      note: "Estado final: leerCampo(v, siguiente, t>=2) = B. A ya no tiene a v entre sus incoming; B sí. Este bookkeeping es exactamente lo que node-split usa después para encontrar, sin recorrer toda la estructura, a los p predecesores que hay que redirigir cuando le toque partirse a v.",
+      highlight: ["v", "B"],
+      nodes: [
+        { id: "v", value: "v", state: "answer", fields: [{ name: "valor", value: 10, time: 1 }, { name: "siguiente", value: "B", time: 2 }] },
+        { id: "A", value: "A", state: "muted", fields: [] },
+        { id: "B", value: "B", state: "active", fields: [{ name: "incoming", value: "(v,Next)" }] }
+      ],
+      links: [{ from: "v", to: "B", kind: "pointer", label: "next" }]
+    }
+  ]
+}} />
 
 ## Casos límite
 

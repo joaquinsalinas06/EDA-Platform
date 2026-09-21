@@ -28,6 +28,9 @@ export type PersistentNode = {
   /** Representa un subárbol completo (compartido o no): se dibuja como
    * triángulo (`shape: 'subtree'`), igual que en la familia `tree`. */
   collapsed?: boolean;
+  /** Etiqueta chica arriba de la caja — p.ej. "campo: Value" para marcar de
+   * qué campo del enum es esta entrada del registro. */
+  tag?: string;
 };
 
 export type PersistentLink = { from: string; to: string; kind?: 'tree' | 'shared' | 'pointer'; label?: string };
@@ -187,6 +190,7 @@ export function layoutFatNodes(step: PersistentStep): Frame {
       w,
       h,
       state: n.state,
+      tag: n.tag,
     });
     x += w / 2 + GAP;
   }
@@ -203,7 +207,14 @@ export function layoutFatNodes(step: PersistentStep): Frame {
     ...ports.map((port) => ({ from: port.id, to: port.to, id: port.id, kind: 'pointer' as const, arrow: true })),
   ];
 
-  return { nodes: outNodes, edges: outEdges, groups: [], annotations: [], height: 220, width: x + 60 };
+  // `caption`: texto chico centrado arriba del registro — la condición que
+  // se está evaluando en este paso (p.ej. "campo == Next?"), no la nota de
+  // abajo (que ya explica el paso en prosa completa).
+  const annotations: CanvasText[] = step.caption
+    ? [{ id: 'condition', text: step.caption, x: (x + 60) / 2, y: 24, anchor: 'middle', state: 'muted' }]
+    : [];
+
+  return { nodes: outNodes, edges: outEdges, groups: [], annotations, height: 220, width: x + 60 };
 }
 
 export function layout(step: PersistentStep): Frame {

@@ -10,14 +10,14 @@ visualization:
         punteros que tendría en la máquina de punteros ordinaria — y un
         registro de modificaciones, vacío al nacer.
       nodes:
-        - { id: orig, value: "v: [dato, siguiente] (original)" }
+        - { id: orig, value: "v: [dato, siguiente] (original)", tag: "siguiente: campo PUNTERO de ejemplo" }
         - { id: reg, value: "registro: []" }
     - note: >-
         Primera escritura: se agrega la tupla (campo, valor, t=3) al
         registro, todavía sin confirmar.
       highlight: ["reg"]
       nodes:
-        - { id: orig, value: "v: [dato, siguiente] (original)" }
+        - { id: orig, value: "v: [dato, siguiente] (original)", tag: "siguiente: campo PUNTERO de ejemplo" }
         - { id: reg, value: "registro: [ ] + (campo, valor, t=3)", state: copied }
     - note: >-
         Con p=1 (un solo puntero entrante), el límite es 2p=2 entradas.
@@ -25,15 +25,19 @@ visualization:
         llega a su tamaño máximo.
       highlight: ["reg"]
       nodes:
-        - { id: orig, value: "v: [dato, siguiente] (original)" }
+        - { id: orig, value: "v: [dato, siguiente] (original)", tag: "siguiente: campo PUNTERO de ejemplo" }
         - { id: reg, value: "registro: [(campo,valor,t=3)] + (campo,valor,t=7)", state: copied }
     - note: >-
         Registro en su límite (2/2 = 2p): el invariante central es que
         nunca crece más allá de esto. La próxima escritura ya no cabe —
         dispara node-split, que crea un nodo nuevo y redirige los
-        punteros entrantes (no se reimplica aquí).
+        punteros entrantes (no se reimplica aquí). "siguiente" es UN
+        ejemplo de campo puntero, no una parte obligatoria de todo nodo
+        gordo — ver "¿por qué `next` en unos pasos de C++ y no en otros?"
+        más abajo.
+      caption: "campo dato != campo puntero -- next es sólo el ejemplo"
       nodes:
-        - { id: orig, value: "v: [dato, siguiente] (original)" }
+        - { id: orig, value: "v: [dato, siguiente] (original)", tag: "siguiente: campo PUNTERO de ejemplo" }
         - id: reg
           value: "registro: [(campo,valor,t=3), (campo,valor,t=7)]"
           state: marked
@@ -111,6 +115,42 @@ Ese límite $2p$, y no cualquier otro, es lo que hace que el argumento de
 potencial cierre exactamente en $O(1)$ (ver "Análisis de complejidad" más
 abajo): el split libera de golpe todo lo que el potencial había
 acumulado en ese nodo.
+
+## ¿Por qué `next` en unos pasos de C++ y no en otros?
+
+`next`/`siguiente` **no es una parte obligatoria de un nodo gordo** — es
+sólo el campo que eligió el profesor para el ejemplo. La regla real viene
+de [pointer-machine](/structures/pointer-machine): un nodo tiene $O(1)$
+campos, y cada campo es "dato **o** puntero a otro nodo" (regla 1 del
+modelo). El nodo más simple que sirve para ilustrar la técnica es uno con
+**un** campo de dato y **un** campo puntero — eso es `v: [dato, siguiente]`
+en el diagrama de arriba. Podría llamarse `left`/`right` (BST), `child`
+(árbol $n$-ario) o no tener ningún puntero — el registro de
+modificaciones, el límite $2p$ y `node-split` funcionan exactamente igual,
+porque nodos gordos versiona *escrituras de campo*, sin importarle qué
+significa el campo.
+
+Y es justo por eso que `next` importa como ejemplo: cuando el campo que se
+escribe **es un puntero**, escribirlo significa redirigir quién apunta a
+quién — la operación que la máquina de punteros prohíbe hacer "de golpe"
+(no hay actualizar-todas-las-referencias-a-la-vez). Si el ejemplo fuera
+sólo `dato`, sin ningún puntero, nunca aparecería esa complicación — que es
+la razón real de ser de `trackIncoming`/`untrackIncoming` y de gran parte
+de [node-split](/structures/fat-nodes/operations/node-split). Ver el
+diagrama "Redirigir un puntero: el caso `campo == Next`" en
+[Escribir un campo](/structures/fat-nodes/operations/write-field) para el
+mecanismo completo.
+
+Por eso `Field::Next` aparece en `step-1-node.cpp` hasta
+`step-5-bidirectional.cpp` y en `full-implementation.cpp` — todos
+implementan el `FatNode`/`BiFatNode` con sus dos campos de ejemplo — pero
+**no** en `step-6-version-tree.cpp`: ese paso no es sobre el nodo gordo en
+absoluto, es sobre el **árbol de versiones** (qué versión es ancestro de
+cuál), una estructura totalmente distinta que
+[linearización del árbol de versiones](/structures/fat-nodes/operations/version-tree-linearization)
+necesita para persistencia total. No tiene `dato` ni `siguiente` porque no
+es el mismo nodo — es un árbol aparte, sobre las versiones mismas, no
+sobre los datos que esas versiones guardan.
 
 ## Operaciones
 

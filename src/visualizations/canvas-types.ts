@@ -136,6 +136,9 @@ export type CanvasStep = {
   highlight: string[];
   groups?: CanvasGroup[];
   annotations?: CanvasText[];
+  /** Ancho que necesita este paso, si es menor que el más ancho de todos —
+   * el canvas se recorta (no se re-escala) a este ancho y lo centra. */
+  width?: number;
 };
 
 /** Lo que devuelve el layout puro de cada familia para UN paso. */
@@ -146,6 +149,9 @@ export type Frame = {
   annotations: CanvasText[];
   /** Alto que necesita este paso. */
   height: number;
+  /** Ancho que necesita este paso, si es mayor que el ancho por defecto de
+   * la familia (p.ej. un registro de nodo gordo con muchas modificaciones). */
+  width?: number;
 };
 
 /** Un nodo sin `state` explícito hereda el comportamiento de hoy: activo si

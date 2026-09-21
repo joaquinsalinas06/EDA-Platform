@@ -175,6 +175,7 @@ export function layoutFatNodes(step: PersistentStep): Frame {
         ? Math.max(...lines.map((l) => boxWidth(l, 12, 0))) + 2 * PAD_X
         : boxWidth(String(n.value));
     const h = n.collapsed ? 40 : lines ? LINE_H * lines.length + 12 : undefined;
+    x += w / 2;
     outNodes.push({
       id: n.id,
       label: String(n.value),
@@ -187,7 +188,7 @@ export function layoutFatNodes(step: PersistentStep): Frame {
       h,
       state: n.state,
     });
-    x += w + GAP;
+    x += w / 2 + GAP;
   }
 
   const ports = step.ports ?? [];
@@ -202,7 +203,7 @@ export function layoutFatNodes(step: PersistentStep): Frame {
     ...ports.map((port) => ({ from: port.id, to: port.to, id: port.id, kind: 'pointer' as const, arrow: true })),
   ];
 
-  return { nodes: outNodes, edges: outEdges, groups: [], annotations: [], height: 220 };
+  return { nodes: outNodes, edges: outEdges, groups: [], annotations: [], height: 220, width: x + 60 };
 }
 
 export function layout(step: PersistentStep): Frame {

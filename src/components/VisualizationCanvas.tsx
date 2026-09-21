@@ -110,6 +110,20 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
   const progress = steps.length > 1 ? (i / last) * 100 : 100;
   const groups = step.groups ?? [];
   const annotations = step.annotations ?? [];
+  // Un paso con menos contenido que el más ancho (p.ej. un registro de nodo
+  // gordo recién empezado) se ve más CHICO si no se hace nada — el `viewBox`
+  // (fijo en `width`/`height`, el paso más ancho de todos) le deja de
+  // sobra alrededor. Se corrige con un zoom real: un único `<g transform=
+  // "scale(...)">` alrededor de TODO el dibujo, centrado en el punto medio
+  // del lienzo. `transform` en un `<g>` es exactamente lo mismo que ya
+  // anima cada nodo (`translate` con `transition: transform`) — mismo
+  // mecanismo, sin re-render ni remontaje, sólo que aquí escala el grupo
+  // entero en vez de mover un nodo suelto.
+  const stepWidth = step.width ?? width;
+  const zoom = width / stepWidth;
+  const cx = width / 2;
+  const cy = height / 2;
+  const zoomTransform = `translate(${cx}, ${cy}) scale(${zoom}) translate(${-cx}, ${-cy})`;
 
   return (
     <figure
@@ -168,6 +182,10 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
             </marker>
           </defs>
 
+          <g
+            transform={zoomTransform}
+            style={{ transition: 'transform 450ms cubic-bezier(.2,.7,.3,1)' }}
+          >
           {groups.map((g) => (
             // La transición va en los atributos que de verdad cambian (x/y/
             // width/height en el rect, x/y en el label) — antes estaba en el
@@ -506,6 +524,7 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
               {a.text}
             </text>
           ))}
+          </g>
         </svg>
       </div>
 

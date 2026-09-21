@@ -110,17 +110,27 @@ export default function VisualizationCanvas({ steps, width = 640, height = 260 }
   const progress = steps.length > 1 ? (i / last) * 100 : 100;
   const groups = step.groups ?? [];
   const annotations = step.annotations ?? [];
-  // Un paso con menos contenido que el más ancho (p.ej. un registro de nodo
-  // gordo recién empezado) se ve más CHICO si no se hace nada — el `viewBox`
-  // (fijo en `width`/`height`, el paso más ancho de todos) le deja de
-  // sobra alrededor. Se corrige con un zoom real: un único `<g transform=
-  // "scale(...)">` alrededor de TODO el dibujo, centrado en el punto medio
-  // del lienzo. `transform` en un `<g>` es exactamente lo mismo que ya
-  // anima cada nodo (`translate` con `transition: transform`) — mismo
-  // mecanismo, sin re-render ni remontaje, sólo que aquí escala el grupo
-  // entero en vez de mover un nodo suelto.
+  // Un paso con menos contenido que el más grande (p.ej. un registro de nodo
+  // gordo recién empezado, o uno con un solo nodo angosto) se ve más CHICO
+  // si no se hace nada — el `viewBox` (fijo en `width`/`height`, el paso más
+  // grande de todos) le deja de sobra alrededor. Se corrige con un zoom
+  // real: un único `<g transform="scale(...)">` alrededor de TODO el
+  // dibujo, centrado en el punto medio del lienzo. `transform` en un `<g>`
+  // es exactamente lo mismo que ya anima cada nodo (`translate` con
+  // `transition: transform`) — mismo mecanismo, sin re-render ni
+  // remontaje, sólo que aquí escala el grupo entero en vez de mover un nodo
+  // suelto.
+  //
+  // El zoom se calcula por AMBOS ejes (`Math.min`, "contain") y no sólo por
+  // ancho: si sólo importara el ancho, un paso angosto pero con contenido
+  // alto (un registro de varias líneas, un tag, un caption cerca del borde)
+  // recibía un zoom pensado para caber a lo ancho que en el eje vertical lo
+  // sacaba del viewBox — el layout ya centra ese contenido en `width`/
+  // `height` compartidos (ver PersistentVisualization), así que sólo falta
+  // no escalarlo más de lo que el eje más corto tolera.
   const stepWidth = step.width ?? width;
-  const zoom = width / stepWidth;
+  const stepHeight = step.height ?? height;
+  const zoom = Math.min(width / stepWidth, height / stepHeight);
   const cx = width / 2;
   const cy = height / 2;
   const zoomTransform = `translate(${cx}, ${cy}) scale(${zoom}) translate(${-cx}, ${-cy})`;

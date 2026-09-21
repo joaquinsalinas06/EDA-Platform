@@ -136,9 +136,14 @@ export type CanvasStep = {
   highlight: string[];
   groups?: CanvasGroup[];
   annotations?: CanvasText[];
-  /** Ancho que necesita este paso, si es menor que el más ancho de todos —
-   * el canvas se recorta (no se re-escala) a este ancho y lo centra. */
+  /** Ancho/alto que necesita este paso, si es menor que el más grande de
+   * todos — el canvas hace zoom-fit (nunca estira) a este tamaño y lo
+   * centra en ambos ejes. Sin `height`, sólo se ajustaba el ancho: un paso
+   * angosto con contenido alto (un registro de varias líneas, un tag, un
+   * caption cerca del borde) terminaba con un zoom pensado sólo para el
+   * eje horizontal, que en el vertical lo sacaba del viewBox por arriba. */
   width?: number;
+  height?: number;
 };
 
 /** Lo que devuelve el layout puro de cada familia para UN paso. */

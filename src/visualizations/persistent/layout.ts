@@ -4,7 +4,7 @@
 // (registro de modificaciones + split). Los tres comparten `tidy`/`scale`.
 
 import { tidy, scale, type OrderedNode } from '../shared/tidy-tree.ts';
-import { boxWidth, NODE_W, LINE_H, PAD_X, type Frame, type CanvasNode, type CanvasEdge, type CanvasGroup, type CanvasText } from '../canvas-types.ts';
+import { boxWidth, NODE_W, NODE_H, LINE_H, PAD_X, type Frame, type CanvasNode, type CanvasEdge, type CanvasGroup, type CanvasText } from '../canvas-types.ts';
 
 export const W = 720;
 const ROW_GAP = 56;
@@ -161,14 +161,19 @@ function layoutVersionTree(step: PersistentStep): Frame {
 
 /** Nodo gordo: registro de modificaciones como filas de `(campo, valor, t)`,
  * y los `p` punteros entrantes como `port`s que un split puede redirigir sin
- * remontar (mismo `id` de puerto, sólo cambia su `to`). */
+ * remontar (mismo `id` de puerto, sólo cambia su `to`). El alto, igual que
+ * el ancho, se mide del contenido real de ESTE paso (un registro de 2
+ * entradas no es tan alto como uno de 2p=4) en vez de un valor fijo: un
+ * registro largo, un `tag` o un `caption` cerca del borde superior son
+ * justo lo que un alto fijo no contemplaba, y el zoom-fit de
+ * VisualizationCanvas (que sí escala por el eje que haga falta) terminaba
+ * sacándolos del viewBox por arriba en un paso angosto. */
 export function layoutFatNodes(step: PersistentStep): Frame {
   const GAP = 46;
-  const outNodes: CanvasNode[] = [];
-  let x = 60;
-  const y = 90;
 
-  for (const n of step.nodes) {
+  // Primera pasada: medir cada nodo antes de decidir dónde va el eje
+  // horizontal de los nodos — hace falta el h máximo para eso.
+  const dims = step.nodes.map((n) => {
     const lines = n.fields
       ? [String(n.value), ...n.fields.map((f) => `${f.name}=${f.value}${f.time !== undefined ? ` @${f.time}` : ''}`)]
       : undefined;
@@ -177,7 +182,26 @@ export function layoutFatNodes(step: PersistentStep): Frame {
       : lines
         ? Math.max(...lines.map((l) => boxWidth(l, 12, 0))) + 2 * PAD_X
         : boxWidth(String(n.value));
-    const h = n.collapsed ? 40 : lines ? LINE_H * lines.length + 12 : undefined;
+    const h = n.collapsed ? 40 : lines ? LINE_H * lines.length + 12 : NODE_H;
+    return { n, lines, w, h };
+  });
+
+  const maxNodeH = Math.max(NODE_H, ...dims.map((d) => d.h));
+  const ports = step.ports ?? [];
+  // Rango vertical que ya usaban los ports (140px de punta a punta con 2+),
+  // ahora relativo al eje de los nodos en vez de a un y=90 fijo.
+  const portSpan = ports.length > 1 ? 140 : 0;
+  const rowSpan = Math.max(maxNodeH, portSpan);
+
+  const TOP_PAD = 16;
+  const TAG_ROOM = step.nodes.some((n) => n.tag) ? 18 : 0;
+  const CAPTION_ROOM = step.caption ? 30 : 0;
+  const BOTTOM_PAD = 20;
+  const y = TOP_PAD + CAPTION_ROOM + TAG_ROOM + rowSpan / 2;
+
+  const outNodes: CanvasNode[] = [];
+  let x = 60;
+  for (const { n, lines, w, h } of dims) {
     x += w / 2;
     outNodes.push({
       id: n.id,
@@ -188,17 +212,16 @@ export function layoutFatNodes(step: PersistentStep): Frame {
       lines: n.collapsed ? undefined : lines,
       divider: !n.collapsed && lines ? 0 : undefined,
       w,
-      h,
+      h: n.collapsed ? 40 : lines ? h : undefined,
       state: n.state,
       tag: n.tag,
     });
     x += w / 2 + GAP;
   }
 
-  const ports = step.ports ?? [];
-  const portGap = ports.length > 1 ? 140 / (ports.length - 1) : 0;
+  const portGap = ports.length > 1 ? portSpan / (ports.length - 1) : 0;
   ports.forEach((port, i) => {
-    const py = 90 - 70 + i * portGap;
+    const py = y - portSpan / 2 + i * portGap;
     outNodes.push({ id: port.id, label: port.label ?? '', x: 20, y: py, shape: 'port' });
   });
 
@@ -211,10 +234,12 @@ export function layoutFatNodes(step: PersistentStep): Frame {
   // se está evaluando en este paso (p.ej. "campo == Next?"), no la nota de
   // abajo (que ya explica el paso en prosa completa).
   const annotations: CanvasText[] = step.caption
-    ? [{ id: 'condition', text: step.caption, x: (x + 60) / 2, y: 24, anchor: 'middle', state: 'muted' }]
+    ? [{ id: 'condition', text: step.caption, x: (x + 60) / 2, y: TOP_PAD + 10, anchor: 'middle', state: 'muted' }]
     : [];
 
-  return { nodes: outNodes, edges: outEdges, groups: [], annotations, height: 220, width: x + 60 };
+  const height = y + rowSpan / 2 + BOTTOM_PAD;
+
+  return { nodes: outNodes, edges: outEdges, groups: [], annotations, height, width: x + 60 };
 }
 
 export function layout(step: PersistentStep): Frame {
